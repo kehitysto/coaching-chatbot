@@ -1,0 +1,23 @@
+{
+  "name": "coaching-chatbot",
+  "version": "0.0.1",
+  "description": "Facebook messenger bot for life coaching",
+  "main": "handler.js",
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "SLS_DEBUG=true serverless invoke test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kehitysto/coaching-chatbot.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kehitysto/coaching-chatbot/issues"
+  },
+  "homepage": "https://github.com/kehitysto/coaching-chatbot#readme"
+}
