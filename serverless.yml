@@ -45,13 +45,14 @@ provider:
 #    variable1: value1
 
 # you can add packaging information here
-#package:
+package:
+  exclude:
+    - test/**
+    - .git/**
+    - docs/**
 #  include:
 #    - include-me.js
 #    - include-me-dir/**
-#  exclude:
-#    - exclude-me.js
-#    - exclude-me-dir/**
 
 functions:
   hello:
@@ -87,3 +88,7 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+
+plugins:
+  - serverless-mocha-plugin
+  - serverless-webpack
