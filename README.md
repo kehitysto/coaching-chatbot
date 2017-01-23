@@ -5,10 +5,10 @@
  - Prerequisites: npm must be installed
  - Install *serverless* (preferably as global) and dependencies:
 
-```
-$ npm install -g serverless
-$ npm install
-```
+    ```
+    $ npm install -g serverless
+    $ npm install
+    ```
 
 ## Links
  - [Definition of Done](doc/dod.md)
