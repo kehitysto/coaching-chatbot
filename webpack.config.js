@@ -3,7 +3,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
-    'hello-world/handler': './handler.js',
+    'wit-ai/handler': './src/wit-ai/handler.js',
   },
   target: 'node',
   module: {
