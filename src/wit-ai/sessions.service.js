@@ -20,7 +20,7 @@ const SESSION_TABLE = `${process.env.SERVERLESS_PROJECT}-sessions-${process.env.
 
 function getOrCreate(session) {
     if (!session.id) {
-        return Promise.reject(TypeError('No session ID'));
+        return Promise.reject(new TypeError('No session ID'));
     }
 
     return read(session.id).catch(() => write(session));
@@ -36,7 +36,7 @@ function read(id) {
 
         DynamoDB.get(params, (err, data) => {
             if (err) {
-                return reject(Error(err.toString()));
+                return reject(new Error(err.toString()));
             }
 
             const session = {
@@ -53,7 +53,7 @@ function read(id) {
 function write(session) {
     return new Promise((resolve, reject) => {
         if (!session.id) {
-            return reject(TypeError('No session ID'));
+            return reject(new TypeError('No session ID'));
         }
 
         // coerce session id to string
@@ -66,7 +66,7 @@ function write(session) {
 
         DynamoDB.put(params, (err) => {
             if (err) {
-                return reject(Error(err.toString()));
+                return reject(new Error(err.toString()));
             }
 
             return resolve(session);

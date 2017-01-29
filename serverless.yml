@@ -3,19 +3,25 @@ service: coaching-chatbot
 provider:
   name: aws
   runtime: nodejs4.3
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-      - SNS:ListTopics
-      - SNS:Publish
-      Resource: arn:aws:sns:${opt:region, self:provider.region}:*:*
 
 functions:
-  witAi:
-    handler: src/wit-ai/handler.js
-    timeout: 60
+  facebookMessenger:
+    handler: facebook-messenger/handler.handler
+    memorySize: 128
+    timeout: 15
     events:
-      - sns: ${self:service}-witAiTopic-${opt:stage, self:provider.stage}
+      - http:
+          path: facebook-bot
+          method: get
+          integration: lambda
+          response:
+            headers:
+              Content-Type: "'text/html'"
+            template: $input.path('$.response')
+      - http:
+          path: facebook-bot
+          method: post
+          integration: lambda
 
 resources:
   Resources:

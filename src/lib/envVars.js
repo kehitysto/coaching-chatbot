@@ -1,7 +1,5 @@
 'use strict';
 
-require('dotenv').config();
-
 
 const config = () => {
   // current version of Serverless Framework doesn't pass project name to lambda or
