@@ -167,3 +167,6 @@ Temporary Items
 # Serverless Env
 .env
 .serverless
+
+# mocha-webpack
+.tmp

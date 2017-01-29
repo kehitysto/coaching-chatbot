@@ -1,4 +1,5 @@
 const path = require('path');
+
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
@@ -21,4 +22,5 @@ module.exports = {
     path: path.join(__dirname, '.webpack'),
     filename: '[name].js'
   },
+  devtool: "cheap-module-source-map"
 };

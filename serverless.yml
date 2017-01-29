@@ -10,12 +10,6 @@ provider:
       - SNS:Publish
       Resource: arn:aws:sns:${opt:region, self:provider.region}:*:*
 
-package:
-  exclude:
-    - test/**
-    - .git/**
-    - docs/**
-
 functions:
   witAi:
     handler: src/wit-ai/handler.js
@@ -41,5 +35,4 @@ resources:
         TableName: ${self:service}-sessions-${opt:stage, self:provider.stage}
 
 plugins:
-  - serverless-mocha-plugin
   - serverless-webpack
