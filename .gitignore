@@ -162,3 +162,11 @@ Temporary Items
 .nfs*
 
 # End of https://www.gitignore.io/api/node,vim,sublimetext,windows,osx,linux
+
+
+# Serverless Env
+.env
+.serverless
+
+# mocha-webpack
+.tmp

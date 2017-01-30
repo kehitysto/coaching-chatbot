@@ -5,10 +5,8 @@
   "main": "handler.js",
   "directories": {
     "doc": "doc",
+    "src": "src",
     "test": "test"
-  },
-  "scripts": {
-    "test": "SLS_DEBUG=true serverless invoke test"
   },
   "repository": {
     "type": "git",
@@ -21,9 +19,28 @@
   },
   "homepage": "https://github.com/kehitysto/coaching-chatbot#readme",
   "devDependencies": {
+    "aws-sdk": "^2.9.0",
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-plugin-transform-object-rest-spread": "^6.22.0",
+    "babel-preset-es2015": "^6.22.0",
+    "chai": "*",
     "copy-webpack-plugin": "^4.0.1",
+    "dotenv": "^4.0.0",
+    "dotenv-webpack": "^1.3.2",
     "json-loader": "^0.5.4",
-    "serverless-mocha-plugin": "^1.3.2",
-    "serverless-webpack": "^1.0.0-rc.4"
+    "mocha": "*",
+    "mocha-webpack": "^0.7.0",
+    "node-wit": "^4.2.0",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1",
+    "serverless-webpack": "^1.0.0-rc.4",
+    "source-map-support": "^0.4.11",
+    "webpack": "^1.14.0",
+    "webpack-node-externals": "^1.5.4"
+  },
+  "scripts": {
+    "test": "mocha-webpack",
+    "test:hot": "mocha-webpack --watch"
   }
 }
