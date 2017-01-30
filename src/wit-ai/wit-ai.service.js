@@ -27,6 +27,18 @@ function activate() {
             send({sessionId}, {text}) {
                 return FBMessenger.send(sessionId, text).then(() => null);
             },
+            set_name({context, entities}) {
+                return new Promise((resolve, reject) => {
+                    for (let i = 0; i < entities.length; ++i) {
+                        if (entities[i].suggested) {
+                            return resolve({
+                                ...context,
+                                name: entities[i].value
+                            });
+                        }
+                    }
+                });
+            }
         },
         logger: new log.Logger(log.INFO),
     });
