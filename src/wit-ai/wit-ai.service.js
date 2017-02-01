@@ -1,7 +1,5 @@
 import { Wit, log } from 'node-wit';
 
-import Sessions from './sessions.service';
-
 // FIXME: uncouple fb-messenger service
 import FBMessenger from '../facebook-messenger/messenger.service';
 
