@@ -2,6 +2,10 @@ const nodeExternals = require('webpack-node-externals');
 
 
 module.exports = {
+  output: {
+      devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+      devtoolFallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]'
+  },
   target: 'node',
   module: {
     loaders: [
@@ -17,5 +21,5 @@ module.exports = {
     ]
   },
   externals: [nodeExternals()], // ignore node_modules
-  devtool: "cheap-module-eval-source-map"
+  devtool: "inline-cheap-module-source-map"
 };

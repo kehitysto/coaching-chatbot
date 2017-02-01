@@ -10,3 +10,8 @@ chai.use(sinonChai);
 
 const chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
+
+require('source-map-support').install({
+    handleUncaughtExceptions: false,
+    environment: 'node',
+});

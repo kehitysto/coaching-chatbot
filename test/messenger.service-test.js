@@ -1,6 +1,5 @@
 import fs from 'fs';
 import sinon from 'sinon';
-import _ from 'lodash';
 
 
 const mod = require('inject!../src/facebook-messenger/messenger.service');

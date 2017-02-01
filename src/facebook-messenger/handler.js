@@ -1,4 +1,5 @@
-require('source-map-support').install();
+import 'source-map-support/register'
+
 require('../lib/envVars').config();
 
 import Messenger from './messenger.service';
