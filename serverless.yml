@@ -3,6 +3,15 @@ service: coaching-chatbot
 provider:
   name: aws
   runtime: nodejs4.3
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+      - dynamodb:Scan
+      - dynamodb:Query
+      - dynamodb:GetItem
+      - dynamodb:PutItem
+      - dynamodb:DeleteItem
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:*
 
 functions:
   facebookMessenger:
