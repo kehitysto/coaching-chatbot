@@ -15,21 +15,9 @@ module.exports = class WitAI {
         this.wit = new Wit({
             accessToken: process.env.WIT_AI_TOKEN,
             actions: {
-                send({sessionId}, {text}) {
-                    return FBMessenger.send(sessionId, text).then(() => null);
-                },
-                set_name({context, entities}) {
-                    return new Promise((resolve, reject) => {
-                        for (let i = 0; i < entities.length; ++i) {
-                            if (entities[i].suggested) {
-                                return resolve({
-                                    ...context,
-                                    name: entities[i].value
-                                });
-                            }
-                        }
-                    });
-                }
+                send: this.send,
+                set_name: this.set_name,
+                set_job: this.set_job,
             },
             logger: new log.Logger(log.INFO),
         });
@@ -50,5 +38,35 @@ module.exports = class WitAI {
             .then(context => {
                 return this.sessions.write(sessionId, context);
             });
+    }
+
+    send({sessionId}, {text}) {
+        return FBMessenger.send(sessionId, text).then(() => null);
+    }
+
+    set_name({context, entities}) {
+        return new Promise((resolve, reject) => {
+            for (let i = 0; i < entities.length; ++i) {
+                if (entities[i].suggested) {
+                    return resolve({
+                        ...context,
+                        name: entities[i].value
+                    });
+                }
+            }
+        });
+    }
+
+    set_job({context, entities}) {
+        return new Promise((resolve, reject) => {
+            for (let i = 0; i < entities.length; ++i) {
+                if (entities[i].suggested) {
+                    return resolve({
+                        ...context,
+                        job: entities[i].value
+                    });
+                }
+            }
+        });
     }
 }
