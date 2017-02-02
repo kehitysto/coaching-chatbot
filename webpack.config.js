@@ -49,5 +49,5 @@ module.exports = {
     path: path.join(__dirname, '.webpack'),
     filename: '[name].js'
   },
-  devtool: "cheap-module-source-map"
+  devtool: "source-map"
 };
