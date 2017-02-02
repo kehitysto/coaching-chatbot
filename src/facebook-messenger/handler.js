@@ -16,7 +16,9 @@ module.exports.handler = (event, context, cb) => {
             .catch(err => cb(err));
 
     } else if (event.method === 'POST') {
-        return Messenger.receive(event.body, WitAI.receive)
+        const wit = new WitAI();
+
+        return Messenger.receive(event.body, wit.receive)
             .then(response => cb(null, response))
             .catch(err => cb(err));
     }
