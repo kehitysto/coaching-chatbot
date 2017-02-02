@@ -43,6 +43,7 @@
   },
   "scripts": {
     "test": "mocha-webpack",
-    "test:hot": "mocha-webpack --watch"
+    "test:hot": "mocha-webpack --watch",
+    "lint": "eslint src"
   }
 }
