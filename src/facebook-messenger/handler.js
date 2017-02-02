@@ -1,27 +1,27 @@
 import 'source-map-support/register'
 
-require('../lib/envVars').config();
+require('../lib/envVars')
+  .config();
 
 import Messenger from './messenger.service';
 import WitAI from '../wit-ai/wit-ai.service';
 
-
 module.exports.handler = (event, context, cb) => {
-    if (event.method === 'GET') {
-        return Messenger.verify(
-            event.query['hub.verify_token'],
-            event.query['hub.challenge']
-        )
-            .then(response => cb(null, response))
-            .catch(err => cb(err));
+  if (event.method === 'GET') {
+    return Messenger.verify(
+        event.query['hub.verify_token'],
+        event.query['hub.challenge']
+      )
+      .then(response => cb(null, response))
+      .catch(err => cb(err));
 
-    } else if (event.method === 'POST') {
-        const wit = new WitAI();
+  } else if (event.method === 'POST') {
+    const wit = new WitAI();
 
-        return Messenger.receive(event.body, wit.receive)
-            .then(response => cb(null, response))
-            .catch(err => cb(err));
-    }
+    return Messenger.receive(event.body, wit)
+      .then(response => cb(null, response))
+      .catch(err => cb(err));
+  }
 
-    return cb('Unknown event');
+  return cb('Unknown event');
 };
