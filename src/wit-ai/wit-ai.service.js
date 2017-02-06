@@ -18,6 +18,7 @@ module.exports = class WitAI {
                 send: this.send,
                 set_name: this.set_name,
                 set_job: this.set_job,
+                set_age: this.set_age,
             },
             logger: new log.Logger(log.INFO),
         });
@@ -36,6 +37,10 @@ module.exports = class WitAI {
                 );
             })
             .then(context => {
+                console.log('The context looks like this now: ' + JSON.stringify(context));
+                return context;
+            })
+            .then(context => {
                 return this.sessions.write(sessionId, context);
             });
     }
@@ -46,27 +51,51 @@ module.exports = class WitAI {
 
     set_name({context, entities}) {
         return new Promise((resolve, reject) => {
-            for (let i = 0; i < entities.length; ++i) {
-                if (entities[i].suggested) {
-                    return resolve({
-                        ...context,
-                        name: entities[i].value
-                    });
-                }
+            if (entities.name) {
+                console.log('returning name ' + entities.name[0].value);
+                return resolve({
+                    ...context,
+                    name: entities.name[0].value
+                });
             }
+
+            if (entities.contact) {
+                console.log('returning contact ' + entities.contact[0].value);
+                return resolve({
+                    ...context,
+                    name: entities.contact[0].value
+                });
+            }
+
+            return reject(new Error());
         });
     }
 
     set_job({context, entities}) {
         return new Promise((resolve, reject) => {
-            for (let i = 0; i < entities.length; ++i) {
-                if (entities[i].suggested) {
-                    return resolve({
-                        ...context,
-                        job: entities[i].value
-                    });
-                }
+            if (entities.job) {
+                console.log('returning job ' + entities.job[0].value);
+                return resolve({
+                    ...context,
+                    job: entities.job[0].value
+                });
             }
+
+            return reject(new Error());
+        });
+    }
+
+    set_age({context, entities}) {
+        return new Promise((resolve, reject) => {
+            if (entities.age) {
+                console.log('returning age ' + entities.age[0].value);
+                return resolve({
+                    ...context,
+                    age: entities.age[0].value
+                });
+            }
+
+            return reject(new Error());
         });
     }
 }
