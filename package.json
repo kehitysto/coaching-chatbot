@@ -48,6 +48,7 @@
   "scripts": {
     "test": "mocha-webpack",
     "test:watch": "mocha-webpack --watch",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "wit-client": "babel-node ./wit-client.js"
   }
 }
