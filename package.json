@@ -47,7 +47,7 @@
   },
   "scripts": {
     "test": "mocha-webpack",
-    "test:watch": "mocha-webpack --watch"
+    "test:watch": "mocha-webpack --watch",
     "lint": "eslint src"
   }
 }
