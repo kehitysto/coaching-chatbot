@@ -52,11 +52,11 @@ describe('Facebook Messenger service', function() {
                 fs.readFileSync('./test/data/event-fbmessage.json')
             );
 
-            this.cb = sinon.stub();
+            this.cb = { receive: sinon.stub() };
         });
 
         afterEach(function() {
-            this.cb.reset();
+            this.cb.receive.reset();
         });
 
         it('should return a Promise', function() {
@@ -71,7 +71,7 @@ describe('Facebook Messenger service', function() {
             const ret = this.Messenger.receive(this.data.body, this.cb);
 
             return expect(ret).to.eventually.be.fulfilled.then(() => {
-                return expect(this.cb).to.have.been.calledWith(
+                return expect(this.cb.receive).to.have.been.calledWith(
                     'USER_ID', "hello, world!"
                 );
             });
