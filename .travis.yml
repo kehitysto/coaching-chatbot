@@ -5,6 +5,8 @@ node_js:
 before_install:
   - npm i -g serverless@1.5.1
 
+script: 'npm run cover'
+
 after_success: 'npm run coveralls'
 
 notifications:
