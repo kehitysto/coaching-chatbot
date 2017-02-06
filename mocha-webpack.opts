@@ -1,4 +1,4 @@
---require source-map-support/register
+--require test/common
 --webpack-config webpack.config.test.js
 --recursive
 test

@@ -1,75 +1,54 @@
-/**
-* Manage Wit.ai sessions
-*/
-
 import AWS from 'aws-sdk';
 
 
-const Sessions = {
-    getOrCreate,
-    read,
-    write,
-};
-module.exports = Sessions;
-
-////////
-
-const DynamoDB = new AWS.DynamoDB.DocumentClient();
-const SESSION_TABLE = `${process.env.SERVERLESS_PROJECT}-sessions-${process.env.SERVERLESS_STAGE}`;
-
-
-function getOrCreate(session) {
-    if (!session.id) {
-        return Promise.reject(new TypeError('No session ID'));
+module.exports = class Sessions {
+    constructor() {
+        this.SESSION_TABLE = `${process.env.SERVERLESS_PROJECT}-sessions-${process.env.SERVERLESS_STAGE}`;
+        this.db = new AWS.DynamoDB.DocumentClient();
     }
 
-    return read(session.id).catch(() => write(session));
-}
-
-function read(id) {
-    return new Promise((resolve, reject) => {
-        const params = {
-            Key: { id },
-            TableName: SESSION_TABLE,
-            ConsistentRead: true
-        };
-
-        DynamoDB.get(params, (err, data) => {
-            if (err) {
-                return reject(new Error(err.toString()));
-            }
-
-            const session = {
-                id,
-                context: {},
-                ...data.Item
+    read(id) {
+        return new Promise((resolve, reject) => {
+            const params = {
+                Key: { id },
+                TableName: this.SESSION_TABLE,
+                ConsistentRead: true
             };
 
-            return resolve(session);
+            this.db.get(params, (err, data) => {
+                if (err) {
+                    return reject(new Error(err.toString()));
+                }
+
+                return resolve(data.context);
+            });
         });
-    });
-}
+    }
 
-function write(session) {
-    return new Promise((resolve, reject) => {
-        if (!session.id) {
-            return reject(new TypeError('No session ID'));
-        }
-
-        // coerce session id to string
-        session.id = session.id + '';
-
-        const params = {
-            TableName: SESSION_TABLE,
-            Item: session,
-        };
-
-        DynamoDB.put(params, (err) => {
-            if (err) {
-                return reject(new Error(err.toString()));
+    write(id, context) {
+        return new Promise((resolve, reject) => {
+            if (!id) {
+                return reject(new TypeError('No session ID'));
             }
 
-            return resolve(session);
+            // coerce session id to string
+            id = id + '';
+
+            const params = {
+                TableName: this.SESSION_TABLE,
+                Item: {
+                    id,
+                    context
+                }
+            };
+
+            this.db.put(params, (err) => {
+                if (err) {
+                    return reject(new Error(err.toString()));
+                }
+
+                return resolve(context);
+            });
         });
-    });
+    }
 }

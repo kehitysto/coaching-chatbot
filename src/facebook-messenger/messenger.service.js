@@ -22,14 +22,14 @@ function send(id, text) {
     return _fbMessageRequest(body);
 }
 
-function receive(data, cb) {
+function receive(data, wit) {
     if (data.object === 'page') {
         const promises = [];
 
         data.entry.forEach(entry => {
             entry.messaging.forEach(msgEvent => {
                 if (msgEvent.message && !msgEvent.message.is_echo) {
-                    promises.push(_receiveMessage(msgEvent, cb));
+                    promises.push(_receiveMessage(msgEvent, wit));
                 }
             });
         });
@@ -49,7 +49,7 @@ function verify(token, challenge) {
     return Promise.reject(new Error('400 Bad Token'));
 }
 
-function _receiveMessage(msgEvent, cb) {
+function _receiveMessage(msgEvent, wit) {
     return new Promise((resolve, reject) => {
         const sender = msgEvent.sender.id;
 
@@ -59,7 +59,7 @@ function _receiveMessage(msgEvent, cb) {
             return reject(new Error('Attachments are not supported'));
         } else if (text) {
             return resolve(
-                cb(sender, text)
+                wit.receive(sender, text)
             );
         }
     });

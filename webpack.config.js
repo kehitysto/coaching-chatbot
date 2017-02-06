@@ -19,9 +19,6 @@ module.exports = {
         test: /\.js$/,
         exclude: /(node_modules)/,
         loader: 'babel-loader',
-        query: {
-          presets: ['es2015']
-        }
       },
       { test: /\.json/, loader: 'json-loader' }
     ]
@@ -49,5 +46,5 @@ module.exports = {
     path: path.join(__dirname, '.webpack'),
     filename: '[name].js'
   },
-  devtool: "cheap-module-source-map"
+  devtool: "source-map"
 };
