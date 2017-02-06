@@ -27,7 +27,7 @@ module.exports = class WitAI {
 
     receive(sessionId, text) {
         return this.sessions.read(sessionId)
-            .catch(() => {})
+            .catch(() => { return {}; })
             .then(context => {
                 return this.wit.runActions(
                     sessionId,
