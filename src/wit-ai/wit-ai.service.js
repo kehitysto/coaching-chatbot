@@ -14,10 +14,10 @@ module.exports = class WitAI {
         this.wit = new Wit({
             accessToken: process.env.WIT_AI_TOKEN,
             actions: {
-                send: this.send,
-                set_name: this.set_name,
-                set_job: this.set_job,
-                set_age: this.set_age,
+                send: this.send.bind(this),
+                set_name: this.set_name.bind(this),
+                set_job: this.set_job.bind(this),
+                set_age: this.set_age.bind(this),
             },
             logger: new log.Logger(log.INFO),
         });
