@@ -1,8 +1,8 @@
 import { interactive } from 'node-wit';
 
-import WitAI from './src/wit-ai/wit-ai.service';
+import WitAI from '../src/wit-ai/wit-ai.service';
 
-require('./src/lib/envVars').config();
+require('../src/lib/envVars').config();
 
 
 const wit = new WitAI(function(session, message) {
