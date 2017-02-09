@@ -39,7 +39,8 @@ module.exports = class WitAI {
                 );
             })
             .then(context => {
-                console.log('The context looks like this now: ' + JSON.stringify(context));
+                console.log('The context looks like this now: '
+                + JSON.stringify(context));
                 return context;
             })
             .then(context => {
@@ -47,17 +48,17 @@ module.exports = class WitAI {
             });
     }
 
-    send({sessionId}, {text}) {
+    send({ sessionId }, { text }) {
         return this.sendAction(sessionId, text).then(() => null);
     }
 
-    set_name({context, entities}) {
+    set_name({ context, entities }) {
         return new Promise((resolve, reject) => {
             if (entities.name) {
                 console.log('returning name ' + entities.name[0].value);
                 return resolve({
                     ...context,
-                    name: entities.name[0].value
+                    name: entities.name[0].value,
                 });
             }
 
@@ -65,7 +66,7 @@ module.exports = class WitAI {
                 console.log('returning contact ' + entities.contact[0].value);
                 return resolve({
                     ...context,
-                    name: entities.contact[0].value
+                    name: entities.contact[0].value,
                 });
             }
 
@@ -73,13 +74,13 @@ module.exports = class WitAI {
         });
     }
 
-    set_job({context, entities}) {
+    set_job({ context, entities }) {
         return new Promise((resolve, reject) => {
             if (entities.job) {
                 console.log('returning job ' + entities.job[0].value);
                 return resolve({
                     ...context,
-                    job: entities.job[0].value
+                    job: entities.job[0].value,
                 });
             }
 
@@ -87,17 +88,17 @@ module.exports = class WitAI {
         });
     }
 
-    set_age({context, entities}) {
+    set_age({ context, entities }) {
         return new Promise((resolve, reject) => {
             if (entities.age) {
                 console.log('returning age ' + entities.age[0].value);
                 return resolve({
                     ...context,
-                    age: entities.age[0].value
+                    age: entities.age[0].value,
                 });
             }
 
             return reject(new Error());
         });
     }
-}
+};

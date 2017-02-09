@@ -9,18 +9,18 @@ describe('Wit.ai service', function() {
         mockery.enable({
             warnOnReplace: false,
             warnOnUnregistered: false,
-            useCleanCache: true
+            useCleanCache: true,
         });
 
         this.WitSDK = {
             Wit: sinon.stub(),
-            log: { Logger: sinon.stub() }
+            log: { Logger: sinon.stub() },
         };
         mockery.registerMock('node-wit', this.WitSDK);
 
         this.sessions = {
             read: sinon.stub(),
-            write: sinon.stub()
+            write: sinon.stub(),
         };
         mockery.registerMock('./sessions.service', this.sessions);
 
@@ -30,5 +30,42 @@ describe('Wit.ai service', function() {
 
     after(function() {
         mockery.disable();
+    });
+
+    describe('#set_name', function() {
+      it('returns a Promise', function() {
+        const ret = this.wit.set_name({
+          context: {},
+          entities: {},
+        });
+
+        expect(ret).to.be.a('Promise');
+      });
+
+      it('returns the name from entity name', function() {
+        const ret = this.wit.set_name({
+          context: {},
+          entities: {
+            name: [
+              { value: 'Pertti' },
+            ],
+          },
+        });
+
+        expect(ret).to.become({ name: 'Pertti' });
+      });
+
+      it('returns the name from entity contact', function() {
+        const ret = this.wit.set_name({
+            context: {},
+            entities: {
+              contact: [
+                { value: 'Jari' },
+              ],
+            },
+        });
+
+        expect(ret).to.become( { name: 'Jari' } );
+      });
     });
 });
