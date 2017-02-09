@@ -10,10 +10,14 @@
     //place settings for globals here, such as
     "exampleGlobalVariable": true
   },
-  "extends": "google",	
+  "extends": "google",
   "rules": {
-    //Additional eslint rules	
+    //Additional eslint rules
   },
+  "parserOptions": {
+    "ecmaVersion": 2016,
+    "sourceType": "module"
+    },
   "plugins": [
     //you can put plugins here
   ]
