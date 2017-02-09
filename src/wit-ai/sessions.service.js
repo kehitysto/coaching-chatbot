@@ -17,10 +17,13 @@ module.exports = class Sessions {
 
             this.db.get(params, (err, data) => {
                 if (err) {
-                    return reject(new Error(err.toString()));
+                    console.error(err.toString());
+                    return reject(err);
                 }
 
-                return resolve(data.context);
+                console.log('db read: ' + JSON.stringify(data));
+
+                return resolve(data.Item.context);
             });
         });
     }
@@ -42,9 +45,12 @@ module.exports = class Sessions {
                 }
             };
 
-            this.db.put(params, (err) => {
+            console.log('db write: ' + JSON.stringify(context));
+
+            this.db.put(params, (err, data) => {
                 if (err) {
-                    return reject(new Error(err.toString()));
+                    console.error(err.toString());
+                    return reject(err);
                 }
 
                 return resolve(context);

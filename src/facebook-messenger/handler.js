@@ -1,7 +1,6 @@
 import 'source-map-support/register'
 
-require('../lib/envVars')
-  .config();
+require('../lib/envVars').config();
 
 import Messenger from './messenger.service';
 import WitAI from '../wit-ai/wit-ai.service';

@@ -2,7 +2,6 @@ const path = require('path');
 
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
 
 
 module.exports = {
@@ -27,9 +26,6 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: '.env' }
     ]),
-    new Dotenv({
-      safe: true
-    }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
