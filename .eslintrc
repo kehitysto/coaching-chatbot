@@ -13,6 +13,7 @@
   "extends": "google",
   "rules": {
     //Additional eslint rules
+    "object-curly-spacing": [ "warn", "always" ]
   },
   "parserOptions": {
     "ecmaVersion": 2016,
