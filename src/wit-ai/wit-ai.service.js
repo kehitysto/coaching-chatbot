@@ -2,15 +2,14 @@ import { Wit, log } from 'node-wit';
 
 import Sessions from './sessions.service';
 
-// FIXME: uncouple fb-messenger service
-import FBMessenger from '../facebook-messenger/messenger.service';
-
 
 module.exports = class WitAI {
-    constructor() {
+    constructor(sendAction) {
         if (!process.env.WIT_AI_TOKEN) {
             throw new Error('No WIT_AI_TOKEN defined');
         }
+
+        this.sendAction = sendAction;
 
         this.wit = new Wit({
             accessToken: process.env.WIT_AI_TOKEN,
@@ -49,7 +48,7 @@ module.exports = class WitAI {
     }
 
     send({sessionId}, {text}) {
-        return FBMessenger.send(sessionId, text).then(() => null);
+        return this.sendAction(sessionId, text).then(() => null);
     }
 
     set_name({context, entities}) {

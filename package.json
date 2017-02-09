@@ -60,8 +60,9 @@
     "build": "cross-env NODE_ENV=production webpack --config build/webpack.config.js",
     "test": "mocha-webpack",
     "test:watch": "mocha-webpack --watch",
+    "lint": "eslint src",
+    "wit-client": "babel-node ./wit-client.js",
     "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run test",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
-    "lint": "eslint src"
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   }
 }
