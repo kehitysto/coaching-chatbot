@@ -1,22 +1,35 @@
 const nodeExternals = require('webpack-node-externals');
+const path = require('path');
+const isCoverage = process.env.NODE_ENV === 'coverage';
+
 
 
 module.exports = {
   output: {
-      devtoolModuleFilenameTemplate: '[absolute-resource-path]',
-      devtoolFallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]'
+    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+    devtoolFallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]'
   },
   target: 'node',
   module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        exclude: /(node_modules)/,
-        loader: 'babel-loader'
-      },
-      { test: /\.json/, loader: 'json-loader' }
-    ]
+    loaders: [].concat(
+      isCoverage ? {
+          test: /\.js$/,
+          include: path.resolve('src'), // instrument only testing sources with Istanbul, after ts-loader runs
+          loader: 'istanbul-instrumenter-loader'
+        }: [],
+      [
+        {
+          test: /\.js$/,
+          exclude: /(node_modules)/,
+          loader: 'babel-loader',
+          query: {
+            presets: ['es2015']
+          }
+        },
+        { test: /\.json/, loader: 'json-loader' }
+      ]
+    )
   },
   externals: [nodeExternals()], // ignore node_modules
-  devtool: "inline-cheap-module-source-map"
+  devtool: "inline-cheap-module-eval-source-map"
 };

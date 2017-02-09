@@ -21,7 +21,9 @@ module.exports = class Sessions {
                     return reject(err);
                 }
 
-                return resolve(data.context);
+                console.log('db read: ' + JSON.stringify(data));
+
+                return resolve(data.Item.context);
             });
         });
     }
@@ -42,6 +44,8 @@ module.exports = class Sessions {
                     context
                 }
             };
+
+            console.log('db write: ' + JSON.stringify(context));
 
             this.db.put(params, (err, data) => {
                 if (err) {
