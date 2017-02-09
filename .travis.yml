@@ -2,12 +2,15 @@ language: node_js
 node_js:
   - "4.3.2"
 
-before_install:
-  - npm i -g serverless@1.5.1
-
 script: 'npm run cover'
 
 after_success: 'npm run coveralls'
+
+before_deploy:
+  - npm run write-env
+  - npm i -g serverless@1.5.1
+
+# deploy: 'serverless deploy --stage=staging'
 
 notifications:
   slack: messengerbot:GrfKpxLfW17ZRAirqXjuqNfh
