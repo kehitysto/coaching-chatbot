@@ -6,11 +6,16 @@ script: 'npm run cover'
 
 after_success: 'npm run coveralls'
 
-before_deploy:
-  - npm run write-env
-  - npm i -g serverless@1.5.1
+deploy:
+  provider: script
+  script: scripts/deploy.sh staging
+  skip-cleanup: true
+  on:
+    branch: feature/continuous-deployment
 
-# deploy: 'serverless deploy --stage=staging'
+cache:
+  directories:
+      - node_modules
 
 notifications:
   slack: messengerbot:GrfKpxLfW17ZRAirqXjuqNfh
