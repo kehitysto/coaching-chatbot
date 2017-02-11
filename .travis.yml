@@ -8,7 +8,7 @@ after_success: 'npm run coveralls'
 
 deploy:
   provider: script
-  script: scripts/deploy.sh staging
+  script: "./scripts/deploy.sh" staging
   skip-cleanup: true
   on:
     branch: feature/continuous-deployment
