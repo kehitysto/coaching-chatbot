@@ -43,13 +43,11 @@ function read_values_from_env(options) {
 }
 
 function write_values_to_dotenv(values) {
-    const fd = fs.openSync(get_dotenv_path(), 'a');
+    const fpath = get_dotenv_path();
 
     for (let option in values) {
-        fs.appendFileSync(fd, `${option}=${values[option]}\n`);
+        fs.appendFileSync(fpath, `${option}=${values[option]}\n`);
     }
-
-    fs.closeSync(fd);
 }
 
 main();
