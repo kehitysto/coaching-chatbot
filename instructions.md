@@ -11,7 +11,7 @@
 
 1. Run `serverless install --url https://github.com/kehitysto/coaching-chatbot`
 2. Run `npm install`
-3. Rename example.env to .env and fill in `FACEBOOK_BOT_VERIFY_TOKEN`
+3. Rename .env.example to .env and fill in `FACEBOOK_BOT_VERIFY_TOKEN`
 4. Run `serverless deploy` then copy the GET endpoint url
 
 ## Facebook App Configuration
