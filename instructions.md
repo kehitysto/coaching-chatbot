@@ -1,4 +1,4 @@
-## Usage
+## Start
  - Prerequisites: npm must be installed
  - Install *serverless* (preferably as global) and dependencies:
 
