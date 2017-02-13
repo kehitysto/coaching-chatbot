@@ -9,7 +9,7 @@
 
 5. In Facebook Developer site create new Facebook application and page
   * Create Facebook application -> https://developers.facebook.com/quickstarts/?platform=web
-  * Create Facebook page -> https://www.facebook.com/pages/create (if the page already exists, just use it instead when we refer to step 5 page)
+  * Create Facebook page -> https://www.facebook.com/pages/create (if the page already exists, use it when we refer to the page created in step 5)
 6. Go to the App Dashboard and under Product Settings and setup webhook by clicking `Setup Webhooks`
   * Callback URL -> url from step 4 
   * Verify Token -> from step 3 
