@@ -6,22 +6,22 @@ const dotenv = require('dotenv');
 
 
 function main() {
-    const options = read_options_from_example();
-    const values = read_values_from_env(options);
+    const options = readOptionsFromExample();
+    const values = readValuesFromEnv(options);
 
-    write_values_to_dotenv(values);
+    writeValuesToDotenv(values);
 }
 
-function get_example_path() {
+function getExamplePath() {
     return path.resolve(__dirname, '../.env.example');
 }
 
-function get_dotenv_path() {
+function getDotenvPath() {
     return path.resolve(__dirname, '../.env');
 }
 
-function read_options_from_example() {
-    const cfg = dotenv.config({ path: get_example_path() });
+function readOptionsFromExample() {
+    const cfg = dotenv.config({ path: getExamplePath() });
 
     const ret = [];
     for (let option in cfg.parsed) {
@@ -31,7 +31,7 @@ function read_options_from_example() {
     return ret;
 }
 
-function read_values_from_env(options) {
+function readValuesFromEnv(options) {
     const ret = {};
     for (let i = 0; i < options.length; ++i) {
         if (process.env[options[i]]) {
@@ -42,8 +42,8 @@ function read_values_from_env(options) {
     return ret;
 }
 
-function write_values_to_dotenv(values) {
-    const fpath = get_dotenv_path();
+function writeValuesToDotenv(values) {
+    const fpath = getDotenvPath();
 
     for (let option in values) {
         fs.appendFileSync(fpath, `${option}=${values[option]}\n`);
