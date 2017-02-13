@@ -18,6 +18,7 @@ module.exports = class WitAI {
                 set_name: this.set_name.bind(this),
                 set_job: this.set_job.bind(this),
                 set_age: this.set_age.bind(this),
+                reset: this.reset.bind(this),
             },
             logger: new log.Logger(log.INFO),
         });
@@ -102,6 +103,12 @@ module.exports = class WitAI {
             }
 
             return reject(new Error());
+        });
+    }
+
+    reset({context, entities}) {
+        return new Promise((resolve, reject) => {
+                return resolve( {} );
         });
     }
 }
