@@ -17,8 +17,11 @@
   },
   "parserOptions": {
     "ecmaVersion": 2016,
-    "sourceType": "module"
-    },
+    "sourceType": "module",
+    "ecmaFeatures": {
+       "experimentalObjectRestSpread": true
+    }
+  },
   "plugins": [
     //you can put plugins here
   ]
