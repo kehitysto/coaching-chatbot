@@ -1,0 +1,28 @@
+{
+  "env": {
+    //remove either of the lines below if you don't need it
+    //enable nodejs environment
+    "node": 1,
+    //enable browser environment
+    "browser": 1
+  },
+  "globals": {
+    //place settings for globals here, such as
+    "exampleGlobalVariable": true
+  },
+  "extends": "google",
+  "rules": {
+    //Additional eslint rules
+    "object-curly-spacing": [ "warn", "always" ]
+  },
+  "parserOptions": {
+    "ecmaVersion": 2016,
+    "sourceType": "module",
+    "ecmaFeatures": {
+       "experimentalObjectRestSpread": true
+    }
+  },
+  "plugins": [
+    //you can put plugins here
+  ]
+}

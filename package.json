@@ -5,10 +5,8 @@
   "main": "handler.js",
   "directories": {
     "doc": "doc",
+    "src": "src",
     "test": "test"
-  },
-  "scripts": {
-    "test": "SLS_DEBUG=true serverless invoke test"
   },
   "repository": {
     "type": "git",
@@ -20,10 +18,53 @@
     "url": "https://github.com/kehitysto/coaching-chatbot/issues"
   },
   "homepage": "https://github.com/kehitysto/coaching-chatbot#readme",
+  "nyc": {
+    "include": [
+      "src/**/*.js"
+    ],
+    "instrument": false,
+    "sourceMap": false
+  },
   "devDependencies": {
+    "aws-sdk": "^2.9.0",
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-plugin-transform-object-rest-spread": "^6.22.0",
+    "babel-preset-es2015": "^6.22.0",
+    "chai": "*",
+    "chai-as-promised": "^6.0.0",
     "copy-webpack-plugin": "^4.0.1",
+    "coveralls": "^2.11.16",
+    "cross-env": "^3.1.4",
+    "dotenv": "^4.0.0",
+    "dotenv-webpack": "^1.3.2",
+    "eslint": "^3.14.1",
+    "eslint-config-google": "^0.7.1",
+    "inject-loader": "^3.0.0-beta4",
+    "istanbul-instrumenter-loader": "^1.2.0",
     "json-loader": "^0.5.4",
-    "serverless-mocha-plugin": "^1.3.2",
-    "serverless-webpack": "^1.0.0-rc.4"
+    "mocha": "*",
+    "mocha-webpack": "^1.0.0-beta.1",
+    "mockery": "^2.0.0",
+    "node-wit": "^4.2.0",
+    "nyc": "^10.1.2",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1",
+    "serverless-webpack": "^1.0.0-rc.4",
+    "sinon": "^1.17.7",
+    "sinon-chai": "^2.8.0",
+    "source-map-support": "^0.4.11",
+    "webpack": "^1.14.0",
+    "webpack-node-externals": "^1.5.4"
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=production webpack --config build/webpack.config.js",
+    "test": "mocha-webpack",
+    "test:watch": "mocha-webpack --watch",
+    "lint": "eslint src",
+    "wit-client": "babel-node ./scripts/wit-client.js",
+    "write-env": "node ./scripts/write-env.js",
+    "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run test",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   }
 }

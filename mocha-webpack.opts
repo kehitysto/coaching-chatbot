@@ -1,0 +1,5 @@
+--require test/common
+--webpack-config webpack.config.test.js
+--recursive
+src
+test
