@@ -23,7 +23,12 @@ module.exports = class Sessions {
 
                 console.log('db read: ' + JSON.stringify(data));
 
-                return resolve(data.Item.context);
+                if (data.Item !== undefined) {
+                    return resolve(data.Item.context);
+                } else {
+                    // return an empty context for new sessions
+                    return resolve({});
+                }
             });
         });
     }
