@@ -1,3 +1,12 @@
+## Usage
+ - Prerequisites: npm must be installed
+ - Install *serverless* (preferably as global) and dependencies:
+
+    ```
+    $ npm install -g serverless
+    $ npm install
+    ```
+
 ## Coaching chatbot Installation
 
 1. Run `serverless install --url https://github.com/kehitysto/coaching-chatbot`
