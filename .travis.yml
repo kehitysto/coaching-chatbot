@@ -1,13 +1,11 @@
 language: node_js
 node_js:
-  - "4.3.2"
-
+- 4.3.2
 before_install:
-  - npm i -g serverless@1.5.1
-
-script: 'npm run cover'
-
-after_success: 'npm run coveralls'
-
+- npm i -g serverless@1.5.1
+script: npm run cover
+after_success: npm run coveralls
 notifications:
-  slack: messengerbot:GrfKpxLfW17ZRAirqXjuqNfh
+  slack:
+    rooms:
+      secure: BkEzp8l07PQZM0ShlF9JnL+89ZTI85Odg4GZwSNfZUrt1rpelqdH6timORUNdcsi0B7ZIjnVEWp9ES5ZwmVLsVMIxj3DpZ4gCUUnnNqRJte8qf+1YVwJasAR1AIoAQQa/b/qAYGUs83eZLiiUK7x9igbkGABRJg5YuNyXVAy92WkILaUFD60WkC4Vx4xCmgq2TGmc6qKotcXLAp6R3toucHsqb2/sA+25+XqYX1Il8vPoCJ0P0fzm6MlvLv/bP1RxPYh6kflObkavRIparZFNP1mhwPMRoJ3qjQ8t/NqEVexPWSdEvD5hw1ofG6DQf1Zjdh0nhYB0MuZ7td/N0VLAA+ptGVVtkwqBugvxaYcEITerRPxO6RdRiKmDzePG/+d7vEHXEy9tw/kLb9l9ETS7yTNyorfBQARS3xbeXjXeuzZzIV21175cB8RxHyh0XOZOJEf5OIS0XQoeuhsw25+snwN7VkdoIs+rTYQLOuI6b+IF75CHMcJfqq6NYB2XVBASh4vUoC3qoHsfP1jvJFX8PNWH90FIDJKLqBOcS5p65Tf6SqFN9ZtMXBApJgLZB5sbmNx2uvx46UK/XcqNzWHyyWebnohK75YqvvQK1sLQypjDioaBgHtelXwQDi3KR84xmcuYDTuqiMOQ/Ly8Xc8ANf6UhK0Y3QC1m9WE2CI6OE=
