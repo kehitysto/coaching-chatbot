@@ -26,6 +26,10 @@ module.exports = class WitAI {
     }
 
     receive(sessionId, text) {
+        if (text === "!reset") {
+            return this.sessions.write(sessionId, {})
+                .then(() => this.sendAction(sessionId, "!!! Profiili resetoitu."));
+        }
         return this.sessions.read(sessionId)
             .catch(err => {
                 console.error(err.message.toString());
