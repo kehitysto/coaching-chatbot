@@ -62,7 +62,8 @@
     "test": "mocha-webpack",
     "test:watch": "mocha-webpack --watch",
     "lint": "eslint src",
-    "wit-client": "babel-node ./wit-client.js",
+    "wit-client": "babel-node ./scripts/wit-client.js",
+    "write-env": "node ./scripts/write-env.js",
     "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run test",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   }

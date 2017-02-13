@@ -1,10 +1,22 @@
 language: node_js
 node_js:
-- 4.3.2
-before_install:
-- npm i -g serverless@1.5.1
-script: npm run cover
-after_success: npm run coveralls
+  - "4.3.2"
+
+script: 'npm run cover'
+
+after_success: 'npm run coveralls'
+
+deploy:
+  provider: script
+  script: ./scripts/deploy.sh staging
+  skip-cleanup: true
+  on:
+    branch: dev
+
+cache:
+  directories:
+      - node_modules
+
 notifications:
   slack:
     rooms:
