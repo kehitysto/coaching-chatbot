@@ -35,10 +35,8 @@ module.exports = class Session {
     setStateArray(array) {
         let state = "";
 
-        console.log(array);
         for (let i = 0; i < array.length; ++i) {
             state += `/${array[i][0]}?${array[i][1]}`;
-            console.log(state);
         }
 
         return state;
@@ -49,7 +47,7 @@ module.exports = class Session {
     }
 
     pushState(state) {
-        this.state.append([state, 0]);
+        this.state.push([state, 0]);
     }
 
     popState() {
