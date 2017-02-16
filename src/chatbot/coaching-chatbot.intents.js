@@ -1,8 +1,28 @@
-export const yes = [
-    [/kyllä/i,
-     /j[ou]{2,}/i]
-];
+module.exports = {
+    yes: [
+        [/^kyllä/i,
+         /^j[ou]{2,}/i]
+    ],
 
-export const no = [
-    [/ei/i]
-];
+    no: [
+        [/^ei/i]
+    ],
+
+    change_name: [
+        [/^vaihda nimi/i,
+         /^vaihda nimeä/i]
+    ],
+
+    change_job: [
+        [/^vaihda ammattia?/i,
+         /^vaihda työ(?:tä)?/i]
+    ],
+
+    find_match: [
+        [/^etsi pari/i]
+    ],
+    
+    reset: [
+        [/^\!reset$/]
+    ],
+};

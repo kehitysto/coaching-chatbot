@@ -1,9 +1,12 @@
 {
   "@greeting": "Hei! Olen Kehitystön vertaisohjausrobotti. Kiinnostaako sinua löytää pari vertaisohjausta varten?",
   "@goodbye": "Hyvästi!",
+  "@great": "Hienoa!",
   "@unclear": "Anteeksi, en ymmärtänyt mitä tarkoitat.",
+  "@not_implemented": "Toimintoa ei ole vielä toteutettu...",
+  "@reset": " ## TIEDOT NOLLATTU ## ",
 
-  "@request_name": "Hienoa! Millä nimellä haluaisit esittäytyä mahdollisille pareillesi?",
+  "@request_name": "Millä nimellä haluaisit esittäytyä mahdollisille pareillesi?",
   "@confirm_name": "Kiitos {name}. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. \"Vaihda nimi\".",
   "@request_job": "Seuraavaksi haluaisin tietää ammattisi.",
   "@confirm_job": "Parin etsijät näkisivät nyt sinut seuraavasti: \"{name}, {job}\".",

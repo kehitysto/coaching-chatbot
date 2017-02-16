@@ -14,13 +14,16 @@ module.exports = class Dialog {
         this._strings = strings;
     }
 
-    addState(stateId, state) {
+    addState(stateId, substates, intents=[]) {
         if (stateId.startsWith('/')) {
             stateId = stateId.substr(1);
         }
 
         log.debug("Registering state /{0}", stateId);
-        this._tree[stateId] = state;
+        this._tree[stateId] = {
+            intents,
+            substates
+        };
 
         return this;
     }
@@ -44,8 +47,9 @@ module.exports = class Dialog {
 
         const session = new Session(this).start(context, input);
 
-        return this._runStep(0, session, input)
-            .then(session => session.finalize());
+        return this._runIntents(session, input)
+            .then(() => this._runStep(0, session, input))
+            .then(() => session.finalize());
     }
 
     runAction(actionId, session) {
@@ -109,7 +113,28 @@ module.exports = class Dialog {
             return 0;
         }
 
-        return this._tree[stateId].length;
+        return this._tree[stateId].substates.length;
+    }
+
+    _runIntents(session, input) {
+        return new Promise((resolve, reject) => {
+            const states = session.getStateArray();
+
+            for (let i = 0; i < states.length; ++i) {
+                let intents = this._tree[states[i]].intents;
+
+                for (let j = 0; j < intents.length; ++j) {
+                    let match = this.checkIntent(intents[j][0], session);
+
+                    if (match !== false) {
+                        intents[j][1](session, match);
+                        return resolve();
+                    }
+                }
+            }
+
+            return resolve();
+        });
     }
 
     _runStep(step, session, input) {
@@ -125,10 +150,10 @@ module.exports = class Dialog {
             if (this._tree[state] !== undefined) {
                 const substate = session.getSubState();
 
-                this._tree[state][substate](session, input);
+                this._tree[state].substates[substate](session, input);
 
                 if (session.done) {
-                    return resolve(session);
+                    return resolve();
                 } else {
                     return resolve(
                         this._runStep(step+1, session, input)
@@ -136,7 +161,7 @@ module.exports = class Dialog {
                 }
             }
 
-            return Reject(
+            return reject(
                 new Error(`Unknown state: ${state}`)
             );
         });

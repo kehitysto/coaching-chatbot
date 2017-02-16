@@ -47,9 +47,25 @@ module.exports = class Session {
         return this.state[this.state.length-1][0];
     }
 
+    getStateArray() {
+        const out = [];
+
+        for (let i = 0; i < this.state.length; ++i) {
+            out.push(this.state[i][0]);
+        }
+
+        return out;
+    }
+
     pushState(state) {
         if (state.startsWith('/')) {
             state = state.substr(1);
+        }
+
+        for (let i = 0; i < this.state.length; ++i) {
+            if (this.state[i][0] === state) {
+                throw new Error("Recursive state tree");
+            }
         }
 
         this.state.push([state, 0]);
@@ -65,10 +81,14 @@ module.exports = class Session {
 
     switchState(newState) {
         if (newState.startsWith('/')) {
-            newState = stateId.substr(1);
+            newState = newState.substr(1);
         }
 
         this.state[this.state.length-1] = [newState, 0];
+    }
+
+    clearState() {
+        this.state = [['base', 0]];
     }
 
     getSubState() {

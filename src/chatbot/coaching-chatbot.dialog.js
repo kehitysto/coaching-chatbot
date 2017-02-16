@@ -37,11 +37,34 @@ dialog
 
                 } else {
                     session.addResult("@unclear");
+                    session.next();
                 }
             }
+        ],
+        [
+            ['reset', (session) => {
+                session.runAction('reset');
+                session.clearState();
+            }]
         ])
     .addState(
         '/create_profile',
+        [
+            (session) => {
+                session.addResult("@great");
+                session.next();
+                session.pushState('/set_name');
+            },
+            (session) => {
+                session.next();
+                session.pushState('/set_job');
+            },
+            (session) => {
+                session.switchState('/profile');
+            }
+        ])
+    .addState(
+        '/set_name',
         [
             (session) => {
                 session.addResult("@request_name");
@@ -51,8 +74,12 @@ dialog
             (session) => {
                 session.runAction('set_name');
                 session.addResult('@confirm_name');
-                session.next();
-            },
+                session.popState();
+            }
+        ])
+    .addState(
+        '/set_job',
+        [
             (session) => {
                 session.addResult('@request_job');
                 session.next();
@@ -61,7 +88,7 @@ dialog
             (session) => {
                 session.runAction('set_job');
                 session.addResult('@confirm_job');
-                session.pushState('/profile');
+                session.popState();
             }
         ])
     .addState(
@@ -69,13 +96,19 @@ dialog
         [
             (session) => {
                 session.addResult('@display_profile');
-                session.next();
                 session.endDialog();
-            },
-            (session) => {
-                session.addResult("@unclear");
-                session.next();
             }
+        ],
+        [
+            ['change_name', (session) => {
+                session.pushState('/set_name');
+            }],
+            ['change_job', (session) => {
+                session.pushState('/set_job');
+            }],
+            ['find_match', (session) => {
+                session.addResult("@not_implemented");
+            }],
         ]);
 
 module.exports = dialog;
