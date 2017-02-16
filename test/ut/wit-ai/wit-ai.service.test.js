@@ -24,7 +24,7 @@ describe('Wit.ai service', function() {
         };
         mockery.registerMock('./sessions.service', this.sessions);
 
-        const WitAI = require('../../src/wit-ai/wit-ai.service');
+        const WitAI = require('../../../src/wit-ai/wit-ai.service');
         this.wit = new WitAI();
     });
 

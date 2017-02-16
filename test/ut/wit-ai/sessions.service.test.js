@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 
 import AWS from 'aws-sdk';
-import Sessions from '../../src/wit-ai/sessions.service';
+import Sessions from '../../../src/wit-ai/sessions.service';
 
 describe('Sessions service', function() {
   before(function() {
