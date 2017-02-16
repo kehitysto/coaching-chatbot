@@ -1,24 +1,107 @@
 module.exports = class Session {
-    constructor(context) {
-        this.context = context;
+    constructor(dialog) {
+        this.dialog = dialog;
+        this.context = null;
+        this.input = null;
 
-        this.result = [];
-        this.done = false;
+        this.result = null;
+
+        this._results = [];
+        this._done = false;
     }
 
-    start() {
-        this.state = this.getStateArray();
+    start(context, input) {
+        this.context = context;
+        this.input = input;
+
+        this.state = this._getStateArray();
+        delete this.context.state;
+
+        this._results = [];
+        this._done = false;
 
         return this;
     }
 
     finalize() {
-        this.context.state = this.setStateArray(this.state);
+        this.context.state = this._setStateArray(this.state);
+
+        this._processResults();
 
         return this;
     }
 
-    getStateArray() {
+    getInput() {
+        return this.input;
+    }
+
+    getContext() {
+        return this.context;
+    }
+
+    getResult() {
+        return this.result;
+    }
+
+    getState() {
+        return this.state[this.state.length-1][0];
+    }
+
+    pushState(state) {
+        if (state.startsWith('/')) {
+            state = state.substr(1);
+        }
+
+        this.state.push([state, 0]);
+    }
+
+    popState() {
+        if (this.state.length > 1) {
+            this.state.pop();
+        } else {
+            this.state[0] = ['base', 0];
+        }
+    }
+
+    switchState(newState) {
+        if (newState.startsWith('/')) {
+            newState = stateId.substr(1);
+        }
+
+        this.state[this.state.length-1] = [newState, 0];
+    }
+
+    getSubState() {
+        return this.state[this.state.length-1][1];
+    }
+
+    addResult() {
+        this._results.push(
+            Array.prototype.slice.apply(arguments)
+        );
+    }
+
+    runAction(actionId) {
+        return this.dialog.runAction(actionId, this)
+            .then(context => this.context = context);
+    }
+
+    checkIntent(intentId) {
+        return this.dialog.checkIntent(intentId, this);
+    }
+
+    next() {
+        const state = this.state[this.state.length-1];
+        const subStateCount = this.dialog.getSubStateCount(this.getState());
+
+        state[1] = (state[1] + 1) % subStateCount;
+    }
+
+    endDialog() {
+        this.done = true;
+    }
+
+    _getStateArray() {
         if (this.context.state === undefined) {
             return [['base', 0]];
         }
@@ -32,7 +115,7 @@ module.exports = class Session {
         return state;
     }
 
-    setStateArray(array) {
+    _setStateArray(array) {
         let state = "";
 
         for (let i = 0; i < array.length; ++i) {
@@ -42,49 +125,13 @@ module.exports = class Session {
         return state;
     }
 
-    getState() {
-        return this.state[this.state.length-1][0];
-    }
+    _processResults() {
+        this.result = [];
 
-    pushState(state) {
-        this.state.push([state, 0]);
-    }
-
-    popState() {
-        if (this.state.length > 1) {
-            this.state.pop();
-        } else {
-            this.state[0] = ['base', 0];
+        for (let i = 0; i < this._results.length; ++i) {
+            this.result.push(
+                this.dialog.getString(this._results[i], this.context)
+            );
         }
-    }
-
-    switchState(newState) {
-        this.state[state.length-1] = [newState, 0];
-    }
-
-    getSubState() {
-        return this.state[this.state.length-1][1];
-    }
-
-    setSubState(substate) {
-        this.state[this.state.length-1][1] = substate;
-    }
-
-    addResult() {
-        this.result.push(
-            Array.prototype.slice.apply(arguments)
-        );
-    }
-
-    endDialog() {
-        this.done = true;
-    }
-
-    getResult() {
-        return this.result;
-    }
-
-    getContext() {
-        return this.context;
     }
 };

@@ -1,7 +1,15 @@
 {
-  "GREETING": "Hei! Olen Kehitystön vertaisohjausrobotti. Kiinnostaako sinua löytää pari vertaisohjausta varten?",
-  "REQUEST_NAME": "Hienoa! Millä nimellä haluaisit esittäytyä mahdollisille pareillesi?",
+  "@greeting": "Hei! Olen Kehitystön vertaisohjausrobotti. Kiinnostaako sinua löytää pari vertaisohjausta varten?",
+  "@goodbye": "Hyvästi!",
+  "@unclear": "Anteeksi, en ymmärtänyt mitä tarkoitat.",
 
-  "YES": "Kyllä",
-  "NO": "Ei"
+  "@request_name": "Hienoa! Millä nimellä haluaisit esittäytyä mahdollisille pareillesi?",
+  "@confirm_name": "Kiitos {name}. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. \"Vaihda nimi\".",
+  "@request_job": "Seuraavaksi haluaisin tietää ammattisi.",
+  "@confirm_job": "Parin etsijät näkisivät nyt sinut seuraavasti: \"{name}, {job}\".",
+  
+  "@display_profile": "Voit lisätä ikäsi tai paikkakuntasi kertomalla minulle esim. \"Lisää ikä 33\". Jos olet tyytyväinen profiilisi, voit siirtyä parin etsimiseen kirjoittamalla \"Etsi pari\".",
+
+  "@yes": "Kyllä",
+  "@no": "Ei"
 }

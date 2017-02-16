@@ -43,8 +43,11 @@ function interactive(bot) {
       return prompt();
     }
     bot.receive(sessionId, line)
-    .then(msg => console.log(msg))
-    .catch(err => console.error(err))
+      .then(msg => {
+        console.log(msg.join('\n'));
+        console.log();
+      })
+      .catch(err => console.error(err))
   });
 };
 

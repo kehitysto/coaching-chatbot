@@ -1,3 +1,6 @@
+import log from '../lib/logger.service';
+
+
 module.exports = class Chatbot {
     constructor(dialog, sessions) {
         this._dialog = dialog;
@@ -17,11 +20,7 @@ module.exports = class Chatbot {
                 );
             })
             .then((session) => {
-                console.log('The context looks like this now: '
-                + JSON.stringify(session.getContext()));
-                return session;
-            })
-            .then((session) => {
+                log.info('Writing context: {0}', JSON.stringify(session.getContext()));
                 this._sessions.write(sessionId, session.getContext());
                 return session.getResult();
             });
