@@ -1,0 +1,7 @@
+{
+  "GREETING": "Hei! Olen Kehitystön vertaisohjausrobotti. Kiinnostaako sinua löytää pari vertaisohjausta varten?",
+  "REQUEST_NAME": "Hienoa! Millä nimellä haluaisit esittäytyä mahdollisille pareillesi?",
+
+  "YES": "Kyllä",
+  "NO": "Ei"
+}

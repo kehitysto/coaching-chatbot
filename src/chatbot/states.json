@@ -1,0 +1,20 @@
+{
+    "INITIAL": {
+        "message": "GREETING",
+        "quickreply": [
+            "YES",
+            "NO"
+        ],
+        "response": {
+            "YES": "GET_NAME",
+            "NO": "INITIAL"
+        }
+    },
+
+    "GET_NAME": {
+        "message": "REQUEST_NAME",
+        "response": {
+            "DEFAULT": "INITIAL"
+        }
+    }
+}
