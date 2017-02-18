@@ -1,11 +1,16 @@
+import log from '../lib/logger.service';
+
+
 module.exports = class Session {
     constructor(dialog) {
         this.dialog = dialog;
         this.context = null;
+        this.userData = null;
         this.input = null;
 
         this.result = null;
 
+        this._queue = null;
         this._results = [];
         this._done = false;
     }
@@ -13,10 +18,12 @@ module.exports = class Session {
     start(context, input) {
         this.context = context;
         this.input = input;
+        this.userData = {};
 
         this.state = this._getStateArray();
         delete this.context.state;
 
+        this._queue = Promise.resolve();
         this._results = [];
         this._done = false;
 
@@ -31,12 +38,39 @@ module.exports = class Session {
         return this;
     }
 
+    runQueue() {
+        return this._queue;
+    }
+
     getInput() {
         return this.input;
     }
 
     getContext() {
         return this.context;
+    }
+
+    setContext(context) {
+        this.context = context;
+    }
+
+    getUserData() {
+        return this.userData;
+    }
+
+    setUserData(userData) {
+        this.userData = userData;
+    }
+
+    getVariables() {
+        log.debug("Building variable state...");
+        log.debug("context: {0}", JSON.stringify(this.context));
+        log.debug("userData: {0}", JSON.stringify(this.userData));
+
+        return {
+            ...this.context,
+            ...this.userData
+        }
     }
 
     getResult() {
@@ -102,8 +136,9 @@ module.exports = class Session {
     }
 
     runAction(actionId, input=null) {
-        return this.dialog.runAction(actionId, this, input)
-            .then(context => this.context = context);
+        this._queue = this._queue.then(
+            this.dialog.runAction(actionId, this, input)
+        );
     }
 
     checkIntent(intentId) {
@@ -150,7 +185,7 @@ module.exports = class Session {
 
         for (let i = 0; i < this._results.length; ++i) {
             this.result.push(
-                this.dialog.getString(this._results[i], this.context)
+                this.dialog.getString(this._results[i], this.getVariables())
             );
         }
     }

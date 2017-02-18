@@ -1,6 +1,6 @@
 import Dialog from './dialog';
-import strings from './strings.json';
 
+import strings from './coaching-chatbot.strings.json';
 import * as actions from './coaching-chatbot.actions';
 import * as intents from './coaching-chatbot.intents';
 
@@ -88,7 +88,6 @@ dialog
             },
             (session) => {
                 session.runAction('set_job');
-                session.addResult('@confirm_job');
                 session.popState();
             }
         ])
@@ -124,6 +123,7 @@ dialog
         '/profile',
         [
             (session) => {
+                session.runAction('update_profile');
                 session.addResult('@display_profile');
                 session.endDialog();
             }

@@ -59,8 +59,23 @@ module.exports = class Dialog {
             return Promise.reject(new Error(`No such action: ${actionId}`));
         }
 
-        return this._actions[actionId](session.getContext(),
-                                       input || session.getInput());
+        const actionData = {
+            context: session.getContext(),
+            userData: session.getUserData(),
+            input: input || session.getInput()
+        };
+        const promise = this._actions[actionId](actionData).then((result) => {
+            if (result.context) {
+                log.debug("Updating context: {0}", JSON.stringify(result.context));
+                session.setContext(result.context);
+            }
+            if (result.userData) {
+                log.debug("Updating userData: {0}", JSON.stringify(result.userData));
+                session.setUserData(result.userData);
+            }
+        });
+
+        return promise;
     }
 
     checkIntent(intentId, session) {
@@ -92,15 +107,18 @@ module.exports = class Dialog {
         }
     }
 
-    getString(stringId, context) {
+    getString(stringId, variables) {
         log.debug("Retrieving string {0}", stringId);
 
         const template = this._strings[stringId];
 
         if (template !== undefined) {
+            log.debug("Template: {0}", template);
+            log.debug("Variables: {0}", JSON.stringify(variables));
+
             return template.replace(
                 /{(\w+)}/g,
-                (match, name) => typeof context[name] != 'undefined' ? context[name] : match
+                (match, name) => typeof variables[name] != 'undefined' ? variables[name] : match
             )
         } else {
             log.warning("String not found: {0}", stringId);
@@ -153,13 +171,13 @@ module.exports = class Dialog {
 
                 this._tree[state].substates[substate](session, input);
 
-                if (session.done) {
-                    return resolve();
-                } else {
-                    return resolve(
-                        this._runStep(step+1, session, input)
-                    );
-                }
+                return resolve(
+                    session.runQueue().then(() => {
+                        if (!session.done) {
+                            return this._runStep(step+1, session, input);
+                        }
+                    })
+                );
             }
 
             return reject(
