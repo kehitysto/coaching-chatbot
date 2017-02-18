@@ -101,8 +101,8 @@ module.exports = class Session {
         );
     }
 
-    runAction(actionId) {
-        return this.dialog.runAction(actionId, this)
+    runAction(actionId, input=null) {
+        return this.dialog.runAction(actionId, this, input)
             .then(context => this.context = context);
     }
 

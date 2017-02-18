@@ -4,6 +4,8 @@
 
 import request from 'request-promise';
 
+import log from '../lib/logger.service';
+
 
 const Messenger = {
     send,
@@ -59,7 +61,13 @@ function _receiveMessage(msgEvent, wit) {
             return reject(new Error('Attachments are not supported'));
         } else if (text) {
             return resolve(
-                wit.receive(sender, text)
+                wit.receive(sender, text).then((response) => {
+                    let promise = Promise.resolve();
+                    for (let i = 0; i < response.length; ++i) {
+                        promise = promise.then(() => send(sender, response[i]));
+                    }
+                    return promise;
+                })
             );
         }
     });
@@ -69,6 +77,8 @@ function _fbMessageRequest(json) {
     if (!process.env.FACEBOOK_PAGE_ACCESS_TOKEN) {
         return Promise.reject(new Error('No FACEBOOK_PAGE_ACCESS_TOKEN defined'));
     }
+
+    log.info("Sending message to Facebook: {0}", JSON.stringify(json));
 
     return request({
         url: 'https://graph.facebook.com/v2.6/me/messages',

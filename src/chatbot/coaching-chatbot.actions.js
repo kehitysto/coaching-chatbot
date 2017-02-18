@@ -25,6 +25,15 @@ export function set_age(context, input) {
     });
 }
 
+export function set_place(context, input) {
+    return new Promise((resolve, reject) => {
+        return resolve({
+            ...context,
+            place: input
+        });
+    });
+}
+
 export function reset(context) {
     return new Promise((resolve, reject) => {
         return resolve({});

@@ -3,7 +3,11 @@ import 'source-map-support/register'
 require('../lib/envVars').config();
 
 import Messenger from './messenger.service';
-import WitAI from '../wit-ai/wit-ai.service';
+import Sessions from '../wit-ai/sessions.service';
+import Chatbot from '../chatbot/chatbot.service';
+
+import dialog from '../chatbot/coaching-chatbot.dialog';
+
 
 module.exports.handler = (event, context, cb) => {
   if (event.method === 'GET') {
@@ -15,9 +19,10 @@ module.exports.handler = (event, context, cb) => {
       .catch(err => cb(err));
 
   } else if (event.method === 'POST') {
-    const wit = new WitAI(Messenger.send);
+    const sessions = new Sessions();
+    const bot = new Chatbot(dialog, sessions);
 
-    return Messenger.receive(event.body, wit)
+    return Messenger.receive(event.body, bot)
       .then(response => cb(null, response))
       .catch(err => cb(err));
   }

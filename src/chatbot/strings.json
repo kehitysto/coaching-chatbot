@@ -8,8 +8,12 @@
 
   "@request_name": "Millä nimellä haluaisit esittäytyä mahdollisille pareillesi?",
   "@confirm_name": "Kiitos {name}. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. \"Vaihda nimi\".",
-  "@request_job": "Seuraavaksi haluaisin tietää ammattisi.",
+  "@request_job": "Seuraavaksi haluaisin tietää mikä on ammattisi?",
   "@confirm_job": "Parin etsijät näkisivät nyt sinut seuraavasti: \"{name}, {job}\".",
+  "@request_age": "Anna ikäsi.",
+  "@confirm_age": "Iäksesi on nyt asetettu {age}.",
+  "@request_place": "Anna paikkakuntasi.",
+  "@confirm_place": "Paikkakunta lisätty profiiliin.",
   
   "@display_profile": "Voit lisätä ikäsi tai paikkakuntasi kertomalla minulle esim. \"Lisää ikä 33\". Jos olet tyytyväinen profiilisi, voit siirtyä parin etsimiseen kirjoittamalla \"Etsi pari\".",
 

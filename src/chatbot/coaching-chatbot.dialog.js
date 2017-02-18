@@ -44,6 +44,7 @@ dialog
         [
             ['reset', (session) => {
                 session.runAction('reset');
+                session.addResult('@reset');
                 session.clearState();
             }]
         ])
@@ -92,6 +93,34 @@ dialog
             }
         ])
     .addState(
+        '/set_age',
+        [
+            (session) => {
+                session.addResult('@request_age');
+                session.next();
+                session.endDialog();
+            },
+            (session) => {
+                session.runAction('set_age');
+                session.addResult('@confirm_age');
+                session.popState();
+            }
+        ])
+    .addState(
+        '/set_place',
+        [
+            (session) => {
+                session.addResult('@request_place');
+                session.next();
+                session.endDialog();
+            },
+            (session) => {
+                session.runAction('set_place');
+                session.addResult('@confirm_place');
+                session.popState();
+            }
+        ])
+    .addState(
         '/profile',
         [
             (session) => {
@@ -100,11 +129,37 @@ dialog
             }
         ],
         [
-            ['change_name', (session) => {
-                session.pushState('/set_name');
+            ['change_name', (session, match) => {
+                if (match !== true) {
+                    session.runAction('set_name', match);
+                    session.addResult('@confirm_name');
+                } else {
+                    session.pushState('/set_name');
+                }
             }],
-            ['change_job', (session) => {
-                session.pushState('/set_job');
+            ['change_job', (session, match) => {
+                if (match !== true) {
+                    session.runAction('set_job', match);
+                    session.addResult('@confirm_job');
+                } else {
+                    session.pushState('/set_job');
+                }
+            }],
+            ['set_age', (session, match) => {
+                if (match !== true) {
+                    session.runAction('set_age', match);
+                    session.addResult('@confirm_age');
+                } else {
+                    session.pushState('/set_age');
+                }
+            }],
+            ['set_place', (session, match) => {
+                if (match !== true) {
+                    session.runAction('set_place', match);
+                    session.addResult('@confirm_place');
+                } else {
+                    session.pushState('/set_place');
+                }
             }],
             ['find_match', (session) => {
                 session.addResult("@not_implemented");

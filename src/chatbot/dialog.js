@@ -52,14 +52,15 @@ module.exports = class Dialog {
             .then(() => session.finalize());
     }
 
-    runAction(actionId, session) {
+    runAction(actionId, session, input=null) {
         log.info("Running action {0}", actionId);
 
         if (this._actions[actionId] === undefined) {
             return Promise.reject(new Error(`No such action: ${actionId}`));
         }
 
-        return this._actions[actionId](session.getContext(), session.getInput());
+        return this._actions[actionId](session.getContext(),
+                                       input || session.getInput());
     }
 
     checkIntent(intentId, session) {
