@@ -28,9 +28,9 @@ module.exports = class Dialog {
         return this;
     }
 
-    addIntent(intentId, regexp, fn) {
+    addIntent(intentId, intentObj) {
         log.debug("Registering intent {0}", intentId);
-        this._intents[intentId] = [regexp, fn];
+        this._intents[intentId] = intentObj;
 
         return this;
     }
@@ -79,40 +79,24 @@ module.exports = class Dialog {
     }
 
     checkIntent(intentId, session) {
-        if (this._intents[intentId] === undefined) {
-            log.error("Intent not found: {0}", intentId);
-            return false;
-        }
-
         const input = session.getInput();
-        const regexps = this._intents[intentId][0].length ? this._intents[intentId][0] : [ this._intents[intentId][0] ];
 
-        let match = [];
-        for (let i = 0; i < regexps.length; ++i) {
-            match = regexps[i].exec(input);
-            if (match !== null) break;
-        }
-
+        const match = this._runIntent(intentId, input);
         log.debug("Intent {0} on input \"{1}\" returned {2}", intentId, input, match);
 
-        if (match === null) {
-            return false;
-        }
-
-        if (this._intents[intentId][1] !== undefined) {
-            log.debug("Running function for intent {0}", intentId);
-            return this._intents[intentId][1](match);
-        } else {
-            return true;
-        }
+        return match || false;
     }
 
     getString(stringId, variables) {
         log.debug("Retrieving string {0}", stringId);
 
-        const template = this._strings[stringId];
+        let template = this._strings[stringId];
 
         if (template !== undefined) {
+            if (typeof template !== 'string') {
+                template = template[Math.floor(Math.random() * template.length)];
+            }
+
             log.debug("Template: {0}", template);
             log.debug("Variables: {0}", JSON.stringify(variables));
 
@@ -133,6 +117,93 @@ module.exports = class Dialog {
         }
 
         return this._tree[stateId].substates.length;
+    }
+
+    _matchIntentAny(anyArray, input) {
+        let match = null;
+
+        if (!anyArray.length) {
+            anyArray = [anyArray];
+        }
+
+        for (let i = 0; i < anyArray.length; ++i) {
+            match = this._matchIntent(anyArray[i], input);
+            if (match !== null) break;
+        }
+
+        return match;
+    }
+
+    _matchIntentEach(eachArray, input) {
+        let match = null;
+
+        if (!eachArray.length) {
+            eachArray = [eachArray];
+        }
+
+        for (let i = 0; i < eachArray.length; ++i) {
+            match = this._matchIntent(eachArray[i], input);
+
+            if (match === null) {
+                return null;
+            }
+
+            if (match[0] !== undefined) {
+                // match the next regexp against the remainder of input string
+                input = input.substr(match[0].length).trim();
+                log.silly("Trimmed input after match: \"{0}\"", input);
+            }
+        }
+
+        return match;
+    }
+
+    _matchIntent(intentObj, input) {
+        let ret;
+        if (typeof intentObj === 'string') {
+            ret = this._runIntent(intentObj, input);
+        } else {
+            log.silly("Matching intent {0} against input \"{1}\"",
+                      intentObj.toString(), input);
+            ret = intentObj.exec(input);
+        }
+
+        log.silly("Intent returned {0}", ret);
+
+        return ret;
+    }
+
+    _runIntent(intentId, input) {
+        if (this._intents[intentId] === undefined) {
+            log.error("Intent not found: {0}", intentId);
+            return null;
+        }
+
+        log.debug("Running intent {0}", intentId);
+
+        const intent = this._intents[intentId];
+        let result = null;
+
+        if (intent.any !== undefined) {
+            log.silly("Matching strategy: any");
+            result = this._matchIntentAny(intent.any, input);
+        } else if (intent.each !== undefined) {
+            log.silly("Matching strategy: each");
+            result = this._matchIntentEach(intent.each, input);
+        } else {
+            throw new Error(`Intent ${intentId}: any or each must be defined`);
+        }
+
+        if (result === null) {
+            return null;
+        } else {
+            if (intent.match !== undefined) {
+                log.debug("Running function for intent {0}", intentId);
+                result = intent.match(result);
+            }
+
+            return result;
+        }
     }
 
     _runIntents(session, input) {

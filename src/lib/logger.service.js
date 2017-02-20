@@ -4,20 +4,23 @@ const Logger = {
     error,
     warning,
     info,
-    debug
+    debug,
+    silly
 };
 
 const LEVELS = {
     ERROR: 0,
     WARNING: 1,
     INFO: 2,
-    DEBUG: 3
+    DEBUG: 3,
+    SILLY: 4
 };
 
 export const ERROR = LEVELS.ERROR;
 export const WARNING = LEVELS.WARNING;
 export const INFO = LEVELS.INFO;
 export const DEBUG = LEVELS.DEBUG;
+export const SILLY = LEVELS.SILLY;
 
 export default Logger;
 
@@ -53,6 +56,11 @@ function info() {
 function debug() {
     const args = Array.prototype.slice.apply(arguments);
     _logMessage(DEBUG, args[0], args.slice(1));
+}
+
+function silly() {
+    const args = Array.prototype.slice.apply(arguments);
+    _logMessage(SILLY, args[0], args.slice(1));
 }
 
 function _logMessage(level, message, args) {

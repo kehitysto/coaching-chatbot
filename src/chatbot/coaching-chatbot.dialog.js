@@ -14,7 +14,7 @@ for (let actionId in actions) {
 
 // INTENTS
 for (let intentId in intents) {
-    dialog.addIntent(intentId, ...intents[intentId]);
+    dialog.addIntent(intentId, intents[intentId]);
 }
 
 // STATES
@@ -34,6 +34,7 @@ dialog
                 } else if (session.checkIntent('no')) {
                     session.addResult("@goodbye");
                     session.popState();
+                    session.endDialog();
 
                 } else {
                     session.addResult("@unclear");
@@ -161,7 +162,7 @@ dialog
                     session.pushState('/set_place');
                 }
             }],
-            ['find_match', (session) => {
+            ['find_pair', (session) => {
                 session.addResult("@not_implemented");
             }],
         ]);

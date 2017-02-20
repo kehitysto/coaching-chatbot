@@ -1,41 +1,87 @@
 module.exports = {
-    yes: [
-        [/^kyllä/i,
-         /^j[ou]{2,}/i,
-         /^jep[as]?/i]
-    ],
+    greeting: {
+        any: [/^moi(?:kka)?/i,
+              /^mo(?:ro)?/i,
+              /^morjens(?:ta)/i,
+              /^terve/i,
+              /^tere/i,
+              /^hei/i]
+    },
 
-    no: [
-        [/^ei/i,
-         /^en/i]
-    ],
+    yes: {
+        any: [/^kyllä/i,
+              /^j[ou]{2,}/i,
+              /^jep[as]?/i]
+    },
 
-    change_name: [
-        [/^(?:vaihda|muuta) (?:nimi|nimeä)\s*(\w.*)?/i],
-        (match) => match[1] || true
-    ],
+    no: {
+        any: [/^ei/i,
+              /^en/i]
+    },
 
-    change_job: [
-        [/^(?:vaihda|muuta) ammattia?\s*(\w.*)?/i,
-         /^(?:vaihda|muuta) työ(?:tä)?\s*(\w.*)?/i],
-        (match) => match[1] || true
-    ],
+    set: {
+        any: /^(?:lisää|aseta)\s*(?:mun|minun|mulle|minulle)?/i
+    },
 
-    set_age: [
-        [/^(?:lisää|aseta) (?:ikä|iäksi)\s*(\w.*)?/i],
-        (match) => match[1] || true
-    ],
+    change: {
+        any: /^(?:vaihda|muuta|aseta)\s*(?:mun|minun|mulle|minulle)?/i,
+    },
 
-    set_place: [
-        [/^(?:lisää|aseta) paikka(?:kunta)?\s*(\w.*)?/i],
-        (match) => match[1] || true
-    ],
+    find: {
+        any: /^(?:etsi|hae)/i
+    },
 
-    find_match: [
-        [/^(?:etsi|hae) paria?/i]
-    ],
+    set_or_change: {
+        any: ['set', 'change']
+    },
 
-    reset: [
-        [/^\!reset$/]
-    ],
+    optional_value: {
+        any: /(\w.*)?/i,
+        match: (match) => match[1] || true
+    },
+
+    name: {
+        any: /^(?:nimi|nimeä|nimeksi|nimekseni)/i
+    },
+
+    job: {
+        any: [/^ammat(?:tia?|iksi|ikseni)/i,
+              /^työ(?:tä|ksi|kseni)/i]
+    },
+
+    age: {
+        any: /^(?:ikää?|iäksi)/i
+    },
+
+    place: {
+        any: /^paikka(?:kunta)?a?/i
+    },
+
+    pair: {
+        any: /^paria?/i
+    },
+
+    change_name: {
+        each: ['change', 'name', 'optional_value']
+    },
+
+    change_job: {
+        each: ['change', 'job', 'optional_value']
+    },
+
+    set_age: {
+        each: ['set_or_change', 'age', 'optional_value']
+    },
+
+    set_place: {
+        each: ['set_or_change', 'place', 'optional_value']
+    },
+
+    find_pair: {
+        each: ['find', 'pair']
+    },
+
+    reset: {
+        any: [/^\!reset$/]
+    },
 };

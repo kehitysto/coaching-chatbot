@@ -47,7 +47,7 @@ function interactive(bot) {
         console.log(msg.join('\n'));
         console.log();
       })
-      .catch(err => console.error(err))
+      .catch(err => console.error(err.stack))
   });
 };
 
