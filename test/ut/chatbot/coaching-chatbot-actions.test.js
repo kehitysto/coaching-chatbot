@@ -179,4 +179,20 @@ describe('coaching-bot actions', function() {
         return expect(ret).to.eventually.deep.equal( {userData:{profile:'Matti, Opiskelija, 23, Helsinki'}});
       });
     });
+    describe('#reset', function() {
+      it('returns a Promise', function() {
+        const ret = actions.reset({
+          context: {},
+          input: '',
+        });
+        expect(ret).to.be.a('Promise');
+      });
+      it('returns empty context', function() {
+        const ret = actions.reset({
+          context: {},
+          input: '',
+        });
+        return expect(ret).to.eventually.deep.equal({context: {}});
+      });
+    });
 });
