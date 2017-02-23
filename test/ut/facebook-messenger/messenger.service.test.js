@@ -2,7 +2,7 @@ import fs from 'fs';
 import sinon from 'sinon';
 
 
-const mod = require('inject!../../src/facebook-messenger/messenger.service');
+const mod = require('inject!../../../src/facebook-messenger/messenger.service');
 
 
 describe('Facebook Messenger service', function() {
@@ -16,6 +16,7 @@ describe('Facebook Messenger service', function() {
         process.env.FACEBOOK_PAGE_ACCESS_TOKEN = 'DUMMY_ACCESS_TOKEN';
         process.env.FACEBOOK_VERIFY_TOKEN = 'DUMMY_VERIFY_TOKEN';
     });
+
 
     describe('#send()', function() {
         it('should return a Promise', function() {
