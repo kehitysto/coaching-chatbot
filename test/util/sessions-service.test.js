@@ -84,6 +84,12 @@ describe('Sessions service', function() {
         .to.eventually.be.fulfilled;
     });
 
+    it('should return an error if id is null', function() {
+      const ret = this.sessions.write(null, { key: 'value' } );
+
+      return expect(ret).to.be.rejectedWith('No session ID');
+    });
+
     it('should post the session context to DynamoDB', function() {
       return expect(
           this.sessions.write('SESSION_ID', {
