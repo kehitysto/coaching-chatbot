@@ -35,14 +35,10 @@ export function set_place({context, input}) {
 }
 
 export function update_profile({context, userData}) {
-    let profile = `${context.name}, ${context.job}`;
-
-    if (context.age !== undefined) {
-        profile += `, ${context.age}`;
-    }
-    if (context.place !== undefined) {
-        profile += `, ${context.place}`;
-    }
+    let profile = [context.name, context.job,
+                   context.age, context.place]
+        .filter(val => val)
+        .join(", ");
 
     return Promise.resolve({
         userData: {
