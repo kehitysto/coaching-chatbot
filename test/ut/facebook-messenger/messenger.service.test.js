@@ -18,6 +18,7 @@ describe('Facebook Messenger service', function() {
         });
     });
 
+
     describe('#send()', function() {
         it('should return a Promise', function() {
             const ret = this.Messenger.send('USER_ID', 'Message...');
