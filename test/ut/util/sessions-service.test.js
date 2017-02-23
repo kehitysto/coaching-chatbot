@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 
 import AWS from 'aws-sdk';
-import Sessions from '../../../src/wit-ai/sessions.service';
+import Sessions from '../../../src/util/sessions-service';
 
 describe('Sessions service', function() {
   before(function() {
@@ -82,6 +82,12 @@ describe('Sessions service', function() {
 
       return expect(ret)
         .to.eventually.be.fulfilled;
+    });
+
+    it('should return an error if id is null', function() {
+      const ret = this.sessions.write(null, { key: 'value' } );
+
+      return expect(ret).to.be.rejectedWith('No session ID');
     });
 
     it('should post the session context to DynamoDB', function() {
