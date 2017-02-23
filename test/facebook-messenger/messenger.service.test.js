@@ -52,11 +52,9 @@ describe('Facebook Messenger service', function() {
                 fs.readFileSync('./test/data/event-fbmessage.json')
             );
 
-            this.cb = { receive: sinon.stub() };
-        });
-
-        afterEach(function() {
-            this.cb.receive.reset();
+            this.cb = {
+                receive: sinon.stub().returns(Promise.resolve(["hello, world!"]))
+            };
         });
 
         it('should return a Promise', function() {
@@ -64,16 +62,17 @@ describe('Facebook Messenger service', function() {
 
             expect(ret).to.be.a('Promise');
 
-            return expect(ret).to.eventually.be.fulfilled;
+            return expect(ret.catch()).to.eventually.be.fulfilled;
         });
 
         it('should call callback with the message sender and body', function() {
+            const mock = sinon.mock(this.Messenger);
+            mock.expects("send").withArgs("USER_ID", "hello, world!");
+
             const ret = this.Messenger.receive(this.data.body, this.cb);
 
             return expect(ret).to.eventually.be.fulfilled.then(() => {
-                return expect(this.cb.receive).to.have.been.calledWith(
-                    'USER_ID', "hello, world!"
-                );
+                return mock.verify();
             });
         });
     });
