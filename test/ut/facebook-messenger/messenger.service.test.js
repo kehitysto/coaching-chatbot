@@ -62,9 +62,8 @@ describe('Facebook Messenger service', function() {
         it('should return a Promise', function() {
             const ret = this.Messenger.receive(this.data.body, this.cb);
 
-            expect(ret).to.be.a('Promise');
+            return expect(ret).to.be.a('Promise');
 
-            return expect(ret).to.eventually.be.fulfilled;
         });
 
         it('should call callback with the message sender and body', function() {
