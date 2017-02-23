@@ -103,4 +103,42 @@ describe('coaching-bot actions', function() {
         .deep.equal( {context:{ 'foo': 'bar', 'name': 'Jari' }} );
       });
     });
+    describe('#set_place', function() {
+      it('returns a Promise', function() {
+        const ret = actions.set_place({
+          context: {},
+          input: "",
+        });
+
+        expect(ret).to.be.a('Promise');
+      });
+
+      it('returns the name from entity place', function() {
+        const ret = actions.set_place({
+          context: {},
+          input: "Helsinki",
+        });
+
+        expect(ret).to.become({ place: 'Helsinki' });
+      });
+
+      it('returns the name from entity place', function() {
+        const ret = actions.set_place({
+            context: {},
+            input: "Amsterdam",
+        });
+
+        expect(ret).to.become( { name: 'Amsterdam' } );
+      });
+
+      it('preserves context', function() {
+        const ret = actions.set_place({
+            context: { 'foo': 'bar' },
+            input: "Amsterdam",
+        });
+
+        return expect(ret).to.eventually
+        .deep.equal( {context:{ 'foo': 'bar', 'place': 'Amsterdam' }} );
+      });
+    });
 });
