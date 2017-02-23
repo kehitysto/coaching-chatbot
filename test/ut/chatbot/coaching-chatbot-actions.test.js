@@ -134,11 +134,11 @@ describe('coaching-bot actions', function() {
       it('preserves context', function() {
         const ret = actions.set_place({
             context: { 'foo': 'bar' },
-            input: "Amsterdam",
+            input: "Turku",
         });
 
         return expect(ret).to.eventually
-        .deep.equal( {context:{ 'foo': 'bar', 'place': 'Amsterdam' }} );
+        .deep.equal( {context:{ 'foo': 'bar', 'place': 'Turku' }} );
       });
     });
 });
