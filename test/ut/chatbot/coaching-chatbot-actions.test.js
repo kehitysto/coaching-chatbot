@@ -134,11 +134,49 @@ describe('coaching-bot actions', function() {
       it('preserves context', function() {
         const ret = actions.set_place({
             context: { 'foo': 'bar' },
-            input: "Turku",
+            input: 'Turku',
         });
 
         return expect(ret).to.eventually
         .deep.equal( {context:{ 'foo': 'bar', 'place': 'Turku' }} );
+      });
+    });
+    describe('#update_profile', function() {
+      it('Should return a Promise', function() {
+        const ret = actions.update_profile({
+          context: {},
+          input: '',
+        });
+        expect(ret).to.be.a('Promise');
+      });
+
+      it('Should return without age', function() {
+        const ret = actions.update_profile({
+          context: { 'name': 'Matti', 'job': 'Opiskelija', 'place' : 'Helsinki'},
+          userData: '',
+        });
+        return expect(ret).to.eventually.deep.equal( {userData:{profile:'Matti, Opiskelija, Helsinki'}});
+      });
+      it('Should return without place', function() {
+        const ret = actions.update_profile({
+          context: { 'name': 'Matti', 'job': 'Opiskelija', 'age' : '23'},
+          userData: '',
+        });
+        return expect(ret).to.eventually.deep.equal( {userData:{profile:'Matti, Opiskelija, 23'}});
+      });
+      it('Should return without age and place', function() {
+        const ret = actions.update_profile({
+          context: { 'name': 'Matti', 'job': 'Opiskelija'},
+          userData: '',
+        });
+        return expect(ret).to.eventually.deep.equal( {userData:{profile:'Matti, Opiskelija'}});
+      });
+      it('Should return everything', function() {
+        const ret = actions.update_profile({
+          context: { 'name': 'Matti', 'job': 'Opiskelija', 'age': '23', 'place' : 'Helsinki'},
+          userData: '',
+        });
+        return expect(ret).to.eventually.deep.equal( {userData:{profile:'Matti, Opiskelija, 23, Helsinki'}});
       });
     });
 });
