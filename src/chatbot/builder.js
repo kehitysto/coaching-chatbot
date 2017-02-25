@@ -14,7 +14,7 @@ module.exports = class Dialog {
         this._strings = strings;
     }
 
-    addState(stateId, substates, intents=[]) {
+    dialog(stateId, substates, intents=[]) {
         if (stateId.startsWith('/')) {
             stateId = stateId.substr(1);
         }
@@ -28,14 +28,14 @@ module.exports = class Dialog {
         return this;
     }
 
-    addIntent(intentId, intentObj) {
+    intent(intentId, intentObj) {
         log.debug("Registering intent {0}", intentId);
         this._intents[intentId] = intentObj;
 
         return this;
     }
 
-    addAction(actionId, fn) {
+    action(actionId, fn) {
         log.debug("Registering action {0}", actionId);
         this._actions[actionId] = fn;
 
@@ -244,8 +244,10 @@ module.exports = class Dialog {
 
                 return resolve(
                     session.runQueue().then(() => {
-                        if (!session.done) {
+                        if (session.getState() !== state || session.getSubState() !== substate) {
                             return this._runStep(step+1, session, input);
+                        } else {
+                            session.next();
                         }
                     })
                 );

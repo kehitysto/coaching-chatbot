@@ -91,7 +91,7 @@ module.exports = class Session {
         return out;
     }
 
-    pushState(state) {
+    beginDialog(state) {
         if (state.startsWith('/')) {
             state = state.substr(1);
         }
@@ -102,18 +102,19 @@ module.exports = class Session {
             }
         }
 
+        this.next();
         this.state.push([state, 0]);
     }
 
-    popState() {
+    endDialog() {
         if (this.state.length > 1) {
             this.state.pop();
         } else {
-            this.state[0] = ['base', 0];
+            this.state[0] = ['', 0];
         }
     }
 
-    switchState(newState) {
+    switchDialog(newState) {
         if (newState.startsWith('/')) {
             newState = newState.substr(1);
         }
@@ -122,7 +123,7 @@ module.exports = class Session {
     }
 
     clearState() {
-        this.state = [['base', 0]];
+        this.state = [['', 0]];
     }
 
     getSubState() {
@@ -135,10 +136,18 @@ module.exports = class Session {
         );
     }
 
-    runAction(actionId, input=null) {
-        this._queue = this._queue.then(
-            this.dialog.runAction(actionId, this, input)
-        );
+    runActions(actionArr, input=null) {
+        if (!Array.isArray(actionArr)) {
+            actionArr = [actionArr];
+        }
+
+        for (let i = 0; i < actionArr.length; ++i) {
+            this._queue = this._queue.then(
+                Promise.resolve(
+                    this.dialog.runAction(actionArr[i], this, input)
+                )
+            );
+        }
     }
 
     checkIntent(intentId) {
@@ -152,13 +161,9 @@ module.exports = class Session {
         state[1] = (state[1] + 1) % subStateCount;
     }
 
-    endDialog() {
-        this.done = true;
-    }
-
     _getStateArray() {
         if (this.context.state === undefined) {
-            return [['base', 0]];
+            return [['', 0]];
         }
 
         let state = this.context.state.split('/').slice(1);
