@@ -5,7 +5,7 @@ const Logger = {
     warning,
     info,
     debug,
-    silly
+    silly,
 };
 
 const LEVELS = {
@@ -13,7 +13,7 @@ const LEVELS = {
     WARNING: 1,
     INFO: 2,
     DEBUG: 3,
-    SILLY: 4
+    SILLY: 4,
 };
 
 export const ERROR = LEVELS.ERROR;
@@ -25,14 +25,14 @@ export const SILLY = LEVELS.SILLY;
 export default Logger;
 
 
-var logLevel = process.env.LOGLEVEL || WARNING;
+let logLevel = process.env.LOGLEVEL || WARNING;
 
 
 function setLevel(level) {
     if (level < ERROR) {
         level = ERROR;
     } else if (level > DEBUG) {
-        level = DEBUG
+        level = DEBUG;
     }
 
     logLevel = level;
@@ -77,7 +77,8 @@ function _logMessage(level, message, args) {
     out.push(
         message.replace(
             /{(\d+)}/g,
-            (match, number) => typeof args[number] != 'undefined' ? args[number] : match
+            (match, number) => typeof args[number]
+            != 'undefined' ? args[number] : match
         )
     );
 

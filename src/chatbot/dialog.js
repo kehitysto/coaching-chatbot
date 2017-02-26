@@ -19,31 +19,31 @@ module.exports = class Dialog {
             stateId = stateId.substr(1);
         }
 
-        log.debug("Registering state /{0}", stateId);
+        log.debug('Registering state /{0}', stateId);
         this._tree[stateId] = {
             intents,
-            substates
+            substates,
         };
 
         return this;
     }
 
     addIntent(intentId, intentObj) {
-        log.debug("Registering intent {0}", intentId);
+        log.debug('Registering intent {0}', intentId);
         this._intents[intentId] = intentObj;
 
         return this;
     }
 
     addAction(actionId, fn) {
-        log.debug("Registering action {0}", actionId);
+        log.debug('Registering action {0}', actionId);
         this._actions[actionId] = fn;
 
         return this;
     }
 
     run(context, input) {
-        log.info("Running bot for input \"{0}\"", input);
+        log.info('Running bot for input \"{0}\"', input);
 
         const session = new Session(this).start(context, input);
 
@@ -53,7 +53,7 @@ module.exports = class Dialog {
     }
 
     runAction(actionId, session, input=null) {
-        log.info("Running action {0}", actionId);
+        log.info('Running action {0}', actionId);
 
         if (this._actions[actionId] === undefined) {
             return Promise.reject(new Error(`No such action: ${actionId}`));
@@ -62,15 +62,17 @@ module.exports = class Dialog {
         const actionData = {
             context: session.getContext(),
             userData: session.getUserData(),
-            input: input || session.getInput()
+            input: input || session.getInput(),
         };
         const promise = this._actions[actionId](actionData).then((result) => {
             if (result.context) {
-                log.debug("Updating context: {0}", JSON.stringify(result.context));
+                log.debug('Updating context: {0}'
+                , JSON.stringify(result.context));
                 session.setContext(result.context);
             }
             if (result.userData) {
-                log.debug("Updating userData: {0}", JSON.stringify(result.userData));
+                log.debug('Updating userData: {0}'
+                , JSON.stringify(result.userData));
                 session.setUserData(result.userData);
             }
         });
@@ -82,30 +84,33 @@ module.exports = class Dialog {
         const input = session.getInput();
 
         const match = this._runIntent(intentId, input);
-        log.debug("Intent {0} on input \"{1}\" returned {2}", intentId, input, match);
+        log.debug('Intent {0} on input \"{1}\" returned {2}'
+        , intentId, input, match);
 
         return match || false;
     }
 
     getString(stringId, variables) {
-        log.debug("Retrieving string {0}", stringId);
+        log.debug('Retrieving string {0}', stringId);
 
         let template = this._strings[stringId];
 
         if (template !== undefined) {
             if (typeof template !== 'string') {
-                template = template[Math.floor(Math.random() * template.length)];
+                template = template[Math.floor(Math.random()
+                * template.length)];
             }
 
-            log.debug("Template: {0}", template);
-            log.debug("Variables: {0}", JSON.stringify(variables));
+            log.debug('Template: {0}', template);
+            log.debug('Variables: {0}', JSON.stringify(variables));
 
             return template.replace(
                 /{(\w+)}/g,
-                (match, name) => typeof variables[name] != 'undefined' ? variables[name] : match
-            )
+                (match, name) => typeof variables[name]
+                != 'undefined' ? variables[name] : match
+            );
         } else {
-            log.warning("String not found: {0}", stringId);
+            log.warning('String not found: {0}', stringId);
 
             return stringId;
         }
@@ -151,7 +156,7 @@ module.exports = class Dialog {
             if (match[0] !== undefined) {
                 // match the next regexp against the remainder of input string
                 input = input.substr(match[0].length).trim();
-                log.silly("Trimmed input after match: \"{0}\"", input);
+                log.silly('Trimmed input after match: \"{0}\"', input);
             }
         }
 
@@ -163,32 +168,32 @@ module.exports = class Dialog {
         if (typeof intentObj === 'string') {
             ret = this._runIntent(intentObj, input);
         } else {
-            log.silly("Matching intent {0} against input \"{1}\"",
+            log.silly('Matching intent {0} against input \"{1}\"',
                       intentObj.toString(), input);
             ret = intentObj.exec(input);
         }
 
-        log.silly("Intent returned {0}", ret);
+        log.silly('Intent returned {0}', ret);
 
         return ret;
     }
 
     _runIntent(intentId, input) {
         if (this._intents[intentId] === undefined) {
-            log.error("Intent not found: {0}", intentId);
+            log.error('Intent not found: {0}', intentId);
             return null;
         }
 
-        log.debug("Running intent {0}", intentId);
+        log.debug('Running intent {0}', intentId);
 
         const intent = this._intents[intentId];
         let result = null;
 
         if (intent.any !== undefined) {
-            log.silly("Matching strategy: any");
+            log.silly('Matching strategy: any');
             result = this._matchIntentAny(intent.any, input);
         } else if (intent.each !== undefined) {
-            log.silly("Matching strategy: each");
+            log.silly('Matching strategy: each');
             result = this._matchIntentEach(intent.each, input);
         } else {
             throw new Error(`Intent ${intentId}: any or each must be defined`);
@@ -198,7 +203,7 @@ module.exports = class Dialog {
             return null;
         } else {
             if (intent.match !== undefined) {
-                log.debug("Running function for intent {0}", intentId);
+                log.debug('Running function for intent {0}', intentId);
                 result = intent.match(result);
             }
 
@@ -228,11 +233,11 @@ module.exports = class Dialog {
     }
 
     _runStep(step, session, input) {
-        log.debug("Running iteration {0}", step);
+        log.debug('Running iteration {0}', step);
 
         return new Promise((resolve, reject) => {
             if (step > this.maxSteps) {
-                return reject(new Error("Too many iterations"));
+                return reject(new Error('Too many iterations'));
             }
 
             const state = session.getState();
