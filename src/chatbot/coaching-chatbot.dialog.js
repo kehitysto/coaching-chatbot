@@ -23,37 +23,35 @@ dialog
         '/base',
         [
             (session) => {
-                session.addResult("@greeting");
+                session.addResult('@greeting');
                 session.next();
                 session.endDialog();
             },
             (session) => {
                 if (session.checkIntent('yes')) {
                     session.pushState('/create_profile');
-
                 } else if (session.checkIntent('no')) {
-                    session.addResult("@goodbye");
+                    session.addResult('@goodbye');
                     session.popState();
                     session.endDialog();
-
                 } else {
-                    session.addResult("@unclear");
+                    session.addResult('@unclear');
                     session.next();
                 }
-            }
+            },
         ],
         [
             ['reset', (session) => {
                 session.runAction('reset');
                 session.addResult('@reset');
                 session.clearState();
-            }]
+            }],
         ])
     .addState(
         '/create_profile',
         [
             (session) => {
-                session.addResult("@great");
+                session.addResult('@great');
                 session.next();
                 session.pushState('/set_name');
             },
@@ -63,13 +61,13 @@ dialog
             },
             (session) => {
                 session.switchState('/profile');
-            }
+            },
         ])
     .addState(
         '/set_name',
         [
             (session) => {
-                session.addResult("@request_name");
+                session.addResult('@request_name');
                 session.next();
                 session.endDialog();
             },
@@ -77,7 +75,7 @@ dialog
                 session.runAction('set_name');
                 session.addResult('@confirm_name');
                 session.popState();
-            }
+            },
         ])
     .addState(
         '/set_job',
@@ -90,7 +88,7 @@ dialog
             (session) => {
                 session.runAction('set_job');
                 session.popState();
-            }
+            },
         ])
     .addState(
         '/set_age',
@@ -104,7 +102,7 @@ dialog
                 session.runAction('set_age');
                 session.addResult('@confirm_age');
                 session.popState();
-            }
+            },
         ])
     .addState(
         '/set_place',
@@ -118,7 +116,7 @@ dialog
                 session.runAction('set_place');
                 session.addResult('@confirm_place');
                 session.popState();
-            }
+            },
         ])
     .addState(
         '/profile',
@@ -127,7 +125,7 @@ dialog
                 session.runAction('update_profile');
                 session.addResult('@display_profile');
                 session.endDialog();
-            }
+            },
         ],
         [
             ['change_name', (session, match) => {
@@ -163,7 +161,7 @@ dialog
                 }
             }],
             ['find_pair', (session) => {
-                session.addResult("@not_implemented");
+                session.addResult('@not_implemented');
             }],
         ]);
 
