@@ -11,19 +11,22 @@ function format(template, context) {
   let s = Strings[template];
 
   if (context.name) {
-    s.replace('{name}', context.name);
-  }
-  if (context.job) {
-    s.replace('{job}', context.job);
-  }
-  if (context.age) {
-    s.replace('{age}', context.age);
-  }
-  if (context.place) {
-    s.replace('{place}', context.place);
+    s = s.replace('{name}', context.name);
   }
 
-  s.replace('{profile}', create_profile(context));
+  if (context.job) {
+    s = s.replace('{job}', context.job);
+  }
+
+  if (context.age) {
+    s = s.replace('{age}', context.age);
+  }
+
+  if (context.place) {
+    s = s.replace('{place}', context.place);
+  }
+
+  s = s.replace('{profile}', createProfile(context));
 
   return s;
 }
