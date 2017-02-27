@@ -8,7 +8,11 @@ const Formatter = {
 export default Formatter;
 
 function format(template, context) {
-  let s = Strings[template];
+  let s = template;
+
+  if (Strings[template] !== undefined) {
+    s = Strings[template];
+  }
 
   if (context.name) {
     s = s.replace('{name}', context.name);
