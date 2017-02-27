@@ -20,7 +20,8 @@ describe('coaching-bot actions', function() {
           input: 'taksikuski',
         });
 
-        expect(ret).to.become({ job: 'taksikuski' });
+        return expect(ret).to.eventually
+        .deep.equal({ context: { job: 'taksikuski' } } );
       });
 
       it('preserves context', function() {
@@ -41,7 +42,7 @@ describe('coaching-bot actions', function() {
           input: '',
         });
 
-        expect(ret).to.be.a('Promise');
+        return expect(ret).to.be.a('Promise');
       });
 
       it('returns the age from entity age', function() {
@@ -50,7 +51,7 @@ describe('coaching-bot actions', function() {
             input: '66',
           });
 
-          expect(ret).to.become( { age: '66' } );
+          return expect(ret).to.become({ context: { age: '66' } } );
       });
 
       it('preserves context', function() {
@@ -80,7 +81,7 @@ describe('coaching-bot actions', function() {
           input: 'Pertti',
         });
 
-        expect(ret).to.become({ name: 'Pertti' });
+        return expect(ret).to.become({ context: { name: 'Pertti' } } );
       });
 
       it('returns the name from entity contact', function() {
@@ -89,7 +90,7 @@ describe('coaching-bot actions', function() {
             input: 'Jari',
         });
 
-        expect(ret).to.become( { name: 'Jari' } );
+        return expect(ret).to.become({ context: { name: 'Jari' } } );
       });
 
       it('preserves context', function() {
@@ -118,7 +119,7 @@ describe('coaching-bot actions', function() {
           input: 'Helsinki',
         });
 
-        expect(ret).to.become({ place: 'Helsinki' });
+        return expect(ret).to.become({ context: { place: 'Helsinki' } } );
       });
 
       it('returns the name from entity place', function() {
@@ -127,7 +128,7 @@ describe('coaching-bot actions', function() {
             input: 'Amsterdam',
         });
 
-        expect(ret).to.become( { name: 'Amsterdam' } );
+        return expect(ret).to.become( { context: { place: 'Amsterdam' } } );
       });
 
       it('preserves context', function() {

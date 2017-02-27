@@ -61,7 +61,8 @@ describe('Facebook Messenger service', function() {
             );
 
             this.cb = {
-                receive: sinon.stub().returns(Promise.resolve('hello, world!')),
+                receive: sinon.stub()
+                .returns(Promise.resolve(['hello, world!'])),
             };
         });
 
