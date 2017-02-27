@@ -3,7 +3,7 @@ import 'source-map-support/register'
 require('../lib/envVars').config();
 
 import Messenger from './messenger.service';
-import Sessions from '../wit-ai/sessions.service';
+import Sessions from '../util/sessions-service';
 import Chatbot from '../chatbot/chatbot.service';
 
 import dialog from '../chatbot/coaching-chatbot.dialog';

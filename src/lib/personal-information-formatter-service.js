@@ -29,14 +29,9 @@ function format(template, context) {
 }
 
 function createProfile(context) {
-  let profile = `${context.name}, ${context.job}`;
-
-  if (context.age !== undefined) {
-    profile += `, ${context.age}`;
-  }
-  if (context.place !== undefined) {
-    profile += `, ${context.place}`;
-  }
-
-  return profile;
+  return [context.name, context.job,
+      context.age, context.place
+    ]
+    .filter(val => val)
+    .join(", ");
 }
