@@ -1,5 +1,3 @@
-// import sinon from 'sinon';
-// import mockery from 'mockery';
 import * as actions from '../../../src/chatbot/coaching-chatbot.actions.js';
 
 

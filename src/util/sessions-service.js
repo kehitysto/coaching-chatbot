@@ -3,8 +3,8 @@ import AWS from 'aws-sdk';
 module.exports = class Sessions {
   constructor() {
     this.SESSION_TABLE =
-      `${process.env.SERVERLESS_PROJECT}
-      -sessions-${process.env.SERVERLESS_STAGE}`;
+      `${process.env.SERVERLESS_PROJECT}` +
+      `-sessions-${process.env.SERVERLESS_STAGE}`;
     this.db = new AWS.DynamoDB.DocumentClient();
   }
 
