@@ -1,19 +1,21 @@
 const Logger = {
-    setLevel,
+  setLevel,
+  getLevel,
 
-    error,
-    warning,
-    info,
-    debug,
-    silly
+  log,
+  error,
+  warning,
+  info,
+  debug,
+  silly
 };
 
-const LEVELS = {
-    ERROR: 0,
-    WARNING: 1,
-    INFO: 2,
-    DEBUG: 3,
-    SILLY: 4
+export const LEVELS = {
+  ERROR: 0,
+  WARNING: 1,
+  INFO: 2,
+  DEBUG: 3,
+  SILLY: 4
 };
 
 export const ERROR = LEVELS.ERROR;
@@ -24,62 +26,70 @@ export const SILLY = LEVELS.SILLY;
 
 export default Logger;
 
-
 var logLevel = process.env.LOGLEVEL || WARNING;
 
-
 function setLevel(level) {
-    if (level < ERROR) {
-        level = ERROR;
-    } else if (level > DEBUG) {
-        level = DEBUG
-    }
+  if (level < ERROR) {
+    level = ERROR;
+  } else if (level > SILLY) {
+    level = SILLY;
+  }
 
-    logLevel = level;
+  logLevel = level;
+}
+
+function getLevel() {
+  return logLevel;
+}
+
+function log() {
+  const args = Array.prototype.slice.apply(arguments);
+  _logMessage(logLevel, args[0], args.slice(1));
 }
 
 function error() {
-    const args = Array.prototype.slice.apply(arguments);
-    _logMessage(ERROR, args[0], args.slice(1));
+  const args = Array.prototype.slice.apply(arguments);
+  _logMessage(ERROR, args[0], args.slice(1));
 }
 
 function warning() {
-    const args = Array.prototype.slice.apply(arguments);
-    _logMessage(WARNING, args[0], args.slice(1));
+  const args = Array.prototype.slice.apply(arguments);
+  _logMessage(WARNING, args[0], args.slice(1));
 }
 
 function info() {
-    const args = Array.prototype.slice.apply(arguments);
-    _logMessage(INFO, args[0], args.slice(1));
+  const args = Array.prototype.slice.apply(arguments);
+  _logMessage(INFO, args[0], args.slice(1));
 }
 
 function debug() {
-    const args = Array.prototype.slice.apply(arguments);
-    _logMessage(DEBUG, args[0], args.slice(1));
+  const args = Array.prototype.slice.apply(arguments);
+  _logMessage(DEBUG, args[0], args.slice(1));
 }
 
 function silly() {
-    const args = Array.prototype.slice.apply(arguments);
-    _logMessage(SILLY, args[0], args.slice(1));
+  const args = Array.prototype.slice.apply(arguments);
+  _logMessage(SILLY, args[0], args.slice(1));
 }
 
 function _logMessage(level, message, args) {
-    if (level > logLevel) return;
+  if (level > logLevel) return;
 
-    const out = [];
-    for (let key in LEVELS) {
-        if (LEVELS[key] === level) {
-            out.push(key);
-            break;
-        }
+  const out = [];
+  for (let key in LEVELS) {
+    if (LEVELS[key] === level) {
+      out.push(key);
+      break;
     }
+  }
 
-    out.push(
-        message.replace(
-            /{(\d+)}/g,
-            (match, number) => typeof args[number] != 'undefined' ? args[number] : match
-        )
-    );
+  out.push(
+    message.replace(
+      /{(\d+)}/g,
+      (match, number) => typeof args[number] != 'undefined' ? args[number] :
+      match
+    )
+  );
 
-    console.log(out.join('::'));
+  console.log(out.join('::'));
 }
