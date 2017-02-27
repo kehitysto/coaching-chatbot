@@ -39,6 +39,7 @@ describe('User story', function() {
             .to.eventually.become([Strings['@greeting']]);
         });
     });
+
   describe(
     'As a non-registered user I want the bot to ask for my name, when I have confirmed that I want to start searching for a peer',
     function() {
@@ -52,6 +53,7 @@ describe('User story', function() {
               '@request_name']]);
         });
     });
+
   describe(
     'As a registered user I want to provide my name to the bot so other people can see it and ask for occupation after name is confirmed',
     function() {
@@ -62,12 +64,14 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, this.userInformation.name)
             )
-            .to.eventually.become([Formatter.format('@confirm_name', this.userInformation),
+            .to.eventually.become([Formatter.formatFromTemplate(
+                '@confirm_name', this.userInformation),
               Strings[
                 '@request_job']
             ]);
         });
     });
+
   describe(
     'As a registered user I want to provide my occupation to the bot so other people can see it and bot will show the information and asks for additional information',
     function() {
@@ -79,10 +83,11 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, this.userInformation.job)
             )
-            .to.eventually.become([Formatter.format(
+            .to.eventually.become([Formatter.formatFromTemplate(
               '@display_profile', this.userInformation)]);
         });
     });
+
   describe(
     'As a registered user I want to provide my age to the bot so other people can see it and bot will show the information and asks for additional information',
     function() {
@@ -95,12 +100,13 @@ describe('User story', function() {
                 .age)
             )
 
-            .to.eventually.become([Formatter.format(
+            .to.eventually.become([Formatter.formatFromTemplate(
                 '@confirm_age', this.userInformation),
-              Formatter.format('@display_profile', this.userInformation)
+              Formatter.formatFromTemplate('@display_profile', this.userInformation)
             ]);
         });
     });
+
   describe(
     'As a registered user I want to provide my location to the bot so other people can see it and bot will show the information ',
     function() {
@@ -113,21 +119,8 @@ describe('User story', function() {
                 .place)
             )
             .to.eventually.become([Strings['@confirm_place'],
-              Formatter.format('@display_profile', this.userInformation)
+              Formatter.formatFromTemplate('@display_profile', this.userInformation)
             ]);
         });
     });
-  describe('Unclear information', function() {
-    it(
-      'should ask user for a additional information when user has provided his/her name and occupation',
-      function() {
-        return expect(
-            this.bot.receive(SESSION, 'asdaswa834*½')
-          )
-          .to.eventually.become(['Paikkakunta lisätty profiiliin.',
-            'Parin etsijät näkisivät nyt sinut seuraavasti: \"Matti, Opiskelija, 22, Helsinki\". Voit lisätä ikäsi tai paikkakuntasi kertomalla minulle esim. \"Lisää ikä 33\". Jos olet tyytyväinen profiilisi, voit siirtyä parin etsimiseen kirjoittamalla \"Etsi pari\".'
-          ]);
-      });
-  });
-
 });

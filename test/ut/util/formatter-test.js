@@ -1,6 +1,7 @@
 import sinon from 'sinon';
 
 import Formatter from '../../../src/lib/personal-information-formatter-service';
+import Strings from '../../../src/chatbot/coaching-chatbot.strings.json';
 
 var assert = require('assert');
 
@@ -8,6 +9,22 @@ describe('Formatter service', function() {
   before(function() {});
 
   after(function() {});
+
+  describe('#formatFromTemplate()', function() {
+    it('should format a pre-defined template correctly', function() {
+      const templateName = '@confirm_age';
+
+      const context = {
+        age: 45,
+      };
+
+      const expected = Strings['@confirm_age'].replace('{age}',
+        context.age);
+      const formatted = Formatter.formatFromTemplate(templateName,
+        context);
+      assert(formatted === expected);
+    });
+  });
 
   describe('#format()', function() {
     it('should format {name} correctly', function() {
@@ -126,6 +143,5 @@ describe('Formatter service', function() {
       const formatted = Formatter.format(template, context);
       assert(formatted === expected);
     });
-
   });
 });

@@ -2,17 +2,19 @@ import Strings from '../../src/chatbot/coaching-chatbot.strings.json';
 
 const Formatter = {
   format,
-  createProfile
+  formatFromTemplate,
+  createProfile,
 };
 
 export default Formatter;
 
+function formatFromTemplate(template, context) {
+  let s = Strings[template];
+  return format(s, context);
+}
+
 function format(template, context) {
   let s = template;
-
-  if (Strings[template] !== undefined) {
-    s = Strings[template];
-  }
 
   if (context.name) {
     s = s.replace('{name}', context.name);
