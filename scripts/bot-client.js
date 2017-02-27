@@ -16,7 +16,7 @@ function main() {
         write: (sessionId, ctx) => {
             context = ctx;
             return Promise.resolve(context);
-        }
+        },
     };
 
     const bot = new Chatbot(dialog, sessions);
@@ -25,7 +25,7 @@ function main() {
 }
 
 function interactive(bot) {
-  const sessionId = "INTERACTIVE";
+  const sessionId = 'INTERACTIVE';
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -34,7 +34,7 @@ function interactive(bot) {
   rl.setPrompt('> ');
   const prompt = () => {
     rl.prompt();
-    rl.write(null, {ctrl: true, name: 'e'});
+    rl.write(null, { ctrl: true, name: 'e' });
   };
   prompt();
   rl.on('line', (line) => {
@@ -43,11 +43,11 @@ function interactive(bot) {
       return prompt();
     }
     bot.receive(sessionId, line)
-      .then(msg => {
+      .then((msg) => {
         console.log(msg.join('\n'));
         console.log();
       })
-      .catch(err => console.error(err.stack))
+      .catch((err) => console.error(err.stack));
   });
 };
 

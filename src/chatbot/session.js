@@ -63,14 +63,14 @@ module.exports = class Session {
     }
 
     getVariables() {
-        log.debug("Building variable state...");
-        log.debug("context: {0}", JSON.stringify(this.context));
-        log.debug("userData: {0}", JSON.stringify(this.userData));
+        log.debug('Building variable state...');
+        log.debug('context: {0}', JSON.stringify(this.context));
+        log.debug('userData: {0}', JSON.stringify(this.userData));
 
         return {
             ...this.context,
-            ...this.userData
-        }
+            ...this.userData,
+        };
     }
 
     getResult() {
@@ -98,7 +98,7 @@ module.exports = class Session {
 
         for (let i = 0; i < this.state.length; ++i) {
             if (this.state[i][0] === state) {
-                throw new Error("Recursive state tree");
+                throw new Error('Recursive state tree');
             }
         }
 
@@ -171,7 +171,7 @@ module.exports = class Session {
     }
 
     _setStateArray(array) {
-        let state = "";
+        let state = '';
 
         for (let i = 0; i < array.length; ++i) {
             state += `/${array[i][0]}?${array[i][1]}`;

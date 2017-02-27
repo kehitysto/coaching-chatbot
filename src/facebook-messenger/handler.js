@@ -1,4 +1,4 @@
-import 'source-map-support/register'
+import 'source-map-support/register';
 
 require('../lib/envVars').config();
 
@@ -15,16 +15,15 @@ module.exports.handler = (event, context, cb) => {
         event.query['hub.verify_token'],
         event.query['hub.challenge']
       )
-      .then(response => cb(null, response))
-      .catch(err => cb(err));
-
+      .then((response) => cb(null, response))
+      .catch((err) => cb(err));
   } else if (event.method === 'POST') {
     const sessions = new Sessions();
     const bot = new Chatbot(dialog, sessions);
 
     return Messenger.receive(event.body, bot)
-      .then(response => cb(null, response))
-      .catch(err => cb(err));
+      .then((response) => cb(null, response))
+      .catch((err) => cb(err));
   }
 
   return cb('Unknown event');

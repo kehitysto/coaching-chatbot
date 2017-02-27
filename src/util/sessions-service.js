@@ -3,7 +3,8 @@ import AWS from 'aws-sdk';
 module.exports = class Sessions {
   constructor() {
     this.SESSION_TABLE =
-      `${process.env.SERVERLESS_PROJECT}-sessions-${process.env.SERVERLESS_STAGE}`;
+      `${process.env.SERVERLESS_PROJECT}` +
+      `-sessions-${process.env.SERVERLESS_STAGE}`;
     this.db = new AWS.DynamoDB.DocumentClient();
   }
 
@@ -11,10 +12,10 @@ module.exports = class Sessions {
     return new Promise((resolve, reject) => {
       const params = {
         Key: {
-          id
+          id,
         },
         TableName: this.SESSION_TABLE,
-        ConsistentRead: true
+        ConsistentRead: true,
       };
 
       this.db.get(params, (err, data) => {
@@ -48,8 +49,8 @@ module.exports = class Sessions {
         TableName: this.SESSION_TABLE,
         Item: {
           id,
-          context
-        }
+          context,
+        },
       };
 
       console.log('db write: ' + JSON.stringify(context));

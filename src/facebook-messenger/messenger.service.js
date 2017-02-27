@@ -6,7 +6,6 @@ import request from 'request-promise';
 
 import log from '../lib/logger.service';
 
-
 const Messenger = {
     send(id, text) {
         const body = {

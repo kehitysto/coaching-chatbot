@@ -1,15 +1,12 @@
-import sinon from 'sinon';
-import mockery from 'mockery';
 import * as actions from '../../../src/chatbot/coaching-chatbot.actions.js';
 
 
 describe('coaching-bot actions', function() {
-
     describe('#set_job', function() {
       it('returns a Promise', function() {
         const ret = actions.set_job({
           context: {},
-          input: "",
+          input: '',
         });
 
         expect(ret).to.be.a('Promise');
@@ -18,20 +15,21 @@ describe('coaching-bot actions', function() {
       it('returns the job from entity job', function() {
         const ret = actions.set_job({
           context: {},
-          input: "taksikuski",
+          input: 'taksikuski',
         });
 
-        expect(ret).to.become({ job: 'taksikuski' });
+        return expect(ret).to.eventually
+        .deep.equal({ context: { job: 'taksikuski' } } );
       });
 
       it('preserves context', function() {
         const ret = actions.set_job({
           context: { 'foo': 'bar' },
-          input: "maalari",
+          input: 'maalari',
         });
 
         return expect(ret).to.eventually
-        .deep.equal( {context:{ 'foo': 'bar', 'job': 'maalari' }} );
+        .deep.equal( { context: { 'foo': 'bar', 'job': 'maalari' } } );
       });
     });
 
@@ -39,29 +37,29 @@ describe('coaching-bot actions', function() {
       it('returns a Promise', function() {
         const ret = actions.set_age({
           context: {},
-          input: "",
+          input: '',
         });
 
-        expect(ret).to.be.a('Promise');
+        return expect(ret).to.be.a('Promise');
       });
 
       it('returns the age from entity age', function() {
           const ret = actions.set_age({
             context: {},
-            input: "66",
+            input: '66',
           });
 
-          expect(ret).to.become( { age: '66' } );
+          return expect(ret).to.become({ context: { age: '66' } } );
       });
 
       it('preserves context', function() {
         const ret = actions.set_age({
           context: { 'foo': 'bar' },
-          input: "43",
+          input: '43',
         });
 
         return expect(ret).to.eventually
-        .deep.equal( {context:{ 'foo': 'bar', 'age': '43' }} );
+        .deep.equal( { context: { 'foo': 'bar', 'age': '43' } } );
       });
     });
 
@@ -69,7 +67,7 @@ describe('coaching-bot actions', function() {
       it('returns a Promise', function() {
         const ret = actions.set_name({
           context: {},
-          input: "",
+          input: '',
         });
 
         expect(ret).to.be.a('Promise');
@@ -78,36 +76,36 @@ describe('coaching-bot actions', function() {
       it('returns the name from entity name', function() {
         const ret = actions.set_name({
           context: {},
-          input: "Pertti",
+          input: 'Pertti',
         });
 
-        expect(ret).to.become({ name: 'Pertti' });
+        return expect(ret).to.become({ context: { name: 'Pertti' } } );
       });
 
       it('returns the name from entity contact', function() {
         const ret = actions.set_name({
             context: {},
-            input: "Jari",
+            input: 'Jari',
         });
 
-        expect(ret).to.become( { name: 'Jari' } );
+        return expect(ret).to.become({ context: { name: 'Jari' } } );
       });
 
       it('preserves context', function() {
         const ret = actions.set_name({
             context: { 'foo': 'bar' },
-            input: "Jari",
+            input: 'Jari',
         });
 
         return expect(ret).to.eventually
-        .deep.equal( {context:{ 'foo': 'bar', 'name': 'Jari' }} );
+        .deep.equal( { context: { 'foo': 'bar', 'name': 'Jari' } } );
       });
     });
     describe('#set_place', function() {
       it('returns a Promise', function() {
         const ret = actions.set_place({
           context: {},
-          input: "",
+          input: '',
         });
 
         expect(ret).to.be.a('Promise');
@@ -116,19 +114,19 @@ describe('coaching-bot actions', function() {
       it('returns the name from entity place', function() {
         const ret = actions.set_place({
           context: {},
-          input: "Helsinki",
+          input: 'Helsinki',
         });
 
-        expect(ret).to.become({ place: 'Helsinki' });
+        return expect(ret).to.become({ context: { place: 'Helsinki' } } );
       });
 
       it('returns the name from entity place', function() {
         const ret = actions.set_place({
             context: {},
-            input: "Amsterdam",
+            input: 'Amsterdam',
         });
 
-        expect(ret).to.become( { name: 'Amsterdam' } );
+        return expect(ret).to.become( { context: { place: 'Amsterdam' } } );
       });
 
       it('preserves context', function() {
@@ -138,7 +136,7 @@ describe('coaching-bot actions', function() {
         });
 
         return expect(ret).to.eventually
-        .deep.equal( {context:{ 'foo': 'bar', 'place': 'Turku' }} );
+        .deep.equal( { context: { 'foo': 'bar', 'place': 'Turku' } } );
       });
     });
     describe('#update_profile', function() {
@@ -152,31 +150,37 @@ describe('coaching-bot actions', function() {
 
       it('Should return without age', function() {
         const ret = actions.update_profile({
-          context: { 'name': 'Matti', 'job': 'Opiskelija', 'place' : 'Helsinki'},
+          context: { 'name': 'Matti', 'job': 'Opiskelija',
+         'place': 'Helsinki' },
           userData: '',
         });
-        return expect(ret).to.eventually.deep.equal( {userData:{profile:'Matti, Opiskelija, Helsinki'}});
+        return expect(ret).to.eventually.deep.equal(
+        { userData: { profile: 'Matti, Opiskelija, Helsinki' } } );
       });
       it('Should return without place', function() {
         const ret = actions.update_profile({
-          context: { 'name': 'Matti', 'job': 'Opiskelija', 'age' : '23'},
+          context: { 'name': 'Matti', 'job': 'Opiskelija', 'age': '23' },
           userData: '',
         });
-        return expect(ret).to.eventually.deep.equal( {userData:{profile:'Matti, Opiskelija, 23'}});
+        return expect(ret).to.eventually.deep.equal(
+        { userData: { profile: 'Matti, Opiskelija, 23' } } );
       });
       it('Should return without age and place', function() {
         const ret = actions.update_profile({
-          context: { 'name': 'Matti', 'job': 'Opiskelija'},
+          context: { 'name': 'Matti', 'job': 'Opiskelija' },
           userData: '',
         });
-        return expect(ret).to.eventually.deep.equal( {userData:{profile:'Matti, Opiskelija'}});
+        return expect(ret).to.eventually.deep.equal(
+        { userData: { profile: 'Matti, Opiskelija' } } );
       });
       it('Should return everything', function() {
         const ret = actions.update_profile({
-          context: { 'name': 'Matti', 'job': 'Opiskelija', 'age': '23', 'place' : 'Helsinki'},
+          context: { 'name': 'Matti', 'job':
+          'Opiskelija', 'age': '23', 'place': 'Helsinki' },
           userData: '',
         });
-        return expect(ret).to.eventually.deep.equal( {userData:{profile:'Matti, Opiskelija, 23, Helsinki'}});
+        return expect(ret).to.eventually.deep.equal(
+        { userData: { profile: 'Matti, Opiskelija, 23, Helsinki' } } );
       });
     });
     describe('#reset', function() {
@@ -192,7 +196,7 @@ describe('coaching-bot actions', function() {
           context: {},
           input: '',
         });
-        return expect(ret).to.eventually.deep.equal({context: {}});
+        return expect(ret).to.eventually.deep.equal( { context: {} } );
       });
     });
 });
