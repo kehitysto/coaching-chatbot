@@ -64,16 +64,17 @@ module.exports = class Dialog {
             userData: session.getUserData(),
             input: input || session.getInput()
         };
-        const promise = this._actions[actionId](actionData).then((result) => {
-            if (result.context) {
-                log.debug("Updating context: {0}", JSON.stringify(result.context));
-                session.setContext(result.context);
-            }
-            if (result.userData) {
-                log.debug("Updating userData: {0}", JSON.stringify(result.userData));
-                session.setUserData(result.userData);
-            }
-        });
+        const promise = Promise.resolve(this._actions[actionId](actionData))
+            .then((result) => {
+                if (result.context) {
+                    log.debug("Updating context: {0}", JSON.stringify(result.context));
+                    session.setContext(result.context);
+                }
+                if (result.userData) {
+                    log.debug("Updating userData: {0}", JSON.stringify(result.userData));
+                    session.setUserData(result.userData);
+                }
+            });
 
         return promise;
     }

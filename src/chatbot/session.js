@@ -143,9 +143,7 @@ module.exports = class Session {
 
         for (let i = 0; i < actionArr.length; ++i) {
             this._queue = this._queue.then(
-                Promise.resolve(
-                    this.dialog.runAction(actionArr[i], this, input)
-                )
+                this.dialog.runAction(actionArr[i], this, input)
             );
         }
     }
