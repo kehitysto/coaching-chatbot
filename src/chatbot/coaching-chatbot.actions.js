@@ -1,3 +1,5 @@
+import Formatter from '../lib/personal-information-formatter-service';
+
 export function set_name({context, input}) {
     return Promise.resolve({
         context: {
@@ -35,14 +37,7 @@ export function set_place({context, input}) {
 }
 
 export function update_profile({context, userData}) {
-    let profile = `${context.name}, ${context.job}`;
-
-    if (context.age !== undefined) {
-        profile += `, ${context.age}`;
-    }
-    if (context.place !== undefined) {
-        profile += `, ${context.place}`;
-    }
+    let profile = Formatter.createProfile(context);
 
     return Promise.resolve({
         userData: {
