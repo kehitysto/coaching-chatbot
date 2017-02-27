@@ -14,7 +14,7 @@ module.exports = class Dialog {
         this._strings = strings;
     }
 
-    addState(stateId, substates, intents=[]) {
+    dialog(stateId, substates, intents=[]) {
         if (stateId.startsWith('/')) {
             stateId = stateId.substr(1);
         }
@@ -28,14 +28,14 @@ module.exports = class Dialog {
         return this;
     }
 
-    addIntent(intentId, intentObj) {
+    intent(intentId, intentObj) {
         log.debug("Registering intent {0}", intentId);
         this._intents[intentId] = intentObj;
 
         return this;
     }
 
-    addAction(actionId, fn) {
+    action(actionId, fn) {
         log.debug("Registering action {0}", actionId);
         this._actions[actionId] = fn;
 
@@ -64,16 +64,17 @@ module.exports = class Dialog {
             userData: session.getUserData(),
             input: input || session.getInput()
         };
-        const promise = this._actions[actionId](actionData).then((result) => {
-            if (result.context) {
-                log.debug("Updating context: {0}", JSON.stringify(result.context));
-                session.setContext(result.context);
-            }
-            if (result.userData) {
-                log.debug("Updating userData: {0}", JSON.stringify(result.userData));
-                session.setUserData(result.userData);
-            }
-        });
+        const promise = Promise.resolve(this._actions[actionId](actionData))
+            .then((result) => {
+                if (result.context) {
+                    log.debug("Updating context: {0}", JSON.stringify(result.context));
+                    session.setContext(result.context);
+                }
+                if (result.userData) {
+                    log.debug("Updating userData: {0}", JSON.stringify(result.userData));
+                    session.setUserData(result.userData);
+                }
+            });
 
         return promise;
     }
@@ -244,8 +245,10 @@ module.exports = class Dialog {
 
                 return resolve(
                     session.runQueue().then(() => {
-                        if (!session.done) {
+                        if (session.getState() !== state || session.getSubState() !== substate) {
                             return this._runStep(step+1, session, input);
+                        } else {
+                            session.next();
                         }
                     })
                 );
