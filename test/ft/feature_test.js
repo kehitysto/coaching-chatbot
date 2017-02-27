@@ -1,9 +1,8 @@
 import Chatbot from '../../src/chatbot/chatbot.service';
 import dialog from '../../src/chatbot/coaching-chatbot.dialog';
-
+import Strings from '../../src/chatbot/coaching-chatbot.strings.json';
 
 const SESSION = 'SESSION';
-
 
 describe('User story', function() {
     before(function() {
@@ -27,16 +26,56 @@ describe('User story', function() {
         function() {
             return expect(
                 this.bot.receive(SESSION, 'moi')
-            ).to.eventually.become(['Hei! Olen Kehitystön vertaisohjausrobotti. Kiinnostaako sinua löytää pari vertaisohjausta varten?']);
+            ).to.eventually.become([Strings['@greeting']]);
         });
     });
-
     describe('As a non-registered user I want the bot to ask for my name, when I have confirmed that I want to start searching for a peer', function() {
-      it('should ask user for a name when user has confirmed that he wants to find a peer',
+     it('should ask user for a name when user has confirmed that he wants to find a peer',
+     function() {
+        return expect(
+           this.bot.receive(SESSION, 'Kyllä')
+         ).to.eventually.become([Strings['@great'], Strings['@request_name']]);
+       });
+     });
+     describe('As a registered user I want to provide my name to the bot so other people can see it and ask for occupation after name is confirmed', function() {
+      it('should ask user for a occupation when user has provided his/her name',
       function() {
          return expect(
-            this.bot.receive(SESSION, 'Kyllä')
-          ).to.eventually.become(['Hienoa!', 'Millä nimellä haluaisit esittäytyä mahdollisille pareillesi?']);
+            this.bot.receive(SESSION, 'Matti')
+          ).to.eventually.become(['Kiitos Matti. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. \"Vaihda nimi\".', 'Seuraavaksi haluaisin tie tää mikä on ammattisi?']);
         });
+    });
+    describe('As a registered user I want to provide my occupation to the bot so other people can see it and bot will show the information and asks for additional information', function() {
+    it('should ask user for a occupation when user has provided his/her name',
+    function() {
+       return expect(
+          this.bot.receive(SESSION, 'Opiskelija')
+        ).to.eventually.become(['Parin etsijät näkisivät nyt sinut seuraavasti: \"Matti, Opiskelija\". Voit lisätä ikäsi tai paikkakuntasi kertomalla minulle esim. \"Lisää ikä 33\". Jos olet tyytyväinen profiilisi, voit siirtyä parin etsimiseen kirjoittamalla \"Etsi pari\".']);
+      });
+  });
+  describe('As a registered user I want to provide my age to the bot so other people can see it and bot will show the information and asks for additional information', function() {
+  it('should ask user for a additional information when user has provided his/her name and occupation',
+  function() {
+     return expect(
+        this.bot.receive(SESSION, 'Lisää ikä 22')
+      ).to.eventually.become(['Iäksesi on nyt asetettu 22.', 'Parin etsijät näkisivät nyt sinut seuraavasti: \"Matti, Opiskelija, 22\". Voit lisätä ikäsi tai paikkakuntasi kertomalla minulle esim. \"Lisää ikä 33\". Jos olet tyytyväinen profiilisi, voit siirtyä parin etsimiseen kirjoittamalla \"Etsi pari\".']);
+    });
 });
+describe('As a registered user I want to provide my location to the bot so other people can see it and bot will show the information ', function() {
+it('should ask user for a additional information when user has provided his/her name and occupation',
+function() {
+   return expect(
+      this.bot.receive(SESSION, 'Lisää paikkakunta Helsinki')
+    ).to.eventually.become(['Paikkakunta lisätty profiiliin.', 'Parin etsijät näkisivät nyt sinut seuraavasti: \"Matti, Opiskelija, 22, Helsinki\". Voit lisätä ikäsi tai paikkakuntasi kertomalla minulle esim. \"Lisää ikä 33\". Jos olet tyytyväinen profiilisi, voit siirtyä parin etsimiseen kirjoittamalla \"Etsi pari\".']);
+  });
+});
+describe('Unclear information', function() {
+it('should ask user for a additional information when user has provided his/her name and occupation',
+function() {
+   return expect(
+      this.bot.receive(SESSION, 'asdaswa834*½')
+    ).to.eventually.become(['Paikkakunta lisätty profiiliin.', 'Parin etsijät näkisivät nyt sinut seuraavasti: \"Matti, Opiskelija, 22, Helsinki\". Voit lisätä ikäsi tai paikkakuntasi kertomalla minulle esim. \"Lisää ikä 33\". Jos olet tyytyväinen profiilisi, voit siirtyä parin etsimiseen kirjoittamalla \"Etsi pari\".']);
+  });
+});
+
 });

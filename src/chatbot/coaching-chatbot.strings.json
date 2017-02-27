@@ -10,7 +10,7 @@
 
   "@request_name": "Millä nimellä haluaisit esittäytyä mahdollisille pareillesi?",
   "@confirm_name": "Kiitos {name}. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. \"Vaihda nimi\".",
-  "@request_job": "Seuraavaksi haluaisin tietää mikä on ammattisi?",
+  "@request_job": "Seuraavaksi haluaisin tie tää mikä on ammattisi?",
   "@request_age": "Anna ikäsi.",
   "@confirm_age": "Iäksesi on nyt asetettu {age}.",
   "@request_place": "Anna paikkakuntasi.",
