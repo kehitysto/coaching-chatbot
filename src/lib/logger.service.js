@@ -7,7 +7,7 @@ const Logger = {
   warning,
   info,
   debug,
-  silly
+  silly,
 };
 
 export const LEVELS = {
@@ -73,9 +73,8 @@ function silly() {
 }
 
 function _logMessage(level, message, args) {
-  if (level > logLevel) return;
-
   const out = [];
+
   for (let key in LEVELS) {
     if (LEVELS[key] === level) {
       out.push(key);

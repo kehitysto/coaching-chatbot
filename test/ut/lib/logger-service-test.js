@@ -17,7 +17,6 @@ describe('Logging service', function() {
   });
 
   describe('#log()', function() {
-
     it('should indicate "ERROR" log level', function() {
       Logger.setLevel(LEVELS.ERROR);
       Logger.log(this.message);
@@ -51,40 +50,35 @@ describe('Logging service', function() {
 
   describe('#error()', function() {
     it('should indicate "ERROR" log level', function() {
-      Logger.setLevel(LEVELS.ERROR);
-      Logger.log(this.message);
+      Logger.error(this.message);
       assert(this.spy.calledWith('ERROR::juuh'));
     });
   });
 
   describe('#warning()', function() {
     it('should indicate "WARNING" log level', function() {
-      Logger.setLevel(LEVELS.WARNING);
-      Logger.log(this.message);
+      Logger.warning(this.message);
       assert(this.spy.calledWith('WARNING::juuh'));
     });
   });
 
   describe('#info()', function() {
     it('should indicate "DEBUG" log level', function() {
-      Logger.setLevel(LEVELS.INFO);
-      Logger.log(this.message);
+      Logger.info(this.message);
       assert(this.spy.calledWith('INFO::juuh'));
     });
   });
 
   describe('#debug()', function() {
     it('should indicate "DEBUG" log level', function() {
-      Logger.setLevel(LEVELS.DEBUG);
-      Logger.log(this.message);
+      Logger.debug(this.message);
       assert(this.spy.calledWith('DEBUG::juuh'));
     });
   });
 
   describe('#silly()', function() {
     it('should indicate "SILLY" log level', function() {
-      Logger.setLevel(LEVELS.SILLY);
-      Logger.log(this.message);
+      Logger.silly(this.message);
       assert(this.spy.calledWith('SILLY::juuh'));
     });
   });
