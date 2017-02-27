@@ -60,7 +60,7 @@
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --config build/webpack.config.js",
-    "test": "mocha-webpack test/ut",
+    "test": "mocha-webpack src test/ut",
     "test:watch": "mocha-webpack --watch test/ut",
     "ft": "mocha-webpack test/ft/feature-test.js",
     "lint": "eslint src",
