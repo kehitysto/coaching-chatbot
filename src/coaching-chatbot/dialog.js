@@ -1,8 +1,8 @@
-import Builder from './builder';
+import Builder from '../chatbot/builder';
 
-import strings from './coaching-chatbot.strings.json';
-import * as actions from './coaching-chatbot.actions';
-import * as intents from './coaching-chatbot.intents';
+import strings from './strings.json';
+import * as actions from './actions';
+import * as intents from './intents';
 
 
 const bot = new Builder(strings);

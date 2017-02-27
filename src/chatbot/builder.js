@@ -3,7 +3,7 @@ import log from '../lib/logger.service';
 import Session from './session';
 
 
-module.exports = class Dialog {
+module.exports = class Builder {
     constructor(strings, maxSteps=5) {
         this.maxSteps = maxSteps;
 

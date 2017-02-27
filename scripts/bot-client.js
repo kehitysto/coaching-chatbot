@@ -1,7 +1,7 @@
 import readline from 'readline';
 
 import Chatbot from '../src/chatbot/chatbot.service';
-import dialog from '../src/chatbot/coaching-chatbot.dialog';
+import dialog from '../src/coaching-chatbot/dialog';
 
 require('../src/lib/envVars')
   .config();
