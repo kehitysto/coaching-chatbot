@@ -131,6 +131,7 @@ module.exports = class Session {
 
         this._processResults();
 
+        this.context.state = this._setStateArray(this._state);
         return this;
     }
 
@@ -166,7 +167,7 @@ module.exports = class Session {
         return {
             ...this.context,
             ...this.userData
-        }
+        };
     }
 
     getResult() {
@@ -224,7 +225,7 @@ module.exports = class Session {
 
         for (let i = 0; i < this._results.length; ++i) {
             this.result.push(
-                this.dialog.getString(this._results[i], this.getVariables())
+                this.dialog.getFormattedString(this._results[i], this.getVariables())
             );
         }
     }
