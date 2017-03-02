@@ -234,7 +234,7 @@ module.exports = class Builder {
   }
 
   _runStep(step, session, input) {
-    log.debug('Running iteration {0}', step);
+    log.silly('Running iteration {0}', step);
 
     return new Promise((resolve, reject) => {
       if (step > this.maxSteps) {
@@ -246,18 +246,20 @@ module.exports = class Builder {
       if (this._tree[state] !== undefined) {
         const substate = session.getSubState();
 
+        log.debug("Running state /{0}?{1}", state, substate);
+
         this._tree[state].substates[substate](session, input);
 
         return resolve(
           session.runQueue()
-          .then(() => {
-            if (session.getState() !== state || session.getSubState() !==
-              substate) {
-              return this._runStep(step + 1, session, input);
-            } else {
-              session.next();
-            }
-          })
+              .then(() => {
+                if (session.getState() !== state ||
+                    session.getSubState() !== substate) {
+                  return this._runStep(step + 1, session, input);
+                } else {
+                  session.next();
+                }
+              })
         );
       }
 

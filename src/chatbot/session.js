@@ -74,6 +74,7 @@ module.exports = class Session {
     * @param {string} stringId ID of the string template to use
     */
     addResult(stringId) {
+        log.debug("Adding result: {0}", stringId);
         this._results.push(stringId);
     }
 
@@ -110,6 +111,8 @@ module.exports = class Session {
     * @return {Session}
     */
     _start(context, input) {
+        log.debug("Starting session...");
+
         this.context = context;
         this.userData = {};
 
@@ -129,10 +132,7 @@ module.exports = class Session {
     * @return {Session}
     */
     _finalize() {
-        this.context.state = this._setStateArray(this._state);
-
-        this._processResults();
-
+        log.debug("Finalizing session...");
         this.context.state = this._setStateArray(this._state);
         return this;
     }
@@ -173,7 +173,16 @@ module.exports = class Session {
     }
 
     getResult() {
-        return this.result;
+        let result = [];
+
+        for (let i = 0; i < this._results.length; ++i) {
+            result.push(
+                this.dialog.getFormattedString(
+                    this._results[i], this.getVariables())
+            );
+        }
+
+        return result;
     }
 
     getState() {
@@ -190,54 +199,8 @@ module.exports = class Session {
         return out;
     }
 
-    pushState(state) {
-        if (state.startsWith('/')) {
-            state = state.substr(1);
-        }
-
-        for (let i = 0; i < this.state.length; ++i) {
-            if (this.state[i][0] === state) {
-                throw new Error('Recursive state tree');
-            }
-        }
-
-        this.state.push([state, 0]);
-    }
-
-    popState() {
-        if (this.state.length > 1) {
-            this.state.pop();
-        } else {
-            this.state[0] = ['base', 0];
-        }
-    }
-
-    switchState(newState) {
-        if (newState.startsWith('/')) {
-            newState = newState.substr(1);
-        }
-
-        this.state[this.state.length-1] = [newState, 0];
-    }
-
-    clearState() {
-        this.state = [['base', 0]];
-    }
-
     getSubState() {
-        return this.state[this.state.length-1][1];
-    }
-
-    addResult(...args) {
-        this._results.push(
-            Array.prototype.slice(...args)
-        );
-    }
-
-    runAction(actionId, input=null) {
-        this._queue = this._queue.then(
-            this.dialog.runAction(actionId, this, input)
-        );
+        return this._state[this._state.length-1][1];
     }
 
     checkIntent(intentId) {
@@ -266,16 +229,5 @@ module.exports = class Session {
         }
 
         return state;
-    }
-
-    _processResults() {
-        this.result = [];
-
-        for (let i = 0; i < this._results.length; ++i) {
-            this.result.push(
-                this.dialog.getFormattedString(
-                    this._results[i], this.getVariables())
-            );
-        }
     }
 };
