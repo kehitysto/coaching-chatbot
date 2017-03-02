@@ -1,4 +1,4 @@
-import Strings from '../../src/chatbot/coaching-chatbot.strings.json';
+import Strings from '../../src/coaching-chatbot/strings.json';
 
 const Formatter = {
   format,

@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 
 import Formatter from '../../../src/lib/personal-information-formatter-service';
-import Strings from '../../../src/chatbot/coaching-chatbot.strings.json';
+import Strings from '../../../src/coaching-chatbot/strings.json';
 
 var assert = require('assert');
 
