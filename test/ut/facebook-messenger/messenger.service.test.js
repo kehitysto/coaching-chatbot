@@ -31,7 +31,8 @@ describe('Facebook Messenger service', function() {
           delete process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
           const ret = this.Messenger.send('USER_ID', 'Message...');
 
-          return expect(ret).to.be.rejectedWith('No FACEBOOK_PAGE_ACCESS_TOKEN defined')
+          return expect(ret).to
+          .be.rejectedWith('No FACEBOOK_PAGE_ACCESS_TOKEN defined');
         });
 
         it('should send messages to facebook', function() {
@@ -45,7 +46,7 @@ describe('Facebook Messenger service', function() {
                         method: 'POST',
                         json: sinon.match({
                             recipient: { id: 'USER_ID' },
-                            message: { text: "Message..." }
+                            message: { text: 'Message...' }
                         })
                     })
                 );
@@ -60,7 +61,8 @@ describe('Facebook Messenger service', function() {
             );
 
             this.cb = {
-                receive: sinon.stub().returns(Promise.resolve(["hello, world!"]))
+                receive: sinon.stub()
+                .returns(Promise.resolve(['hello, world!'])),
             };
         });
 
@@ -74,7 +76,7 @@ describe('Facebook Messenger service', function() {
 
         it('should call callback with the message sender and body', function() {
             const mock = sinon.mock(this.Messenger);
-            mock.expects("send").withArgs("USER_ID", "hello, world!");
+            mock.expects('send').withArgs('USER_ID', 'hello, world!');
 
             const ret = this.Messenger.receive(this.data.body, this.cb);
 
@@ -85,10 +87,11 @@ describe('Facebook Messenger service', function() {
 
         it('Should return an Error when msgEvent.message.attachments exists',
         function() {
-          this.data.body.entry[0].messaging[0].message.attachments = "foobar";
+          this.data.body.entry[0].messaging[0].message.attachments = 'foobar';
           const ret = this.Messenger.receive(this.data.body, this.cb);
 
-          return expect(ret).to.be.rejectedWith('Attachments are not supported');
+          return expect(ret).to.be.rejectedWith(
+          'Attachments are not supported');
         });
 
         it('Should return an error when data.object value is not "page"',

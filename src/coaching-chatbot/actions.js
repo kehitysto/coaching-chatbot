@@ -1,54 +1,54 @@
 import Formatter from '../lib/personal-information-formatter-service';
 
-export function set_name({context, input}) {
+export function setName({ context, input }) {
     return Promise.resolve({
         context: {
             ...context,
-            name: input
-        }
+            name: input,
+        },
     });
 }
 
-export function set_job({context, input}) {
+export function setJob({ context, input }) {
     return Promise.resolve({
         context: {
             ...context,
-            job: input
-        }
+            job: input,
+        },
     });
 }
 
-export function set_age({context, input}) {
+export function setAge({ context, input }) {
     return Promise.resolve({
         context: {
             ...context,
-            age: input
-        }
+            age: input,
+        },
     });
 }
 
-export function set_place({context, input}) {
+export function setPlace({ context, input }) {
     return Promise.resolve({
         context: {
             ...context,
-            place: input
-        }
+            place: input,
+        },
     });
 }
 
-export function update_profile({context, userData}) {
+export function updateProfile({ context, userData }) {
     let profile = Formatter.createProfile(context);
 
     return Promise.resolve({
         userData: {
             ...userData,
-            profile
-        }
+            profile,
+        },
     });
 }
 
 export function reset() {
     return Promise.resolve({
-        context: {}
+        context: {},
     });
 }
