@@ -30,7 +30,7 @@ bot
       },
       (session) => {
         if (session.checkIntent('yes')) {
-          session.beginDialog('/createProfile');
+          session.beginDialog('/create_profile');
         } else if (session.checkIntent('no')) {
           session.addResult('@goodbye');
         } else {
@@ -49,17 +49,17 @@ bot
     '/create_profile', [
       (session) => {
         session.addResult('@great');
-        session.beginDialog('/setName');
+        session.beginDialog('/set_name');
       },
       (session) => {
-        session.beginDialog('/setJob');
+        session.beginDialog('/set_job');
       },
       (session) => {
         session.switchDialog('/profile');
       },
     ])
   .dialog(
-    '/setName', [
+    '/set_name', [
       (session) => {
         session.addResult('@request_name');
       },
@@ -70,7 +70,7 @@ bot
       },
     ])
   .dialog(
-    '/setJob', [
+    '/set_job', [
       (session) => {
         session.addResult('@request_job');
       },
@@ -80,7 +80,7 @@ bot
       },
     ])
   .dialog(
-    '/setAge', [
+    '/set_age', [
       (session) => {
         session.addResult('@request_age');
       },
@@ -91,7 +91,7 @@ bot
       },
     ])
   .dialog(
-    '/setPlace', [
+    '/set_place', [
       (session) => {
         session.addResult('@request_place');
       },
@@ -121,7 +121,7 @@ bot
           session.runActions(['setJob'], match);
           session.addResult('@confirm_job');
         } else {
-          session.beginDialog('/setJob');
+          session.beginDialog('/set_job');
         }
       }],
       ['set_age', (session, match) => {
@@ -129,7 +129,7 @@ bot
           session.runActions(['setAge'], match);
           session.addResult('@confirm_age');
         } else {
-          session.beginDialog('/setAge');
+          session.beginDialog('/set_age');
         }
       }],
       ['set_place', (session, match) => {
@@ -137,7 +137,7 @@ bot
           session.runActions(['setPlace'], match);
           session.addResult('@confirm_place');
         } else {
-          session.beginDialog('/setPlace');
+          session.beginDialog('/set_place');
         }
       }],
       ['find_pair', (session) => {
