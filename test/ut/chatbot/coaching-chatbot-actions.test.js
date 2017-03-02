@@ -2,9 +2,9 @@ import * as actions from '../../../src/chatbot/coaching-chatbot.actions.js';
 
 
 describe('coaching-bot actions', function() {
-    describe('#set_job', function() {
+    describe('#setJob', function() {
       it('returns a Promise', function() {
-        const ret = actions.set_job({
+        const ret = actions.setJob({
           context: {},
           input: '',
         });
@@ -13,7 +13,7 @@ describe('coaching-bot actions', function() {
         });
 
       it('returns the job from entity job', function() {
-        const ret = actions.set_job({
+        const ret = actions.setJob({
           context: {},
           input: 'taksikuski',
         });
@@ -23,7 +23,7 @@ describe('coaching-bot actions', function() {
       });
 
       it('preserves context', function() {
-        const ret = actions.set_job({
+        const ret = actions.setJob({
           context: { 'foo': 'bar' },
           input: 'maalari',
         });
@@ -33,9 +33,9 @@ describe('coaching-bot actions', function() {
       });
     });
 
-    describe('#set_age', function() {
+    describe('#setAge', function() {
       it('returns a Promise', function() {
-        const ret = actions.set_age({
+        const ret = actions.setAge({
           context: {},
           input: '',
         });
@@ -44,7 +44,7 @@ describe('coaching-bot actions', function() {
       });
 
       it('returns the age from entity age', function() {
-          const ret = actions.set_age({
+          const ret = actions.setAge({
             context: {},
             input: '66',
           });
@@ -53,7 +53,7 @@ describe('coaching-bot actions', function() {
       });
 
       it('preserves context', function() {
-        const ret = actions.set_age({
+        const ret = actions.setAge({
           context: { 'foo': 'bar' },
           input: '43',
         });
@@ -63,9 +63,9 @@ describe('coaching-bot actions', function() {
       });
     });
 
-    describe('#set_name', function() {
+    describe('#setName', function() {
       it('returns a Promise', function() {
-        const ret = actions.set_name({
+        const ret = actions.setName({
           context: {},
           input: '',
         });
@@ -74,7 +74,7 @@ describe('coaching-bot actions', function() {
       });
 
       it('returns the name from entity name', function() {
-        const ret = actions.set_name({
+        const ret = actions.setName({
           context: {},
           input: 'Pertti',
         });
@@ -83,7 +83,7 @@ describe('coaching-bot actions', function() {
       });
 
       it('returns the name from entity contact', function() {
-        const ret = actions.set_name({
+        const ret = actions.setName({
             context: {},
             input: 'Jari',
         });
@@ -92,7 +92,7 @@ describe('coaching-bot actions', function() {
       });
 
       it('preserves context', function() {
-        const ret = actions.set_name({
+        const ret = actions.setName({
             context: { 'foo': 'bar' },
             input: 'Jari',
         });
@@ -101,9 +101,9 @@ describe('coaching-bot actions', function() {
         .deep.equal( { context: { 'foo': 'bar', 'name': 'Jari' } } );
       });
     });
-    describe('#set_place', function() {
+    describe('#setPlace', function() {
       it('returns a Promise', function() {
-        const ret = actions.set_place({
+        const ret = actions.setPlace({
           context: {},
           input: '',
         });
@@ -112,7 +112,7 @@ describe('coaching-bot actions', function() {
       });
 
       it('returns the name from entity place', function() {
-        const ret = actions.set_place({
+        const ret = actions.setPlace({
           context: {},
           input: 'Helsinki',
         });
@@ -121,7 +121,7 @@ describe('coaching-bot actions', function() {
       });
 
       it('returns the name from entity place', function() {
-        const ret = actions.set_place({
+        const ret = actions.setPlace({
             context: {},
             input: 'Amsterdam',
         });
@@ -130,7 +130,7 @@ describe('coaching-bot actions', function() {
       });
 
       it('preserves context', function() {
-        const ret = actions.set_place({
+        const ret = actions.setPlace({
             context: { 'foo': 'bar' },
             input: 'Turku',
         });
@@ -139,9 +139,9 @@ describe('coaching-bot actions', function() {
         .deep.equal( { context: { 'foo': 'bar', 'place': 'Turku' } } );
       });
     });
-    describe('#update_profile', function() {
+    describe('#updateProfile', function() {
       it('Should return a Promise', function() {
-        const ret = actions.update_profile({
+        const ret = actions.updateProfile({
           context: {},
           input: '',
         });
@@ -149,7 +149,7 @@ describe('coaching-bot actions', function() {
       });
 
       it('Should return without age', function() {
-        const ret = actions.update_profile({
+        const ret = actions.updateProfile({
           context: { 'name': 'Matti', 'job': 'Opiskelija',
          'place': 'Helsinki' },
           userData: '',
@@ -158,7 +158,7 @@ describe('coaching-bot actions', function() {
         { userData: { profile: 'Matti, Opiskelija, Helsinki' } } );
       });
       it('Should return without place', function() {
-        const ret = actions.update_profile({
+        const ret = actions.updateProfile({
           context: { 'name': 'Matti', 'job': 'Opiskelija', 'age': '23' },
           userData: '',
         });
@@ -166,7 +166,7 @@ describe('coaching-bot actions', function() {
         { userData: { profile: 'Matti, Opiskelija, 23' } } );
       });
       it('Should return without age and place', function() {
-        const ret = actions.update_profile({
+        const ret = actions.updateProfile({
           context: { 'name': 'Matti', 'job': 'Opiskelija' },
           userData: '',
         });
@@ -174,7 +174,7 @@ describe('coaching-bot actions', function() {
         { userData: { profile: 'Matti, Opiskelija' } } );
       });
       it('Should return everything', function() {
-        const ret = actions.update_profile({
+        const ret = actions.updateProfile({
           context: { 'name': 'Matti', 'job':
           'Opiskelija', 'age': '23', 'place': 'Helsinki' },
           userData: '',

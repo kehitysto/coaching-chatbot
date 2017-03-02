@@ -9,12 +9,16 @@ const dialog = new Dialog(strings);
 
 // ACTIONS
 for (let actionId in actions) {
+  if ({}.hasOwnProperty.call(foo, key)) {
     dialog.addAction(actionId, actions[actionId]);
+  }
 }
 
 // INTENTS
 for (let intentId in intents) {
+  if ({}.hasOwnProperty.call(foo, key)) {
     dialog.addIntent(intentId, intents[intentId]);
+  }
 }
 
 // STATES
@@ -29,7 +33,7 @@ dialog
             },
             (session) => {
                 if (session.checkIntent('yes')) {
-                    session.pushState('/create_profile');
+                    session.pushState('/createProfile');
                 } else if (session.checkIntent('no')) {
                     session.addResult('@goodbye');
                     session.popState();
@@ -48,37 +52,37 @@ dialog
             }],
         ])
     .addState(
-        '/create_profile',
+        '/createProfile',
         [
             (session) => {
                 session.addResult('@great');
                 session.next();
-                session.pushState('/set_name');
+                session.pushState('/setName');
             },
             (session) => {
                 session.next();
-                session.pushState('/set_job');
+                session.pushState('/setJob');
             },
             (session) => {
                 session.switchState('/profile');
             },
         ])
     .addState(
-        '/set_name',
+        '/setName',
         [
             (session) => {
-                session.addResult('@request_name');
+                session.addResult('@requestName');
                 session.next();
                 session.endDialog();
             },
             (session) => {
-                session.runAction('set_name');
+                session.runAction('setName');
                 session.addResult('@confirm_name');
                 session.popState();
             },
         ])
     .addState(
-        '/set_job',
+        '/setJob',
         [
             (session) => {
                 session.addResult('@request_job');
@@ -86,12 +90,12 @@ dialog
                 session.endDialog();
             },
             (session) => {
-                session.runAction('set_job');
+                session.runAction('setJob');
                 session.popState();
             },
         ])
     .addState(
-        '/set_age',
+        '/setAge',
         [
             (session) => {
                 session.addResult('@request_age');
@@ -99,13 +103,13 @@ dialog
                 session.endDialog();
             },
             (session) => {
-                session.runAction('set_age');
+                session.runAction('setAge');
                 session.addResult('@confirm_age');
                 session.popState();
             },
         ])
     .addState(
-        '/set_place',
+        '/setPlace',
         [
             (session) => {
                 session.addResult('@request_place');
@@ -113,7 +117,7 @@ dialog
                 session.endDialog();
             },
             (session) => {
-                session.runAction('set_place');
+                session.runAction('setPlace');
                 session.addResult('@confirm_place');
                 session.popState();
             },
@@ -122,7 +126,7 @@ dialog
         '/profile',
         [
             (session) => {
-                session.runAction('update_profile');
+                session.runAction('updateProfile');
                 session.addResult('@display_profile');
                 session.endDialog();
             },
@@ -130,7 +134,7 @@ dialog
         [
             ['change_name', (session, match) => {
                 if (match !== true) {
-                    session.runAction('set_name', match);
+                    session.runAction('setName', match);
                     session.addResult('@confirm_name');
                 } else {
                     session.pushState('/set_name');
@@ -138,26 +142,26 @@ dialog
             }],
             ['change_job', (session, match) => {
                 if (match !== true) {
-                    session.runAction('set_job', match);
+                    session.runAction('setJob', match);
                     session.addResult('@confirm_job');
                 } else {
-                    session.pushState('/set_job');
+                    session.pushState('/setJob');
                 }
             }],
             ['set_age', (session, match) => {
                 if (match !== true) {
-                    session.runAction('set_age', match);
+                    session.runAction('setAge', match);
                     session.addResult('@confirm_age');
                 } else {
-                    session.pushState('/set_age');
+                    session.pushState('/setAge');
                 }
             }],
             ['set_place', (session, match) => {
                 if (match !== true) {
-                    session.runAction('set_place', match);
+                    session.runAction('setPlace', match);
                     session.addResult('@confirm_place');
                 } else {
-                    session.pushState('/set_place');
+                    session.pushState('/setPlace');
                 }
             }],
             ['find_pair', (session) => {

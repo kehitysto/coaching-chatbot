@@ -1,0 +1,17 @@
+running lint...passed!
+running test...failed!
+ WEBPACK  Compiling...
+
+ WEBPACK  Failed to compile with 1 error(s)
+
+Error in ./src/lib/logger.service.js
+
+   Duplicate declaration "args"
+  
+    40 | 
+    41 | function error(...args) {
+  > 42 |     const args = Array.prototype.slice(...args);
+       |           ^
+    43 |     _logMessage(ERROR, args[0], args.slice(1));
+    44 | }
+    45 |

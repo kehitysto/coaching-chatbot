@@ -129,9 +129,9 @@ module.exports = class Session {
         return this.state[this.state.length-1][1];
     }
 
-    addResult() {
+    addResult(...args) {
         this._results.push(
-            Array.prototype.slice.apply(arguments)
+            Array.prototype.slice(...args)
         );
     }
 

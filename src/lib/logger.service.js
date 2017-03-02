@@ -38,28 +38,23 @@ function setLevel(level) {
     logLevel = level;
 }
 
-function error() {
-    const args = Array.prototype.slice.apply(arguments);
+function error(...args) {
     _logMessage(ERROR, args[0], args.slice(1));
 }
 
-function warning() {
-    const args = Array.prototype.slice.apply(arguments);
+function warning(...args) {
     _logMessage(WARNING, args[0], args.slice(1));
 }
 
-function info() {
-    const args = Array.prototype.slice.apply(arguments);
+function info(...args) {
     _logMessage(INFO, args[0], args.slice(1));
 }
 
-function debug() {
-    const args = Array.prototype.slice.apply(arguments);
+function debug(...args) {
     _logMessage(DEBUG, args[0], args.slice(1));
 }
 
-function silly() {
-    const args = Array.prototype.slice.apply(arguments);
+function silly(...args) {
     _logMessage(SILLY, args[0], args.slice(1));
 }
 
