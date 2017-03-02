@@ -7,11 +7,6 @@ describe('chatbot sessions', function() {
     this.dialog = sinon.stub();
     this.session = new Session(this.dialog);
   });
-  describe('#beginDialog', function() {
-    this.session.beginDialog(ths.dialog);
-
-    expect(this.session._state).to.equal(this.dialog)
-  });
   describe('#_start', function() {
     it('start returns the session object', function() {
       const ret = this.session._start(

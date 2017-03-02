@@ -246,7 +246,7 @@ module.exports = class Builder {
       if (this._tree[state] !== undefined) {
         const substate = session.getSubState();
 
-        log.debug("Running state /{0}?{1}", state, substate);
+        log.debug('Running state /{0}?{1}', state, substate);
 
         this._tree[state].substates[substate](session, input);
 

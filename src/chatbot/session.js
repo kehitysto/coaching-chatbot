@@ -74,7 +74,7 @@ module.exports = class Session {
     * @param {string} stringId ID of the string template to use
     */
     addResult(stringId) {
-        log.debug("Adding result: {0}", stringId);
+        log.debug('Adding result: {0}', stringId);
         this._results.push(stringId);
     }
 
@@ -111,7 +111,7 @@ module.exports = class Session {
     * @return {Session}
     */
     _start(context, input) {
-        log.debug("Starting session...");
+        log.debug('Starting session...');
 
         this.context = context;
         this.userData = {};
@@ -132,7 +132,7 @@ module.exports = class Session {
     * @return {Session}
     */
     _finalize() {
-        log.debug("Finalizing session...");
+        log.debug('Finalizing session...');
         this.context.state = this._setStateArray(this._state);
         return this;
     }
