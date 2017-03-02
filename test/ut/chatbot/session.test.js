@@ -44,4 +44,11 @@ describe('chatbot sessions', function() {
     });
   });
 
+  describe('#switchDialog', function() {
+    it('should switch to the given dialog', function() {
+      this.session.switchDialog('/test');
+      expect(this.session._state[this.session._state.length-1])
+          .to.deep.equal(['test', 0]);
+    });
+  });
 });
