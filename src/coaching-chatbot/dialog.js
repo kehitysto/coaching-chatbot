@@ -1,43 +1,39 @@
-import Dialog from './dialog';
+import Builder from '../chatbot/builder';
 
-import strings from './coaching-chatbot.strings.json';
-import * as actions from './coaching-chatbot.actions';
-import * as intents from './coaching-chatbot.intents';
+import strings from './strings.json';
+import * as actions from './actions';
+import * as intents from './intents';
 
 
-const dialog = new Dialog(strings);
+const bot = new Builder(strings);
 
 // ACTIONS
 for (let actionId in actions) {
-  if ({}.hasOwnProperty.call(foo, key)) {
-    dialog.addAction(actionId, actions[actionId]);
+  if ({}.hasOwnProperty.call(actions, actionId)) {
+    bot.action(actionId, actions[actionId]);
   }
 }
 
 // INTENTS
 for (let intentId in intents) {
-  if ({}.hasOwnProperty.call(foo, key)) {
-    dialog.addIntent(intentId, intents[intentId]);
+  if ({}.hasOwnProperty.call(intents, intentId)) {
+    bot.intent(intentId, intents[intentId]);
   }
 }
 
-// STATES
-dialog
-    .addState(
-        '/base',
+// DIALOGS
+bot
+    .dialog(
+        '/',
         [
             (session) => {
                 session.addResult('@greeting');
-                session.next();
-                session.endDialog();
             },
             (session) => {
                 if (session.checkIntent('yes')) {
-                    session.pushState('/createProfile');
+                    session.beginDialog('/createProfile');
                 } else if (session.checkIntent('no')) {
                     session.addResult('@goodbye');
-                    session.popState();
-                    session.endDialog();
                 } else {
                     session.addResult('@unclear');
                     session.next();
@@ -46,122 +42,111 @@ dialog
         ],
         [
             ['reset', (session) => {
-                session.runAction('reset');
+                session.runActions(['reset']);
                 session.addResult('@reset');
                 session.clearState();
             }],
         ])
-    .addState(
-        '/createProfile',
+    .dialog(
+        '/create_profile',
         [
             (session) => {
                 session.addResult('@great');
-                session.next();
-                session.pushState('/setName');
+                session.beginDialog('/setName');
             },
             (session) => {
-                session.next();
-                session.pushState('/setJob');
+                session.beginDialog('/setJob');
             },
             (session) => {
-                session.switchState('/profile');
+                session.switchDialog('/profile');
             },
         ])
-    .addState(
+    .dialog(
         '/setName',
         [
             (session) => {
-                session.addResult('@requestName');
-                session.next();
-                session.endDialog();
+                session.addResult('@request_name');
             },
             (session) => {
-                session.runAction('setName');
+                session.runActions(['setName']);
                 session.addResult('@confirm_name');
-                session.popState();
+                session.endDialog();
             },
         ])
-    .addState(
+    .dialog(
         '/setJob',
         [
             (session) => {
                 session.addResult('@request_job');
-                session.next();
-                session.endDialog();
             },
             (session) => {
-                session.runAction('setJob');
-                session.popState();
+                session.runActions(['setJob']);
+                session.endDialog();
             },
         ])
-    .addState(
+    .dialog(
         '/setAge',
         [
             (session) => {
                 session.addResult('@request_age');
-                session.next();
-                session.endDialog();
             },
             (session) => {
-                session.runAction('setAge');
+                session.runActions(['setAge']);
                 session.addResult('@confirm_age');
-                session.popState();
+                session.endDialog();
             },
         ])
-    .addState(
+    .dialog(
         '/setPlace',
         [
             (session) => {
                 session.addResult('@request_place');
-                session.next();
-                session.endDialog();
             },
             (session) => {
-                session.runAction('setPlace');
+                session.runActions(['setPlace']);
                 session.addResult('@confirm_place');
-                session.popState();
+                session.endDialog();
             },
         ])
-    .addState(
+    .dialog(
         '/profile',
         [
             (session) => {
-                session.runAction('updateProfile');
+                session.runActions(['updateProfile']);
                 session.addResult('@display_profile');
-                session.endDialog();
             },
         ],
         [
             ['change_name', (session, match) => {
                 if (match !== true) {
-                    session.runAction('setName', match);
+                    session.runActions(['setName'], match);
                     session.addResult('@confirm_name');
                 } else {
-                    session.pushState('/set_name');
+                    session.beginDialog('/set_name');
                 }
             }],
             ['change_job', (session, match) => {
                 if (match !== true) {
-                    session.runAction('setJob', match);
+                    session.runActions(['setJob'], match);
                     session.addResult('@confirm_job');
                 } else {
-                    session.pushState('/setJob');
+                    session.beginDialog('/setJob');
                 }
             }],
             ['set_age', (session, match) => {
                 if (match !== true) {
-                    session.runAction('setAge', match);
+                    session.runActions(['setAge'], match);
                     session.addResult('@confirm_age');
                 } else {
-                    session.pushState('/setAge');
+                    session.beginDialog('/setAge');
                 }
             }],
             ['set_place', (session, match) => {
                 if (match !== true) {
-                    session.runAction('setPlace', match);
+                    session.runActions(['setPlace'], match);
                     session.addResult('@confirm_place');
                 } else {
-                    session.pushState('/setPlace');
+                    session.beginDialog('/setPlace');
                 }
             }],
             ['find_pair', (session) => {
@@ -169,4 +154,4 @@ dialog
             }],
         ]);
 
-module.exports = dialog;
+module.exports = bot;
