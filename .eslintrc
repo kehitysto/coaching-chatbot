@@ -13,7 +13,15 @@
   "extends": "google",
   "rules": {
     //Additional eslint rules
-    "object-curly-spacing": [ "warn", "always" ]
+    "object-curly-spacing": [ "warn", "always" ],
+    "require-jsdoc": ["error", {
+        "require": {
+            "FunctionDeclaration": false,
+            "MethodDefinition": false,
+            "ClassDeclaration": false,
+            "ArrowFunctionExpression": false
+        }
+    }]
   },
   "parserOptions": {
     "ecmaVersion": 2016,

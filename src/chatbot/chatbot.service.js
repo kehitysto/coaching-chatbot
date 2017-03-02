@@ -8,11 +8,11 @@ module.exports = class Chatbot {
 
   receive(sessionId, text) {
     return this._sessions.read(sessionId)
-      .catch(err => {
+      .catch((err) => {
         console.error(err.message.toString());
         return {};
       })
-      .then(context => {
+      .then((context) => {
         return this._dialog.run(
           context,
           text
@@ -22,6 +22,10 @@ module.exports = class Chatbot {
         log.info('Writing context: {0}', JSON.stringify(session.context));
         this._sessions.write(sessionId, session.context);
         return session.getResult();
+      })
+      .catch((err) => {
+        log.error(err.stack);
+        return [`## ERROR: ${err} ##`];
       });
   }
 };

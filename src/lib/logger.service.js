@@ -15,7 +15,7 @@ export const LEVELS = {
   WARNING: 1,
   INFO: 2,
   DEBUG: 3,
-  SILLY: 4
+  SILLY: 4,
 };
 
 export const ERROR = LEVELS.ERROR;
@@ -26,7 +26,7 @@ export const SILLY = LEVELS.SILLY;
 
 export default Logger;
 
-var logLevel = process.env.LOGLEVEL || WARNING;
+let logLevel = process.env.LOGLEVEL || WARNING;
 
 function setLevel(level) {
   if (level < ERROR) {
@@ -42,33 +42,27 @@ function getLevel() {
   return logLevel;
 }
 
-function log() {
-  const args = Array.prototype.slice.apply(arguments);
+function log(...args) {
   _logMessage(logLevel, args[0], args.slice(1));
 }
 
-function error() {
-  const args = Array.prototype.slice.apply(arguments);
+function error(...args) {
   _logMessage(ERROR, args[0], args.slice(1));
 }
 
-function warning() {
-  const args = Array.prototype.slice.apply(arguments);
+function warning(...args) {
   _logMessage(WARNING, args[0], args.slice(1));
 }
 
-function info() {
-  const args = Array.prototype.slice.apply(arguments);
+function info(...args) {
   _logMessage(INFO, args[0], args.slice(1));
 }
 
-function debug() {
-  const args = Array.prototype.slice.apply(arguments);
+function debug(...args) {
   _logMessage(DEBUG, args[0], args.slice(1));
 }
 
-function silly() {
-  const args = Array.prototype.slice.apply(arguments);
+function silly(...args) {
   _logMessage(SILLY, args[0], args.slice(1));
 }
 
@@ -85,8 +79,8 @@ function _logMessage(level, message, args) {
   out.push(
     message.replace(
       /{(\d+)}/g,
-      (match, number) => typeof args[number] != 'undefined' ? args[number] :
-      match
+      (match, number) => typeof args[number]
+      != 'undefined' ? args[number] : match
     )
   );
 

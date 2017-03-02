@@ -69,6 +69,15 @@
     "bot-client": "babel-node ./scripts/bot-client.js",
     "write-env": "node ./scripts/write-env.js",
     "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run test",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
+    "validate": "npm ls"
+  },
+  "pre-commit": [
+    "lint",
+    "validate",
+    "test"
+  ],
+  "dependencies": {
+    "precommit-hook-eslint": "^3.0.0"
   }
 }

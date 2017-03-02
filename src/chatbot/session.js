@@ -27,7 +27,7 @@ module.exports = class Session {
 
         for (let i = 0; i < this._state.length; ++i) {
             if (this._state[i][0] === dialogId) {
-                throw new Error("Recursive state tree");
+                throw new Error('Recursive state tree');
             }
         }
 
@@ -74,6 +74,7 @@ module.exports = class Session {
     * @param {string} stringId ID of the string template to use
     */
     addResult(stringId) {
+        log.debug("Adding result: {0}", stringId);
         this._results.push(stringId);
     }
 
@@ -107,8 +108,11 @@ module.exports = class Session {
     * Start processing a new message by user
     * @param {Object} context The current conversation context
     * @param {string} input The message sent by the user
+    * @return {Session}
     */
     _start(context, input) {
+        log.debug("Starting session...");
+
         this.context = context;
         this.userData = {};
 
@@ -125,12 +129,10 @@ module.exports = class Session {
 
     /**
     * End processing a new message by user
+    * @return {Session}
     */
     _finalize() {
-        this.context.state = this._setStateArray(this._state);
-
-        this._processResults();
-
+        log.debug("Finalizing session...");
         this.context.state = this._setStateArray(this._state);
         return this;
     }
@@ -160,18 +162,27 @@ module.exports = class Session {
     }
 
     getVariables() {
-        log.debug("Building variable state...");
-        log.debug("context: {0}", JSON.stringify(this.context));
-        log.debug("userData: {0}", JSON.stringify(this.userData));
+        log.debug('Building variable state...');
+        log.debug('context: {0}', JSON.stringify(this.context));
+        log.debug('userData: {0}', JSON.stringify(this.userData));
 
         return {
             ...this.context,
-            ...this.userData
+            ...this.userData,
         };
     }
 
     getResult() {
-        return this.result;
+        let result = [];
+
+        for (let i = 0; i < this._results.length; ++i) {
+            result.push(
+                this.dialog.getFormattedString(
+                    this._results[i], this.getVariables())
+            );
+        }
+
+        return result;
     }
 
     getState() {
@@ -211,22 +222,12 @@ module.exports = class Session {
     }
 
     _setStateArray(array) {
-        let state = "";
+        let state = '';
 
         for (let i = 0; i < array.length; ++i) {
             state += `/${array[i][0]}?${array[i][1]}`;
         }
 
         return state;
-    }
-
-    _processResults() {
-        this.result = [];
-
-        for (let i = 0; i < this._results.length; ++i) {
-            this.result.push(
-                this.dialog.getFormattedString(this._results[i], this.getVariables())
-            );
-        }
     }
 };
