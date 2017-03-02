@@ -99,7 +99,7 @@ module.exports = class Session {
     */
     next() {
         const state = this._state[this._state.length-1];
-        const subStateCount = this.dialog.getSubStateCount(this.getState());
+        const subStateCount = this.dialog.getSubStateCount(this.stateId);
 
         state[1] = (state[1] + 1) % subStateCount;
     }
@@ -185,21 +185,11 @@ module.exports = class Session {
         return result;
     }
 
-    getState() {
+    get stateId() {
         return this._state[this._state.length-1][0];
     }
 
-    getStateArray() {
-        const out = [];
-
-        for (let i = 0; i < this._state.length; ++i) {
-            out.push(this._state[i][0]);
-        }
-
-        return out;
-    }
-
-    getSubState() {
+    get subStateId() {
         return this._state[this._state.length-1][1];
     }
 

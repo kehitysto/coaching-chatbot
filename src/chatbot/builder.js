@@ -214,10 +214,15 @@ module.exports = class Builder {
 
   _runIntents(session, input) {
     return new Promise((resolve, reject) => {
-      const states = session.getStateArray();
+      const states = session._state;
 
       for (let i = 0; i < states.length; ++i) {
-        let intents = this._tree[states[i]].intents;
+        log.silly('Running intents for state /{0}', states[i][0]);
+        if (this._tree[states[i][0]] === undefined) {
+            return reject(new Error(`No such dialog: ${states[i][0]}`));
+        }
+
+        let intents = this._tree[states[i][0]].intents;
 
         for (let j = 0; j < intents.length; ++j) {
           let match = this.checkIntent(intents[j][0], session);
@@ -241,10 +246,10 @@ module.exports = class Builder {
         return reject(new Error('Too many iterations'));
       }
 
-      const state = session.getState();
+      const state = session.stateId;
 
       if (this._tree[state] !== undefined) {
-        const substate = session.getSubState();
+        const substate = session.subStateId;
 
         log.debug('Running state /{0}?{1}', state, substate);
 
@@ -253,8 +258,8 @@ module.exports = class Builder {
         return resolve(
           session.runQueue()
               .then(() => {
-                if (session.getState() !== state ||
-                    session.getSubState() !== substate) {
+                if (session.stateId !== state ||
+                    session.subStateId !== substate) {
                   return this._runStep(step + 1, session, input);
                 } else {
                   session.next();
