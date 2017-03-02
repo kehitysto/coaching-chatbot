@@ -83,5 +83,17 @@ describe('Facebook Messenger service handler', function() {
           assert(s.firstCall.args[0].name === expectedResponse);
         });
     });
+
+    it('should return error on unsupported HTTP method', function() {
+      let s = sinon.stub();
+      let expectedResponse = 'Unknown event';
+
+      let m = mockEvent;
+      m.method = 'PUT';
+
+      const ret = handler.handler(m, {}, s);
+
+      return assert(s.firstCall.args[0] == expectedResponse);
+    });
   });
 });
