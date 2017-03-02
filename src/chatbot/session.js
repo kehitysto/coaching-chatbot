@@ -127,8 +127,6 @@ module.exports = class Session {
     * End processing a new message by user
     */
     _finalize() {
-        this.context.state = this._setStateArray(this._state);
-
         this._processResults();
 
         this.context.state = this._setStateArray(this._state);
