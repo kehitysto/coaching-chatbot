@@ -11,6 +11,7 @@ module.exports = class Session {
 
         this._input = null;
         this._queue = null;
+        this._state = [];
         this._results = [];
         this._done = false;
     }
@@ -24,24 +25,24 @@ module.exports = class Session {
             dialogId = dialogId.substr(1);
         }
 
-        for (let i = 0; i < this.state.length; ++i) {
-            if (this.state[i][0] === state) {
+        for (let i = 0; i < this._state.length; ++i) {
+            if (this._state[i][0] === dialogId) {
                 throw new Error("Recursive state tree");
             }
         }
 
         this.next();
-        this.state.push([state, 0]);
+        this._state.push([dialogId, 0]);
     }
 
     /**
     * End execution of the current dialog, and return control to parent
     */
     endDialog() {
-        if (this.state.length > 1) {
-            this.state.pop();
+        if (this._state.length > 1) {
+            this._state.pop();
         } else {
-            this.state[0] = ['', 0];
+            this._state[0] = ['', 0];
         }
     }
 
@@ -57,7 +58,7 @@ module.exports = class Session {
             dialogId = dialogId.substr(1);
         }
 
-        this.state[this.state.length-1] = [dialogId, 0];
+        this._state[this._state.length-1] = [dialogId, 0];
     }
 
     /**
@@ -65,7 +66,7 @@ module.exports = class Session {
     * Control will return to the beginning of the '/' dialog.
     */
     clearState() {
-        this.state = [['', 0]];
+        this._state = [['', 0]];
     }
 
     /**
@@ -96,7 +97,7 @@ module.exports = class Session {
     * Skip to the next substate of the current dialog
     */
     next() {
-        const state = this.state[this.state.length-1];
+        const state = this._state[this._state.length-1];
         const subStateCount = this.dialog.getSubStateCount(this.getState());
 
         state[1] = (state[1] + 1) % subStateCount;
@@ -111,7 +112,7 @@ module.exports = class Session {
         this.context = context;
         this.userData = {};
 
-        this.state = this._getStateArray();
+        this._state = this._getStateArray();
         delete this.context.state;
 
         this._input = input;
@@ -126,7 +127,7 @@ module.exports = class Session {
     * End processing a new message by user
     */
     _finalize() {
-        this.context.state = this._setStateArray(this.state);
+        this.context.state = this._setStateArray(this._state);
 
         this._processResults();
 
@@ -173,21 +174,21 @@ module.exports = class Session {
     }
 
     getState() {
-        return this.state[this.state.length-1][0];
+        return this._state[this._state.length-1][0];
     }
 
     getStateArray() {
         const out = [];
 
-        for (let i = 0; i < this.state.length; ++i) {
-            out.push(this.state[i][0]);
+        for (let i = 0; i < this._state.length; ++i) {
+            out.push(this._state[i][0]);
         }
 
         return out;
     }
 
     getSubState() {
-        return this.state[this.state.length-1][1];
+        return this._state[this._state.length-1][1];
     }
 
     checkIntent(intentId) {
