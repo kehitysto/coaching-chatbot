@@ -4,9 +4,12 @@ import Session from '../../../src/chatbot/session.js';
 
 describe('chatbot sessions', function() {
   beforeEach(function() {
-    this.dialog = sinon.stub();
+    this.dialog = {
+      checkIntent: sinon.stub()
+    };
     this.session = new Session(this.dialog);
   });
+
   describe('#_start', function() {
     it('start returns the session object', function() {
       const ret = this.session._start(
@@ -39,11 +42,63 @@ describe('chatbot sessions', function() {
     });
   });
 
+  describe('#_finalize', function() {
+    beforeEach(function() {
+      this.session.context = {};
+    });
+    it('returns the session object', function() {
+      const ret = this.session._finalize();
+      return expect(ret).to.equal(this.session);
+    });
+    it('serializes the current state to context', function() {
+      this.session._state = [['', 1], ['first', 3], ['second', 0]];
+
+      const ret = this.session._finalize();
+      return expect(this.session.context.state).to.deep.equal(
+          '/?1/first?3/second?0');
+    });
+  });
+
   describe('#switchDialog', function() {
     it('should switch to the given dialog', function() {
       this.session.switchDialog('/test');
       expect(this.session._state[this.session._state.length-1])
           .to.deep.equal(['test', 0]);
+    });
+  });
+
+  describe('#checkIntent', function() {
+    it('should call Builder.checkIntent', function() {
+      this.dialog.checkIntent.returns('OK');
+
+      const ret = this.session.checkIntent('test_intent');
+      expect(this.dialog.checkIntent)
+          .to.have.been.calledWith('test_intent', this.session);
+      return expect(ret).to.equal('OK');
+    });
+  });
+
+  describe('#_getStateArray', function() {
+    it('should produce a state array from state string', function() {
+      this.session.context = { 'state': '/?1/first?3/second?0' };
+
+      const ret = this.session._getStateArray();
+      return expect(ret).to.deep.equal(
+          [['', 1], ['first', 3], ['second', 0]]);
+    });
+    it('should return base state if no state is set', function() {
+      this.session.context = {};
+
+      const ret = this.session._getStateArray();
+      return expect(ret).to.deep.equal([['', 0]]);
+    });
+  });
+
+  describe('#_setStateArray', function() {
+    it('should generate a state string from a state array', function() {
+      const ret = this.session._setStateArray(
+          [['', 1], ['first', 3], ['second', 0]]);
+      return expect(ret).to.deep.equal('/?1/first?3/second?0');
     });
   });
 });
