@@ -19,8 +19,8 @@ module.exports = class Chatbot {
         );
       })
       .then((session) => {
-        log.info('Writing context: {0}', JSON.stringify(session.getContext()));
-        this._sessions.write(sessionId, session.getContext());
+        log.info('Writing context: {0}', JSON.stringify(session.context));
+        this._sessions.write(sessionId, session.context);
         return session.getResult();
       });
   }

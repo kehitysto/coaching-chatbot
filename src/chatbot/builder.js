@@ -14,6 +14,12 @@ module.exports = class Builder {
         this._strings = strings;
     }
 
+    /**
+    * Register a dialog with the bot
+    * @param {string} stateId
+    * @param {Array<Function>|function(Session, string)} substates
+    * @param {Array} intents
+    */
     dialog(stateId, substates, intents=[]) {
         if (stateId.startsWith('/')) {
             stateId = stateId.substr(1);
@@ -28,6 +34,11 @@ module.exports = class Builder {
         return this;
     }
 
+    /**
+    * Register an intent with the bot
+    * @param {string} intentId ID for the intent
+    * @param {} intentObj Implementation of the intent
+    */
     intent(intentId, intentObj) {
         log.debug("Registering intent {0}", intentId);
         this._intents[intentId] = intentObj;
@@ -35,6 +46,11 @@ module.exports = class Builder {
         return this;
     }
 
+    /**
+    * Register an action with the bot
+    * @param {string} actionId ID for the action
+    * @param {function({context, userData, input})} fn Implementation of the action
+    */
     action(actionId, fn) {
         log.debug("Registering action {0}", actionId);
         this._actions[actionId] = fn;
@@ -45,11 +61,11 @@ module.exports = class Builder {
     run(context, input) {
         log.info("Running bot for input \"{0}\"", input);
 
-        const session = new Session(this).start(context, input);
+        const session = new Session(this)._start(context, input);
 
         return this._runIntents(session, input)
             .then(() => this._runStep(0, session, input))
-            .then(() => session.finalize());
+            .then(() => session._finalize());
     }
 
     runAction(actionId, session, input=null) {
@@ -60,7 +76,7 @@ module.exports = class Builder {
         }
 
         const actionData = {
-            context: session.getContext(),
+            context: session.context,
             userData: session.getUserData(),
             input: input || session.getInput()
         };
