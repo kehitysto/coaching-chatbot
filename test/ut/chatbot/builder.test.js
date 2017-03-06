@@ -26,10 +26,11 @@ describe('Chatbot builder', function() {
       });
 
       it('should return an Error when there is no such actionId', function() {
-        const ret = this.builder.runAction('UNDEFINED_ACTION', {}, {});
+        const action = 'UNDEFINED_ACTION';
+        const ret = this.builder.runAction(action, {}, {});
 
         return expect(ret).to
-        .be.rejectedWith('No such action: UNDEFINED_ACTION');
+        .be.rejectedWith('No such action: ' + action);
       });
     });
 
@@ -37,7 +38,7 @@ describe('Chatbot builder', function() {
       it('should return false if intent is undefined', function() {
         const ret = this.builder.checkIntent('UNDEFINED_INTENT', this.session);
 
-        expect(ret).to.be.false;
+        return expect(ret).to.be.false;
       });
     });
 });
