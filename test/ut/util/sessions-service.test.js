@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 
 import AWS from 'aws-sdk';
-import Sessions from '../../src/wit-ai/sessions.service';
+import Sessions from '../../../src/util/sessions-service';
 
 describe('Sessions service', function() {
   before(function() {
@@ -22,9 +22,9 @@ describe('Sessions service', function() {
             Item: {
               id: 'SESSION_ID',
               context: {
-                key: 'value'
-              }
-            }
+                key: 'value',
+              },
+            },
           }
         );
     });
@@ -47,9 +47,9 @@ describe('Sessions service', function() {
             .to.have.been.calledWith(
               sinon.match({
                 Key: {
-                  id: 'SESSION_ID'
+                  id: 'SESSION_ID',
                 },
-                TableName: sinon.match.string
+                TableName: sinon.match.string,
               }),
               sinon.match.func
             );
@@ -61,7 +61,7 @@ describe('Sessions service', function() {
           this.sessions.read('SESSION_ID')
         )
         .to.become({
-          key: 'value'
+          key: 'value',
         });
     });
   });
@@ -74,7 +74,7 @@ describe('Sessions service', function() {
 
     it('should return a Promise', function() {
       const ret = this.sessions.write('SESSION_ID', {
-        key: 'value'
+        key: 'value',
       });
 
       expect(ret)
@@ -84,10 +84,16 @@ describe('Sessions service', function() {
         .to.eventually.be.fulfilled;
     });
 
+    it('should return an error if id is null', function() {
+      const ret = this.sessions.write(null, { key: 'value' } );
+
+      return expect(ret).to.be.rejectedWith('No session ID');
+    });
+
     it('should post the session context to DynamoDB', function() {
       return expect(
           this.sessions.write('SESSION_ID', {
-            key: 'value'
+            key: 'value',
           })
         )
         .to.eventually.be.fulfilled.then(() => {
@@ -98,8 +104,8 @@ describe('Sessions service', function() {
                 Item: {
                   id: 'SESSION_ID',
                   context: {
-                    key: 'value'
-                  }
+                    key: 'value',
+                  },
                 },
               }),
               sinon.match.func
@@ -110,11 +116,11 @@ describe('Sessions service', function() {
     it('should resolve with context from DynamoDB', function() {
       return expect(
           this.sessions.write('SESSION_ID', {
-            key: 'value'
+            key: 'value',
           })
         )
         .to.become({
-          key: 'value'
+          key: 'value',
         });
     });
   });
