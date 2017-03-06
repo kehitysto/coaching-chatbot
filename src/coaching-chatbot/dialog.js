@@ -1,5 +1,4 @@
 import Builder from '../chatbot/builder';
-import log from '../lib/logger.service';
 
 import strings from './strings.json';
 import * as actions from './actions';

@@ -61,15 +61,15 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --config build/webpack.config.js",
     "test": "mocha-webpack src test/ut",
-    "test:watch": "mocha-webpack --watch test/ut",
+    "test:watch": "npm run test -- --watch",
     "ft": "mocha-webpack test/ft",
-    "ft:watch": "mocha-webpack --watch test/ft",
+    "ft:watch": "npm run ft -- --watch",
     "lint": "eslint src",
-    "wit-client": "babel-node ./scripts/wit-client.js",
     "bot-client": "babel-node ./scripts/bot-client.js",
     "write-env": "node ./scripts/write-env.js",
     "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run test",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
+    "ci": "npm run lint && npm run cover && npm run ft",
     "validate": "npm ls"
   },
   "pre-commit": [

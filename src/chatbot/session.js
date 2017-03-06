@@ -74,7 +74,7 @@ module.exports = class Session {
     * @param {string} stringId ID of the string template to use
     */
     addResult(stringId) {
-        log.debug("Adding result: {0}", stringId);
+        log.debug('Adding result: {0}', stringId);
         this._results.push(stringId);
     }
 
@@ -99,7 +99,7 @@ module.exports = class Session {
     */
     next() {
         const state = this._state[this._state.length-1];
-        const subStateCount = this.dialog.getSubStateCount(this.getState());
+        const subStateCount = this.dialog.getSubStateCount(this.stateId);
 
         state[1] = (state[1] + 1) % subStateCount;
     }
@@ -111,7 +111,7 @@ module.exports = class Session {
     * @return {Session}
     */
     _start(context, input) {
-        log.debug("Starting session...");
+        log.debug('Starting session...');
 
         this.context = context;
         this.userData = {};
@@ -132,7 +132,7 @@ module.exports = class Session {
     * @return {Session}
     */
     _finalize() {
-        log.debug("Finalizing session...");
+        log.debug('Finalizing session...');
         this.context.state = this._setStateArray(this._state);
         return this;
     }
@@ -185,21 +185,11 @@ module.exports = class Session {
         return result;
     }
 
-    getState() {
+    get stateId() {
         return this._state[this._state.length-1][0];
     }
 
-    getStateArray() {
-        const out = [];
-
-        for (let i = 0; i < this._state.length; ++i) {
-            out.push(this._state[i][0]);
-        }
-
-        return out;
-    }
-
-    getSubState() {
+    get subStateId() {
         return this._state[this._state.length-1][1];
     }
 
