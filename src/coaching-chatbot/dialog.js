@@ -77,6 +77,15 @@ bot
         session.runActions(['setJob']);
         session.endDialog();
       },
+    ], [
+      ['change_name', (session, match) => {
+        if (match !== true) {
+          session.runActions(['setName'], match);
+          session.addResult('@confirm_name');
+        } else {
+          session.beginDialog('/set_name');
+        }
+      }],
     ])
   .dialog(
     '/set_age', [
