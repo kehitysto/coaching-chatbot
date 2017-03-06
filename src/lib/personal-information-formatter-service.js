@@ -16,6 +16,10 @@ function formatFromTemplate(template, context) {
 function format(template, context) {
   let s = template;
 
+  if (typeof template !== 'string') {
+    s = template[Math.floor(Math.random() * template.length)];
+  }
+
   if (context.name) {
     s = s.replace('{name}', context.name);
   }

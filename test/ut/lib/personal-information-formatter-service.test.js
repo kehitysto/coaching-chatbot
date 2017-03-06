@@ -144,4 +144,13 @@ describe('Formatter service', function() {
       assert(formatted === expected);
     });
   });
+
+  it('should understand template arrays', function() {
+    const template = ['test', 'test'];
+    const context = {};
+
+    const formatted = Formatter.format(template, context);
+
+    assert(formatted === 'test');
+  });
 });
