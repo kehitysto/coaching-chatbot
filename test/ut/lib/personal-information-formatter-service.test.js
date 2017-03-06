@@ -24,6 +24,15 @@ describe('Formatter service', function() {
         context);
       assert(formatted === expected);
     });
+
+    it('should understand template arrays', function() {
+      const template = '@unclear';
+      const context = {};
+
+      const formatted = Formatter.formatFromTemplate(template, context);
+
+      expect(Strings[template]).to.include(formatted);
+    });
   });
 
   describe('#format()', function() {

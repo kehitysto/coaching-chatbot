@@ -10,6 +10,11 @@ export default Formatter;
 
 function formatFromTemplate(template, context) {
   let s = Strings[template];
+
+  if (Array.isArray(s)) {
+    s = s[Math.floor(Math.random() * s.length)];
+  }
+
   return format(s, context);
 }
 

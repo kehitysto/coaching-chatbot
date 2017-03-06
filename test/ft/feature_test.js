@@ -41,6 +41,22 @@ describe('User story', function() {
     });
 
   describe(
+    'As a user I want the bot to respond if my input is not understood so that I can reply with valid input',
+    function() {
+      it(
+        'should tell that the input is not understood if the input is bad',
+        function() {
+          const promise = this.bot.receive(SESSION, 'invalid input');
+          return promise.then((ret) => {
+            expect(Strings['@unclear']).to.include(ret[0]);
+            expect(ret[1]).to.deep.equal(Strings['@greeting']);
+          });
+        }
+      );
+    }
+  );
+
+  describe(
     'As a non-registered user I want the bot to ask for my name, when I have confirmed that I want to start searching for a peer',
     function() {
       it(
