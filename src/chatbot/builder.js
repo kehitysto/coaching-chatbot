@@ -219,7 +219,9 @@ module.exports = class Builder {
       for (let i = 0; i < states.length; ++i) {
         log.silly('Running intents for state /{0}', states[i][0]);
         if (this._tree[states[i][0]] === undefined) {
-            return reject(new Error(`No such dialog: ${states[i][0]}`));
+            session.clearState();
+            log.error('No such dialog: {0}', states[i][0]);
+            return resolve();
         }
 
         let intents = this._tree[states[i][0]].intents;

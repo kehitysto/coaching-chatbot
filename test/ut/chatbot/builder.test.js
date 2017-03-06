@@ -5,6 +5,7 @@ import Builder from '../../../src/chatbot/builder.js';
 describe('Chatbot builder', function() {
   beforeEach(function() {
     this.builder = new Builder({});
+    this.builder.dialog('', [() => undefined]);
     this.session = {
       getInput: sinon.stub(),
     };
@@ -16,6 +17,12 @@ describe('Chatbot builder', function() {
 
       expect(ret)
         .to.be.a('Promise');
+    });
+
+    it('should reset state if dialog does not exist', function() {
+      const ret = this.builder.run({'state': '/foobar?666'}, "moi");
+      return expect(ret).to.eventually
+          .have.property('stateId', '');
     });
   });
 
