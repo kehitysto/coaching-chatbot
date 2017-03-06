@@ -27,7 +27,6 @@
   },
   "devDependencies": {
     "aws-sdk": "^2.9.0",
-    "babel-cli": "^6.23.0",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
     "babel-plugin-transform-object-rest-spread": "^6.22.0",
@@ -60,22 +59,12 @@
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --config build/webpack.config.js",
-    "test": "mocha-webpack src test/ut",
-    "test:watch": "npm run test -- --watch",
-    "ft": "mocha-webpack test/ft",
-    "ft:watch": "npm run ft -- --watch",
+    "test": "mocha-webpack",
+    "test:watch": "mocha-webpack --watch",
     "lint": "eslint src",
-    "bot-client": "babel-node ./scripts/bot-client.js",
+    "wit-client": "babel-node ./scripts/wit-client.js",
     "write-env": "node ./scripts/write-env.js",
     "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run test",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
-    "ci": "npm run lint && npm run cover && npm run ft"
-  },
-  "pre-commit": [
-    "lint",
-    "test"
-  ],
-  "dependencies": {
-    "precommit-hook-eslint": "^3.0.0"
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   }
 }

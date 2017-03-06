@@ -10,7 +10,7 @@ module.exports = {
   },
   target: 'node',
   externals: [
-    'aws-sdk',
+    'aws-sdk'
   ],
   module: {
     loaders: [
@@ -19,12 +19,12 @@ module.exports = {
         exclude: /(node_modules)/,
         loader: 'babel-loader',
       },
-      { test: /\.json/, loader: 'json-loader' },
-    ],
+      { test: /\.json/, loader: 'json-loader' }
+    ]
   },
   plugins: [
     new CopyWebpackPlugin([
-      { from: '.env' },
+      { from: '.env' }
     ]),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
@@ -33,14 +33,14 @@ module.exports = {
         unused: true,
         dead_code: true,
         warnings: false,
-        drop_debugger: true,
-      },
-    }),
+        drop_debugger: true
+      }
+    })
   ],
   output: {
     libraryTarget: 'commonjs',
     path: path.join(__dirname, '.webpack'),
-    filename: '[name].js',
+    filename: '[name].js'
   },
-  devtool: 'source-map',
+  devtool: "source-map"
 };
