@@ -1,9 +1,13 @@
-import 'source-map-support/register'
+import 'source-map-support/register';
 
 require('../lib/envVars').config();
 
 import Messenger from './messenger.service';
-import WitAI from '../wit-ai/wit-ai.service';
+import Sessions from '../util/sessions-service';
+import Chatbot from '../chatbot/chatbot.service';
+
+import dialog from '../coaching-chatbot/dialog';
+
 
 module.exports.handler = (event, context, cb) => {
   if (event.method === 'GET') {
@@ -11,15 +15,15 @@ module.exports.handler = (event, context, cb) => {
         event.query['hub.verify_token'],
         event.query['hub.challenge']
       )
-      .then(response => cb(null, response))
-      .catch(err => cb(err));
-
+      .then((response) => cb(null, response))
+      .catch((err) => cb(err));
   } else if (event.method === 'POST') {
-    const wit = new WitAI(Messenger.send);
+    const sessions = new Sessions();
+    const bot = new Chatbot(dialog, sessions);
 
-    return Messenger.receive(event.body, wit)
-      .then(response => cb(null, response))
-      .catch(err => cb(err));
+    return Messenger.receive(event.body, bot)
+      .then((response) => cb(null, response))
+      .catch((err) => cb(err));
   }
 
   return cb('Unknown event');
