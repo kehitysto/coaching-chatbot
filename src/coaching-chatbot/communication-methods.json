@@ -1,0 +1,17 @@
+[
+  {
+    "identifier": "SKYPE",
+    "name": "Skype",
+    "infoRequestText": "@REQUEST_SKYPE_NAME"
+  },
+  {
+    "identifier": "PHONE",
+    "name": "Puhelin",
+    "infoRequestText": "@REQUEST_PHONE_NUMBER"
+  },
+  {
+    "identifier": "CAFETERIA",
+    "name": "Kahvila",
+    "infoRequestText": "@REQUEST_PHONE_NUMBER"
+  }
+]
