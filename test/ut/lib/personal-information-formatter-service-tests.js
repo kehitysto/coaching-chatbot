@@ -12,13 +12,13 @@ describe('Formatter service', function() {
 
   describe('#formatFromTemplate()', function() {
     it('should format a pre-defined template correctly', function() {
-      const templateName = '@confirm_age';
+      const templateName = '@CONFIRM_AGE';
 
       const context = {
         age: 45,
       };
 
-      const expected = Strings['@confirm_age'].replace('{age}',
+      const expected = Strings['@CONFIRM_AGE'].replace('{age}',
         context.age);
       const formatted = Formatter.formatFromTemplate(templateName,
         context);
@@ -26,7 +26,7 @@ describe('Formatter service', function() {
     });
 
     it('should understand template arrays', function() {
-      const template = '@unclear';
+      const template = '@UNCLEAR';
       const context = {};
 
       const formatted = Formatter.formatFromTemplate(template, context);

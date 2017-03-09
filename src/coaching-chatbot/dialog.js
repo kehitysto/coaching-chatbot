@@ -25,29 +25,29 @@ bot
   .dialog(
     '/', [
       (session) => {
-        session.addResult('@greeting');
+        session.addResult('@GREETING');
       },
       (session) => {
         if (session.checkIntent('yes')) {
           session.beginDialog('/create_profile');
         } else if (session.checkIntent('no')) {
-          session.addResult('@goodbye');
+          session.addResult('@GOODBYE');
         } else {
-          session.addResult('@unclear');
+          session.addResult('@UNCLEAR');
           session.next();
         }
       },
     ], [
       ['reset', (session) => {
         session.runActions(['reset']);
-        session.addResult('@reset');
+        session.addResult('@RESET');
         session.clearState();
       }],
     ])
   .dialog(
     '/create_profile', [
       (session) => {
-        session.addResult('@great');
+        session.addResult('@GREAT');
         session.beginDialog('/set_name');
       },
       (session) => {
@@ -60,18 +60,18 @@ bot
   .dialog(
     '/set_name', [
       (session) => {
-        session.addResult('@request_name');
+        session.addResult('@REQUEST_NAME');
       },
       (session) => {
         session.runActions(['setName']);
-        session.addResult('@confirm_name');
+        session.addResult('@CONFIRM_NAME');
         session.endDialog();
       },
     ])
   .dialog(
     '/set_job', [
       (session) => {
-        session.addResult('@request_job');
+        session.addResult('@REQUEST_JOB');
       },
       (session) => {
         session.runActions(['setJob']);
@@ -81,7 +81,7 @@ bot
       ['change_name', (session, match) => {
         if (match !== true) {
           session.runActions(['setName'], match);
-          session.addResult('@confirm_name');
+          session.addResult('@CONFIRM_NAME');
         } else {
           session.beginDialog('/set_name');
         }
@@ -90,22 +90,22 @@ bot
   .dialog(
     '/set_age', [
       (session) => {
-        session.addResult('@request_age');
+        session.addResult('@REQUEST_AGE');
       },
       (session) => {
         session.runActions(['setAge']);
-        session.addResult('@confirm_age');
+        session.addResult('@CONFIRM_AGE');
         session.endDialog();
       },
     ])
   .dialog(
     '/set_place', [
       (session) => {
-        session.addResult('@request_place');
+        session.addResult('@REQUEST_PLACE');
       },
       (session) => {
         session.runActions(['setPlace']);
-        session.addResult('@confirm_place');
+        session.addResult('@CONFIRM_PLACE');
         session.endDialog();
       },
     ])
@@ -113,13 +113,13 @@ bot
     '/profile', [
       (session) => {
         session.runActions(['updateProfile']);
-        session.addResult('@display_profile');
+        session.addResult('@DISPLAY_PROFILE');
       },
     ], [
       ['change_name', (session, match) => {
         if (match !== true) {
           session.runActions(['setName'], match);
-          session.addResult('@confirm_name');
+          session.addResult('@CONFIRM_NAME');
         } else {
           session.beginDialog('/set_name');
         }
@@ -135,7 +135,7 @@ bot
       ['set_age', (session, match) => {
         if (match !== true) {
           session.runActions(['setAge'], match);
-          session.addResult('@confirm_age');
+          session.addResult('@CONFIRM_AGE');
         } else {
           session.beginDialog('/set_age');
         }
@@ -143,13 +143,13 @@ bot
       ['set_place', (session, match) => {
         if (match !== true) {
           session.runActions(['setPlace'], match);
-          session.addResult('@confirm_place');
+          session.addResult('@CONFIRM_PLACE');
         } else {
           session.beginDialog('/set_place');
         }
       }],
       ['find_pair', (session) => {
-        session.addResult('@not_implemented');
+        session.addResult('@NOT_IMPLEMENTED');
       }],
     ]);
 
