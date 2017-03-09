@@ -1,4 +1,4 @@
-import log from '../lib/logger.service';
+import log from '../lib/logger-service';
 
 
 module.exports = class Session {

@@ -1,4 +1,4 @@
-import Chatbot from '../../src/chatbot/chatbot.service';
+import Chatbot from '../../src/chatbot/chatbot-service';
 import dialog from '../../src/coaching-chatbot/dialog';
 import Formatter from '../../src/lib/personal-information-formatter-service';
 import Strings from '../../src/coaching-chatbot/strings.json';
