@@ -1,4 +1,5 @@
 import AWS from 'aws-sdk';
+import log from '../lib/logger.service';
 
 module.exports = class Sessions {
   constructor() {
@@ -24,7 +25,7 @@ module.exports = class Sessions {
           return reject(err);
         }
 
-        console.log('db read: ' + JSON.stringify(data));
+        log.info('db read: {0}', JSON.stringify(data));
 
         if (data.Item !== undefined) {
           return resolve(data.Item.context);
@@ -53,7 +54,7 @@ module.exports = class Sessions {
         },
       };
 
-      console.log('db write: ' + JSON.stringify(context));
+      log.info('db write: {0}', JSON.stringify(context));
 
       this.db.put(params, (err, data) => {
         if (err) {
