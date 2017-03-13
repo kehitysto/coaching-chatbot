@@ -74,8 +74,17 @@ module.exports = class Session {
     * @param {string} templateId ID of the string template to use
     * @param {Array<{name: string, payload: string}>} quickReplies
     */
-    addResult(templateId, quickReplies) {
+    addResult(templateId, quickReplies=[]) {
         let template = this.dialog.getStringTemplate(templateId);
+
+        for (let i = 0; i < quickReplies.length; ++i) {
+            if (quickReplies[i].name !== undefined) {
+                let quickReplyTemplate =
+                    this.dialog.getStringTemplate(quickReplies[i].name);
+                quickReplies[i].name = quickReplyTemplate;
+            }
+        }
+
         this.send(template, quickReplies);
     }
 
@@ -84,9 +93,12 @@ module.exports = class Session {
     * @param {string} message The message to send to the user
     * @param {Array<{name: string, payload: string}>} quickReplies
     */
-    send(message, quickReplies) {
+    send(message, quickReplies=[]) {
         log.debug('Adding result: {0}', message);
-        this._results.push(message);
+        this._results.push({
+            message,
+            quickReplies,
+        });
     }
 
     /**
@@ -185,11 +197,14 @@ module.exports = class Session {
 
     getResult() {
       let result = [];
+      let variables = this.getVariables();
 
       for (let i = 0; i < this._results.length; ++i) {
-        result.push(
-            Formatter.format(this._results[i], this.getVariables()));
+        let { message, quickReplies } = this._results[i];
+        message = Formatter.format(message, variables);
+        result.push({ message, quickReplies });
       }
+
 
       return result;
     }

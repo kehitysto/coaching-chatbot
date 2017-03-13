@@ -25,7 +25,8 @@ bot
   .dialog(
     '/', [
       (session) => {
-        session.addResult('@GREETING');
+        session.addResult('@GREETING',
+            [{ name: '@YES' }, { name: '@NO' }]);
       },
       (session) => {
         if (session.checkIntent('yes')) {

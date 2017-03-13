@@ -5,6 +5,13 @@ import Strings from '../../src/coaching-chatbot/strings.json';
 
 const SESSION = 'SESSION';
 
+function buildResponse(templateId, quickReplies=[]) {
+  return {
+    message: Strings[templateId],
+    quickReplies: []
+  };
+}
+
 describe('User story', function() {
   before(function() {
     let context = {};

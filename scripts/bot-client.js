@@ -40,7 +40,13 @@ function interactive(bot) {
 
     bot.receive(sessionId, line)
       .then((msg) => {
-        console.log('\x1b[93m' + msg.join('\n'));
+        for (let i = 0; i < msg.length; ++i) {
+          let { message, quickReplies } = msg[i];
+          console.log('\x1b[93m' + message + '\x1b[39m');
+          if (quickReplies.length) {
+            console.log(formatQuickReplies(quickReplies));
+          }
+        }
         rl.prompt();
       })
       .catch((err) => console.error(err.stack));
@@ -49,5 +55,15 @@ function interactive(bot) {
   rl.setPrompt('\x1b[0m> ');
   rl.prompt();
 };
+
+function formatQuickReplies(quickReplies) {
+  let out = [];
+
+  for (let i = 0; i < quickReplies.length; ++i) {
+    out.push('\x1b[7m ' + quickReplies[i].name + ' \x1b[27m');
+  }
+
+  return out.join(' ');
+}
 
 main();
