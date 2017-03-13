@@ -69,6 +69,10 @@ function silly(...args) {
 function _logMessage(level, message, args) {
   const out = [];
 
+  if (level > logLevel) {
+    return;
+  }
+
   for (let key in LEVELS) {
     if (LEVELS[key] === level) {
       out.push(key);

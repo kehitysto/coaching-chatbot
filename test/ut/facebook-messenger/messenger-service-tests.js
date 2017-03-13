@@ -2,7 +2,7 @@ import fs from 'fs';
 import sinon from 'sinon';
 
 
-const mod = require('inject!../../../src/facebook-messenger/messenger.service');
+const mod = require('inject!../../../src/facebook-messenger/messenger-service');
 
 
 describe('Facebook Messenger service', function() {

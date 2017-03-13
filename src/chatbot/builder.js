@@ -1,4 +1,4 @@
-import log from '../lib/logger.service';
+import log from '../lib/logger-service';
 import Formatter from '../lib/personal-information-formatter-service';
 
 import Session from './session';
