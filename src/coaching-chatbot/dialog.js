@@ -37,12 +37,6 @@ bot
           session.next();
         }
       },
-    ], [
-      ['reset', (session) => {
-        session.runActions(['reset']);
-        session.addResult('@RESET');
-        session.clearState();
-      }],
     ])
   .dialog(
     '/create_profile', [
@@ -150,6 +144,11 @@ bot
       }],
       ['find_pair', (session) => {
         session.addResult('@NOT_IMPLEMENTED');
+      }],
+      ['reset', (session) => {
+        session.runActions(['reset']);
+        session.addResult('@RESET');
+        session.clearState();
       }],
     ]);
 
