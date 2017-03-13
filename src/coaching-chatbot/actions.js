@@ -47,6 +47,35 @@ export function updateProfile({ context, userData }) {
     });
 }
 
+export function addCommunicationMethod( { context, input } ) {
+  // let communicationMethod = input;
+  let undefinedCommunicationInfo = "UNDEFINED_COMMUNICATION_INFO";
+  return Promise.resolve({
+    context: {
+      ...context,
+      communicationMethods: { input: undefinedCommunicationInfo },
+    },
+  });
+}
+
+export function getCommunicationMethodRequestInfoText( { context } ) {
+  for (let communicationMethod in context.communicationMethods) {
+    if (communicationMethod.value === "UNDEFINED_COMMUNICATION_INFO") {
+      return Formatter.matchCommunicationMethod(communicationMethod.value);
+    }
+  }
+}
+
+export function addCommunicationInfo( { context, input } ) {
+
+  return Promise.resolve({
+    context: {
+      ...context,
+      communicationMethods: input,
+    },
+  });
+}
+
 export function reset() {
     return Promise.resolve({
         context: {},

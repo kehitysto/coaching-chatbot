@@ -110,6 +110,28 @@ bot
       },
     ])
   .dialog(
+    '/add_communication_method', [
+        (session) => {
+          session.addResult('@REQUEST_COMMUNICATION_METHOD');
+        },
+        (session) => {
+          session.runActions(['addCommunicationMethod']);
+          session.addResult(['getCommunicationMethodRequestInfoText']);
+          session.runActions(['addCommunicationInfo']);
+        },
+        (session) => {
+          session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS');
+          if(session.checkIntent('yes')) {
+            session.beginDialog('/add_communication_method');
+          }else if (session.checkIntent('no')) {
+            session.endDialog();
+          }else{
+            session.addResult('@UNCLEAR');
+            session.next();
+          }
+      },
+    ])
+  .dialog(
     '/profile', [
       (session) => {
         session.runActions(['updateProfile']);
@@ -150,6 +172,7 @@ bot
       }],
       ['find_pair', (session) => {
         session.addResult('@NOT_IMPLEMENTED');
+        session.beginDialog('/add_communication_method');
       }],
     ]);
 

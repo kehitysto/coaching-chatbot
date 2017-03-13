@@ -40,6 +40,10 @@ function format(template, context) {
     s = s.replace('{place}', context.place);
   }
 
+  if (context.communicationMethod) {
+    s = s.replace('{communicationMethod}', context.communicationMethod);
+  }
+
   s = s.replace('{profile}', createProfile(context));
 
   return s;
@@ -51,6 +55,14 @@ function createProfile(context) {
     ]
     .filter((val) => val)
     .join(', ');
+}
+
+function matchCommunicationMethod(input) {
+  for(let i = 0; i < CommunicationMethods.length; i++) {
+    if(CommunicationMethods[i].name === input) {
+      return communicationMethods[i].infoRequestText;
+    }
+  }
 }
 
 function getCommunicationMethods() {
