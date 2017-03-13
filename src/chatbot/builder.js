@@ -1,5 +1,4 @@
 import log from '../lib/logger-service';
-import Formatter from '../lib/personal-information-formatter-service';
 
 import Session from './session';
 
@@ -110,10 +109,14 @@ module.exports = class Builder {
     return match || false;
   }
 
-  getFormattedString(stringId, variables) {
-    log.debug('Retrieving string {0}', stringId);
-    log.debug('Retrieving string {0}', JSON.stringify(variables));
-    return Formatter.formatFromTemplate(stringId, variables);
+  getStringTemplate(templateId) {
+    log.debug('Retrieving string template {0}', templateId);
+
+    let template = this._strings[templateId];
+    if (Array.isArray(template)) {
+      template = template[Math.floor(Math.random() * template.length)];
+    }
+    return (template === undefined) ? templateId : template;
   }
 
   getSubStateCount(stateId) {
