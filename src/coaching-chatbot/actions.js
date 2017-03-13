@@ -63,7 +63,7 @@ export function addCommunicationMethod( { context, input } ) {
 
 export function addCommunicationInfo( { context, input } ) {
   return new Promise((resolve, reject) => {
-    let communicationMethods = context.communicationMethods;
+  let communicationMethods = context.communicationMethods;
     let undefinedCommunicationInfo = 'UNDEFINED_COMMUNICATION_INFO';
     for (let method in communicationMethods) {
       if (communicationMethods[method] !== undefinedCommunicationInfo) {

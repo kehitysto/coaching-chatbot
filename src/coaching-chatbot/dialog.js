@@ -123,7 +123,7 @@ bot
         },
         (session) => {
           if(session.checkIntent('yes')) {
-            session.beginDialog('/add_communication_method');
+            session.switchDialog('/add_communication_method');
           }else if (session.checkIntent('no')) {
             session.endDialog();
           }else{
