@@ -87,6 +87,7 @@ module.exports = class Builder {
     };
     const promise = Promise.resolve(this._actions[actionId](actionData))
       .then((result) => {
+        log.silly('Action result: {0}', JSON.stringify(result));
         if (result.context) {
           log.debug('Updating context: {0}', JSON.stringify(result.context));
           session.context = result.context;
@@ -95,7 +96,13 @@ module.exports = class Builder {
           log.debug('Updating userData: {0}', JSON.stringify(result.userData));
           session.setUserData(result.userData);
         }
-      });
+        if (result.result) {
+          log.silly('Adding result from action: {0}',
+              JSON.stringify(result.result));
+          session.addResult(result.result);
+        }
+      })
+      .catch((err) => log.error('Action failed!!!\n{0}', err.stack));
 
     return promise;
   }

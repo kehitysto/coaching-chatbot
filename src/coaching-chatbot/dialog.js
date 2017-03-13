@@ -116,11 +116,12 @@ bot
         },
         (session) => {
           session.runActions(['addCommunicationMethod']);
-          session.addResult(['getCommunicationMethodRequestInfoText']);
-          session.runActions(['addCommunicationInfo']);
         },
         (session) => {
+          session.runActions(['addCommunicationInfo']);
           session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS');
+        },
+        (session) => {
           if(session.checkIntent('yes')) {
             session.beginDialog('/add_communication_method');
           }else if (session.checkIntent('no')) {
@@ -171,7 +172,6 @@ bot
         }
       }],
       ['find_pair', (session) => {
-        session.addResult('@NOT_IMPLEMENTED');
         session.beginDialog('/add_communication_method');
       }],
     ]);

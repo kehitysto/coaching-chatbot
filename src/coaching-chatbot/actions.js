@@ -48,31 +48,43 @@ export function updateProfile({ context, userData }) {
 }
 
 export function addCommunicationMethod( { context, input } ) {
-  // let communicationMethod = input;
-  let undefinedCommunicationInfo = "UNDEFINED_COMMUNICATION_INFO";
+  let undefinedCommunicationInfo = 'UNDEFINED_COMMUNICATION_INFO';
   return Promise.resolve({
     context: {
       ...context,
-      communicationMethods: { input: undefinedCommunicationInfo },
+      communicationMethods: {
+        ...context.communicationMethods,
+        [input]: undefinedCommunicationInfo,
+      },
     },
+    result: Formatter.matchCommunicationMethod(input),
   });
 }
 
-export function getCommunicationMethodRequestInfoText( { context } ) {
-  for (let communicationMethod in context.communicationMethods) {
-    if (communicationMethod.value === "UNDEFINED_COMMUNICATION_INFO") {
-      return Formatter.matchCommunicationMethod(communicationMethod.value);
-    }
-  }
-}
-
 export function addCommunicationInfo( { context, input } ) {
-
-  return Promise.resolve({
-    context: {
-      ...context,
-      communicationMethods: input,
-    },
+  return new Promise((resolve, reject) => {
+    let communicationMethods = context.communicationMethods;
+    let undefinedCommunicationInfo = 'UNDEFINED_COMMUNICATION_INFO';
+    for (let method in communicationMethods) {
+      if (communicationMethods[method] !== undefinedCommunicationInfo) {
+        continue;
+      }
+      return resolve({
+        context: {
+          ...context,
+          communicationMethods: {
+            ...communicationMethods,
+            [method]: input,
+          },
+        },
+      });
+    }
+    return resolve({
+      context: {
+        ...context,
+        communicationMethods: { input },
+      },
+    });
   });
 }
 
