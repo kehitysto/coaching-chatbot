@@ -55,7 +55,7 @@ function createProfile(context) {
 
 function getCommunicationMethods() {
   let communicationMethods = [];
-  for(i = 0; i < CommunicationMethods.length; i++) {
+  for(let i = 0; i < CommunicationMethods.length; i++) {
     let nameAndPayload = { name: CommunicationMethods[i].name,
       identifier: CommunicationMethods[i].identifier };
     communicationMethods.push(nameAndPayload);
