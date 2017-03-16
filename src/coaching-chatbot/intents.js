@@ -84,4 +84,7 @@ module.exports = {
     RESET: {
         any: [/^\!reset$/],
     },
+    COMMUNICATION_METHODS: {
+        any: [/^Skype/, /^Puhelin/, /^Kahvila/],
+    },
 };
