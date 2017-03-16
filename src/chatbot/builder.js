@@ -42,6 +42,10 @@ module.exports = class Builder {
    * @return {Builder}
    */
   intent(intentId, intentObj) {
+    if (intentId.startsWith('#')) {
+      intentId = intentId.substr(1);
+    }
+
     log.debug('Registering intent {0}', intentId);
     this._intents[intentId] = intentObj;
 
@@ -102,6 +106,9 @@ module.exports = class Builder {
 
   checkIntent(intentId, session) {
     const input = session.getInput();
+    if (intentId.startsWith('#')) {
+      intentId = intentId.substr(1);
+    }
 
     const match = this._runIntent(intentId, input);
     log.debug('Intent {0} on input "{1}" returned {2}', intentId, input,
@@ -180,6 +187,10 @@ module.exports = class Builder {
   }
 
   _runIntent(intentId, input) {
+    if (intentId.startsWith('#')) {
+      intentId = intentId.substr(1);
+    }
+
     if (this._intents[intentId] === undefined) {
       log.error('Intent not found: {0}', intentId);
       return null;
@@ -216,23 +227,24 @@ module.exports = class Builder {
     return new Promise((resolve, reject) => {
       const states = session._state;
 
-      for (let i = 0; i < states.length; ++i) {
-        log.silly('Running intents for state /{0}', states[i][0]);
-        if (this._tree[states[i][0]] === undefined) {
-            session.clearState();
-            log.error('No such dialog: {0}', states[i][0]);
-            return resolve();
-        }
+      let i = states.length - 1;
 
-        let intents = this._tree[states[i][0]].intents;
+      log.silly('Running intents for state /{0}', states[i][0]);
 
-        for (let j = 0; j < intents.length; ++j) {
-          let match = this.checkIntent(intents[j][0], session);
+      if (this._tree[states[i][0]] === undefined) {
+        session.clearState();
+        log.error('No such dialog: {0}', states[i][0]);
+        return resolve();
+      }
 
-          if (match !== false) {
-            intents[j][1](session, match);
-            return resolve();
-          }
+      let intents = this._tree[states[i][0]].intents;
+
+      for (let j = 0; j < intents.length; ++j) {
+        let match = this.checkIntent(intents[j][0], session);
+
+        if (match !== false) {
+          intents[j][1](session, match);
+          return resolve();
         }
       }
 
@@ -259,14 +271,14 @@ module.exports = class Builder {
 
         return resolve(
           session.runQueue()
-              .then(() => {
-                if (session.stateId !== state ||
-                    session.subStateId !== substate) {
-                  return this._runStep(step + 1, session, input);
-                } else {
-                  session.next();
-                }
-              })
+          .then(() => {
+            if (session.stateId !== state ||
+              session.subStateId !== substate) {
+              return this._runStep(step + 1, session, input);
+            } else {
+              session.next();
+            }
+          })
         );
       }
 

@@ -28,21 +28,15 @@ bot
         session.addResult('@GREETING');
       },
       (session) => {
-        if (session.checkIntent('yes')) {
+        if (session.checkIntent('#YES')) {
           session.beginDialog('/create_profile');
-        } else if (session.checkIntent('no')) {
+        } else if (session.checkIntent('#NO')) {
           session.addResult('@GOODBYE');
         } else {
           session.addResult('@UNCLEAR');
           session.next();
         }
       },
-    ], [
-      ['reset', (session) => {
-        session.runActions(['reset']);
-        session.addResult('@RESET');
-        session.clearState();
-      }],
     ])
   .dialog(
     '/create_profile', [
@@ -78,7 +72,7 @@ bot
         session.endDialog();
       },
     ], [
-      ['change_name', (session, match) => {
+      ['#CHANGE_NAME', (session, match) => {
         if (match !== true) {
           session.runActions(['setName'], match);
           session.addResult('@CONFIRM_NAME');
@@ -116,7 +110,7 @@ bot
         session.addResult('@DISPLAY_PROFILE');
       },
     ], [
-      ['change_name', (session, match) => {
+      ['#CHANGE_NAME', (session, match) => {
         if (match !== true) {
           session.runActions(['setName'], match);
           session.addResult('@CONFIRM_NAME');
@@ -124,15 +118,15 @@ bot
           session.beginDialog('/set_name');
         }
       }],
-      ['change_job', (session, match) => {
+      ['#CHANGE_JOB', (session, match) => {
         if (match !== true) {
           session.runActions(['setJob'], match);
-          session.addResult('@confirm_job');
+          session.addResult('@CONFIRM_JOB');
         } else {
           session.beginDialog('/set_job');
         }
       }],
-      ['set_age', (session, match) => {
+      ['#SET_AGE', (session, match) => {
         if (match !== true) {
           session.runActions(['setAge'], match);
           session.addResult('@CONFIRM_AGE');
@@ -140,7 +134,7 @@ bot
           session.beginDialog('/set_age');
         }
       }],
-      ['set_place', (session, match) => {
+      ['#SET_PLACE', (session, match) => {
         if (match !== true) {
           session.runActions(['setPlace'], match);
           session.addResult('@CONFIRM_PLACE');
@@ -148,8 +142,13 @@ bot
           session.beginDialog('/set_place');
         }
       }],
-      ['find_pair', (session) => {
+      ['#FIND_PAIR', (session) => {
         session.addResult('@NOT_IMPLEMENTED');
+      }],
+      ['#RESET', (session) => {
+        session.runActions(['reset']);
+        session.addResult('@RESET');
+        session.clearState();
       }],
     ]);
 
