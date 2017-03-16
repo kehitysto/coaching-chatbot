@@ -5,6 +5,15 @@ import Strings from '../../src/coaching-chatbot/strings.json';
 
 const SESSION = 'SESSION';
 
+function buildResponse(templateId, quickReplies=[]) {
+  let message = Strings[templateId];
+  if (message === undefined) {
+    message = templateId;
+  }
+
+  return { message, quickReplies };
+}
+
 describe('User story', function() {
   before(function() {
     let context = {};
@@ -33,10 +42,11 @@ describe('User story', function() {
     function() {
       it('When the user sends a greeting MB should respond to the user',
         function() {
-          return expect(
-              this.bot.receive(SESSION, 'moi')
-            )
-            .to.eventually.become([Strings['@GREETING']]);
+          return expect(this.bot.receive(SESSION, 'moi'))
+              .to.eventually.become([
+                  buildResponse('@GREETING',
+                      [{ 'name': 'Kyllä' }, { 'name': 'Ei' }]),
+              ]);
         });
     });
 
@@ -48,8 +58,11 @@ describe('User story', function() {
         function() {
           const promise = this.bot.receive(SESSION, 'invalid input');
           return promise.then((ret) => {
-            expect(Strings['@UNCLEAR']).to.include(ret[0]);
-            expect(ret[1]).to.deep.equal(Strings['@GREETING']);
+            expect(Strings['@UNCLEAR']).to.include(ret[0].message);
+            expect(ret[1]).to.deep.equal(
+                buildResponse('@GREETING',
+                    [{ 'name': 'Kyllä' }, { 'name': 'Ei' }])
+            );
           });
         }
       );
@@ -65,8 +78,10 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'Kyllä')
             )
-            .to.eventually.become([Strings['@GREAT'], Strings[
-              '@REQUEST_NAME']]);
+            .to.eventually.become([
+                buildResponse('@GREAT'),
+                buildResponse('@REQUEST_NAME'),
+            ]);
         });
     });
 
@@ -78,12 +93,13 @@ describe('User story', function() {
         function() {
           this.userInformation.name = this.expectedName;
           return expect(
-              this.bot.receive(SESSION, this.userInformation.name)
+                this.bot.receive(SESSION, this.userInformation.name)
             )
-            .to.eventually.become([Formatter.formatFromTemplate(
-                '@CONFIRM_NAME', this.userInformation),
-              Strings[
-                '@REQUEST_JOB']
+            .to.eventually.become([
+                buildResponse(
+                    Formatter.formatFromTemplate(
+                        '@CONFIRM_NAME', this.userInformation)),
+                buildResponse('@REQUEST_JOB'),
             ]);
         });
     });
@@ -91,7 +107,6 @@ describe('User story', function() {
   describe(
     'As a registered user I want to provide my occupation to the bot so other people can see it and bot will show the information and asks for additional information',
     function() {
-
       it(
         'should ask user for a occupation when user has provided his/her name',
         function() {
@@ -99,8 +114,11 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, this.userInformation.job)
             )
-            .to.eventually.become([Formatter.formatFromTemplate(
-              '@DISPLAY_PROFILE', this.userInformation)]);
+            .to.eventually.become([
+              buildResponse(
+                  Formatter.formatFromTemplate(
+                      '@DISPLAY_PROFILE', this.userInformation)),
+            ]);
         });
     });
 
@@ -112,13 +130,16 @@ describe('User story', function() {
         function() {
           this.userInformation.age = this.expectedAge;
           return expect(
-              this.bot.receive(SESSION, 'Lisää ikä ' + this.userInformation
-                .age)
-            )
-
-            .to.eventually.become([Formatter.formatFromTemplate(
-                '@CONFIRM_AGE', this.userInformation),
-              Formatter.formatFromTemplate('@DISPLAY_PROFILE', this.userInformation)
+              this.bot.receive(
+                  SESSION,
+                      'Lisää ikä ' + this.userInformation.age))
+            .to.eventually.become([
+              buildResponse(
+                  Formatter.formatFromTemplate(
+                      '@CONFIRM_AGE', this.userInformation)),
+              buildResponse(
+                  Formatter.formatFromTemplate(
+                      '@DISPLAY_PROFILE', this.userInformation)),
             ]);
         });
     });
@@ -130,12 +151,16 @@ describe('User story', function() {
         'should ask user for a additional information when user has provided his/her name and occupation',
         function() {
           this.userInformation.place = this.expectedPlace;
+
           return expect(
-              this.bot.receive(SESSION, 'Lisää paikkakunta ' + this.userInformation
-                .place)
-            )
-            .to.eventually.become([Strings['@CONFIRM_PLACE'],
-              Formatter.formatFromTemplate('@DISPLAY_PROFILE', this.userInformation)
+              this.bot.receive(
+                  SESSION,
+                      'Lisää paikkakunta ' + this.userInformation.place))
+            .to.eventually.become([
+              buildResponse('@CONFIRM_PLACE'),
+              buildResponse(
+                  Formatter.formatFromTemplate(
+                      '@DISPLAY_PROFILE', this.userInformation)),
             ]);
         });
     });

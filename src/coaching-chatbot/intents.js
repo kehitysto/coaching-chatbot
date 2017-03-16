@@ -1,5 +1,5 @@
 module.exports = {
-    greeting: {
+    GREETING: {
         any: [/^moi(?:kka)?/i,
               /^mo(?:ro)?/i,
               /^morjens(?:ta)/i,
@@ -8,80 +8,80 @@ module.exports = {
               /^hei/i],
     },
 
-    yes: {
+    YES: {
         any: [/^kyllä/i,
               /^j[ou]{2,}/i,
               /^jep[as]?/i],
     },
 
-    no: {
+    NO: {
         any: [/^ei/i,
               /^en/i],
     },
 
-    set: {
+    SET: {
         any: /^(?:lisää|aseta)\s*(?:mun|minun|mulle|minulle)?/i,
     },
 
-    change: {
+    CHANGE: {
         any: /^(?:vaihda|muuta|aseta)\s*(?:mun|minun|mulle|minulle)?/i,
     },
 
-    find: {
+    FIND: {
         any: /^(?:etsi|hae)/i,
     },
 
-    set_or_change: {
-        any: ['set', 'change'],
+    SET_OR_CHANGE: {
+        any: ['#SET', '#CHANGE'],
     },
 
-    optional_value: {
+    OPTIONAL_VALUE: {
         any: /(\w.*)?/i,
         match: (match) => match[1] || true,
     },
 
-    name: {
+    NAME: {
         any: /^(?:nimi|nimeä|nimeksi|nimekseni)/i,
     },
 
-    job: {
+    JOB: {
         any: [/^ammat(?:tia?|iksi|ikseni)/i,
               /^työ(?:tä|ksi|kseni)/i],
     },
 
-    age: {
+    AGE: {
         any: /^(?:ikää?|iäksi)/i,
     },
 
-    place: {
+    PLACE: {
         any: /^paikka(?:kunta)?a?/i,
     },
 
-    pair: {
+    PAIR: {
         any: /^paria?/i,
     },
 
-    change_name: {
-        each: ['change', 'name', 'optional_value'],
+    CHANGE_NAME: {
+        each: ['#CHANGE', '#NAME', '#OPTIONAL_VALUE'],
     },
 
-    change_job: {
-        each: ['change', 'job', 'optional_value'],
+    CHANGE_JOB: {
+        each: ['#CHANGE', '#JOB', '#OPTIONAL_VALUE'],
     },
 
-    set_age: {
-        each: ['set_or_change', 'age', 'optional_value'],
+    SET_AGE: {
+        each: ['#SET_OR_CHANGE', '#AGE', '#OPTIONAL_VALUE'],
     },
 
-    set_place: {
-        each: ['set_or_change', 'place', 'optional_value'],
+    SET_PLACE: {
+        each: ['#SET_OR_CHANGE', '#PLACE', '#OPTIONAL_VALUE'],
     },
 
-    find_pair: {
-        each: ['find', 'pair'],
+    FIND_PAIR: {
+        each: ['#FIND', '#PAIR'],
     },
 
-    reset: {
+    RESET: {
         any: [/^\!reset$/],
     },
 };

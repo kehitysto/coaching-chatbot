@@ -7,11 +7,24 @@ import request from 'request-promise';
 import log from '../lib/logger-service';
 
 const Messenger = {
-    send(id, text) {
-        const body = {
+    send(id, text, quickReplies=[]) {
+        let body = {
             recipient: { id },
             message: { text },
         };
+
+        if (quickReplies.length) {
+            body.message['quick_replies'] = [];
+            for (let i = 0; i < quickReplies.length; ++i) {
+                let title = quickReplies[i].name;
+                let payload = quickReplies[i].payload || title;
+                body.message['quick_replies'].push({
+                    'content_type': 'text',
+                    title,
+                    payload,
+                });
+            }
+        }
 
         return _fbMessageRequest(body);
     },
@@ -58,8 +71,10 @@ function _receiveMessage(msgEvent, chatbot) {
                 chatbot.receive(sender, text).then((response) => {
                     let promise = Promise.resolve();
                     for (let i = 0; i < response.length; ++i) {
-                        promise = promise.then(() => Messenger
-                        .send(sender, response[i]));
+                        promise = promise.then(() => {
+                            return Messenger.send(sender,
+                                response[i].message, response[i].quickReplies);
+                        });
                     }
                     return promise;
                 })
