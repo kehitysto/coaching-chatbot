@@ -5,26 +5,29 @@ import Strings from '../../src/coaching-chatbot/strings.json';
 
 const SESSION = 'SESSION';
 
-function buildResponse(templateId, quickReplies=[]) {
+function buildResponse(templateId, quickReplies = []) {
   let message = Strings[templateId];
   if (message === undefined) {
     message = templateId;
   }
 
-  return { message, quickReplies };
+  return {
+    message,
+    quickReplies,
+  };
 }
 
 describe('User story', function() {
   before(function() {
-    let context = {};
+    this.context = {};
     const sessions = {
       read: (sessionId) => {
-        return Promise.resolve(context);
+        return Promise.resolve(this.context);
       },
 
-      write: (sessionId, ctx) => {
-        context = ctx;
-        return Promise.resolve(context);
+      write: (sessionId, context) => {
+        this.context = context;
+        return Promise.resolve(this.context);
       },
     };
 
@@ -43,10 +46,13 @@ describe('User story', function() {
       it('When the user sends a greeting MB should respond to the user',
         function() {
           return expect(this.bot.receive(SESSION, 'moi'))
-              .to.eventually.become([
-                  buildResponse('@GREETING',
-                      [{ 'name': 'Kyllä' }, { 'name': 'Ei' }]),
-              ]);
+            .to.eventually.become([
+              buildResponse('@GREETING', [{
+                'name': 'Kyllä',
+              }, {
+                'name': 'Ei',
+              }]),
+            ]);
         });
     });
 
@@ -58,11 +64,16 @@ describe('User story', function() {
         function() {
           const promise = this.bot.receive(SESSION, 'invalid input');
           return promise.then((ret) => {
-            expect(Strings['@UNCLEAR']).to.include(ret[0].message);
-            expect(ret[1]).to.deep.equal(
-                buildResponse('@GREETING',
-                    [{ 'name': 'Kyllä' }, { 'name': 'Ei' }])
-            );
+            expect(Strings['@UNCLEAR'])
+              .to.include(ret[0].message);
+            expect(ret[1])
+              .to.deep.equal(
+                buildResponse('@GREETING', [{
+                  'name': 'Kyllä',
+                }, {
+                  'name': 'Ei',
+                }])
+              );
           });
         }
       );
@@ -79,8 +90,8 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'Kyllä')
             )
             .to.eventually.become([
-                buildResponse('@GREAT'),
-                buildResponse('@REQUEST_NAME'),
+              buildResponse('@GREAT'),
+              buildResponse('@REQUEST_NAME'),
             ]);
         });
     });
@@ -93,13 +104,13 @@ describe('User story', function() {
         function() {
           this.userInformation.name = this.expectedName;
           return expect(
-                this.bot.receive(SESSION, this.userInformation.name)
+              this.bot.receive(SESSION, this.userInformation.name)
             )
             .to.eventually.become([
-                buildResponse(
-                    Formatter.formatFromTemplate(
-                        '@CONFIRM_NAME', this.userInformation)),
-                buildResponse('@REQUEST_JOB'),
+              buildResponse(
+                Formatter.formatFromTemplate(
+                  '@CONFIRM_NAME', this.userInformation)),
+              buildResponse('@REQUEST_JOB'),
             ]);
         });
     });
@@ -116,8 +127,8 @@ describe('User story', function() {
             )
             .to.eventually.become([
               buildResponse(
-                  Formatter.formatFromTemplate(
-                      '@DISPLAY_PROFILE', this.userInformation)),
+                Formatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation)),
             ]);
         });
     });
@@ -131,21 +142,21 @@ describe('User story', function() {
           this.userInformation.age = this.expectedAge;
           return expect(
               this.bot.receive(
-                  SESSION,
-                      'Lisää ikä ' + this.userInformation.age))
+                SESSION,
+                'Lisää ikä ' + this.userInformation.age))
             .to.eventually.become([
               buildResponse(
-                  Formatter.formatFromTemplate(
-                      '@CONFIRM_AGE', this.userInformation)),
+                Formatter.formatFromTemplate(
+                  '@CONFIRM_AGE', this.userInformation)),
               buildResponse(
-                  Formatter.formatFromTemplate(
-                      '@DISPLAY_PROFILE', this.userInformation)),
+                Formatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation)),
             ]);
         });
     });
 
   describe(
-    'As a registered user I want to provide my location to the bot so other people can see it and bot will show the information ',
+    'As a registered user I want to provide my location to the bot so other people can see it and bot will show the information',
     function() {
       it(
         'should ask user for a additional information when user has provided his/her name and occupation',
@@ -154,14 +165,80 @@ describe('User story', function() {
 
           return expect(
               this.bot.receive(
-                  SESSION,
-                      'Lisää paikkakunta ' + this.userInformation.place))
+                SESSION,
+                'Lisää paikkakunta ' + this.userInformation.place))
             .to.eventually.become([
               buildResponse('@CONFIRM_PLACE'),
               buildResponse(
-                  Formatter.formatFromTemplate(
-                      '@DISPLAY_PROFILE', this.userInformation)),
+                Formatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation)),
             ]);
         });
+    });
+
+  describe(
+    'As a registered user I want to be able to restart the process and remove my data',
+    function() {
+
+      beforeEach(function() {});
+
+      it(
+        'should ask user for a confirmation when user has requested a reset',
+        function() {
+          return expect(
+              this.bot.receive(
+                SESSION,
+                '!reset'))
+            .to.eventually.become([
+              buildResponse('@RESET_CONFIRMATION', [{
+                'name': 'Kyllä',
+              }, {
+                'name': 'Ei',
+              }]),
+            ]);
+        });
+
+      it(
+        'should repeat the last question if the user declines to reset',
+        function() {
+          return expect(
+              this.bot.receive(
+                SESSION,
+                'ei'))
+            .to.eventually.become([
+              buildResponse(
+                Formatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation)),
+            ]);
+        });
+
+      it(
+        'should reset the context and go to the start if the user agrees to reset',
+        function() {
+          let backupContext = this.context;
+
+          let g = this.bot.receive(
+            SESSION,
+            '!reset');
+
+          return g.then(_ => {
+            let response = this.bot.receive(
+              SESSION,
+              'kyllä');
+
+            response.then(_ => this.context = backupContext);
+
+            return expect(response)
+              .to.eventually.become([
+                buildResponse('@RESET', []),
+                buildResponse('@GREETING', [{
+                  'name': 'Kyllä',
+                }, {
+                  'name': 'Ei',
+                }]),
+              ]);
+          });
+        }
+      );
     });
 });

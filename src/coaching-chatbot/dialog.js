@@ -26,8 +26,11 @@ bot
   .dialog(
     '/', [
       (session) => {
-        session.addResult('@GREETING',
-            [{ name: '@YES' }, { name: '@NO' }]);
+        session.addResult('@GREETING', [{
+          name: '@YES',
+        }, {
+          name: '@NO',
+        }]);
       },
       (session) => {
         if (session.checkIntent('#YES')) {
@@ -173,10 +176,30 @@ bot
         session.beginDialog('/add_communication_method');
       }],
       ['#RESET', (session) => {
-        session.runActions(['reset']);
-        session.addResult('@RESET');
-        session.clearState();
+        session.beginDialog('/reset');
       }],
+    ])
+  .dialog(
+    '/reset', [
+      (session) => {
+        session.addResult('@RESET_CONFIRMATION', [{
+          name: '@YES',
+        }, {
+          name: '@NO',
+        }]);
+      },
+      (session) => {
+        if (session.checkIntent('#YES')) {
+          session.runActions(['reset']);
+          session.addResult('@RESET');
+          session.clearState();
+        } else if (session.checkIntent('#NO')) {
+          session.endDialog();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.next();
+        }
+      },
     ]);
 
 module.exports = bot;
