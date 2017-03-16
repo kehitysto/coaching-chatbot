@@ -40,13 +40,13 @@ function interactive(bot) {
 
     bot.receive(sessionId, line)
       .then((msg) => {
-        console.log('\x1b[31m' + msg.join('\n'));
+        console.log('\x1b[93m' + msg.join('\n'));
         rl.prompt();
       })
       .catch((err) => console.error(err.stack));
   });
 
-  rl.setPrompt('\x1b[32m> ');
+  rl.setPrompt('\x1b[0m> ');
   rl.prompt();
 };
 
