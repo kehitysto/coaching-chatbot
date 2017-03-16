@@ -1,9 +1,13 @@
 import Strings from '../../src/coaching-chatbot/strings.json';
+import CommunicationMethods
+ from '../../src/coaching-chatbot/communication-methods.json';
 
 const Formatter = {
   format,
   formatFromTemplate,
   createProfile,
+  getCommunicationMethods,
+  matchCommunicationMethod,
 };
 
 export default Formatter;
@@ -48,4 +52,22 @@ function createProfile(context) {
     ]
     .filter((val) => val)
     .join(', ');
+}
+
+function matchCommunicationMethod(input) {
+  for(let i = 0; i < CommunicationMethods.length; i++) {
+    if(CommunicationMethods[i].name === input) {
+      return CommunicationMethods[i].infoRequestText;
+    }
+  }
+}
+
+function getCommunicationMethods() {
+  let communicationMethods = [];
+  for(let i = 0; i < CommunicationMethods.length; i++) {
+    let nameAndPayload = { name: CommunicationMethods[i].name,
+      payload: CommunicationMethods[i].identifier };
+    communicationMethods.push(nameAndPayload);
+  }
+  return communicationMethods;
 }
