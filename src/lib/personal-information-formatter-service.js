@@ -62,12 +62,18 @@ function matchCommunicationMethod(input) {
   }
 }
 
-function getCommunicationMethods() {
+function getCommunicationMethods( context ) {
   let communicationMethods = [];
-  for(let i = 0; i < CommunicationMethods.length; i++) {
-    let nameAndPayload = { name: CommunicationMethods[i].name,
-      payload: CommunicationMethods[i].identifier };
-    communicationMethods.push(nameAndPayload);
+  console.log(JSON.stringify(context));
+  console.log('testi');
+  for(let jsonCommunicationMethod of CommunicationMethods) {
+    for(let communicationMethod in context.communicationMethods) {
+      if(communicationMethod !== jsonCommunicationMethod.name) {
+        let nameAndPayload = { name: jsonCommunicationMethod.name,
+        payload: jsonCommunicationMethod.identifier };
+        communicationMethods.push(nameAndPayload);
+      }
+    }
   }
   return communicationMethods;
 }
