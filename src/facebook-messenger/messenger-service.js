@@ -15,13 +15,13 @@ const Messenger = {
 
     if (quickReplies.length) {
       body.message['quick_replies'] = [];
-      for (let quickReply of quickReplies) {
-        body.message['quick_replies'].push({
-          'content_type': 'text',
-          'title': quickReply.title,
-          'payload': quickReply.payload || quickReply.title,
-        });
-      }
+    }
+    for (let quickReply of quickReplies) {
+      body.message['quick_replies'].push({
+        'content_type': 'text',
+        'title': quickReply.title,
+        'payload': quickReply.payload || quickReply.title,
+      });
     }
 
     return _fbMessageRequest(body);
