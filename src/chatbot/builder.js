@@ -42,6 +42,10 @@ module.exports = class Builder {
    * @return {Builder}
    */
   intent(intentId, intentObj) {
+    if (intentId.startsWith('#')) {
+      intentId = intentId.substr(1);
+    }
+
     log.debug('Registering intent {0}', intentId);
     this._intents[intentId] = intentObj;
 
@@ -102,6 +106,9 @@ module.exports = class Builder {
 
   checkIntent(intentId, session) {
     const input = session.getInput();
+    if (intentId.startsWith('#')) {
+      intentId = intentId.substr(1);
+    }
 
     const match = this._runIntent(intentId, input);
     log.debug('Intent {0} on input "{1}" returned {2}', intentId, input,
@@ -180,6 +187,10 @@ module.exports = class Builder {
   }
 
   _runIntent(intentId, input) {
+    if (intentId.startsWith('#')) {
+      intentId = intentId.substr(1);
+    }
+
     if (this._intents[intentId] === undefined) {
       log.error('Intent not found: {0}', intentId);
       return null;
