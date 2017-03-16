@@ -62,12 +62,15 @@ function matchCommunicationMethod(input) {
   }
 }
 
-function getCommunicationMethods() {
+function getCommunicationMethods( context ) {
   let communicationMethods = [];
-  for(let i = 0; i < CommunicationMethods.length; i++) {
-    let nameAndPayload = { name: CommunicationMethods[i].name,
-      payload: CommunicationMethods[i].identifier };
-    communicationMethods.push(nameAndPayload);
-  }
+  for (let communicationMethod of CommunicationMethods) {
+    let a = (context.communicationMethods === undefined ||
+        context.communicationMethods[communicationMethod.name] === undefined);
+    communicationMethods.push({
+        name: `${communicationMethod.name} ${a ? '' : ' (lisätty)'}`,
+        payload: communicationMethod.identifier,
+      });
+    }
   return communicationMethods;
 }
