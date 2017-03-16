@@ -110,7 +110,7 @@ bot
     '/add_communication_method', [
         (session) => {
           session.addResult('@REQUEST_COMMUNICATION_METHOD',
-              Formatter.getCommunicationMethods());
+              Formatter.getCommunicationMethods( session.context ));
         },
         (session) => {
           session.runActions(['addCommunicationMethod']);
