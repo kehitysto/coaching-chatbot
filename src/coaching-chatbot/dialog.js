@@ -3,6 +3,7 @@ import Builder from '../chatbot/builder';
 import strings from './strings.json';
 import * as actions from './actions';
 import * as intents from './intents';
+import Formatter from '../lib/personal-information-formatter-service';
 
 const bot = new Builder(strings);
 
@@ -107,19 +108,21 @@ bot
   .dialog(
     '/add_communication_method', [
         (session) => {
-          session.addResult('@REQUEST_COMMUNICATION_METHOD');
+          session.addResult('@REQUEST_COMMUNICATION_METHOD',
+              Formatter.getCommunicationMethods());
         },
         (session) => {
           session.runActions(['addCommunicationMethod']);
         },
         (session) => {
           session.runActions(['addCommunicationInfo']);
-          session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS');
+          session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS',
+              [{ name: '@YES' }, { name: '@NO' }]);
         },
         (session) => {
-          if(session.checkIntent('yes')) {
+          if(session.checkIntent('#YES')) {
             session.switchDialog('/add_communication_method');
-          }else if (session.checkIntent('no')) {
+          }else if (session.checkIntent('#NO')) {
             session.endDialog();
           }else{
             session.addResult('@UNCLEAR');
