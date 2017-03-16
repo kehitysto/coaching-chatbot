@@ -6,6 +6,7 @@
                "Valitettavasti en tiedä mitä tarkoitat.",
                "Valitettavasti en ymmärtänyt mitä tarkoitat."],
   "@NOT_IMPLEMENTED": "Toimintoa ei ole vielä toteutettu...",
+  "@RESET_CONFIRMATION": "Haluatko varmasti resetoida?",
   "@RESET": " ## TIEDOT NOLLATTU ## ",
 
   "@REQUEST_NAME": "Millä nimellä haluaisit esittäytyä mahdollisille pareillesi?",
