@@ -115,7 +115,12 @@ bot
           Formatter.getCommunicationMethods( session.context ));
         },
         (session) => {
-          session.runActions(['addCommunicationMethod']);
+          if (session.checkIntent('#COMMUNICATION_METHODS')) {
+            session.runActions(['addCommunicationMethod']);
+          } else {
+            session.addResult('@UNCLEAR');
+            session.switchDialog('/add_communication_method');
+          }
         },
         (session) => {
           session.runActions(['addCommunicationInfo']);
