@@ -89,16 +89,18 @@ module.exports = class Builder {
       input: input || session.getInput(),
     };
     const promise = Promise.resolve(this._actions[actionId](actionData))
-      .then((result) => {
-        if (result.context) {
-          log.debug('Updating context: {0}', JSON.stringify(result.context));
-          session.context = result.context;
-        }
-        if (result.userData) {
-          log.debug('Updating userData: {0}', JSON.stringify(result.userData));
-          session.setUserData(result.userData);
-        }
-      });
+        .then((result) => {
+          if (result.context) {
+            log.debug('Updating context: {0}',
+                JSON.stringify(result.context));
+            session.context = result.context;
+          }
+          if (result.userData) {
+            log.debug('Updating userData: {0}',
+                JSON.stringify(result.userData));
+            session.setUserData(result.userData);
+          }
+        });
 
     return promise;
   }
@@ -141,8 +143,8 @@ module.exports = class Builder {
       anyArray = [anyArray];
     }
 
-    for (let i = 0; i < anyArray.length; ++i) {
-      match = this._matchIntent(anyArray[i], input);
+    for (let intent of anyArray) {
+      match = this._matchIntent(intent, input);
       if (match !== null) break;
     }
 
@@ -156,8 +158,8 @@ module.exports = class Builder {
       eachArray = [eachArray];
     }
 
-    for (let i = 0; i < eachArray.length; ++i) {
-      match = this._matchIntent(eachArray[i], input);
+    for (let intent of eachArray) {
+      match = this._matchIntent(intent, input);
 
       if (match === null) {
         return null;
@@ -229,24 +231,23 @@ module.exports = class Builder {
   _runIntents(session, input) {
     return new Promise((resolve, reject) => {
       const states = session._state;
+      const state = states.length - 1;
 
-      let i = states.length - 1;
+      log.silly('Running intents for state /{0}', state[0]);
 
-      log.silly('Running intents for state /{0}', states[i][0]);
-
-      if (this._tree[states[i][0]] === undefined) {
+      if (this._tree[state[0]] === undefined) {
         session.clearState();
-        log.error('No such dialog: {0}', states[i][0]);
+        log.error('No such dialog: {0}', state[0]);
         return resolve();
       }
 
-      let intents = this._tree[states[i][0]].intents;
+      const intents = this._tree[state[0]].intents;
 
-      for (let j = 0; j < intents.length; ++j) {
-        let match = this.checkIntent(intents[j][0], session);
+      for (let intent of intents) {
+        let match = this.checkIntent(intent[0], session);
 
         if (match !== false) {
-          intents[j][1](session, match);
+          intent[1](session, match);
           return resolve();
         }
       }
