@@ -64,22 +64,13 @@ function matchCommunicationMethod(input) {
 
 function getCommunicationMethods( context ) {
   let communicationMethods = [];
-  console.log(JSON.stringify(context.communicationMethods));
-  console.log('testi');
   for (let communicationMethod of CommunicationMethods) {
-    console.log(JSON.stringify(communicationMethod.name + ' lalal'));
-    if (context.communicationMethods === undefined ||
-        context.communicationMethods[communicationMethod.name] === undefined) {
-      communicationMethods.push({
-        name: communicationMethod.name,
-        payload: communicationMethod.identifier,
-      });
-    } else {
-      communicationMethods.push({
-        name: communicationMethod.name + ' (lisätty)',
+    let a = (context.communicationMethods === undefined ||
+        context.communicationMethods[communicationMethod.name] === undefined);
+    communicationMethods.push({
+        name: `${communicationMethod.name} ${a ? '' : ' (lisätty)'}`,
         payload: communicationMethod.identifier,
       });
     }
-  }
   return communicationMethods;
 }
