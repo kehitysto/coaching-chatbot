@@ -66,7 +66,7 @@ function getCommunicationMethods() {
   let communicationMethods = [];
   for(let i = 0; i < CommunicationMethods.length; i++) {
     let nameAndPayload = { name: CommunicationMethods[i].name,
-      identifier: CommunicationMethods[i].identifier };
+      payload: CommunicationMethods[i].identifier };
     communicationMethods.push(nameAndPayload);
   }
   return communicationMethods;
