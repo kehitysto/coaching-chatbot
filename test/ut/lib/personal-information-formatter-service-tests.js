@@ -152,7 +152,8 @@ describe('Formatter service', function() {
       const formatted = Formatter.format(template, context);
       assert(formatted === expected);
     });
-    it('should find right string to ask for right communication Method(Skype)', function() {
+    it('should find right string to ask for right communication Method(Skype)',
+     function() {
       const input = 'Skype';
 
       const expected = '@REQUEST_SKYPE_NAME';
@@ -170,6 +171,26 @@ describe('Formatter service', function() {
       const expected = '@REQUEST_PHONE_NUMBER';
       const matchedCommunicationMethod = Formatter.matchCommunicationMethod(input);
       assert(matchedCommunicationMethod === expected);
+    });
+    it('should get all communication methods', function(){
+      const context = { context: {} };
+      const communicationMethods = Formatter.getCommunicationMethods(
+        context );
+      const expected = [{
+        name: 'Skype ',
+        payload: 'SKYPE',
+      },
+      {
+        name: 'Puhelin ',
+        payload: 'PHONE',
+      },
+      {
+        name: 'Kahvila ',
+        payload: 'CAFETERIA',
+      }];
+      console.log(JSON.stringify(communicationMethods));
+      return expect(communicationMethods).to
+      .deep.equal(expected);
     });
   });
 });
