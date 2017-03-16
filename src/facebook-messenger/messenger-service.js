@@ -15,13 +15,11 @@ const Messenger = {
 
         if (quickReplies.length) {
             body.message['quick_replies'] = [];
-            for (let i = 0; i < quickReplies.length; ++i) {
-                let title = quickReplies[i].name;
-                let payload = quickReplies[i].payload || title;
+            for (let quickReply of quickReplies) {
                 body.message['quick_replies'].push({
                     'content_type': 'text',
-                    title,
-                    payload,
+                    'title': quickReply.title,
+                    'payload': quickReply.payload || quickReply.title,
                 });
             }
         }
