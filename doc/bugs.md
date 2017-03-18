@@ -1,12 +1,18 @@
-﻿Bugs on current mb (test-messenger-bot).
+﻿Bugs on current mb (test-messenger-bot). b = bot u = user
 
 >doesn't understand "k", "j", "kyl", "ju" as true
 
 >Start: when bot asks your name, bot thinks everything is name. (bug or feature)
 u: "vaihda nimi"
 b: "kerro nimi"
-u: "vaihda ammatti
-b: "kiitos vaihda ammatti. jos haluat..."
+u: "vaihda nimi
+<bug>b: "kiitos vaihda nimi. jos haluat..."
+
+>Start: after users has told bot a name and tries to change it.
+b: "Kiitos matti. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. "Vaihda nimi"."
+b: "Seuraavaksi haluaisin tietää ammattisi."
+u: "vaihda nimi pekka"
+<bug>b: "Parin etsijät näkisivät nyt sinut seuraavasti: "pekka, vaihda nimi pekka" Voit lisätä..."
 
 
 >START: //if you misspell your name
@@ -35,16 +41,23 @@ u: puhelin //quick replies are spelled "Skype", "Puhelin" and "Kahvila"
 <bug> b: Anteeksi, en ymmärtänyt mitä tarkoitat.
 
 >after uder has told phone number quick reply on "Puhelin" changes to "Puhelin (lisätty)"
-if user click on that, bot does nothing and user has to say something to wake up the bot.
+if user clicks on that, bot does nothing and user has to say something to wake up the bot.
 same goes on "Kahvila" -> "Kahvila (lisätty) and "Skype" -> "Skype (lisätty)" 
-if user wants to change skype account, user has to wrote "Skype" and cant click on it.
-also bot asks phone number again when user chooses kahvila, even though user has told the phone number.
-//solved, it cant handel letter ä (or ö)
+if user wants to change skype account, user has to wrote "Skype".
+also bot asks phone number again when user chooses kahvila, even if user has told already the phone number.
+<fix> solved. bot can't handel any extra chars after legit way of communication.
+b: "Valitse tapa jolla haluat olla yhteydessä:"
+u: "Kahvilaa" (same with "Kahvila asd" so space after doesn't help)
+bot goes silent
+u: "haloo"
+b: "Haluatko lisätä muita tapoja olla yhteydessä"
+
+>Phone number can contains chars.
 
 >mb doesnt react on facebook "basic thumbs up". if users inputs "sticker" bot reads it and says that it doesnt understand
 user can also input "stickers" on names, job, age, location
 
->after user has added a way of communication.
+>after user has added a way of communication and doesn't want to add more.
 b: "Haluatko lisätä muita tapoja olla yhteydessä?"
 u: "emmä"
 b: "Anteeksi, en ymmärtänyt mitä tarkoitat."
