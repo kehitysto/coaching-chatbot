@@ -185,9 +185,7 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'Etsi pari'))
             .to.eventually.become([
-              buildResponse('@REQUEST_COMMUNICATION_METHOD'),
-              buildResponse(
-                Formatter.getCommunicationMethods(this.context)),
+              buildResponse('@REQUEST_COMMUNICATION_METHOD', Formatter.getCommunicationMethods(this.context)),
             ]);
         }
       );
