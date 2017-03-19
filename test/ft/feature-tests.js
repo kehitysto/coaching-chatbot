@@ -177,6 +177,24 @@ describe('User story', function() {
     });
 
   describe(
+    'As a registered user I want to provide my acceptable methods of communication with quick replies',
+    function() {
+      it(
+        'should provide a list of communication methods from which the user can choose one',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'Etsi pari'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_COMMUNICATION_METHOD'),
+              buildResponse(
+                Formatter.getCommunicationMethods(this.context)),
+            ]);
+        }
+      );
+    }
+  );
+
+  describe(
     'As a registered user I want to be able to restart the process and remove my data',
     function() {
 
