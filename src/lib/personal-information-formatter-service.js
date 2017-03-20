@@ -7,7 +7,7 @@ const Formatter = {
   formatFromTemplate,
   createProfile,
   getCommunicationMethods,
-  matchCommunicationMethod,
+  getCommunicationMethodByInput,
 };
 
 export default Formatter;
@@ -54,7 +54,7 @@ function createProfile(context) {
     .join(', ');
 }
 
-function matchCommunicationMethod(input) {
+function getCommunicationMethodByInput(input) {
   for (let i = 0; i < CommunicationMethods.length; i++) {
     if (input.toLowerCase().includes(
         CommunicationMethods[i].name.toLowerCase())) {

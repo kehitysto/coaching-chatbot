@@ -153,11 +153,12 @@ describe('Formatter service', function() {
     it('should find right string to ask for right communication Method(Skype)',
      function() {
       const input = 'Skype';
+
       const expected = {
         identifier: 'SKYPE',
         name: 'Skype',
         infoRequestText: '@REQUEST_SKYPE_NAME' };
-      return expect(Formatter.matchCommunicationMethod(input)).to.deep
+      return expect(Formatter.getCommunicationMethodByInput(input)).to.deep
         .equal(expected);
     });
     it('should find right string to ask for right communication Method(Phonenumber)',
@@ -167,7 +168,7 @@ describe('Formatter service', function() {
           identifier: 'CAFETERIA',
           name: 'Kahvila',
           infoRequestText: '@REQUEST_PHONE_NUMBER' };
-        return expect(Formatter.matchCommunicationMethod(input)).to.deep
+        return expect(Formatter.getCommunicationMethodByInput(input)).to.deep
           .equal(expected);
     });
     it('should find right string to ask for right communication Method(CAFETERIA)',
@@ -177,7 +178,7 @@ describe('Formatter service', function() {
           identifier: 'PHONE',
           name: 'Puhelin',
           infoRequestText: '@REQUEST_PHONE_NUMBER' };
-        return expect(Formatter.matchCommunicationMethod(input)).to.deep
+        return expect(Formatter.getCommunicationMethodByInput(input)).to.deep
           .equal(expected);
     });
     it('should get all communication methods', function() {

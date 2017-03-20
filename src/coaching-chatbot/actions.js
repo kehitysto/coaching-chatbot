@@ -49,7 +49,7 @@ export function updateProfile({ context, userData }) {
 
 export function addCommunicationMethod( { context, input } ) {
   let undefinedCommunicationInfo = 'UNDEFINED_COMMUNICATION_INFO';
-  let method = Formatter.matchCommunicationMethod(input);
+  let method = Formatter.getCommunicationMethodByInput(input);
   return Promise.resolve({
     context: {
       ...context,
