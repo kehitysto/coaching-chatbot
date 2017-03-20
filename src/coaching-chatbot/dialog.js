@@ -136,7 +136,7 @@ bot
             session.endDialog();
           }else{
             session.addResult('@UNCLEAR');
-            session.next();
+            session.prev();
           }
       },
     ])
