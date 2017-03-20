@@ -30,7 +30,7 @@ bot: @CONFIRM_JOB
 bot: "parin etsijät näkevät sinut..."  
 
 ### before "etsi pari" sets weird things on name
->u: "vaihda nimi"  
+>user: "vaihda nimi"  
 bot: "kerro nimesi"  
 user: "lisää ikä 33  
 bot: "Kiitos lisää ikä 33. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. "Vaihda nimi"."  
