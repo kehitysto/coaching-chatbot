@@ -9,14 +9,17 @@ module.exports = {
     },
 
     YES: {
-        any: [/^kyllä/i,
+        any: [/^[kj]/i,
+              /^kyl(?:lä)?/i,
               /^j[ou]{2,}/i,
               /^jep[as]?/i],
     },
 
     NO: {
-        any: [/^ei/i,
-              /^en/i],
+        any: [/^e/i,
+              /^ei/i,
+              /^en/i,
+              /^emmä/i],
     },
 
     SET: {
