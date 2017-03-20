@@ -73,7 +73,8 @@ module.exports = class Sessions {
       const params = {
         TableName: this.SESSION_TABLE,
         Limit: 50,
-        FilterExpression: 'searching = true',
+        FilterExpression: 'searching = :val',
+        ExpressionAttributeValues: { ':val': true },
       };
 
       this.db.scan(params, (err, data) => {

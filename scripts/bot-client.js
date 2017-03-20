@@ -17,6 +17,8 @@ function main() {
       context = ctx;
       return Promise.resolve(context);
     },
+
+    getAvailablePairs: () => [],
   };
 
   const bot = new Chatbot(dialog, sessions);

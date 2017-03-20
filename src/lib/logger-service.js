@@ -1,3 +1,6 @@
+require('./env-vars')
+  .config();
+
 const Logger = {
   setLevel,
   getLevel,

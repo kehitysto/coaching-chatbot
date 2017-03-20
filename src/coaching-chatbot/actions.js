@@ -111,13 +111,13 @@ export function markUserAsSearching({ context }) {
   });
 }
 
-export function getAvailablePairs({ userData }) {
+export function getAvailablePairs() {
   return new Promise((resolve, reject) => {
     const sessions = new Sessions();
 
     sessions.getAvailablePairs()
         .then((pairs) => {
-          resolve({ userData: { ...userData, availablePairs: pairs } });
+          resolve({ result: [JSON.stringify(pairs)] });
         })
         .catch((err) => {
           reject(err);
