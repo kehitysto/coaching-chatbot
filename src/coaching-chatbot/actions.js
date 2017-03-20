@@ -1,5 +1,7 @@
 import Formatter from '../lib/personal-information-formatter-service';
 
+import Sessions from '../util/sessions-service';
+
 export function setName({ context, input }) {
   return Promise.resolve({
     context: {
@@ -106,5 +108,19 @@ export function markUserAsSearching({ context }) {
       ...context,
       searching: true,
     },
+  });
+}
+
+export function getAvailablePairs({ userData }) {
+  return new Promise((resolve, reject) => {
+    const sessions = new Sessions();
+
+    sessions.getAvailablePairs()
+        .then((pairs) => {
+          resolve({ userData: { ...userData, availablePairs: pairs } });
+        })
+        .catch((err) => {
+          reject(err);
+        });
   });
 }
