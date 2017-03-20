@@ -1,6 +1,5 @@
 import Formatter from '../lib/personal-information-formatter-service';
 
-
 export function setName({ context, input }) {
     return Promise.resolve({
         context: {
@@ -59,7 +58,7 @@ export function addCommunicationMethod( { context, input } ) {
         [method.name]: undefinedCommunicationInfo,
       },
     },
-    result: method.infoRequestText,
+    result: me.infoRequestText,
   });
 }
 

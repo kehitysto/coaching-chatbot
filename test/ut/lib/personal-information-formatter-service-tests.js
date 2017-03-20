@@ -13,11 +13,9 @@ describe('Formatter service', function() {
   describe('#formatFromTemplate()', function() {
     it('should format a pre-defined template correctly', function() {
       const templateName = '@CONFIRM_AGE';
-
       const context = {
         age: 45,
       };
-
       const expected = Strings['@CONFIRM_AGE'].replace('{age}',
         context.age);
       const formatted = Formatter.formatFromTemplate(templateName,
@@ -155,7 +153,6 @@ describe('Formatter service', function() {
     it('should find right string to ask for right communication Method(Skype)',
      function() {
       const input = 'Skype';
-
       const expected = {
         identifier: 'SKYPE',
         name: 'Skype',
@@ -183,7 +180,7 @@ describe('Formatter service', function() {
         return expect(Formatter.matchCommunicationMethod(input)).to.deep
           .equal(expected);
     });
-    it('should get all communication methods', function(){
+    it('should get all communication methods', function() {
       const context = { context: {} };
       const communicationMethods = Formatter.getCommunicationMethods(
         context );
