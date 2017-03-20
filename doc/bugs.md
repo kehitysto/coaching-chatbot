@@ -2,20 +2,20 @@
 
 ### doesn't understand "k", "j", "kyl", "ju" as true
 
-### Start: when bot asks your name, bot thinks everything is name. (bug or feature)
+### START: when bot asks your name, bot thinks everything is name. (bug or feature)
 >u: "vaihda nimi"  
 b: "kerro nimi"  
 u: "vaihda nimi  
 b: "kiitos vaihda nimi. jos haluat..."  
 
-### Start: after users has told bot a name and tries to change it.
+### START: after users has told bot a name and tries to change it.
 >b: "Kiitos matti. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. "Vaihda nimi"."  
 b: "Seuraavaksi haluaisin tietää ammattisi."  
 u: "vaihda nimi pekka"  
 b: "Parin etsijät näkisivät nyt sinut seuraavasti: "pekka, vaihda nimi pekka" Voit lisätä..."  
 
 
-### START: //if you misspell your name
+### START: if you misspell your name
 >b: "Millä nimellä haluaisit esittäytyä mahdollisille pareillesi?"  
 u: "pekka"  
 b: "Kiitos pekka. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. "Vaihda nimi"."  
@@ -53,7 +53,7 @@ u: "haloo"
 b: "Haluatko lisätä muita tapoja olla yhteydessä"  
 bug is that bot can't handel any extra chars after legit way of communication.  
 
-### Phone number can contains chars.
+### Phone number can contain chars.
 
 ### mb doesnt react on facebook "basic thumbs up". 
 >if users inputs "sticker" bot reads it and says that it doesnt understand  
