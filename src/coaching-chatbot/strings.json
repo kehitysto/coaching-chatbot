@@ -3,8 +3,9 @@
   "@GOODBYE": "Hyvästi!",
   "@GREAT": "Hienoa!",
   "@UNCLEAR": ["Anteeksi, en ymmärtänyt mitä tarkoitat.",
-               "Valitettavasti en tiedä mitä tarkoitat.",
-               "Valitettavasti en ymmärtänyt mitä tarkoitat."],
+    "Valitettavasti en tiedä mitä tarkoitat.",
+    "Valitettavasti en ymmärtänyt mitä tarkoitat."
+  ],
   "@NOT_IMPLEMENTED": "Toimintoa ei ole vielä toteutettu...",
   "@RESET_CONFIRMATION": "Haluatko varmasti resetoida?",
   "@RESET": " ## TIEDOT NOLLATTU ## ",
@@ -26,5 +27,6 @@
   "@REQUEST_COMMUNICATION_METHOD": "Valitse tapa jolla haluat olla yhteydessä:",
   "@REQUEST_SKYPE_NAME": "Anna Skype-tunnuksesi.",
   "@REQUEST_PHONE_NUMBER": "Anna puhelinnumerosi.",
-  "@PROVIDE_OTHER_COMMUNICATION_METHODS": "Haluatko lisätä muita tapoja olla yhteydessä?"
+  "@PROVIDE_OTHER_COMMUNICATION_METHODS": "Haluatko lisätä muita tapoja olla yhteydessä?",
+  "@NO_METHODS_ADDED": "Et ole vielä lisännyt yhteydenottotapojasi. Haluatko lisätä niitä nyt?"
 }

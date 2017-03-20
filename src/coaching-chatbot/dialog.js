@@ -26,9 +26,9 @@ bot
   .dialog(
     '/', [
       (session) => {
-        session.addResult('@GREETING',
-            [Builder.QuickReplies.create('@YES'),
-             Builder.QuickReplies.create('@NO')]);
+        session.addResult('@GREETING', [Builder.QuickReplies.create('@YES'),
+          Builder.QuickReplies.create('@NO')
+        ]);
       },
       (session) => {
         if (session.checkIntent('#YES')) {
@@ -108,34 +108,35 @@ bot
     ])
   .dialog(
     '/add_communication_method', [
-        (session) => {
-          session.addResult('@REQUEST_COMMUNICATION_METHOD',
-          Formatter.getCommunicationMethods( session.context ));
-        },
-        (session) => {
-          if (session.checkIntent('#COMMUNICATION_METHODS')) {
-            session.runActions(['addCommunicationMethod']);
-          } else {
-            session.addResult('@UNCLEAR');
-            session.switchDialog('/add_communication_method');
-          }
-        },
-        (session) => {
-          session.runActions(['addCommunicationInfo']);
-          session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS',
-              [Builder.QuickReplies.create('@YES'),
-               Builder.QuickReplies.create('@NO')]);
-        },
-        (session) => {
-          if(session.checkIntent('#YES')) {
-            session.switchDialog('/add_communication_method');
-          }else if (session.checkIntent('#NO')) {
-            session.runActions(['getAvailablePairs']);
-            session.endDialog();
-          }else{
-            session.addResult('@UNCLEAR');
-            session.prev();
-          }
+      (session) => {
+        session.addResult('@REQUEST_COMMUNICATION_METHOD',
+          Formatter.getCommunicationMethods(session.context));
+      },
+      (session) => {
+        if (session.checkIntent('#COMMUNICATION_METHODS')) {
+          session.runActions(['addCommunicationMethod']);
+        } else {
+          session.addResult('@UNCLEAR');
+          session.switchDialog('/add_communication_method');
+        }
+      },
+      (session) => {
+        session.runActions(['addCommunicationInfo']);
+        session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS', [Builder.QuickReplies
+          .create('@YES'),
+          Builder.QuickReplies.create('@NO')
+        ]);
+      },
+      (session) => {
+        if (session.checkIntent('#YES')) {
+          session.switchDialog('/add_communication_method');
+        } else if (session.checkIntent('#NO')) {
+          session.runActions(['getAvailablePairs']);
+          session.endDialog();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
+        }
       },
     ])
   .dialog(
@@ -178,18 +179,50 @@ bot
         }
       }],
       ['#FIND_PAIR', (session) => {
-        session.beginDialog('/add_communication_method');
+        session.beginDialog('/find_pair');
       }],
       ['#RESET', (session) => {
         session.beginDialog('/reset');
       }],
     ])
   .dialog(
+    '/find_pair', [
+      (session) => {
+        let m = session.context.communicationMethods;
+        if (m === undefined || m.length === 0) {
+          session.addResult('@NO_METHODS_ADDED', [Builder.QuickReplies.create(
+              '@YES'),
+            Builder.QuickReplies.create('@NO'),
+          ]);
+        } else {
+          session.switchDialog('/dump_pairs');
+        }
+      },
+      (session) => {
+        if (session.checkIntent('#YES')) {
+          session.prev();
+          session.switchDialog('/add_communication_method');
+        } else if (session.checkIntent('#NO')) {
+          session.endDialog();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.next();
+        }
+      },
+    ])
+  .dialog(
+    '/dump_pairs', [
+      (session) => {
+        session.addResult('dump pairs here');
+      },
+    ])
+  .dialog(
     '/reset', [
       (session) => {
-        session.addResult('@RESET_CONFIRMATION',
-            [Builder.QuickReplies.create('@YES'),
-             Builder.QuickReplies.create('@NO')]);
+        session.addResult('@RESET_CONFIRMATION', [Builder.QuickReplies.create(
+            '@YES'),
+          Builder.QuickReplies.create('@NO'),
+        ]);
       },
       (session) => {
         if (session.checkIntent('#YES')) {
