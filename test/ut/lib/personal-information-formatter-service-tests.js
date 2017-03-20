@@ -177,20 +177,20 @@ describe('Formatter service', function() {
       const communicationMethods = Formatter.getCommunicationMethods(
         context );
       const expected = [{
-        name: 'Skype ',
+        name: 'Skype',
         payload: 'SKYPE',
       },
       {
-        name: 'Puhelin ',
+        name: 'Puhelin',
         payload: 'PHONE',
       },
       {
-        name: 'Kahvila ',
+        name: 'Kahvila',
         payload: 'CAFETERIA',
       }];
       console.log(JSON.stringify(communicationMethods));
-      return expect(communicationMethods).to
-      .deep.equal(expected);
+      return expect(communicationMethods).to.deep
+      .equal(expected);
     });
   });
 });
