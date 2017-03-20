@@ -181,6 +181,140 @@ describe('User story', function() {
     });
 
   describe(
+    'As a registered user I want to provide my acceptable methods of communication with quick replies',
+    function() {
+      it(
+        'should provide a list of communication methods from which the user can choose one',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'Etsi pari'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_COMMUNICATION_METHOD', Formatter.getCommunicationMethods(this.context)),
+            ]);
+        }
+      );
+
+      it(
+        'should ask for my Skype username when I choose Skype as a communication method',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'Skype'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_SKYPE_NAME')]);
+        }
+      );
+
+      it(
+        'should ask if I want to add more communication methods after giving my Skype username',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'username'))
+            .to.eventually.become([
+              buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
+                'title': 'Kyllä',
+                'payload': '@YES',
+              }, {
+                'title': 'Ei',
+                'payload': '@NO',
+              }]),
+            ]);
+        }
+      );
+
+      it(
+        'if I answer yes to add more after giving my Skype id, it should provide the list of communication methods again and it should show that I have already added Skype',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'Kyllä'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_COMMUNICATION_METHOD',
+                Formatter.getCommunicationMethods(this.context)),
+            ]);
+        }
+      );
+
+      it(
+        'should ask for my phone number when I choose phone as a communication method',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'Puhelin'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_PHONE_NUMBER')]);
+        }
+      );
+
+      it(
+        'should ask if I want to add more communication methods after giving my phone number',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, '040-123123'))
+            .to.eventually.become([
+              buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
+                'title': 'Kyllä',
+                'payload': '@YES',
+              }, {
+                'title': 'Ei',
+                'payload': '@NO',
+              }]),
+            ]);
+        }
+      );
+
+      it(
+        'if I answer yes to add more after giving my phone number, it should provide the list of communication methods again and it should show that I have already added Skype and Phone',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'Kyllä'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_COMMUNICATION_METHOD',
+                Formatter.getCommunicationMethods(this.context)),
+            ]);
+        }
+      );
+
+      it(
+        'should ask for my phone number when I choose cafeteria as a communication method',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'Kahvila'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_PHONE_NUMBER')]);
+        }
+      );
+
+      it(
+        'should ask if I want to add more communication methods after giving my phone number',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, '040-123123'))
+            .to.eventually.become([
+              buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
+                'title': 'Kyllä',
+                'payload': '@YES',
+              }, {
+                'title': 'Ei',
+                'payload': '@NO',
+              }]),
+            ]);
+        }
+      );
+
+      it(
+        'if I do not want to add more communication methods, it should show my profile info and ask to start the search for a peer',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'Ei'))
+            .to.eventually.become([
+              buildResponse(
+                Formatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation)),
+            ]);
+        }
+      );
+    }
+  );
+
+  describe(
     'As a registered user I want to be able to restart the process and remove my data',
     function() {
 
