@@ -48,9 +48,11 @@ describe('User story', function() {
           return expect(this.bot.receive(SESSION, 'moi'))
             .to.eventually.become([
               buildResponse('@GREETING', [{
-                'name': 'Kyllä',
+                'title': 'Kyllä',
+                'payload': '@YES',
               }, {
-                'name': 'Ei',
+                'title': 'Ei',
+                'payload': '@NO',
               }]),
             ]);
         });
@@ -69,9 +71,11 @@ describe('User story', function() {
             expect(ret[1])
               .to.deep.equal(
                 buildResponse('@GREETING', [{
-                  'name': 'Kyllä',
+                  'title': 'Kyllä',
+                  'payload': '@YES',
                 }, {
-                  'name': 'Ei',
+                  'title': 'Ei',
+                  'payload': '@NO',
                 }])
               );
           });
@@ -319,9 +323,11 @@ describe('User story', function() {
                 '!reset'))
             .to.eventually.become([
               buildResponse('@RESET_CONFIRMATION', [{
-                'name': 'Kyllä',
+                'title': 'Kyllä',
+                'payload': '@YES',
               }, {
-                'name': 'Ei',
+                'title': 'Ei',
+                'payload': '@NO',
               }]),
             ]);
         });
@@ -360,9 +366,11 @@ describe('User story', function() {
               .to.eventually.become([
                 buildResponse('@RESET', []),
                 buildResponse('@GREETING', [{
-                  'name': 'Kyllä',
+                  'title': 'Kyllä',
+                  'payload': '@YES',
                 }, {
-                  'name': 'Ei',
+                  'title': 'Ei',
+                  'payload': '@NO',
                 }]),
               ]);
           });
