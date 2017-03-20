@@ -211,9 +211,11 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'username'))
             .to.eventually.become([
               buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
-                'name': 'Kyllä',
+                'title': 'Kyllä',
+                'payload': '@YES',
               }, {
-                'name': 'Ei',
+                'title': 'Ei',
+                'payload': '@NO',
               }]),
             ]);
         }
@@ -248,9 +250,11 @@ describe('User story', function() {
               this.bot.receive(SESSION, '040-123123'))
             .to.eventually.become([
               buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
-                'name': 'Kyllä',
+                'title': 'Kyllä',
+                'payload': '@YES',
               }, {
-                'name': 'Ei',
+                'title': 'Ei',
+                'payload': '@NO',
               }]),
             ]);
         }
@@ -285,9 +289,11 @@ describe('User story', function() {
               this.bot.receive(SESSION, '040-123123'))
             .to.eventually.become([
               buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
-                'name': 'Kyllä',
+                'title': 'Kyllä',
+                'payload': '@YES',
               }, {
-                'name': 'Ei',
+                'title': 'Ei',
+                'payload': '@NO',
               }]),
             ]);
         }
