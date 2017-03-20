@@ -180,9 +180,6 @@ bot
       ['#FIND_PAIR', (session) => {
         session.beginDialog('/add_communication_method');
       }],
-      ['#RESET', (session) => {
-        session.beginDialog('/reset');
-      }],
     ])
   .dialog(
     '/reset', [
@@ -203,6 +200,11 @@ bot
           session.next();
         }
       },
-    ]);
+    ])
+  .match(
+      '#RESET',
+      (session) => {
+        session.beginDialog('/reset');
+      });
 
 module.exports = bot;
