@@ -74,7 +74,8 @@
   },
   "pre-commit": [
     "lint",
-    "test"
+    "test",
+    "ft"
   ],
   "dependencies": {
     "precommit-hook-eslint": "^3.0.0"

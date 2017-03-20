@@ -27,8 +27,8 @@ bot
     '/', [
       (session) => {
         session.addResult('@GREETING',
-            [Builder.QuickReply.create('@YES'),
-             Builder.QuickReply.create('@NO')]);
+            [Builder.QuickReplies.create('@YES'),
+             Builder.QuickReplies.create('@NO')]);
       },
       (session) => {
         if (session.checkIntent('#YES')) {
@@ -123,8 +123,8 @@ bot
         (session) => {
           session.runActions(['addCommunicationInfo']);
           session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS',
-              [Builder.QuickReply.create('@YES'),
-               Builder.QuickReply.create('@NO')]);
+              [Builder.QuickReplies.create('@YES'),
+               Builder.QuickReplies.create('@NO')]);
         },
         (session) => {
           if(session.checkIntent('#YES')) {
@@ -187,8 +187,8 @@ bot
     '/reset', [
       (session) => {
         session.addResult('@RESET_CONFIRMATION',
-            [Builder.QuickReply.create('@YES'),
-             Builder.QuickReply.create('@NO')]);
+            [Builder.QuickReplies.create('@YES'),
+             Builder.QuickReplies.create('@NO')]);
       },
       (session) => {
         if (session.checkIntent('#YES')) {
