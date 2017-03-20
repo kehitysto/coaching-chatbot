@@ -1,7 +1,7 @@
 import log from '../lib/logger-service';
 import Strings from '../../src/coaching-chatbot/strings.json';
 import CommunicationMethods
- from '../../src/coaching-chatbot/communication-methods.json';
+from '../../src/coaching-chatbot/communication-methods.json';
 
 const Formatter = {
   format,
@@ -53,22 +53,24 @@ function createProfile(context) {
 
 function getCommunicationMethodByInput(input) {
   for (let i = 0; i < CommunicationMethods.length; i++) {
-    if (input.toLowerCase().includes(
+    if (input.toLowerCase()
+      .includes(
         CommunicationMethods[i].name.toLowerCase())) {
       return CommunicationMethods[i];
     }
   }
 }
 
-function getCommunicationMethods( context ) {
-  let communicationMethods = [];
-  for (let communicationMethod of CommunicationMethods) {
-    let a = (context.communicationMethods === undefined ||
-        context.communicationMethods[communicationMethod.name] === undefined);
-    communicationMethods.push({
-        name: `${communicationMethod.name}${a ? '' : ' (lisätty)'}`,
-        payload: communicationMethod.identifier,
+function getCommunicationMethods(context) {
+  return CommunicationMethods.reduce((l, m) => {
+    if (context.communicationMethods === undefined ||
+      context.communicationMethods[m.identifier] === undefined) {
+      l.push({
+        title: m.name,
+        payload: m.identifier,
       });
     }
-  return communicationMethods;
+
+    return l;
+  }, []);
 }
