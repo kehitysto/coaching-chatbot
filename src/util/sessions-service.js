@@ -69,21 +69,23 @@ module.exports = class Sessions {
   }
 
   getAvailablePairs() {
-    const params = {
-      TableName: this.SESSION_TABLE,
-      Limit: 50,
-      FilterExpression: 'searching = true',
-    };
+    return new Promise((resolve, reject) => {
+      const params = {
+        TableName: this.SESSION_TABLE,
+        Limit: 50,
+        FilterExpression: 'searching = true',
+      };
 
-    this.db.scan(params, (err, data) => {
-      if (err) {
-        log.error(err.toString());
-        return reject(err);
-      }
+      this.db.scan(params, (err, data) => {
+        if (err) {
+          log.error(err.toString());
+          return reject(err);
+        }
 
-      log.debug('Users searching for pair: {0}', JSON.stringify(data.Items));
+        log.debug('Users searching for pair: {0}', JSON.stringify(data.Items));
 
-      return resolve(data.Items);
+        return resolve(data.Items);
+      });
     });
   }
 };
