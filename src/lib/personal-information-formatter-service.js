@@ -25,25 +25,15 @@ function formatFromTemplate(template, context) {
 function format(template, context) {
   let s = template;
 
-  if (context.name) {
-    s = s.replace('{name}', context.name);
-  }
-
-  if (context.job) {
-    s = s.replace('{job}', context.job);
-  }
-
-  if (context.age) {
-    s = s.replace('{age}', context.age);
-  }
-
-  if (context.place) {
-    s = s.replace('{place}', context.place);
-  }
-
-  s = s.replace('{profile}', createProfile(context));
-
-  return s;
+  return s.replace(
+    /{(\w+)}/g,
+    (match, name) => {
+      if (name === 'profile') {
+        return createProfile(context);
+      }
+      return context[name] != undefined ? context[name] : name;
+    }
+  );
 }
 
 function createProfile(context) {
