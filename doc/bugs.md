@@ -24,11 +24,6 @@ bot: "Parin etsijät näkisivät nyt sinut seuraavasti: "matti, vaihda nimi matt
 it work when you write "vaihda nimi"  
 same happens if you write "lisää ikä" or "lisää paikkakunta"  
 
-### all the time: when you change your job like this
->user: "vaihda ammatti muurari"  
-bot: @CONFIRM_JOB  
-bot: "parin etsijät näkevät sinut..."  
-
 ### before "etsi pari" sets weird things on name
 >user: "vaihda nimi"  
 bot: "kerro nimesi"  
