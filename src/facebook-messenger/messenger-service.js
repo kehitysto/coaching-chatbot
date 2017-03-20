@@ -77,14 +77,15 @@ function _receiveMessage(msgEvent, chatbot) {
     } else if (text) {
       return resolve(
         chatbot.receive(sender, text).then((response) => {
-          let promise = Messenger.toggleTypingIndicator(true);
+          let promise = Messenger.toggleTypingIndicator(sender, true);
           for (let i = 0; i < response.length; ++i) {
             promise = promise.then(() => {
               return Messenger.send(sender,
                   response[i].message, response[i].quickReplies);
             });
           }
-          return promise.then(() => Messenger.toggleTypingIndicator(false));
+          return promise
+              .then(() => Messenger.toggleTypingIndicator(sender, false));
         })
       );
     }
