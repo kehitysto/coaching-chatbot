@@ -2,7 +2,7 @@ import log from '../lib/logger-service';
 
 import Session from './session';
 
-module.exports = class Builder {
+class Builder {
   constructor(strings, maxSteps = 5) {
     this.maxSteps = maxSteps;
 
@@ -297,4 +297,14 @@ module.exports = class Builder {
       );
     });
   }
+}
+module.exports = Builder;
+
+Builder.QuickReplies = {
+  create(title, payload) {
+    return {
+      title,
+      payload: (payload === undefined) ? title : payload,
+    };
+  },
 };

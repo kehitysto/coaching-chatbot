@@ -26,11 +26,9 @@ bot
   .dialog(
     '/', [
       (session) => {
-        session.addResult('@GREETING', [{
-          name: '@YES',
-        }, {
-          name: '@NO',
-        }]);
+        session.addResult('@GREETING',
+            [Builder.QuickReplies.create('@YES'),
+             Builder.QuickReplies.create('@NO')]);
       },
       (session) => {
         if (session.checkIntent('#YES')) {
@@ -125,7 +123,8 @@ bot
         (session) => {
           session.runActions(['addCommunicationInfo']);
           session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS',
-              [{ name: '@YES' }, { name: '@NO' }]);
+              [Builder.QuickReplies.create('@YES'),
+               Builder.QuickReplies.create('@NO')]);
         },
         (session) => {
           if(session.checkIntent('#YES')) {
@@ -187,11 +186,9 @@ bot
   .dialog(
     '/reset', [
       (session) => {
-        session.addResult('@RESET_CONFIRMATION', [{
-          name: '@YES',
-        }, {
-          name: '@NO',
-        }]);
+        session.addResult('@RESET_CONFIRMATION',
+            [Builder.QuickReplies.create('@YES'),
+             Builder.QuickReplies.create('@NO')]);
       },
       (session) => {
         if (session.checkIntent('#YES')) {
