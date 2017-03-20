@@ -1,3 +1,4 @@
+import log from '../lib/logger-service';
 import Strings from '../../src/coaching-chatbot/strings.json';
 import CommunicationMethods
 from '../../src/coaching-chatbot/communication-methods.json';
@@ -23,25 +24,21 @@ function formatFromTemplate(template, context) {
 }
 
 function format(template, context) {
+  log.debug('Formatting template with variables {0}', JSON.stringify(context));
   let s = template;
 
-  if (context.name) {
-    s = s.replace('{name}', context.name);
-  }
+  s = s.replace(
+    /{(\w+)}/g,
+    (match, name) => {
+      log.silly('Formatting match {0}', match);
 
-  if (context.job) {
-    s = s.replace('{job}', context.job);
-  }
+      if (name === 'profile') {
+        return createProfile(context);
+      }
 
-  if (context.age) {
-    s = s.replace('{age}', context.age);
-  }
-
-  if (context.place) {
-    s = s.replace('{place}', context.place);
-  }
-
-  s = s.replace('{profile}', createProfile(context));
+      return context[name] != undefined ? context[name] : match;
+    }
+  );
 
   return s;
 }

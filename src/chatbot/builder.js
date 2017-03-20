@@ -281,14 +281,15 @@ class Builder {
 
         return resolve(
           session.runQueue()
-          .then(() => {
-            if (session.stateId !== state ||
-              session.subStateId !== substate) {
-              return this._runStep(step + 1, session, input);
-            } else {
-              session.next();
-            }
-          })
+              .then(() => {
+                log.silly('Iteration {0} completed', step);
+                if (session.stateId !== state ||
+                  session.subStateId !== substate) {
+                  return this._runStep(step + 1, session, input);
+                } else {
+                  session.next();
+                }
+              })
         );
       }
 

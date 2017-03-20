@@ -130,10 +130,11 @@ bot
           if(session.checkIntent('#YES')) {
             session.switchDialog('/add_communication_method');
           }else if (session.checkIntent('#NO')) {
+            session.runActions(['getAvailablePairs']);
             session.endDialog();
           }else{
             session.addResult('@UNCLEAR');
-            session.next();
+            session.prev();
           }
       },
     ])

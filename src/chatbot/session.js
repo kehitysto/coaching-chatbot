@@ -128,6 +128,16 @@ module.exports = class Session {
     }
 
     /**
+    * Return to the previous substate of the current dialog
+    */
+    prev() {
+        const state = this._state[this._state.length-1];
+        const subStateCount = this.dialog.getSubStateCount(this.stateId);
+
+        state[1] = (state[1] > 0) ? state[1]-1 : subStateCount-1;
+    }
+
+    /**
     * Start processing a new message by user
     * @param {Object} context The current conversation context
     * @param {string} input The message sent by the user
