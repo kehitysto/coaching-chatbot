@@ -58,7 +58,7 @@ export function addCommunicationMethod( { context, input } ) {
         [method.name]: undefinedCommunicationInfo,
       },
     },
-    result: me.infoRequestText,
+    result: method.infoRequestText,
   });
 }
 
