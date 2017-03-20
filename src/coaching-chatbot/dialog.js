@@ -27,7 +27,7 @@ bot
     '/', [
       (session) => {
         session.addResult('@GREETING', [Builder.QuickReplies.create('@YES'),
-          Builder.QuickReplies.create('@NO')
+          Builder.QuickReplies.create('@NO'),
         ]);
       },
       (session) => {
@@ -122,9 +122,9 @@ bot
       },
       (session) => {
         session.runActions(['addCommunicationInfo']);
-        session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS', [Builder.QuickReplies
-          .create('@YES'),
-          Builder.QuickReplies.create('@NO')
+        session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS', [
+          Builder.QuickReplies.create('@YES'),
+          Builder.QuickReplies.create('@NO'),
         ]);
       },
       (session) => {
@@ -214,6 +214,7 @@ bot
     '/dump_pairs', [
       (session) => {
         session.addResult('dump pairs here');
+        session.endDialog();
       },
     ])
   .dialog(
