@@ -72,16 +72,16 @@ module.exports = class Session {
     /**
     * Add a response to give to the user
     * @param {string} templateId ID of the string template to use
-    * @param {Array<{name: string, payload: string}>} quickReplies
+    * @param {Array<{title: string, payload: string}>} quickReplies
     */
     addResult(templateId, quickReplies=[]) {
         let template = this.dialog.getStringTemplate(templateId);
 
-        for (let i = 0; i < quickReplies.length; ++i) {
-            if (quickReplies[i].name !== undefined) {
+        for (let quickReply of quickReplies) {
+            if (quickReply.title !== undefined) {
                 let quickReplyTemplate =
-                    this.dialog.getStringTemplate(quickReplies[i].name);
-                quickReplies[i].name = quickReplyTemplate;
+                    this.dialog.getStringTemplate(quickReply.title);
+                quickReply.title = quickReplyTemplate;
             }
         }
 

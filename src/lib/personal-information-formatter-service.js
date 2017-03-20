@@ -8,7 +8,7 @@ const Formatter = {
   formatFromTemplate,
   createProfile,
   getCommunicationMethods,
-  matchCommunicationMethod,
+  getCommunicationMethodByInput,
 };
 
 export default Formatter;
@@ -51,10 +51,11 @@ function createProfile(context) {
     .join(', ');
 }
 
-function matchCommunicationMethod(input) {
-  for(let i = 0; i < CommunicationMethods.length; i++) {
-    if(CommunicationMethods[i].name === input) {
-      return CommunicationMethods[i].infoRequestText;
+function getCommunicationMethodByInput(input) {
+  for (let i = 0; i < CommunicationMethods.length; i++) {
+    if (input.toLowerCase().includes(
+        CommunicationMethods[i].name.toLowerCase())) {
+      return CommunicationMethods[i];
     }
   }
 }
@@ -65,7 +66,7 @@ function getCommunicationMethods( context ) {
     let a = (context.communicationMethods === undefined ||
         context.communicationMethods[communicationMethod.name] === undefined);
     communicationMethods.push({
-        name: `${communicationMethod.name} ${a ? '' : ' (lisätty)'}`,
+        name: `${communicationMethod.name}${a ? '' : ' (lisätty)'}`,
         payload: communicationMethod.identifier,
       });
     }
