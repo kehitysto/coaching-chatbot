@@ -60,7 +60,7 @@ function formatQuickReplies(quickReplies) {
   let out = [];
 
   for (let i = 0; i < quickReplies.length; ++i) {
-    out.push('\x1b[7m ' + quickReplies[i].name + ' \x1b[27m');
+    out.push('\x1b[7m ' + quickReplies[i].title + ' \x1b[27m');
   }
 
   return out.join(' ');
