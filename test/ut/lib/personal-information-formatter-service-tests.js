@@ -13,11 +13,9 @@ describe('Formatter service', function() {
   describe('#formatFromTemplate()', function() {
     it('should format a pre-defined template correctly', function() {
       const templateName = '@CONFIRM_AGE';
-
       const context = {
         age: 45,
       };
-
       const expected = Strings['@CONFIRM_AGE'].replace('{age}',
         context.age);
       const formatted = Formatter.formatFromTemplate(templateName,
@@ -155,24 +153,34 @@ describe('Formatter service', function() {
     it('should find right string to ask for right communication Method(Skype)',
      function() {
       const input = 'Skype';
-
-      const expected = '@REQUEST_SKYPE_NAME';
-      const matchedCommunicationMethod = Formatter.matchCommunicationMethod(input);
-      assert(matchedCommunicationMethod === expected);
+      const expected = {
+        identifier: 'SKYPE',
+        name: 'Skype',
+        infoRequestText: '@REQUEST_SKYPE_NAME' };
+      return expect(Formatter.matchCommunicationMethod(input)).to.deep
+        .equal(expected);
     });
-    it('should find right string to ask for right communication Method(Phonenumber)', function() {
-      const input = 'Puhelin';
-      const expected = '@REQUEST_PHONE_NUMBER';
-      const matchedCommunicationMethod = Formatter.matchCommunicationMethod(input);
-      assert(matchedCommunicationMethod === expected);
+    it('should find right string to ask for right communication Method(Phonenumber)',
+      function() {
+        const input = 'Kahvila';
+        const expected = {
+          identifier: 'CAFETERIA',
+          name: 'Kahvila',
+          infoRequestText: '@REQUEST_PHONE_NUMBER' };
+        return expect(Formatter.matchCommunicationMethod(input)).to.deep
+          .equal(expected);
     });
-    it('should find right string to ask for right communication Method(CAFETERIA)', function() {
-      const input = 'Kahvila';
-      const expected = '@REQUEST_PHONE_NUMBER';
-      const matchedCommunicationMethod = Formatter.matchCommunicationMethod(input);
-      assert(matchedCommunicationMethod === expected);
+    it('should find right string to ask for right communication Method(CAFETERIA)',
+      function() {
+        const input = 'Puhelin';
+        const expected = {
+          identifier: 'PHONE',
+          name: 'Puhelin',
+          infoRequestText: '@REQUEST_PHONE_NUMBER' };
+        return expect(Formatter.matchCommunicationMethod(input)).to.deep
+          .equal(expected);
     });
-    it('should get all communication methods', function(){
+    it('should get all communication methods', function() {
       const context = { context: {} };
       const communicationMethods = Formatter.getCommunicationMethods(
         context );
@@ -190,7 +198,7 @@ describe('Formatter service', function() {
       }];
       console.log(JSON.stringify(communicationMethods));
       return expect(communicationMethods).to.deep
-      .equal(expected);
+        .equal(expected);
     });
   });
 });

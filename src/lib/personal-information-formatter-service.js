@@ -55,9 +55,10 @@ function createProfile(context) {
 }
 
 function matchCommunicationMethod(input) {
-  for(let i = 0; i < CommunicationMethods.length; i++) {
-    if(CommunicationMethods[i].name === input) {
-      return CommunicationMethods[i].infoRequestText;
+  for (let i = 0; i < CommunicationMethods.length; i++) {
+    if (input.toLowerCase().includes(
+        CommunicationMethods[i].name.toLowerCase())) {
+      return CommunicationMethods[i];
     }
   }
 }

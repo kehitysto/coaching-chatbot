@@ -49,15 +49,16 @@ export function updateProfile({ context, userData }) {
 
 export function addCommunicationMethod( { context, input } ) {
   let undefinedCommunicationInfo = 'UNDEFINED_COMMUNICATION_INFO';
+  let method = Formatter.matchCommunicationMethod(input);
   return Promise.resolve({
     context: {
       ...context,
       communicationMethods: {
         ...context.communicationMethods,
-        [input]: undefinedCommunicationInfo,
+        [method.name]: undefinedCommunicationInfo,
       },
     },
-    result: Formatter.matchCommunicationMethod(input),
+    result: method.infoRequestText,
   });
 }
 
