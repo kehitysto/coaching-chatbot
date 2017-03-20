@@ -68,7 +68,7 @@ function getCommunicationMethods( context ) {
     let a = (context.communicationMethods === undefined ||
         context.communicationMethods[communicationMethod.name] === undefined);
     communicationMethods.push({
-        name: `${communicationMethod.name} ${a ? '' : ' (lisätty)'}`,
+        name: `${communicationMethod.name}${a ? '' : ' (lisätty)'}`,
         payload: communicationMethod.identifier,
       });
     }
