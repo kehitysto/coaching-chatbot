@@ -8,16 +8,16 @@ bot: "kerro nimi"
 user: "vaihda nimi  
 bot: "kiitos vaihda nimi. jos haluat..."  
 
-### START: after users has told bot a name and tries to change it.
+### START: after users has told bot a name and tries to change it before adding a job.
 >bot: "Millä nimellä haluaisit esittäytyä mahdollisille pareillesi?"  
 user: "pekka"  
 bot: "Kiitos pekka. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. "Vaihda nimi"."  
 user: "vaihda nimi matti"  
-bot: "Parin etsijät näkisivät nyt sinut seuraavasti: "matti, vaihda nimi matti". vaihda nimi matti is set as a job
-it work when you write "vaihda nimi"  
+bot: "Parin etsijät näkisivät nyt sinut seuraavasti: "matti, vaihda nimi matti".  
+vaihda nimi matti is set as a job. it works when you write "vaihda nimi".  
 same happens if you write "lisää ikä" or "lisää paikkakunta"  
 
-### before "etsi pari" sets weird things on name
+### before "etsi pari" bot sets weird things on name
 >user: "vaihda nimi"  
 bot: "kerro nimesi"  
 user: "lisää ikä 33  
@@ -25,6 +25,11 @@ bot: "Kiitos lisää ikä 33. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sit
 
 ### user wants to change skype account
 >user has to write Skype again and cant click the button  
+
+### after user has changed job
+>user: "vaihda ammatti muurari"  
+bot: "@CONFIRM_JOB"  
+bot: "Parin etsijät näkisivät nyt sinut..."  
  
 ### Phone number can contain chars.
 
