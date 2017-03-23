@@ -226,7 +226,7 @@ describe('User story', function() {
       );
 
       it(
-        'should ask if I want to add more communication methods after giving my Skype username',
+        'should ask if the user wants to add more methods',
         function() {
           return expect(
               this.bot.receive(SESSION, 'username'))
@@ -300,13 +300,13 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'Kahvila'))
             .to.eventually.become([
-              buildResponse('@REQUEST_PHONE_NUMBER')
+              buildResponse('@REQUEST_PHONE_NUMBER'),
             ]);
         }
       );
 
       it(
-        'should ask if I want to add more communication methods after giving my phone number',
+        'should go straight to pair searching after all methods are given',
         function() {
           return expect(
               this.bot.receive(SESSION, '040-123123'))
@@ -318,36 +318,15 @@ describe('User story', function() {
                 'title': 'Ei',
                 'payload': '@NO',
               }]),
-            ]);
-        }
-      );
-
-      it(
-        'if I do not want to add more communication methods, it should show my profile info and ask to start the search for a peer',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Ei'))
-            .to.eventually.become([
-              buildResponse(
-                Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
-            ]);
-        }
-      );
-
-      it(
-        'should show matching pairs now that the communication methods have been added',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'etsi pari'))
-            .to.eventually.become([
               buildResponse('dump pairs here'),
+
               buildResponse(
                 Formatter.formatFromTemplate(
                   '@DISPLAY_PROFILE', this.userInformation)),
             ]);
         }
       );
+
     }
   );
 

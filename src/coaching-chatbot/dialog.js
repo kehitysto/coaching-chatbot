@@ -122,6 +122,13 @@ bot
       },
       (session) => {
         session.runActions(['addCommunicationInfo']);
+
+        // check if all methods have been filled and
+        // go to dumping automatically if so
+        if (session.allCommunicationMethodsFilled()) {
+          session.switchDialog('/dump_pairs');
+        }
+
         session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS', [
           Builder.QuickReplies.create('@YES'),
           Builder.QuickReplies.create('@NO'),
@@ -188,8 +195,7 @@ bot
   .dialog(
     '/find_pair', [
       (session) => {
-        let m = session.context.communicationMethods;
-        if (m === undefined || m.length === 0) {
+        if (session.getCommunicationMethodsCount() === 0) {
           session.addResult('@NO_METHODS_ADDED', [Builder.QuickReplies.create(
               '@YES'),
             Builder.QuickReplies.create('@NO'),
