@@ -229,8 +229,14 @@ describe('User story', function() {
         'should ask if the user wants to add more methods',
         function() {
           return expect(
-              this.bot.receive(SESSION, 'username'))
+              this.bot.receive(SESSION, 'nickname'))
             .to.eventually.become([
+              buildResponse(Formatter.formatFromTemplate(
+                '@CONFIRM_COMMUNICATION_METHODS', {
+                  communicationMethods: {
+                    SKYPE: 'nickname'
+                  }
+                })),
               buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
                 'title': 'Kyllä',
                 'payload': '@YES',
@@ -270,15 +276,22 @@ describe('User story', function() {
         function() {
           return expect(
               this.bot.receive(SESSION, '040-123123'))
-            .to.eventually.become([
-              buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
-            ]);
+            .to.eventually.become(
+              [buildResponse(Formatter.formatFromTemplate(
+                  '@CONFIRM_COMMUNICATION_METHODS', {
+                    communicationMethods: {
+                      SKYPE: 'nickname',
+                      PHONE: '040-123123'
+                    }
+                  })),
+                buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
+                  'title': 'Kyllä',
+                  'payload': '@YES',
+                }, {
+                  'title': 'Ei',
+                  'payload': '@NO',
+                }]),
+              ]);
         }
       );
 

@@ -130,6 +130,7 @@ bot
         if (session.allCommunicationMethodsFilled()) {
           session.switchDialog('/dump_pairs');
         } else {
+          session.addResult('@CONFIRM_COMMUNICATION_METHODS');
           session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS', [
             Builder.QuickReplies.create('@YES'),
             Builder.QuickReplies.create('@NO'),
