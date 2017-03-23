@@ -12,13 +12,11 @@ describe('Formatter service', function() {
 
   describe('#formatFromTemplate()', function() {
     it('should format a pre-defined template correctly', function() {
-      const templateName = '@confirm_age';
-
+      const templateName = '@CONFIRM_AGE';
       const context = {
         age: 45,
       };
-
-      const expected = Strings['@confirm_age'].replace('{age}',
+      const expected = Strings['@CONFIRM_AGE'].replace('{age}',
         context.age);
       const formatted = Formatter.formatFromTemplate(templateName,
         context);
@@ -26,12 +24,14 @@ describe('Formatter service', function() {
     });
 
     it('should understand template arrays', function() {
-      const template = '@unclear';
+      const template = '@UNCLEAR';
       const context = {};
 
-      const formatted = Formatter.formatFromTemplate(template, context);
+      const formatted = Formatter.formatFromTemplate(template,
+        context);
 
-      expect(Strings[template]).to.include(formatted);
+      expect(Strings[template])
+        .to.include(formatted);
     });
   });
 
@@ -152,5 +152,124 @@ describe('Formatter service', function() {
       const formatted = Formatter.format(template, context);
       assert(formatted === expected);
     });
+
+    it('should get all communication methods', function() {
+
+      const communicationMethods = Formatter.getCommunicationMethods(
+        context);
+
+      const expected = [{
+          title: 'Skype',
+          payload: 'SKYPE',
+        },
+        {
+          title: 'Puhelin',
+          payload: 'PHONE',
+        },
+        {
+          title: 'Kahvila',
+          payload: 'CAFETERIA',
+        },
+      ];
+
+      return expect(communicationMethods)
+        .to.deep
+        .equal(expected);
+    });
+
+    it(
+      'should find right string to ask for right communication Method(Skype)',
+      function() {
+        const input = 'Skype';
+
+        const expected = {
+          identifier: 'SKYPE',
+          name: 'Skype',
+          infoRequestText: '@REQUEST_SKYPE_NAME',
+        };
+
+        return expect(Formatter.getCommunicationMethodByInput(input))
+          .to.deep
+          .equal(expected);
+      });
+
+    it(
+      'should not include skype in communication methods if it has been selected already',
+      function() {
+        const context = {
+          communicationMethods: {
+              SKYPE: '',
+          },
+        };
+
+        const communicationMethods = Formatter.getCommunicationMethods(
+          context);
+
+        const expected = [{
+            title: 'Puhelin',
+            payload: 'PHONE',
+          },
+          {
+            title: 'Kahvila',
+            payload: 'CAFETERIA',
+          },
+        ];
+
+        return expect(communicationMethods)
+          .to.deep
+          .equal(expected);
+      });
+
+    it(
+      'should find right string to ask for right communication Method(Phonenumber)',
+      function() {
+        const input = 'Kahvila';
+        const expected = {
+          identifier: 'CAFETERIA',
+          name: 'Kahvila',
+          infoRequestText: '@REQUEST_PHONE_NUMBER',
+        };
+
+        return expect(Formatter.getCommunicationMethodByInput(input))
+          .to.deep
+          .equal(expected);
+      });
+
+    it('should only include cafeteria in communication methods if the others have been selected',
+      function() {
+          const context = {
+              communicationMethods: {
+                  SKYPE: '',
+                  PHONE: '',
+              },
+          };
+
+        const communicationMethods = Formatter.getCommunicationMethods(
+          context);
+
+        const expected = [{
+          title: 'Kahvila',
+          payload: 'CAFETERIA',
+        }, ];
+
+        return expect(communicationMethods)
+          .to.deep
+          .equal(expected);
+      });
+
+    it(
+      'should find right string to ask for right communication Method(CAFETERIA)',
+      function() {
+        const input = 'Puhelin';
+        const expected = {
+          identifier: 'PHONE',
+          name: 'Puhelin',
+          infoRequestText: '@REQUEST_PHONE_NUMBER',
+        };
+
+        return expect(Formatter.getCommunicationMethodByInput(input))
+          .to.deep
+          .equal(expected);
+      });
   });
 });

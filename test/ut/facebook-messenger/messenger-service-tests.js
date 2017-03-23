@@ -2,7 +2,7 @@ import fs from 'fs';
 import sinon from 'sinon';
 
 
-const mod = require('inject!../../../src/facebook-messenger/messenger.service');
+const mod = require('inject!../../../src/facebook-messenger/messenger-service');
 
 
 describe('Facebook Messenger service', function() {
@@ -10,7 +10,7 @@ describe('Facebook Messenger service', function() {
         this.request = sinon.stub().returns(Promise.resolve());
 
         this.Messenger = mod({
-            'request-promise': this.request
+            'request-promise': this.request,
         });
 
         process.env.FACEBOOK_PAGE_ACCESS_TOKEN = 'DUMMY_ACCESS_TOKEN';
@@ -62,7 +62,10 @@ describe('Facebook Messenger service', function() {
 
             this.cb = {
                 receive: sinon.stub()
-                .returns(Promise.resolve(['hello, world!'])),
+                    .returns(Promise.resolve([{
+                        message: 'hello, world!',
+                        quickReplies: [],
+                    }])),
             };
         });
 
@@ -76,7 +79,7 @@ describe('Facebook Messenger service', function() {
 
         it('should call callback with the message sender and body', function() {
             const mock = sinon.mock(this.Messenger);
-            mock.expects('send').withArgs('USER_ID', 'hello, world!');
+            mock.expects('send').withArgs('USER_ID', 'hello, world!', []);
 
             const ret = this.Messenger.receive(this.data.body, this.cb);
 

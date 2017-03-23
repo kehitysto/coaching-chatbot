@@ -1,5 +1,5 @@
-import log from '../lib/logger.service';
-
+import log from '../lib/logger-service';
+import Formatter from '../lib/personal-information-formatter-service';
 
 module.exports = class Session {
     constructor(dialog) {
@@ -71,11 +71,34 @@ module.exports = class Session {
 
     /**
     * Add a response to give to the user
-    * @param {string} stringId ID of the string template to use
+    * @param {string} templateId ID of the string template to use
+    * @param {Array<{title: string, payload: string}>} quickReplies
     */
-    addResult(stringId) {
-        log.debug('Adding result: {0}', stringId);
-        this._results.push(stringId);
+    addResult(templateId, quickReplies=[]) {
+        let template = this.dialog.getStringTemplate(templateId);
+
+        for (let quickReply of quickReplies) {
+            if (quickReply.title !== undefined) {
+                let quickReplyTemplate =
+                    this.dialog.getStringTemplate(quickReply.title);
+                quickReply.title = quickReplyTemplate;
+            }
+        }
+
+        this.send(template, quickReplies);
+    }
+
+    /**
+    * Add a response to give to the user
+    * @param {string} message The message to send to the user
+    * @param {Array<{name: string, payload: string}>} quickReplies
+    */
+    send(message, quickReplies=[]) {
+        log.debug('Adding result: {0}', message);
+        this._results.push({
+            message,
+            quickReplies,
+        });
     }
 
     /**
@@ -102,6 +125,16 @@ module.exports = class Session {
         const subStateCount = this.dialog.getSubStateCount(this.stateId);
 
         state[1] = (state[1] + 1) % subStateCount;
+    }
+
+    /**
+    * Return to the previous substate of the current dialog
+    */
+    prev() {
+        const state = this._state[this._state.length-1];
+        const subStateCount = this.dialog.getSubStateCount(this.stateId);
+
+        state[1] = (state[1] > 0) ? state[1]-1 : subStateCount-1;
     }
 
     /**
@@ -173,16 +206,17 @@ module.exports = class Session {
     }
 
     getResult() {
-        let result = [];
+      let result = [];
+      let variables = this.getVariables();
 
-        for (let i = 0; i < this._results.length; ++i) {
-            result.push(
-                this.dialog.getFormattedString(
-                    this._results[i], this.getVariables())
-            );
-        }
+      for (let i = 0; i < this._results.length; ++i) {
+        let { message, quickReplies } = this._results[i];
+        message = Formatter.format(message, variables);
+        result.push({ message, quickReplies });
+      }
 
-        return result;
+
+      return result;
     }
 
     get stateId() {
