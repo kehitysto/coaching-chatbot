@@ -82,7 +82,7 @@ module.exports = {
     },
 
     RESET: {
-        any: [/^\!reset$/],
+        any: [/^aloita alusta/i],
     },
 
     COMMUNICATION_METHODS: {
