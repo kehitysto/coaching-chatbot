@@ -199,4 +199,22 @@ describe('coaching-bot actions', function() {
         return expect(ret).to.eventually.deep.equal( { context: {} } );
       });
     });
+    describe('#addCommunicationMethod', function() {
+      it('Should return a communication methods with undefined Communication Info', function() {
+        const ret = actions.addCommunicationMethod({
+          context: {},
+          input: 'Skype',
+        });
+        expect(ret).to.eventually.deep.equal('Promise');
+      });
+   });
+   describe('#addCommunicationInfo', function() {
+     it('Should return a communication methods with undefined Communication Info', function() {
+       const ret = actions.addCommunicationInfo({
+         context: {},
+         input: 'nickname',
+       });
+       expect(ret).to.eventually.deep.equal('Promise');
+     });
+  });
 });
