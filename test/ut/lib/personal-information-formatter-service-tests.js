@@ -298,7 +298,7 @@ describe('Formatter service', function() {
           };
           return expect(Formatter.createCommunicationMethodslist(context))
            .to.deep
-           .equal([' Skype(nickname)']);
+           .equal('Skype (nickname)');
         }
       )
   });

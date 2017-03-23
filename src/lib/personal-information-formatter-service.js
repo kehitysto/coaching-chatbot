@@ -51,11 +51,11 @@ function createCommunicationMethodslist(context) {
   for ( let method in context.communicationMethods ) {
     if ( method != null ) {
       let methodname = getCommunicationMethodsByIdentifier(method);
-      a.push(' ' + methodname.name + '(' + context
-      .communicationMethods[method] + ')' );
+      a.push( methodname.name + ' (' + context
+      .communicationMethods[method] + ')');
     }
-  };
-  return a;
+  }
+  return a.join('\n');
 }
 
 function createProfile(context) {
