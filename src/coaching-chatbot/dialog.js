@@ -122,17 +122,19 @@ bot
       },
       (session) => {
         session.runActions(['addCommunicationInfo']);
-
+        session.next();
+      },
+      (session) => {
         // check if all methods have been filled and
         // go to dumping automatically if so
         if (session.allCommunicationMethodsFilled()) {
           session.switchDialog('/dump_pairs');
+        } else {
+          session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS', [
+            Builder.QuickReplies.create('@YES'),
+            Builder.QuickReplies.create('@NO'),
+          ]);
         }
-
-        session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS', [
-          Builder.QuickReplies.create('@YES'),
-          Builder.QuickReplies.create('@NO'),
-        ]);
       },
       (session) => {
         if (session.checkIntent('#YES')) {

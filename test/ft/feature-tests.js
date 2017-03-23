@@ -311,15 +311,7 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, '040-123123'))
             .to.eventually.become([
-              buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
               buildResponse('dump pairs here'),
-
               buildResponse(
                 Formatter.formatFromTemplate(
                   '@DISPLAY_PROFILE', this.userInformation)),
