@@ -184,12 +184,32 @@ describe('User story', function() {
     'As a registered user I want to provide my acceptable methods of communication with quick replies',
     function() {
       it(
-        'should provide a list of communication methods from which the user can choose one',
+        'should tell the user there are no communication methods added yet',
         function() {
           return expect(
               this.bot.receive(SESSION, 'Etsi pari'))
+            .to.eventually.become(
+              [
+                buildResponse('@NO_METHODS_ADDED', [{
+                  'title': 'Kyllä',
+                  'payload': '@YES',
+                }, {
+                  'title': 'Ei',
+                  'payload': '@NO',
+                }]),
+              ]
+            );
+        }
+      );
+
+      it(
+        'after agreeing should provide a list of communication methods from which the user can choose one',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'kyllä'))
             .to.eventually.become([
-              buildResponse('@REQUEST_COMMUNICATION_METHOD', Formatter.getCommunicationMethods(this.context)),
+              buildResponse('@REQUEST_COMMUNICATION_METHOD',
+                Formatter.getCommunicationMethods(this.context)),
             ]);
         }
       );
@@ -200,12 +220,13 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'Skype'))
             .to.eventually.become([
-              buildResponse('@REQUEST_SKYPE_NAME')]);
+              buildResponse('@REQUEST_SKYPE_NAME'),
+            ]);
         }
       );
 
       it(
-        'should ask if I want to add more communication methods after giving my Skype username',
+        'should ask if the user wants to add more methods',
         function() {
           return expect(
               this.bot.receive(SESSION, 'username'))
@@ -239,7 +260,8 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'Puhelin'))
             .to.eventually.become([
-              buildResponse('@REQUEST_PHONE_NUMBER')]);
+              buildResponse('@REQUEST_PHONE_NUMBER')
+            ]);
         }
       );
 
@@ -278,39 +300,25 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'Kahvila'))
             .to.eventually.become([
-              buildResponse('@REQUEST_PHONE_NUMBER')]);
-        }
-      );
-
-      it(
-        'should ask if I want to add more communication methods after giving my phone number',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, '040-123123'))
-            .to.eventually.become([
-              buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
+              buildResponse('@REQUEST_PHONE_NUMBER'),
             ]);
         }
       );
 
       it(
-        'if I do not want to add more communication methods, it should show my profile info and ask to start the search for a peer',
+        'should go straight to pair searching after all methods are given',
         function() {
           return expect(
-              this.bot.receive(SESSION, 'Ei'))
+              this.bot.receive(SESSION, '040-123123'))
             .to.eventually.become([
+              buildResponse('dump pairs here'),
               buildResponse(
                 Formatter.formatFromTemplate(
                   '@DISPLAY_PROFILE', this.userInformation)),
             ]);
         }
       );
+
     }
   );
 
