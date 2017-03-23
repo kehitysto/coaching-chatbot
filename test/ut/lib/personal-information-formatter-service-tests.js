@@ -209,6 +209,7 @@ describe('Formatter service', function() {
             .equal(expected);
         });
 
+
     it(
       'should not include skype in communication methods if it has been selected already',
       function() {
@@ -287,5 +288,18 @@ describe('Formatter service', function() {
           .to.deep
           .equal(expected);
       });
+      it(
+        'should retrun a array of added communication methods',
+        function() {
+          const context = {
+            communicationMethods: {
+                SKYPE : 'nickname',
+            },
+          };
+          return expect(Formatter.createCommunicationMethodslist(context))
+           .to.deep
+           .equal([' Skype(nickname)']);
+        }
+      )
   });
 });
