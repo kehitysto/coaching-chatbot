@@ -193,6 +193,22 @@ describe('Formatter service', function() {
           .equal(expected);
       });
 
+      it(
+        'should find right string to ask for right communication Method(Skype)',
+        function() {
+          const input = 'SKYPE';
+
+          const expected = {
+            identifier: 'SKYPE',
+            name: 'Skype',
+            infoRequestText: '@REQUEST_SKYPE_NAME',
+          };
+
+          return expect(Formatter.getCommunicationMethodsByIdentifier(input))
+            .to.deep
+            .equal(expected);
+        });
+
     it(
       'should not include skype in communication methods if it has been selected already',
       function() {
@@ -250,7 +266,7 @@ describe('Formatter service', function() {
         const expected = [{
           title: 'Kahvila',
           payload: 'CAFETERIA',
-        }, ];
+        }];
 
         return expect(communicationMethods)
           .to.deep

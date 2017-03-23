@@ -10,6 +10,7 @@ const Formatter = {
   getCommunicationMethods,
   getCommunicationMethodByInput,
   createCommunicationMethodslist,
+  getCommunicationMethodsByIdentifier,
 };
 
 export default Formatter;
