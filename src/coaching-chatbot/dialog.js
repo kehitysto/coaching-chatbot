@@ -122,9 +122,15 @@ bot
         },
         (session) => {
           session.runActions(['addCommunicationInfo']);
-          session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS',
-              [Builder.QuickReplies.create('@YES'),
-               Builder.QuickReplies.create('@NO')]);
+          session.addResult('@CONFIRM_COMMUNICATION_METHODS');
+          if( Formatter.getCommunicationMethods(session.context)
+           .length === 0 ) {
+            session.endDialog();
+          } else {
+            session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS',
+                [Builder.QuickReplies.create('@YES'),
+                 Builder.QuickReplies.create('@NO')]);
+          }
         },
         (session) => {
           if(session.checkIntent('#YES')) {

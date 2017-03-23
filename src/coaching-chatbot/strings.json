@@ -26,5 +26,6 @@
   "@REQUEST_COMMUNICATION_METHOD": "Valitse tapa jolla haluat olla yhteydessä:",
   "@REQUEST_SKYPE_NAME": "Anna Skype-tunnuksesi.",
   "@REQUEST_PHONE_NUMBER": "Anna puhelinnumerosi.",
-  "@PROVIDE_OTHER_COMMUNICATION_METHODS": "Haluatko lisätä muita tapoja olla yhteydessä?"
+  "@PROVIDE_OTHER_COMMUNICATION_METHODS": "Haluatko lisätä muita tapoja olla yhteydessä?",
+  "@CONFIRM_COMMUNICATION_METHODS": "Tällä hetkellä on lisätty seuravat tavat olla yhteydesä: {communicationMethods} "
 }

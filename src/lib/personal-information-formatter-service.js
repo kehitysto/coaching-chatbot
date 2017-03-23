@@ -9,6 +9,7 @@ const Formatter = {
   createProfile,
   getCommunicationMethods,
   getCommunicationMethodByInput,
+  createCommunicationMethodslist,
 };
 
 export default Formatter;
@@ -34,6 +35,8 @@ function format(template, context) {
 
       if (name === 'profile') {
         return createProfile(context);
+      } else if (name === 'communicationMethods') {
+        return createCommunicationMethodslist(context);
       }
 
       return context[name] != undefined ? context[name] : match;
@@ -41,6 +44,15 @@ function format(template, context) {
   );
 
   return s;
+}
+function createCommunicationMethodslist(context) {
+  let a = [];
+  for ( let method in context.communicationMethods ) {
+    if ( method != null ) {
+      a.push(' ' + method + '(' + context.communicationMethods[method] + ')' );
+    }
+  };
+  return a;
 }
 
 function createProfile(context) {
@@ -64,13 +76,12 @@ function getCommunicationMethodByInput(input) {
 function getCommunicationMethods(context) {
   return CommunicationMethods.reduce((l, m) => {
     if (context.communicationMethods === undefined ||
-      context.communicationMethods[m.identifier] === undefined) {
+      context.communicationMethods[m.name] === undefined) {
       l.push({
         title: m.name,
         payload: m.identifier,
       });
     }
-
     return l;
   }, []);
 }

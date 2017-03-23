@@ -198,7 +198,7 @@ describe('Formatter service', function() {
       function() {
         const context = {
           communicationMethods: {
-              SKYPE: '',
+              Skype : '',
           },
         };
 
@@ -239,8 +239,8 @@ describe('Formatter service', function() {
       function() {
           const context = {
               communicationMethods: {
-                  SKYPE: '',
-                  PHONE: '',
+                  Skype: '',
+                  Puhelin: '',
               },
           };
 

@@ -208,8 +208,9 @@ describe('User story', function() {
         'should ask if I want to add more communication methods after giving my Skype username',
         function() {
           return expect(
-              this.bot.receive(SESSION, 'username'))
+              this.bot.receive(SESSION, 'nickname'))
             .to.eventually.become([
+              buildResponse(Formatter.formatFromTemplate('@CONFIRM_COMMUNICATION_METHODS', { communicationMethods: { Skype: 'nickname' } })),
               buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
                 'title': 'Kyllä',
                 'payload': '@YES',
@@ -248,8 +249,9 @@ describe('User story', function() {
         function() {
           return expect(
               this.bot.receive(SESSION, '040-123123'))
-            .to.eventually.become([
-              buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
+            .to.eventually.become(
+                [buildResponse(Formatter.formatFromTemplate('@CONFIRM_COMMUNICATION_METHODS', { communicationMethods: { Skype: 'nickname', Puhelin: '040-123123' } } ) ),
+                buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
                 'title': 'Kyllä',
                 'payload': '@YES',
               }, {
@@ -283,18 +285,14 @@ describe('User story', function() {
       );
 
       it(
-        'should ask if I want to add more communication methods after giving my phone number',
+        'should ask if I want to start looking for a pair after i added all possible communication methods',
         function() {
           return expect(
               this.bot.receive(SESSION, '040-123123'))
             .to.eventually.become([
-              buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
+              buildResponse(Formatter.formatFromTemplate('@CONFIRM_COMMUNICATION_METHODS', { communicationMethods: { Skype: 'nickname', Puhelin: '040-123123', Kahvila: '040-123123' } } )),
+              buildResponse(  Formatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation)),
             ]);
         }
       );

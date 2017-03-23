@@ -57,7 +57,7 @@ export function addCommunicationMethod({ context, input }) {
       ...context,
       communicationMethods: {
         ...context.communicationMethods,
-        [method.identifier]: undefinedCommunicationInfo,
+        [method.name]: undefinedCommunicationInfo,
       },
     },
     result: method.infoRequestText,
