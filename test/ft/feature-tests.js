@@ -326,7 +326,7 @@ describe('User story', function() {
           return expect(
               this.bot.receive(
                 SESSION,
-                '!reset'))
+                'aloita alusta'))
             .to.eventually.become([
               buildResponse('@RESET_CONFIRMATION', [{
                 'title': 'Kyllä',
@@ -359,7 +359,7 @@ describe('User story', function() {
 
           let g = this.bot.receive(
             SESSION,
-            '!reset');
+            'aloita alusta');
 
           return g.then(_ => {
             let response = this.bot.receive(
@@ -370,7 +370,7 @@ describe('User story', function() {
 
             return expect(response)
               .to.eventually.become([
-                buildResponse('@RESET', []),
+                buildResponse('@RESET_DONE', []),
                 buildResponse('@GREETING', [{
                   'title': 'Kyllä',
                   'payload': '@YES',

@@ -194,7 +194,7 @@ bot
       (session) => {
         if (session.checkIntent('#YES')) {
           session.runActions(['reset']);
-          session.addResult('@RESET');
+          session.addResult('@RESET_DONE');
           session.clearState();
         } else if (session.checkIntent('#NO')) {
           session.endDialog();
