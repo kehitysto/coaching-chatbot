@@ -49,7 +49,9 @@ function createCommunicationMethodslist(context) {
   let a = [];
   for ( let method in context.communicationMethods ) {
     if ( method != null ) {
-      a.push(' ' + method + '(' + context.communicationMethods[method] + ')' );
+      let methodname = getCommunicationMethodsByIdentifier(method);
+      a.push(' ' + methodname.name + '(' + context
+      .communicationMethods[method] + ')' );
     }
   };
   return a;
@@ -72,11 +74,18 @@ function getCommunicationMethodByInput(input) {
     }
   }
 }
+function getCommunicationMethodsByIdentifier(input) {
+  for (let i = 0; i < CommunicationMethods.length; i++) {
+    if (input === CommunicationMethods[i].identifier) {
+      return CommunicationMethods[i];
+    }
+  }
+}
 
 function getCommunicationMethods(context) {
   return CommunicationMethods.reduce((l, m) => {
     if (context.communicationMethods === undefined ||
-      context.communicationMethods[m.name] === undefined) {
+      context.communicationMethods[m.identifier] === undefined) {
       l.push({
         title: m.name,
         payload: m.identifier,
