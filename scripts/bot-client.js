@@ -1,4 +1,6 @@
 import readline from 'readline';
+import fs from 'fs';
+import path from 'path';
 
 import Chatbot from '../src/chatbot/chatbot-service';
 import dialog from '../src/coaching-chatbot/dialog';
@@ -6,8 +8,10 @@ import dialog from '../src/coaching-chatbot/dialog';
 require('../src/lib/env-vars')
   .config();
 
+const STATE_STORE = '.state.json';
+let context = {};
+
 function main() {
-  let context = {};
   const sessions = {
     read: (sessionId) => {
       return Promise.resolve(context);
@@ -26,6 +30,18 @@ function main() {
   interactive(bot);
 }
 
+function snapState() {
+  const storePath = path.resolve(__dirname, '..', STATE_STORE);
+  fs.writeFileSync(storePath, JSON.stringify(context));
+}
+
+function loadState() {
+  const storePath = path.resolve(__dirname, '..', STATE_STORE);
+  const data = fs.readFileSync(storePath);
+
+  context = JSON.parse(data);
+}
+
 function interactive(bot) {
   const sessionId = 'INTERACTIVE';
   const rl = readline.createInterface({
@@ -37,6 +53,12 @@ function interactive(bot) {
     line = line.trim();
 
     if (!line) {
+      return rl.prompt();
+    } else if (line === '!snap') {
+      snapState();
+      return rl.prompt();
+    } else if (line === '!load') {
+      loadState();
       return rl.prompt();
     }
 
