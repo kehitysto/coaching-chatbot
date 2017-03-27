@@ -30,11 +30,10 @@ bot: "Kiitos lisää ikä 33. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sit
 doesn't tell user "Valitettavasti en tiedä mitä tarkoitat"  
 if users inputs "sticker" bot reads it and says that it doesn't understand  
 user can also input "stickers" on names, job, age, location    
-
-### bot doesn't tell user about 'aloita alusta'  
   
 ### 'aloita alusta' can be name, job, age and location
->bot doen't restart if user writes "aloita alusta" when bot expects something from above
+>bot doen't restart if user writes "aloita alusta" when bot expects something from above  
+
 
 #### Fixed bugs (not all of them):  
 >#when choosing a method of communication, user cant spell on lowercase
@@ -42,3 +41,4 @@ user can also input "stickers" on names, job, age, location
 bot forces user to add new method of communacion  
 #when adding a job, bot says @confirm_job -> fixed to "ammattisi on nyt .."  
 #bot shows methods of communication that users has already told  
+#bot doesn't tell user about the change to reset 'aloita alusta'  
