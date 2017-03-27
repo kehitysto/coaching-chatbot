@@ -1,6 +1,6 @@
 ## Bugs on current mb (test-messenger-bot).
 
-### doesn't understand "k", "j", "kyl", "ju" as true
+### doesn't understand "k", "j", "kyl", "ju" as true and "emmä", "e" as false
 
 ### START: when bot asks your name, bot thinks everything is name. (bug or feature)
 >user: "vaihda nimi"  
@@ -22,8 +22,6 @@ same happens if you write "lisää ikä" or "lisää paikkakunta"
 bot: "kerro nimesi"  
 user: "lisää ikä 33  
 bot: "Kiitos lisää ikä 33. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. "Vaihda nimi"."  
- 
-### Phone number can contain chars.
 
 ### Bot doesn't tell user how to change skype account(or phone number)  
 
@@ -31,12 +29,6 @@ bot: "Kiitos lisää ikä 33. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sit
 >if user clicks "thumbs up" button on messenger, bot hides quick replies but  
 doesn't tell user "Valitettavasti en tiedä mitä tarkoitat"  
 if users inputs "sticker" bot reads it and says that it doesn't understand  
-user can also input "stickers" on names, job, age, location  
+user can also input "stickers" on names, job, age, location    
 
-### after user has added a way of communication and doesn't want to add more.
->bot: "Haluatko lisätä muita tapoja olla yhteydessä?"  
-user: "emmä" or "e"
-bot: "Anteeksi, en ymmärtänyt mitä tarkoitat."  
-bot: "Valitse tapa jolla haluat olla yhteydessä"  
-if bot fails to understand users "no", it forces user to choose a way of communication.  
-should have a button to cancel choosing a way of communication.  
+### bot doesn't tell user about 'aloita alusta'  
