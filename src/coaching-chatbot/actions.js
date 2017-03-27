@@ -106,7 +106,7 @@ export function addMeetingFrequency( { context, input } ) {
   return Promise.resolve({
     context: {
       ...context,
-      meetingfrequency: Formatter.getMeetingFrequencyIdentifierByInput(input),
+      meetingFrequency: Formatter.getMeetingFrequencyIdentifierByInput(input),
     },
   });
 }
