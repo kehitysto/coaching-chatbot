@@ -50,6 +50,7 @@ function format(template, context) {
 
   return s;
 }
+
 function createCommunicationMethodslist(context) {
   let a = [];
   for ( let method in context.communicationMethods ) {
@@ -79,6 +80,7 @@ function getCommunicationMethodByInput(input) {
     }
   }
 }
+
 function getCommunicationMethodsByIdentifier(input) {
   for (let i = 0; i < CommunicationMethods.length; i++) {
     if (input === CommunicationMethods[i].identifier) {
@@ -99,6 +101,7 @@ function getCommunicationMethods(context) {
     return l;
   }, []);
 }
+
 function getMeetingFrequency(context) {
   return MeetingFrequency.reduce((l, m) => {
       l.push({
@@ -108,6 +111,7 @@ function getMeetingFrequency(context) {
     return l;
   }, []);
 }
+
 function getMeetingFrequencyIdentifierByInput(input) {
   for (let i = 0; i < MeetingFrequency.length; i++) {
     if (input.toLowerCase()
