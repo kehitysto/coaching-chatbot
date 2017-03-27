@@ -121,7 +121,7 @@ module.exports = {
         any: [
           /^Arkipäivisin/i,
           /^Kerran viikossa/i,
-          /^Kerran kahdessa viikossa/i,
+          /^Joka toinen viikko/i,
         ],
     },
 };
