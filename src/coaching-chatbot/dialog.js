@@ -157,7 +157,8 @@ bot
        (session) => {
          if (session.checkIntent('#MEETING_FREQUENCY')) {
            session.runActions(['addMeetingFrequency']);
-           session.switchDialog('/dump_pairs');
+           session.runActions(['markUserAsSearching']);
+           session.addResult('@CHANGE_MEETING_FREQUENCY');
          } else {
            session.addResult('@UNCLEAR');
            session.switchDialog('/add_meeting_frequency');
@@ -169,7 +170,9 @@ bot
     '/profile', [
       (session) => {
         session.runActions(['updateProfile']);
-        session.addResult('@DISPLAY_PROFILE');
+        session.addResult(session.context.searching ?
+          '@DISPLAY_PAIRS' :
+          '@DISPLAY_PROFILE');
       },
     ], [
       ['#CHANGE_NAME', (session, match) => {
@@ -236,19 +239,6 @@ bot
           session.addResult('@UNCLEAR');
           session.next();
         }
-      },
-    ])
-  .dialog(
-    '/dump_pairs', [
-      (session) => {
-        session.runActions(['markUserAsSearching']);
-        session.next();
-      },
-      (session) => {
-        session.addResult('Voit muuttaa tapaamisten välillä olevan ajan '
-            + 'pituutta kirjoittamalla "muuta tapaamisväliä"');
-        session.addResult('dump pairs here');
-        session.endDialog();
       },
     ])
   .dialog(
