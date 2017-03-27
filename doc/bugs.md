@@ -14,8 +14,8 @@ user: "pekka"
 bot: "Kiitos pekka. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. "Vaihda nimi"."  
 user: "vaihda nimi matti"  
 bot: "Parin etsijät näkisivät nyt sinut seuraavasti: "matti, vaihda nimi matti".  
-'vaihda nimi matti' is set as a job. it works when you write "vaihda nimi".  
-same happens if you write "lisää ikä" or "lisää paikkakunta"  
+it still changes users name even though 'vaihda nimi matti' is set as a job. 
+it works when you write "vaihda nimi". same happens if you write "lisää ikä" or "lisää paikkakunta"  
 
 ### before "etsi pari" bot sets weird things on name
 >user: "vaihda nimi"  
@@ -35,6 +35,4 @@ bot forces user to add new method of communacion
 #when adding a job, bot says @confirm_job -> fixed to "ammattisi on nyt .."  
 #bot shows methods of communication that users has already told  
 #bot doesn't tell user about the change to reset 'aloita alusta'  
-#mb doesn't react on facebook "basic thumbs up"  
-solution is that bot can't read thumbs up because it is an image  
-and users have different url for this image.  
+#mb doesn't react on facebook "basic thumbs up"    
