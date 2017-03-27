@@ -245,6 +245,8 @@ bot
         session.next();
       },
       (session) => {
+        session.addResult('Voit muuttaa tapaamisten välillä olevan ajan '
+            + 'pituutta kirjoittamalla "muuta tapaamisväliä"');
         session.addResult('dump pairs here');
         session.endDialog();
       },
