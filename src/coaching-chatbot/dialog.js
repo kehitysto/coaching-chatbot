@@ -207,6 +207,9 @@ bot
       ['#FIND_PAIR', (session) => {
         session.beginDialog('/find_pair');
       }],
+      ['#CHANGE_MEETING_FREQUENCY', (session) => {
+        session.beginDialog('/add_meeting_frequency');
+      }],
       ['#RESET', (session) => {
         session.beginDialog('/reset');
       }],

@@ -103,6 +103,12 @@ module.exports = {
         ],
     },
 
+    CHANGE_MEETING_FREQUENCY: {
+      any: [
+        /^muuta tapaamisväliä/i,
+              ],
+    },
+
     RESET: {
         any: [
           /^aloita alusta/i,
