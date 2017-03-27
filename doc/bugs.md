@@ -25,12 +25,12 @@ bot: "Kiitos lisää ikä 33. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sit
  
 ### Phone number can contain chars.
 
-### Bot doesnt tell user how to change skype account(or phone number)  
+### Bot doesn't tell user how to change skype account(or phone number)  
 
-### mb doesnt react on facebook "basic thumbs up". 
+### mb doesn't react on facebook "basic thumbs up". 
 >if user clicks "thumbs up" button on messenger, bot hides quick replies but  
-doesnt tell user "Valitettavasti en tiedä mitä tarkoitat"  
-if users inputs "sticker" bot reads it and says that it doesnt understand  
+doesn't tell user "Valitettavasti en tiedä mitä tarkoitat"  
+if users inputs "sticker" bot reads it and says that it doesn't understand  
 user can also input "stickers" on names, job, age, location  
 
 ### after user has added a way of communication and doesn't want to add more.
