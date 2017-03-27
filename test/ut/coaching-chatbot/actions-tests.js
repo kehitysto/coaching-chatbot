@@ -210,7 +210,7 @@ describe('coaching-bot actions', function() {
           { context: { communicationMethods: { 'SKYPE': 'UNDEFINED_COMMUNICATION_INFO' } }, result: '@REQUEST_SKYPE_NAME' } );
       });
 
-      it('Should return a a communication method with uderfined communication info when there is already other communication method', function() {
+      it('Should return a a communication method with uderfined communication info when there are already other communication methods ', function() {
         const ret = actions.addCommunicationMethod({
           context: { communicationMethods: { 'SKYPE': 'nickname' } },
           input: 'Puhelin',
@@ -221,7 +221,7 @@ describe('coaching-bot actions', function() {
    });
 
   describe('#addCommunicationInfo', function() {
-     it('Should return a communication methods with undefined Communication Info', function() {
+     it('Should return a communication methods', function() {
        const ret = actions.addCommunicationInfo({
          context: {
            communicationMethods: {
@@ -234,7 +234,7 @@ describe('coaching-bot actions', function() {
          { context: { communicationMethods: { 'Skype': 'nickname' } } } );
      });
 
-     it('Should return Promise if there is no undefined communication methods', function() {
+     it('Should return input if there is no undefined communication methods', function() {
        const ret = actions.addCommunicationInfo({
          context: {},
          input: 'nickname',
