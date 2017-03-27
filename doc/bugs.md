@@ -23,22 +23,18 @@ bot: "kerro nimesi"
 user: "lisää ikä 33  
 bot: "Kiitos lisää ikä 33. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. "Vaihda nimi"."  
 
-### Bot doesn't tell user how to change skype account(or phone number)  
-
-### mb doesn't react on facebook "basic thumbs up". 
->if user clicks "thumbs up" button on messenger, bot hides quick replies but  
-doesn't tell user "Valitettavasti en tiedä mitä tarkoitat"  
-if users inputs "sticker" bot reads it and says that it doesn't understand  
-user can also input "stickers" on names, job, age, location    
+### Bot doesn't tell user how to change skype account(or phone number)    
   
 ### 'aloita alusta' can be name, job, age and location
 >bot doen't restart if user writes "aloita alusta" when bot expects something from above  
 
-
-#### Fixed bugs (not all of them):  
->#when choosing a method of communication, user cant spell on lowercase
+#### Fixed/solved bugs (not all of them):  
+>#when choosing a method of communication, user cant spell on lowercase  
 #after user has added a method of communication and misspels something,  
 bot forces user to add new method of communacion  
 #when adding a job, bot says @confirm_job -> fixed to "ammattisi on nyt .."  
 #bot shows methods of communication that users has already told  
 #bot doesn't tell user about the change to reset 'aloita alusta'  
+#mb doesn't react on facebook "basic thumbs up"  
+solution is that bot can't read thumbs up because it is an image  
+and users have different url for this image.  
