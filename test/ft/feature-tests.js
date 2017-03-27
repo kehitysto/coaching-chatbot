@@ -341,6 +341,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'Arkipäivisin'))
             .to.eventually.become([
               buildResponse('Kiitos. Halutessasi voit muuttaa tapaamisväliä kirjoittamalla "muuta tapaamisväliä".'),
+              buildResponse('@DISPLAY_PAIRS'),
             ]);
         }
       );
