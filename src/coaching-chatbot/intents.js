@@ -32,7 +32,10 @@ module.exports = {
     },
 
     SET_OR_CHANGE: {
-        any: ['#SET', '#CHANGE'],
+        any: [
+          '#SET',
+          '#CHANGE',
+        ],
     },
 
     OPTIONAL_VALUE: {
@@ -62,30 +65,63 @@ module.exports = {
     },
 
     CHANGE_NAME: {
-        each: ['#CHANGE', '#NAME', '#OPTIONAL_VALUE'],
+        each: [
+          '#CHANGE',
+          '#NAME',
+          '#OPTIONAL_VALUE',
+        ],
     },
 
     CHANGE_JOB: {
-        each: ['#CHANGE', '#JOB', '#OPTIONAL_VALUE'],
+        each: [
+          '#CHANGE',
+          '#JOB',
+          '#OPTIONAL_VALUE',
+        ],
     },
 
     SET_AGE: {
-        each: ['#SET_OR_CHANGE', '#AGE', '#OPTIONAL_VALUE'],
+        each: [
+          '#SET_OR_CHANGE',
+          '#AGE',
+          '#OPTIONAL_VALUE',
+        ],
     },
 
     SET_PLACE: {
-        each: ['#SET_OR_CHANGE', '#PLACE', '#OPTIONAL_VALUE'],
+        each: [
+          '#SET_OR_CHANGE',
+          '#PLACE',
+          '#OPTIONAL_VALUE',
+        ],
     },
 
     FIND_PAIR: {
-        each: ['#FIND', '#PAIR'],
+        each: [
+          '#FIND',
+          '#PAIR',
+        ],
     },
 
     RESET: {
-        any: [/^aloita alusta/i],
+        any: [
+          /^aloita alusta/i,
+        ],
     },
 
     COMMUNICATION_METHODS: {
-        any: [/^Skype/i, /^Puhelin/i, /^Kahvila/i],
+        any: [
+          /^Skype/i,
+          /^Puhelin/i,
+          /^Kahvila/i,
+        ],
+    },
+
+    MEETING_FREQUENCY: {
+        any: [
+          /^Arkipäivisin/i,
+          /^Kerran viikossa/i,
+          /^Kerran kahdessa viikossa/i,
+        ],
     },
 };

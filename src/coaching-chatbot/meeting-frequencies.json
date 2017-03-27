@@ -1,14 +1,14 @@
 [
   {
     "identifier": "EVERY_WEEKDAY",
-    "description": "Arkipäivisin",
+    "description": "Arkipäivisin"
   },
   {
     "identifier": "ONCE_A_WEEK",
-    "description": "Kerran viikossa",
+    "description": "Kerran viikossa"
   },
   {
     "identifier": "ONCE_EVERY_TWO_WEEKS",
-    "description": "Kerran kahdessa viikossa",
+    "description": "Kerran kahdessa viikossa"
   }
 ]
