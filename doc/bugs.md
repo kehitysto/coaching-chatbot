@@ -14,7 +14,7 @@ user: "pekka"
 bot: "Kiitos pekka. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. "Vaihda nimi"."  
 user: "vaihda nimi matti"  
 bot: "Parin etsijät näkisivät nyt sinut seuraavasti: "matti, vaihda nimi matti".  
-vaihda nimi matti is set as a job. it works when you write "vaihda nimi".  
+'vaihda nimi matti' is set as a job. it works when you write "vaihda nimi".  
 same happens if you write "lisää ikä" or "lisää paikkakunta"  
 
 ### before "etsi pari" bot sets weird things on name
@@ -22,20 +22,14 @@ same happens if you write "lisää ikä" or "lisää paikkakunta"
 bot: "kerro nimesi"  
 user: "lisää ikä 33  
 bot: "Kiitos lisää ikä 33. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. "Vaihda nimi"."  
-
-### user wants to change skype account
->user has to write Skype again and cant click the button  
-
-### after user has changed job
->user: "vaihda ammatti muurari"  
-bot: "@CONFIRM_JOB"  
-bot: "Parin etsijät näkisivät nyt sinut..."  
  
 ### Phone number can contain chars.
 
+### Bot doesnt tell user how to change skype account(or phone number)  
+
 ### mb doesnt react on facebook "basic thumbs up". 
 >if user clicks "thumbs up" button on messenger, bot hides quick replies but  
-doesnt answer user "Valitettavasti en tiedä mitä tarkoitat"  
+doesnt tell user "Valitettavasti en tiedä mitä tarkoitat"  
 if users inputs "sticker" bot reads it and says that it doesnt understand  
 user can also input "stickers" on names, job, age, location  
 
