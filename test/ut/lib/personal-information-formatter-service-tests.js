@@ -332,7 +332,7 @@ describe('Formatter service', function() {
           it(
             'should return an identifier(ONCE_EVERY_TWO_WEEKS) for the frequeny meeting method',
             function() {
-              const input = 'kerran kahdessa viikossa';
+              const input = 'Joka toinen viikko';
 
               const meetingFrequency = Formatter.getMeetingFrequencyIdentifierByInput(
                 input);
@@ -360,7 +360,7 @@ describe('Formatter service', function() {
               payload: 'ONCE_A_WEEK',
             },
             {
-              title: 'Kerran kahdessa viikossa',
+              title: 'Joka toinen viikko',
               payload: 'ONCE_EVERY_TWO_WEEKS',
             },
           ];
