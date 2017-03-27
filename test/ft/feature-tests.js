@@ -347,20 +347,6 @@ describe('User story', function() {
             ]);
         }
       );
-
-      it(
-        'after providing preferred meeting frequency as "every weekdays", it should give the list of all users that are searching a peer',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Arkipäivisin'))
-            .to.eventually.become([
-              buildResponse('dump pairs here'),
-              buildResponse(
-                Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
-            ]);
-        }
-      );
     }
   );
 });
