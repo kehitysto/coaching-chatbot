@@ -181,63 +181,20 @@ describe('User story', function() {
     });
 
   describe(
-    'As a registered user I want to provide my acceptable methods of communication with quick replies',
+    'As a registered user I want to be able to restart the process and remove my data',
     function() {
-      it(
-        'should tell the user there are no communication methods added yet',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Etsi pari'))
-            .to.eventually.become(
-              [
-                buildResponse('@NO_METHODS_ADDED', [{
-                  'title': 'Kyllä',
-                  'payload': '@YES',
-                }, {
-                  'title': 'Ei',
-                  'payload': '@NO',
-                }]),
-              ]
-            );
-        }
-      );
+
+      beforeEach(function() {});
 
       it(
-        'after agreeing should provide a list of communication methods from which the user can choose one',
+        'should ask user for a confirmation when user has requested a reset',
         function() {
           return expect(
-              this.bot.receive(SESSION, 'kyllä'))
+              this.bot.receive(
+                SESSION,
+                'aloita alusta'))
             .to.eventually.become([
-              buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                Formatter.getCommunicationMethods(this.context)),
-            ]);
-        }
-      );
-
-      it(
-        'should ask for my Skype username when I choose Skype as a communication method',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Skype'))
-            .to.eventually.become([
-              buildResponse('@REQUEST_SKYPE_NAME'),
-            ]);
-        }
-      );
-
-      it(
-        'should ask if the user wants to add more methods',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'nickname'))
-            .to.eventually.become([
-              buildResponse(Formatter.formatFromTemplate(
-                '@CONFIRM_COMMUNICATION_METHODS', {
-                  communicationMethods: {
-                    SKYPE: 'nickname'
-                  }
-                })),
-              buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
+              buildResponse('@RESET_CONFIRMATION', [{
                 'title': 'Kyllä',
                 'payload': '@YES',
               }, {
@@ -245,46 +202,42 @@ describe('User story', function() {
                 'payload': '@NO',
               }]),
             ]);
-        }
-      );
+        });
 
       it(
-        'if I answer yes to add more after giving my Skype id, it should provide the list of communication methods again and it should show that I have already added Skype',
+        'should repeat the last question if the user declines to reset',
         function() {
           return expect(
-              this.bot.receive(SESSION, 'Kyllä'))
+              this.bot.receive(
+                SESSION,
+                'ei'))
             .to.eventually.become([
-              buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                Formatter.getCommunicationMethods(this.context)),
+              buildResponse(
+                Formatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation)),
             ]);
-        }
-      );
+        });
 
       it(
-        'should ask for my phone number when I choose phone as a communication method',
+        'should reset the context and go to the start if the user agrees to reset',
         function() {
-          return expect(
-              this.bot.receive(SESSION, 'Puhelin'))
-            .to.eventually.become([
-              buildResponse('@REQUEST_PHONE_NUMBER')
-            ]);
-        }
-      );
+          let backupContext = this.context;
 
-      it(
-        'should ask if I want to add more communication methods after giving my phone number',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, '040-123123'))
-            .to.eventually.become(
-              [buildResponse(Formatter.formatFromTemplate(
-                  '@CONFIRM_COMMUNICATION_METHODS', {
-                    communicationMethods: {
-                      SKYPE: 'nickname',
-                      PHONE: '040-123123'
-                    }
-                  })),
-                buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
+          let g = this.bot.receive(
+            SESSION,
+            'aloita alusta');
+
+          return g.then(_ => {
+            let response = this.bot.receive(
+              SESSION,
+              'kyllä');
+
+            response.then(_ => this.context = backupContext);
+
+            return expect(response)
+              .to.eventually.become([
+                buildResponse('@RESET_DONE', []),
+                buildResponse('@GREETING', [{
                   'title': 'Kyllä',
                   'payload': '@YES',
                 }, {
@@ -292,42 +245,8 @@ describe('User story', function() {
                   'payload': '@NO',
                 }]),
               ]);
+          });
         }
       );
-
-      it(
-        'if I answer yes to add more after giving my phone number, it should provide the list of communication methods again and it should show that I have already added Skype and Phone',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Kyllä'))
-            .to.eventually.become([
-              buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                Formatter.getCommunicationMethods(this.context)),
-            ]);
-        }
-      );
-
-      it(
-        'should ask for my phone number when I choose cafeteria as a communication method',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Kahvila'))
-            .to.eventually.become([
-              buildResponse('@REQUEST_PHONE_NUMBER'),
-            ]);
-        }
-      );
-
-      it(
-        'should go straight to pair searching after all methods are given',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, '040-123123'))
-            .to.eventually.become([
-              buildResponse('@REQUEST_MEETING_FREQUENCY', Formatter
-               .getMeetingFrequency(this.context))]);
-        }
-      );
-    }
-  );
+    });
 });

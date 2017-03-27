@@ -128,7 +128,7 @@ bot
         // check if all methods have been filled and
         // go to dumping automatically if so
         if (session.allCommunicationMethodsFilled()) {
-          session.switchDialog('/dump_pairs');
+          session.switchDialog('/add_meeting_frequency');
         } else {
           session.addResult('@CONFIRM_COMMUNICATION_METHODS');
           session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS', [
@@ -141,14 +141,30 @@ bot
         if (session.checkIntent('#YES')) {
           session.switchDialog('/add_communication_method');
         } else if (session.checkIntent('#NO')) {
-          session.runActions(['getAvailablePairs']);
-          session.endDialog();
+          session.switchDialog('/add_meeting_frequency');
         } else {
           session.addResult('@UNCLEAR');
           session.prev();
         }
       },
     ])
+  .dialog(
+     '/add_meeting_frequency', [
+       (session) => {
+         session.addResult('@REQUEST_MEETING_FREQUENCY',
+          Formatter.getMeetingFrequency(session.context));
+       },
+       (session) => {
+         if (session.checkIntent('#MEETING_FREQUENCY')) {
+           session.runActions(['addMeetingFrequency']);
+           session.switchDialog('/dump_pairs');
+         } else {
+           session.addResult('@UNCLEAR');
+           session.switchDialog('/add_meeting_frequency');
+         }
+       },
+     ]
+  )
   .dialog(
     '/profile', [
       (session) => {

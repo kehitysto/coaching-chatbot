@@ -88,4 +88,8 @@ module.exports = {
     COMMUNICATION_METHODS: {
         any: [/^Skype/i, /^Puhelin/i, /^Kahvila/i],
     },
+    MEETING_FREQUENCY: {
+        any: [/^Arkipäivisin/i,
+          /^Kerran viikossa/i, /^Kerran kahdessa viikossa/i],
+    },
 };

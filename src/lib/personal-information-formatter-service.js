@@ -2,6 +2,8 @@ import log from '../lib/logger-service';
 import Strings from '../../src/coaching-chatbot/strings.json';
 import CommunicationMethods
 from '../../src/coaching-chatbot/communication-methods.json';
+import MeetingFrequency
+from '../../src/coaching-chatbot/meeting-frequencies.json';
 
 const Formatter = {
   format,
@@ -11,6 +13,8 @@ const Formatter = {
   getCommunicationMethodByInput,
   createCommunicationMethodslist,
   getCommunicationMethodsByIdentifier,
+  getMeetingFrequency,
+  getMeetingFrequencyIdentifierByInput,
 };
 
 export default Formatter;
@@ -94,4 +98,22 @@ function getCommunicationMethods(context) {
     }
     return l;
   }, []);
+}
+function getMeetingFrequency(context) {
+  return MeetingFrequency.reduce((l, m) => {
+      l.push({
+        title: m.description,
+        payload: m.identifier,
+      });
+    return l;
+  }, []);
+}
+function getMeetingFrequencyIdentifierByInput(input) {
+  for (let i = 0; i < MeetingFrequency.length; i++) {
+    if (input.toLowerCase()
+      .includes(
+        MeetingFrequency[i].description.toLowerCase())) {
+      return MeetingFrequency[i].identifier;
+    }
+  }
 }
