@@ -31,5 +31,6 @@
   "@CONFIRM_COMMUNICATION_METHODS": "Olet lisännyt seuraavat tavat olla yhteydessä: {communicationMethods}",
   "@NO_METHODS_ADDED": "Et ole vielä lisännyt yhteydenottotapojasi. Haluatko lisätä niitä nyt?",
   "@REQUEST_MEETING_FREQUENCY": "Kuinka usein haluaisit tavata parisi kanssa?",
+  "@UNABLE_TO_CHANGE_MEETING_FREQUENCY": "Et voi muuttaa tapaamisväliä, ennen kuin olet asettanut tavan yhteydenpitoa varten.",
   "@CHANGE_MEETING_FREQUENCY": "Kiitos. Halutessasi voit muuttaa tapaamisväliä kirjoittamalla \"muuta tapaamisväliä\"."
 }

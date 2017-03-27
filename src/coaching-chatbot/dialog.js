@@ -151,6 +151,14 @@ bot
   .dialog(
      '/add_meeting_frequency', [
        (session) => {
+         if (session.getCommunicationMethodsCount() == 0) {
+           session.addResult('@UNABLE_TO_CHANGE_MEETING_FREQUENCY');
+           session.endDialog();
+         } else {
+           session.next();
+         }
+       },
+       (session) => {
          session.addResult('@REQUEST_MEETING_FREQUENCY',
           Formatter.getMeetingFrequency(session.context));
        },
@@ -159,6 +167,7 @@ bot
            session.runActions(['addMeetingFrequency']);
            session.runActions(['markUserAsSearching']);
            session.addResult('@CHANGE_MEETING_FREQUENCY');
+           session.endDialog();
          } else {
            session.addResult('@UNCLEAR');
            session.switchDialog('/add_meeting_frequency');
