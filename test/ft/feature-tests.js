@@ -340,7 +340,6 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'Arkipäivisin'))
             .to.eventually.become([
-              buildResponse('dump pairs here'),
               buildResponse(
                 Formatter.formatFromTemplate(
                   '@DISPLAY_PROFILE', this.userInformation)),

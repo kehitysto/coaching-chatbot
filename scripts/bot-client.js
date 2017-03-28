@@ -2,29 +2,20 @@ import readline from 'readline';
 import fs from 'fs';
 import path from 'path';
 
+import Sessions from '../src/util/sessions-service';
 import Chatbot from '../src/chatbot/chatbot-service';
 import dialog from '../src/coaching-chatbot/dialog';
 
 require('../src/lib/env-vars')
   .config();
 
+// normally undefined, set to 'dev' for local client only
+process.env.RUN_ENV = 'dev';
+
 const STATE_STORE = '.state.json';
-let context = {};
+const sessions = new Sessions();
 
 function main() {
-  const sessions = {
-    read: (sessionId) => {
-      return Promise.resolve(context);
-    },
-
-    write: (sessionId, ctx) => {
-      context = ctx;
-      return Promise.resolve(context);
-    },
-
-    getAvailablePairs: () => [],
-  };
-
   const bot = new Chatbot(dialog, sessions);
 
   interactive(bot);
@@ -32,14 +23,16 @@ function main() {
 
 function snapState() {
   const storePath = path.resolve(__dirname, '..', STATE_STORE);
-  fs.writeFileSync(storePath, JSON.stringify(context));
+  const data = sessions.db.dump();
+
+  fs.writeFileSync(storePath, JSON.stringify(data));
 }
 
 function loadState() {
   const storePath = path.resolve(__dirname, '..', STATE_STORE);
   const data = fs.readFileSync(storePath);
 
-  context = JSON.parse(data);
+  sessions.db.load(JSON.parse(data));
 }
 
 function interactive(bot) {

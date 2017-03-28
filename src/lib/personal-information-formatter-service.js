@@ -30,8 +30,11 @@ function formatFromTemplate(template, context) {
 }
 
 function format(template, context) {
-  log.debug('Formatting template with variables {0}', JSON.stringify(context));
+  log.debug('Formatting template {0} with variables {1}',
+      template, JSON.stringify(context));
   let s = template;
+
+  log.silly('Template type: {0}', typeof template);
 
   s = s.replace(
     /{(\w+)}/g,

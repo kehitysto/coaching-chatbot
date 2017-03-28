@@ -2,7 +2,8 @@
   "@GREETING": "Hei! Olen Kehitystön vertaisohjausrobotti. Kiinnostaako sinua löytää pari vertaisohjausta varten?",
   "@GOODBYE": "Hyvästi!",
   "@GREAT": "Hienoa!\nJos haluat nollata tiedot ja aloittaa alusta, pyydä sitä minulta esim. \"Aloita alusta\".",
-  "@UNCLEAR": ["Anteeksi, en ymmärtänyt mitä tarkoitat.",
+  "@UNCLEAR": [
+    "Anteeksi, en ymmärtänyt mitä tarkoitat.",
     "Valitettavasti en tiedä mitä tarkoitat.",
     "Valitettavasti en ymmärtänyt mitä tarkoitat."
   ],
@@ -30,5 +31,6 @@
   "@PROVIDE_OTHER_COMMUNICATION_METHODS": "Haluatko lisätä muita tapoja olla yhteydessä?",
   "@CONFIRM_COMMUNICATION_METHODS": "Olet lisännyt seuraavat tavat olla yhteydessä: {communicationMethods}",
   "@NO_METHODS_ADDED": "Et ole vielä lisännyt yhteydenottotapojasi. Haluatko lisätä niitä nyt?",
-  "@REQUEST_MEETING_FREQUENCY": "Kuinka usein haluaisit tavata parisi kanssa?"
+  "@REQUEST_MEETING_FREQUENCY": "Kuinka usein haluaisit tavata parisi kanssa?",
+  "@NO_PAIRS_AVAILABLE": "Valitettavasti antamillasi ehdoilla ei juuri nyt löydy mahdollisia pareja. Voit joko odottaa että sinuun otetaan yhteyttä, tai palata tarkistamaan tilanne uudelleen myöhemmin."
 }

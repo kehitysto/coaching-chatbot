@@ -238,11 +238,7 @@ bot
   .dialog(
     '/dump_pairs', [
       (session) => {
-        session.runActions(['markUserAsSearching']);
-        session.next();
-      },
-      (session) => {
-        session.addResult('dump pairs here');
+        session.runActions(['markUserAsSearching', 'getAvailablePairs']);
         session.endDialog();
       },
     ])

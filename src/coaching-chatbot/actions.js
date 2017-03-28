@@ -1,6 +1,7 @@
-import Formatter from '../lib/personal-information-formatter-service';
+import log from '../lib/logger-service';
 
 import Sessions from '../util/sessions-service';
+import Formatter from '../lib/personal-information-formatter-service';
 
 export function setName({ context, input }) {
   return Promise.resolve({
@@ -120,15 +121,21 @@ export function markUserAsSearching({ context }) {
   });
 }
 
-export function getAvailablePairs() {
+export function getAvailablePairs({ db }) {
   return new Promise((resolve, reject) => {
-    const sessions = new Sessions();
-
-    sessions.getAvailablePairs()
+    let sessions = new Sessions();
+    log.debug('session.getAvailablePairs()');
+    return sessions.getAvailablePairs()
         .then((pairs) => {
-          resolve({ result: [JSON.stringify(pairs)] });
+          log.debug('build result');
+          if (pairs.length > 0) {
+            resolve({ result: JSON.stringify(pairs) });
+          } else {
+            resolve({ result: '@NO_PAIRS_AVAILABLE' });
+          }
         })
         .catch((err) => {
+          log.error('err: {0}', err);
           reject(err);
         });
   });
