@@ -154,8 +154,8 @@ class Builder {
       anyArray = [anyArray];
     }
 
-    for (let i = 0; i < anyArray.length; ++i) {
-      match = this._matchIntent(anyArray[i], input);
+    for (let intent of anyArray) {
+      match = this._matchIntent(intent, input);
       if (match !== null) break;
     }
 
@@ -169,8 +169,8 @@ class Builder {
       eachArray = [eachArray];
     }
 
-    for (let i = 0; i < eachArray.length; ++i) {
-      match = this._matchIntent(eachArray[i], input);
+    for (let intent of eachArray) {
+      match = this._matchIntent(intent, input);
 
       if (match === null) {
         return null;
@@ -250,24 +250,23 @@ class Builder {
       }
 
       const states = session._state;
+      const state = states.length - 1;
 
-      let i = states.length - 1;
+      log.silly('Running intents for state /{0}', state[0]);
 
-      log.silly('Running intents for state /{0}', states[i][0]);
-
-      if (this._tree[states[i][0]] === undefined) {
+      if (this._tree[state[0]] === undefined) {
         session.clearState();
-        log.error('No such dialog: {0}', states[i][0]);
+        log.error('No such dialog: {0}', state[0]);
         return resolve();
       }
 
-      let intents = this._tree[states[i][0]].intents;
+      const intents = this._tree[state[0]].intents;
 
-      for (let j = 0; j < intents.length; ++j) {
-        let match = this.checkIntent(intents[j][0], session);
+      for (let intent of intents) {
+        let match = this.checkIntent(intent[0], session);
 
         if (match !== false) {
-          intents[j][1](session, match);
+          intent[1](session, match);
           return resolve();
         }
       }
