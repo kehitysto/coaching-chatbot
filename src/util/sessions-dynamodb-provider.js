@@ -74,15 +74,17 @@ module.exports = class DynamoDBProvider {
     });
   }
 
-  getAvailablePairs(meetingFrequency) {
+  getAvailablePairs(id, meetingFrequency) {
     return new Promise((resolve, reject) => {
       const params = {
         TableName: this.SESSION_TABLE,
         Limit: 50,
         FilterExpression: 'context.searching = :true AND ' +
-                          'context.meetingFrequency = :freq',
+                          'context.meetingFrequency = :freq' +
+                          'id != :id',
         ExpressionAttributeValues: { ':true': true,
-                                     ':freq': meetingFrequency },
+                                     ':freq': meetingFrequency,
+                                     ':id': id },
       };
 
       this.db.scan(params, (err, data) => {
