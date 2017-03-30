@@ -121,11 +121,10 @@ export function markUserAsSearching({ context }) {
   });
 }
 
-export function getAvailablePairs({ db }) {
+export function getAvailablePairs({ context }) {
   return new Promise((resolve, reject) => {
     let sessions = new Sessions();
-    log.debug('session.getAvailablePairs()');
-    return sessions.getAvailablePairs()
+    return sessions.getAvailablePairs(context.meetingFrequency)
         .then((pairs) => {
           log.debug('build result');
           if (pairs.length > 0) {

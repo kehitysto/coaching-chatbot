@@ -2,8 +2,12 @@ import Chatbot from '../../src/chatbot/chatbot-service';
 import dialog from '../../src/coaching-chatbot/dialog';
 import Formatter from '../../src/lib/personal-information-formatter-service';
 import Strings from '../../src/coaching-chatbot/strings.json';
+import Sessions from '../../src/util/sessions-service';
 
 const SESSION = 'SESSION';
+
+// normally undefined, set to 'dev' for local client only
+process.env.RUN_ENV = 'dev';
 
 function buildResponse(templateId, quickReplies = []) {
   let message = Strings[templateId];
@@ -19,19 +23,9 @@ function buildResponse(templateId, quickReplies = []) {
 
 describe('User story', function() {
   before(function() {
-    this.context = {};
-    const sessions = {
-      read: (sessionId) => {
-        return Promise.resolve(this.context);
-      },
+    this.sessions = new Sessions();
 
-      write: (sessionId, context) => {
-        this.context = context;
-        return Promise.resolve(this.context);
-      },
-    };
-
-    this.bot = new Chatbot(dialog, sessions);
+    this.bot = new Chatbot(dialog, this.sessions);
 
     this.expectedName = 'Matti';
     this.expectedJob = 'Opiskelija';
@@ -209,7 +203,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'kyllä'))
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                Formatter.getCommunicationMethods(this.context)),
+                Formatter.getCommunicationMethods(this.sessions.db.dump())),
             ]);
         }
       );
@@ -255,7 +249,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'Kyllä'))
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                Formatter.getCommunicationMethods(this.context)),
+                Formatter.getCommunicationMethods(this.sessions.db.dump())),
             ]);
         }
       );
@@ -302,7 +296,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'Kyllä'))
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                Formatter.getCommunicationMethods(this.context)),
+                Formatter.getCommunicationMethods(this.sessions.db.dump())),
             ]);
         }
       );
@@ -325,7 +319,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, '040-123123'))
             .to.eventually.become([
               buildResponse('@REQUEST_MEETING_FREQUENCY', Formatter
-               .getMeetingFrequency(this.context))]);
+               .getMeetingFrequency(this.sessions.db.dump()))]);
         }
       );
     }
@@ -360,7 +354,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'muuta tapaamisväliä'))
             .to.eventually.become([
               buildResponse('@REQUEST_MEETING_FREQUENCY', Formatter
-               .getMeetingFrequency(this.context))]);
+               .getMeetingFrequency(this.sessions.db.dump()))]);
         }
       );
     }

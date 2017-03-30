@@ -158,8 +158,7 @@ bot
         if (session.checkIntent('#MEETING_FREQUENCY')) {
           session.runActions([
               'markUserAsSearching',
-              'addMeetingFrequency',
-              'getAvailablePairs']);
+              'addMeetingFrequency']);
           session.addResult('@CHANGE_MEETING_FREQUENCY');
           session.endDialog();
         } else {
@@ -173,9 +172,11 @@ bot
     '/profile', [
       (session) => {
         session.runActions(['updateProfile']);
-        session.addResult(session.context.searching ?
-          '@DISPLAY_PAIRS' :
-          '@DISPLAY_PROFILE');
+        if (!session.context.searching) {
+          session.addResult('@DISPLAY_PROFILE');
+        } else {
+          session.runActions(['getAvailablePairs']);
+        }
       },
     ], [
       ['#CHANGE_NAME', (session, match) => {

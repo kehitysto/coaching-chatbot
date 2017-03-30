@@ -15,11 +15,12 @@ module.exports = class InMemoryProvider {
     return Promise.resolve(this.db[sessionId]);
   }
 
-  getAvailablePairs() {
+  getAvailablePairs(meetingFrequency) {
     return new Promise((resolve, reject) => {
       let pairs = [];
       for (let sessionId in this.db) {
-        if (this.db[sessionId]['searching'] === true) {
+        if (this.db[sessionId]['searching'] === true &&
+            this.db[sessionId]['meetingFrequency'] == meetingFrequency) {
           pairs.push(this.db[sessionId]);
         }
       }
