@@ -152,7 +152,7 @@ bot
     '/add_meeting_frequency', [
       (session) => {
         session.addResult('@REQUEST_MEETING_FREQUENCY',
-        Formatter.getMeetingFrequency(session.context));
+            Formatter.getMeetingFrequency(session.context));
       },
       (session) => {
         if (session.checkIntent('#MEETING_FREQUENCY')) {
@@ -227,7 +227,7 @@ bot
             Builder.QuickReplies.create('@NO'),
           ]);
         } else {
-          session.switchDialog('/dump_pairs');
+          session.switchDialog('/add_meeting_frequency');
         }
       },
       (session) => {

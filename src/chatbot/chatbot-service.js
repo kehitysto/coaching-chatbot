@@ -18,6 +18,7 @@ module.exports = class Chatbot {
       })
       .then((context) => {
         return this._dialog.run(
+          sessionId,
           context,
           text
         );

@@ -71,11 +71,11 @@ class Builder {
     return this;
   }
 
-  run(context, input) {
+  run(sessionId, context, input) {
     log.info('Running bot for input "{0}"', input);
 
     const session = new Session(this)
-      ._start(context, input);
+      ._start(sessionId, context, input);
 
     return this._runIntents(session, input)
       .then(() => this._runStep(0, session, input))
@@ -90,6 +90,7 @@ class Builder {
     }
 
     const actionData = {
+      sessionId: session.id,
       context: session.context,
       userData: session.getUserData(),
       input: input || session.getInput(),

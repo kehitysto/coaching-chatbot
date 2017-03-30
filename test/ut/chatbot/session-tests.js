@@ -10,7 +10,7 @@ describe('chatbot sessions', function() {
     };
     this.session = new Session(this.dialog);
 
-    this.session._start({}, '');
+    this.session._start('SESSION', {}, '');
     this.dialog.getSubStateCount.returns(1);
   });
 
@@ -67,11 +67,12 @@ describe('chatbot sessions', function() {
 
   describe('#_start', function() {
     it('start returns the session object', function() {
-      const ret = this.session._start({}, '');
+      const ret = this.session._start('SESSION', {}, '');
       return expect(ret).to.equal(this.session);
     });
     it('should assign context to session ', function(){
       this.session._start(
+        'SESSION',
         { foo: 'bar' },
         ''
       );
@@ -83,6 +84,7 @@ describe('chatbot sessions', function() {
     });
     it('should assign input to session', function(){
       this.session._start(
+        'SESSION',
         { foo: 'bar' },
         'something'
       );

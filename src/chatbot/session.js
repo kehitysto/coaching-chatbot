@@ -4,6 +4,8 @@ import Formatter from '../lib/personal-information-formatter-service';
 module.exports = class Session {
   constructor(dialog) {
     this.dialog = dialog;
+
+    this.id = null;
     this.context = null;
     this.userData = null;
 
@@ -141,13 +143,15 @@ module.exports = class Session {
 
   /**
    * Start processing a new message by user
+   * @param {string} sessionId The id for the current session
    * @param {Object} context The current conversation context
    * @param {string} input The message sent by the user
    * @return {Session}
    */
-  _start(context, input) {
+  _start(sessionId, context, input) {
     log.debug('Starting session...');
 
+    this.id = sessionId;
     this.context = context;
     this.userData = {};
 
