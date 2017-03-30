@@ -7,4 +7,4 @@
 ## Links
  - [Definition of Done](doc/dod.md)
  - [Product Backlog](https://waffle.io/kehitysto/coaching-chatbot)
- - [Deploy instructions] (doc/instructions.md)
+ - [Deploy instructions](doc/instructions.md)
