@@ -7,6 +7,7 @@ class Builder {
     this.maxSteps = maxSteps;
 
     this._tree = {};
+    this._match = {};
     this._intents = {};
     this._actions = {};
 
@@ -49,6 +50,11 @@ class Builder {
     this._intents[intentId] = intentObj;
 
     return this;
+  }
+
+  match(intentId, fn) {
+    log.debug('Registering a global intent {0}', intentId);
+    this._match[intentId] = fn;
   }
 
   /**
@@ -235,6 +241,14 @@ class Builder {
 
   _runIntents(session, input) {
     return new Promise((resolve, reject) => {
+      log.silly('Running global intents');
+
+      for (let match in this._match) {
+        if (this.checkIntent(match, session) === false) continue;
+        this._match[match](session, input);
+        return resolve();
+      }
+
       const states = session._state;
 
       let i = states.length - 1;

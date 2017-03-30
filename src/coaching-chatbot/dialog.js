@@ -222,9 +222,6 @@ bot
       ['#CHANGE_MEETING_FREQUENCY', (session) => {
         session.beginDialog('/add_meeting_frequency');
       }],
-      ['#RESET', (session) => {
-        session.beginDialog('/reset');
-      }],
     ])
   .dialog(
     '/find_pair', [
@@ -270,6 +267,11 @@ bot
           session.next();
         }
       },
-    ]);
+    ])
+  .match(
+      '#RESET',
+      (session) => {
+        session.beginDialog('/reset');
+      });
 
 module.exports = bot;
