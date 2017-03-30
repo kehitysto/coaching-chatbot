@@ -57,7 +57,7 @@ export function addCommunicationMethod({ context, input }) {
       ...context,
       communicationMethods: {
         ...context.communicationMethods,
-        [method.name]: undefinedCommunicationInfo,
+        [method.identifier]: undefinedCommunicationInfo,
       },
     },
     result: method.infoRequestText,
@@ -100,6 +100,14 @@ export function addCommunicationInfo({ context, input }) {
 export function reset() {
   return Promise.resolve({
     context: {},
+  });
+}
+export function addMeetingFrequency( { context, input } ) {
+  return Promise.resolve({
+    context: {
+      ...context,
+      meetingFrequency: Formatter.getMeetingFrequencyIdentifierByInput(input),
+    },
   });
 }
 

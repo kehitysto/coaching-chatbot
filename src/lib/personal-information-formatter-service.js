@@ -1,7 +1,9 @@
 import log from '../lib/logger-service';
 import Strings from '../../src/coaching-chatbot/strings.json';
 import CommunicationMethods
- from '../../src/coaching-chatbot/communication-methods.json';
+from '../../src/coaching-chatbot/communication-methods.json';
+import MeetingFrequency
+from '../../src/coaching-chatbot/meeting-frequencies.json';
 
 const Formatter = {
   format,
@@ -9,6 +11,10 @@ const Formatter = {
   createProfile,
   getCommunicationMethods,
   getCommunicationMethodByInput,
+  createCommunicationMethodslist,
+  getCommunicationMethodsByIdentifier,
+  getMeetingFrequency,
+  getMeetingFrequencyIdentifierByInput,
 };
 
 export default Formatter;
@@ -34,6 +40,8 @@ function format(template, context) {
 
       if (name === 'profile') {
         return createProfile(context);
+      } else if (name === 'communicationMethods') {
+        return createCommunicationMethodslist(context);
       }
 
       return context[name] != undefined ? context[name] : match;
@@ -41,6 +49,18 @@ function format(template, context) {
   );
 
   return s;
+}
+
+function createCommunicationMethodslist(context) {
+  let a = [];
+  for ( let method in context.communicationMethods ) {
+    if ( method != null ) {
+      let methodname = getCommunicationMethodsByIdentifier(method);
+      a.push( methodname.name + ' (' + context
+      .communicationMethods[method] + ')');
+    }
+  }
+  return a.join('\n');
 }
 
 function createProfile(context) {
@@ -53,22 +73,51 @@ function createProfile(context) {
 
 function getCommunicationMethodByInput(input) {
   for (let i = 0; i < CommunicationMethods.length; i++) {
-    if (input.toLowerCase().includes(
+    if (input.toLowerCase()
+      .includes(
         CommunicationMethods[i].name.toLowerCase())) {
       return CommunicationMethods[i];
     }
   }
 }
 
-function getCommunicationMethods( context ) {
-  let communicationMethods = [];
-  for (let communicationMethod of CommunicationMethods) {
-    let a = (context.communicationMethods === undefined ||
-        context.communicationMethods[communicationMethod.name] === undefined);
-    communicationMethods.push({
-        name: `${communicationMethod.name}${a ? '' : ' (lisätty)'}`,
-        payload: communicationMethod.identifier,
+function getCommunicationMethodsByIdentifier(input) {
+  for (let i = 0; i < CommunicationMethods.length; i++) {
+    if (input === CommunicationMethods[i].identifier) {
+      return CommunicationMethods[i];
+    }
+  }
+}
+
+function getCommunicationMethods(context) {
+  return CommunicationMethods.reduce((l, m) => {
+    if (context.communicationMethods === undefined ||
+      context.communicationMethods[m.identifier] === undefined) {
+      l.push({
+        title: m.name,
+        payload: m.identifier,
       });
     }
-  return communicationMethods;
+    return l;
+  }, []);
+}
+
+function getMeetingFrequency(context) {
+  return MeetingFrequency.reduce((l, m) => {
+      l.push({
+        title: m.description,
+        payload: m.identifier,
+      });
+    return l;
+  }, []);
+}
+
+function getMeetingFrequencyIdentifierByInput(input) {
+  for (let i = 0; i < MeetingFrequency.length; i++) {
+    if (input.toLowerCase()
+      .includes(
+        MeetingFrequency[i].description.toLowerCase())) {
+      return MeetingFrequency[i].identifier;
+    }
+  }
 }

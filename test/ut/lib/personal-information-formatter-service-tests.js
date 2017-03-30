@@ -27,9 +27,11 @@ describe('Formatter service', function() {
       const template = '@UNCLEAR';
       const context = {};
 
-      const formatted = Formatter.formatFromTemplate(template, context);
+      const formatted = Formatter.formatFromTemplate(template,
+        context);
 
-      expect(Strings[template]).to.include(formatted);
+      expect(Strings[template])
+        .to.include(formatted);
     });
   });
 
@@ -150,56 +152,222 @@ describe('Formatter service', function() {
       const formatted = Formatter.format(template, context);
       assert(formatted === expected);
     });
-    it('should find right string to ask for right communication Method(Skype)',
-     function() {
-      const input = 'Skype';
 
-      const expected = {
-        identifier: 'SKYPE',
-        name: 'Skype',
-        infoRequestText: '@REQUEST_SKYPE_NAME' };
-      return expect(Formatter.getCommunicationMethodByInput(input)).to.deep
+    it('should get all communication methods', function() {
+
+      const communicationMethods = Formatter.getCommunicationMethods(
+        context);
+
+      const expected = [{
+          title: 'Skype',
+          payload: 'SKYPE',
+        },
+        {
+          title: 'Puhelin',
+          payload: 'PHONE',
+        },
+        {
+          title: 'Kahvila',
+          payload: 'CAFETERIA',
+        },
+      ];
+
+      return expect(communicationMethods)
+        .to.deep
         .equal(expected);
     });
-    it('should find right string to ask for right communication Method(Phonenumber)',
+
+    it(
+      'should find right string to ask for right communication Method(Skype)',
+      function() {
+        const input = 'Skype';
+
+        const expected = {
+          identifier: 'SKYPE',
+          name: 'Skype',
+          infoRequestText: '@REQUEST_SKYPE_NAME',
+        };
+
+        return expect(Formatter.getCommunicationMethodByInput(input))
+          .to.deep
+          .equal(expected);
+      });
+
+      it(
+        'should find right string to ask for right communication Method(Skype)',
+        function() {
+          const input = 'SKYPE';
+
+          const expected = {
+            identifier: 'SKYPE',
+            name: 'Skype',
+            infoRequestText: '@REQUEST_SKYPE_NAME',
+          };
+
+          return expect(Formatter.getCommunicationMethodsByIdentifier(input))
+            .to.deep
+            .equal(expected);
+        });
+
+
+    it(
+      'should not include skype in communication methods if it has been selected already',
+      function() {
+        const context = {
+          communicationMethods: {
+              SKYPE : '',
+          },
+        };
+
+        const communicationMethods = Formatter.getCommunicationMethods(
+          context);
+
+        const expected = [{
+            title: 'Puhelin',
+            payload: 'PHONE',
+          },
+          {
+            title: 'Kahvila',
+            payload: 'CAFETERIA',
+          },
+        ];
+
+        return expect(communicationMethods)
+          .to.deep
+          .equal(expected);
+      });
+
+    it(
+      'should find right string to ask for right communication Method(Phonenumber)',
       function() {
         const input = 'Kahvila';
         const expected = {
           identifier: 'CAFETERIA',
           name: 'Kahvila',
-          infoRequestText: '@REQUEST_PHONE_NUMBER' };
-        return expect(Formatter.getCommunicationMethodByInput(input)).to.deep
+          infoRequestText: '@REQUEST_PHONE_NUMBER',
+        };
+
+        return expect(Formatter.getCommunicationMethodByInput(input))
+          .to.deep
           .equal(expected);
-    });
-    it('should find right string to ask for right communication Method(CAFETERIA)',
+      });
+
+    it('should only include cafeteria in communication methods if the others have been selected',
+      function() {
+          const context = {
+              communicationMethods: {
+                  SKYPE: '',
+                  PHONE: '',
+              },
+          };
+
+        const communicationMethods = Formatter.getCommunicationMethods(
+          context);
+
+        const expected = [{
+          title: 'Kahvila',
+          payload: 'CAFETERIA',
+        }];
+
+        return expect(communicationMethods)
+          .to.deep
+          .equal(expected);
+      });
+
+    it(
+      'should find right string to ask for right communication Method(CAFETERIA)',
       function() {
         const input = 'Puhelin';
         const expected = {
           identifier: 'PHONE',
           name: 'Puhelin',
-          infoRequestText: '@REQUEST_PHONE_NUMBER' };
-        return expect(Formatter.getCommunicationMethodByInput(input)).to.deep
+          infoRequestText: '@REQUEST_PHONE_NUMBER',
+        };
+
+        return expect(Formatter.getCommunicationMethodByInput(input))
+          .to.deep
           .equal(expected);
-    });
-    it('should get all communication methods', function() {
-      const context = { context: {} };
-      const communicationMethods = Formatter.getCommunicationMethods(
-        context );
-      const expected = [{
-        name: 'Skype',
-        payload: 'SKYPE',
-      },
-      {
-        name: 'Puhelin',
-        payload: 'PHONE',
-      },
-      {
-        name: 'Kahvila',
-        payload: 'CAFETERIA',
-      }];
-      console.log(JSON.stringify(communicationMethods));
-      return expect(communicationMethods).to.deep
-        .equal(expected);
-    });
-  });
+      });
+      it(
+        'should retrun a array of added communication methods',
+        function() {
+          const context = {
+            communicationMethods: {
+                SKYPE : 'nickname',
+            },
+          };
+          return expect(Formatter.createCommunicationMethodslist(context))
+           .to.deep
+           .equal('Skype (nickname)');
+        }
+      );
+      it(
+        'should return an identifier(EVERY_WEEKDAY) for the frequeny meeting method',
+        function() {
+          const input = 'arkipäivisin';
+
+          const meetingFrequency = Formatter.getMeetingFrequencyIdentifierByInput(
+            input);
+
+          const expected = 'EVERY_WEEKDAY';
+
+          return expect(meetingFrequency)
+            .to.deep
+            .equal(expected);
+        });
+        it(
+          'should return an identifier(ONCE_A_WEEK) for the frequeny meeting method',
+          function() {
+            const input = 'kerran viikossa';
+
+            const meetingFrequency = Formatter.getMeetingFrequencyIdentifierByInput(
+              input);
+
+            const expected = 'ONCE_A_WEEK';
+
+            return expect(meetingFrequency)
+              .to.deep
+              .equal(expected);
+          });
+          it(
+            'should return an identifier(ONCE_EVERY_TWO_WEEKS) for the frequeny meeting method',
+            function() {
+              const input = 'Joka toinen viikko';
+
+              const meetingFrequency = Formatter.getMeetingFrequencyIdentifierByInput(
+                input);
+
+              const expected = 'ONCE_EVERY_TWO_WEEKS';
+
+              return expect(meetingFrequency)
+                .to.deep
+                .equal(expected);
+            });
+      it(
+        'should return an array of all possible meeting-frequencies',
+        function() {
+          const context = {};
+
+          const meetingFrequency = Formatter.getMeetingFrequency(
+            context);
+
+          const expected = [{
+              title: 'Arkipäivisin',
+              payload: 'EVERY_WEEKDAY',
+            },
+            {
+              title: 'Kerran viikossa',
+              payload: 'ONCE_A_WEEK',
+            },
+            {
+              title: 'Joka toinen viikko',
+              payload: 'ONCE_EVERY_TWO_WEEKS',
+            },
+          ];
+
+          return expect(meetingFrequency)
+            .to.deep
+            .equal(expected);
+        });
+      });
 });
