@@ -7,21 +7,26 @@ module.exports = {
           /^terve/i,
           /^tere/i,
           /^hei/i,
-          ],
+        ],
     },
 
     YES: {
         any: [
-          /^kyllä/i,
+          /^[kj]/i,
+          /^kyl(?:lä)?/i,
           /^j[ou]{2,}/i,
+          /^ok/i,
+          /^(?:oo)?koo/i,
           /^jep[as]?/i,
         ],
     },
 
     NO: {
         any: [
+          /^e/i,
           /^ei/i,
           /^en/i,
+          /^emmä/i,
         ],
     },
 
@@ -50,13 +55,13 @@ module.exports = {
     },
 
     NAME: {
-        any: /^(?:nimi|nimeä|nimeksi|nimekseni)/i,
+        any: /^(?:nimi|nimeä|nimeksi|nimekseni|nimeni)/i,
     },
 
     JOB: {
         any: [
-          /^ammat(?:tia?|iksi|ikseni)/i,
-          /^työ(?:tä|ksi|kseni)/i,
+          /^ammat(?:tia?|iksi|ikseni|tini)/i,
+          /^työ(?:tä|ksi|kseni|ni)/i,
         ],
     },
 
