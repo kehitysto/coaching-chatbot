@@ -3,7 +3,10 @@ import Builder from '../chatbot/builder';
 import strings from './strings.json';
 import * as actions from './actions';
 import * as intents from './intents';
-import Formatter from '../lib/personal-information-formatter-service';
+import PersonalInformationFormatter
+ from '../lib/personal-information-formatter-service';
+import CommunicationMethodsFormatter
+ from '../lib/communication-methods-formatter';
 
 const bot = new Builder(strings);
 
@@ -73,7 +76,7 @@ bot
       (session) => {
         session.runActions(['setJob']);
         session.addResult('@CONFIRM_JOB');
-        session.addResult('@INFORMATION_ABOUT_BUTTONS')
+        session.addResult('@INFORMATION_ABOUT_BUTTONS');
         session.endDialog();
       },
     ], [
@@ -112,7 +115,8 @@ bot
     '/add_communication_method', [
       (session) => {
         session.addResult('@REQUEST_COMMUNICATION_METHOD',
-          Formatter.getCommunicationMethods(session.context));
+          CommunicationMethodsFormatter
+            .getCommunicationMethods(session.context));
       },
       (session) => {
         if (session.checkIntent('#COMMUNICATION_METHODS')) {
@@ -154,7 +158,7 @@ bot
     '/add_meeting_frequency', [
       (session) => {
         session.addResult('@REQUEST_MEETING_FREQUENCY',
-        Formatter.getMeetingFrequency(session.context));
+        PersonalInformationFormatter.getMeetingFrequency(session.context));
       },
       (session) => {
         if (session.checkIntent('#MEETING_FREQUENCY')) {
@@ -176,7 +180,8 @@ bot
         session.runActions(['updateProfile']);
         if (!session.context.searching) {
           session.addResult('@DISPLAY_PROFILE',
-           Formatter.getPersonalInformationbuttons(session.context));
+           PersonalInformationFormatter
+              .getPersonalInformationbuttons(session.context));
         } else {
           session.runActions(['getAvailablePairs']);
         }

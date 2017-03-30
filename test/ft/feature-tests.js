@@ -3,7 +3,10 @@ process.env.RUN_ENV = 'dev';
 
 import Chatbot from '../../src/chatbot/chatbot-service';
 import dialog from '../../src/coaching-chatbot/dialog';
-import Formatter from '../../src/lib/personal-information-formatter-service';
+import PersonalInformationFormatter
+ from '../../src/lib/personal-information-formatter-service';
+import CommunicationMethodsFormatter
+ from '../../src/lib/communication-methods-formatter';
 import Strings from '../../src/coaching-chatbot/strings.json';
 import Sessions from '../../src/util/sessions-service';
 
@@ -106,7 +109,7 @@ describe('User story', function() {
             )
             .to.eventually.become([
               buildResponse(
-                Formatter.formatFromTemplate(
+                PersonalInformationFormatter.formatFromTemplate(
                   '@CONFIRM_NAME', this.userInformation)),
               buildResponse('@REQUEST_JOB'),
             ]);
@@ -123,10 +126,17 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, this.userInformation.job)
             )
-            .to.eventually.become( [buildResponse(Formatter.formatFromTemplate('@CONFIRM_JOB', this.userInformation)), buildResponse(Formatter.formatFromTemplate('@INFORMATION_ABOUT_BUTTONS')),
+            .to.eventually.become([
               buildResponse(
-                Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation), Formatter.getPersonalInformationbuttons(this.context)),
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@CONFIRM_JOB', this.userInformation)),
+              buildResponse(
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@INFORMATION_ABOUT_BUTTONS')),
+              buildResponse(
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation),
+                  PersonalInformationFormatter.getPersonalInformationbuttons(this.context)),
             ]);
         });
     });
@@ -144,11 +154,12 @@ describe('User story', function() {
                 'Lisää ikä ' + this.userInformation.age))
             .to.eventually.become([
               buildResponse(
-                Formatter.formatFromTemplate(
+                PersonalInformationFormatter.formatFromTemplate(
                   '@CONFIRM_AGE', this.userInformation)),
               buildResponse(
-                Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation), Formatter.getPersonalInformationbuttons(this.context)),
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation),
+                  PersonalInformationFormatter.getPersonalInformationbuttons(this.context)),
             ]);
         });
     });
@@ -168,8 +179,9 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse('@CONFIRM_PLACE'),
               buildResponse(
-                Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation), Formatter.getPersonalInformationbuttons(this.context)),
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation),
+                  PersonalInformationFormatter.getPersonalInformationbuttons(this.context)),
             ]);
         });
     });
@@ -203,7 +215,8 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'kyllä'))
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                Formatter.getCommunicationMethods(this.sessions.db.dump()[SESSION])),
+                CommunicationMethodsFormatter
+                  .getCommunicationMethods(this.sessions.db.dump()[SESSION])),
             ]);
         }
       );
@@ -225,7 +238,7 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'nickname'))
             .to.eventually.become([
-              buildResponse(Formatter.formatFromTemplate(
+              buildResponse(PersonalInformationFormatter.formatFromTemplate(
                 '@CONFIRM_COMMUNICATION_METHODS', {
                   communicationMethods: {
                     SKYPE: 'nickname'
@@ -249,7 +262,8 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'Kyllä'))
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                Formatter.getCommunicationMethods(this.sessions.db.dump()[SESSION])),
+                CommunicationMethodsFormatter
+                  .getCommunicationMethods(this.sessions.db.dump()[SESSION])),
             ]);
         }
       );
@@ -271,7 +285,7 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, '040-123123'))
             .to.eventually.become(
-              [buildResponse(Formatter.formatFromTemplate(
+              [buildResponse(PersonalInformationFormatter.formatFromTemplate(
                   '@CONFIRM_COMMUNICATION_METHODS', {
                     communicationMethods: {
                       SKYPE: 'nickname',
@@ -296,7 +310,8 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'Kyllä'))
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                Formatter.getCommunicationMethods(this.sessions.db.dump()[SESSION])),
+                CommunicationMethodsFormatter
+                  .getCommunicationMethods(this.sessions.db.dump()[SESSION])),
             ]);
         }
       );
@@ -318,7 +333,7 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, '040-123123'))
             .to.eventually.become([
-              buildResponse('@REQUEST_MEETING_FREQUENCY', Formatter
+              buildResponse('@REQUEST_MEETING_FREQUENCY', PersonalInformationFormatter
                .getMeetingFrequency(this.sessions.db.dump()[SESSION]))]);
         }
       );
@@ -351,7 +366,7 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'muuta tapaamisväliä'))
             .to.eventually.become([
-              buildResponse('@REQUEST_MEETING_FREQUENCY', Formatter
+              buildResponse('@REQUEST_MEETING_FREQUENCY', PersonalInformationFormatter
                .getMeetingFrequency(this.sessions.db.dump()[SESSION]))]);
         }
       );
