@@ -193,29 +193,29 @@ describe('Formatter service', function() {
           .equal(expected);
       });
 
-      it(
-        'should find right string to ask for right communication Method(Skype)',
-        function() {
-          const input = 'SKYPE';
+    it(
+      'should find right string to ask for right communication Method(Skype)',
+      function() {
+        const input = 'SKYPE';
 
-          const expected = {
-            identifier: 'SKYPE',
-            name: 'Skype',
-            infoRequestText: '@REQUEST_SKYPE_NAME',
-          };
+        const expected = {
+          identifier: 'SKYPE',
+          name: 'Skype',
+          infoRequestText: '@REQUEST_SKYPE_NAME',
+        };
 
-          return expect(Formatter.getCommunicationMethodsByIdentifier(input))
-            .to.deep
-            .equal(expected);
-        });
-
+        return expect(Formatter.getCommunicationMethodByIdentifier(
+            input))
+          .to.deep
+          .equal(expected);
+      });
 
     it(
       'should not include skype in communication methods if it has been selected already',
       function() {
         const context = {
           communicationMethods: {
-              SKYPE : '',
+            SKYPE: '',
           },
         };
 
@@ -252,14 +252,15 @@ describe('Formatter service', function() {
           .equal(expected);
       });
 
-    it('should only include cafeteria in communication methods if the others have been selected',
+    it(
+      'should only include cafeteria in communication methods if the others have been selected',
       function() {
-          const context = {
-              communicationMethods: {
-                  SKYPE: '',
-                  PHONE: '',
-              },
-          };
+        const context = {
+          communicationMethods: {
+            SKYPE: '',
+            PHONE: '',
+          },
+        };
 
         const communicationMethods = Formatter.getCommunicationMethods(
           context);
@@ -288,86 +289,132 @@ describe('Formatter service', function() {
           .to.deep
           .equal(expected);
       });
-      it(
-        'should retrun a array of added communication methods',
-        function() {
-          const context = {
-            communicationMethods: {
-                SKYPE : 'nickname',
-            },
-          };
-          return expect(Formatter.createCommunicationMethodslist(context))
-           .to.deep
-           .equal('Skype (nickname)');
-        }
-      );
-      it(
-        'should return an identifier(EVERY_WEEKDAY) for the frequeny meeting method',
-        function() {
-          const input = 'arkipäivisin';
+    it(
+      'should retrun a array of added communication methods',
+      function() {
+        const context = {
+          communicationMethods: {
+            SKYPE: 'nickname',
+          },
+        };
+        return expect(Formatter.createCommunicationMethodslist(
+            context))
+          .to.deep
+          .equal('Skype (nickname)');
+      }
+    );
+    it(
+      'should return an identifier(EVERY_WEEKDAY) for the frequeny meeting method',
+      function() {
+        const input = 'arkipäivisin';
 
-          const meetingFrequency = Formatter.getMeetingFrequencyIdentifierByInput(
-            input);
+        const meetingFrequency = Formatter.getMeetingFrequencyIdentifierByInput(
+          input);
 
-          const expected = 'EVERY_WEEKDAY';
+        const expected = 'EVERY_WEEKDAY';
 
-          return expect(meetingFrequency)
-            .to.deep
-            .equal(expected);
-        });
-        it(
-          'should return an identifier(ONCE_A_WEEK) for the frequeny meeting method',
-          function() {
-            const input = 'kerran viikossa';
-
-            const meetingFrequency = Formatter.getMeetingFrequencyIdentifierByInput(
-              input);
-
-            const expected = 'ONCE_A_WEEK';
-
-            return expect(meetingFrequency)
-              .to.deep
-              .equal(expected);
-          });
-          it(
-            'should return an identifier(ONCE_EVERY_TWO_WEEKS) for the frequeny meeting method',
-            function() {
-              const input = 'Joka toinen viikko';
-
-              const meetingFrequency = Formatter.getMeetingFrequencyIdentifierByInput(
-                input);
-
-              const expected = 'ONCE_EVERY_TWO_WEEKS';
-
-              return expect(meetingFrequency)
-                .to.deep
-                .equal(expected);
-            });
-      it(
-        'should return an array of all possible meeting-frequencies',
-        function() {
-          const context = {};
-
-          const meetingFrequency = Formatter.getMeetingFrequency(
-            context);
-
-          const expected = [{
-              title: 'Arkipäivisin',
-              payload: 'EVERY_WEEKDAY',
-            },
-            {
-              title: 'Kerran viikossa',
-              payload: 'ONCE_A_WEEK',
-            },
-            {
-              title: 'Joka toinen viikko',
-              payload: 'ONCE_EVERY_TWO_WEEKS',
-            },
-          ];
-
-          return expect(meetingFrequency)
-            .to.deep
-            .equal(expected);
-        });
+        return expect(meetingFrequency)
+          .to.deep
+          .equal(expected);
       });
+    it(
+      'should return an identifier(ONCE_A_WEEK) for the frequeny meeting method',
+      function() {
+        const input = 'kerran viikossa';
+
+        const meetingFrequency = Formatter.getMeetingFrequencyIdentifierByInput(
+          input);
+
+        const expected = 'ONCE_A_WEEK';
+
+        return expect(meetingFrequency)
+          .to.deep
+          .equal(expected);
+      });
+    it(
+      'should return an identifier(ONCE_EVERY_TWO_WEEKS) for the frequeny meeting method',
+      function() {
+        const input = 'Joka toinen viikko';
+
+        const meetingFrequency = Formatter.getMeetingFrequencyIdentifierByInput(
+          input);
+
+        const expected = 'ONCE_EVERY_TWO_WEEKS';
+
+        return expect(meetingFrequency)
+          .to.deep
+          .equal(expected);
+      });
+    it(
+      'should return an array of all possible meeting-frequencies',
+      function() {
+        const context = {};
+
+        const meetingFrequency = Formatter.getMeetingFrequency(
+          context);
+
+        const expected = [{
+            title: 'Arkipäivisin',
+            payload: 'EVERY_WEEKDAY',
+          },
+          {
+            title: 'Kerran viikossa',
+            payload: 'ONCE_A_WEEK',
+          },
+          {
+            title: 'Joka toinen viikko',
+            payload: 'ONCE_EVERY_TWO_WEEKS',
+          },
+        ];
+
+        return expect(meetingFrequency)
+          .to.deep
+          .equal(expected);
+      });
+
+    it(
+      'should format available pairs in a beautiful manner',
+      function() {
+        const dumps = [{
+            "id": "12345",
+            "context": {
+              "searching": true,
+              "name": "Pertti",
+              "communicationMethods": {
+                "SKYPE": "pertti_52",
+              },
+              "state": "/?0/profile?0/add_meeting_frequency?1",
+              "job": "muurari",
+              "age": "58",
+              "place": "Kuopio",
+              "meetingFrequency": "ONCE_A_WEEK",
+            },
+          },
+          {
+            "id": "67890",
+            "context": {
+              "searching": true,
+              "name": "Seppo",
+              "communicationMethods": {
+                "SKYPE": "sala.seppo42",
+                "CAFETERIA": "Salainen",
+              },
+              "state": "/?0/profile?0",
+              "job": "valastaja",
+              "age": "62",
+              "place": "Oulu",
+              "meetingFrequency": "ONCE_A_WEEK",
+            },
+          },
+        ];
+
+        const expected =
+          'Pertti, muurari, 58, Kuopio\n  - Skype\nSeppo, valastaja, 62, Oulu\n  - Skype\n  - Kahvila';
+
+        const beautifulPairs = Formatter.beautifyAvailablePairs(dumps);
+        return expect(beautifulPairs)
+          .to.deep
+          .equal(expected);
+      });
+  });
 });

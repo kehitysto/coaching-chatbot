@@ -12,9 +12,10 @@ const Formatter = {
   getCommunicationMethods,
   getCommunicationMethodByInput,
   createCommunicationMethodslist,
-  getCommunicationMethodsByIdentifier,
+  getCommunicationMethodByIdentifier,
   getMeetingFrequency,
   getMeetingFrequencyIdentifierByInput,
+  beautifyAvailablePairs,
 };
 
 export default Formatter;
@@ -56,13 +57,15 @@ function format(template, context) {
 
 function createCommunicationMethodslist(context) {
   let a = [];
+
   for ( let method in context.communicationMethods ) {
     if ( method != null ) {
-      let methodname = getCommunicationMethodsByIdentifier(method);
-      a.push( methodname.name + ' (' + context
+      let methodName = getCommunicationMethodByIdentifier(method);
+      a.push(methodName.name + ' (' + context
       .communicationMethods[method] + ')');
     }
   }
+
   return a.join('\n');
 }
 
@@ -84,12 +87,14 @@ function getCommunicationMethodByInput(input) {
   }
 }
 
-function getCommunicationMethodsByIdentifier(input) {
+function getCommunicationMethodByIdentifier(input) {
   for (let i = 0; i < CommunicationMethods.length; i++) {
     if (input === CommunicationMethods[i].identifier) {
       return CommunicationMethods[i];
     }
   }
+
+  return 'undefined';
 }
 
 function getCommunicationMethods(context) {
@@ -123,4 +128,21 @@ function getMeetingFrequencyIdentifierByInput(input) {
       return MeetingFrequency[i].identifier;
     }
   }
+
+  return 'undefined';
+}
+
+function createPairString(context) {
+    const s =
+        Object.keys(context.communicationMethods)
+        .filter((v) => v)
+        .map((v) => `  - ${getCommunicationMethodByIdentifier(v).name}`)
+        .join('\n');
+
+    return `${createProfile(context)}\n${s}`;
+}
+
+function beautifyAvailablePairs(dumps) {
+    const a = dumps.map((d) => createPairString(d.context));
+    return a.join('\n');
 }

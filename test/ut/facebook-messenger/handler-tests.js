@@ -69,21 +69,6 @@ describe('Facebook Messenger service handler', function() {
           });
       });
 
-    it('should return some response on some input with POST', function() {
-      let s = sinon.stub();
-      let expectedResponse = 'StatusCodeError';
-
-      const ret = handler.handler(mockEvent, {}, s);
-
-      expect(ret)
-        .to.be.a('Promise');
-
-      return expect(ret)
-        .to.eventually.be.fulfilled.then(() => {
-          assert(s.firstCall.args[0].name === expectedResponse);
-        });
-    });
-
     it('should return error on unsupported HTTP method', function() {
       let s = sinon.stub();
       let expectedResponse = 'Unknown event';

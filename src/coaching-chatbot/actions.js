@@ -121,6 +121,7 @@ export function markUserAsSearching({ context }) {
   });
 }
 
+
 export function getAvailablePairs({ context }) {
   return new Promise((resolve, reject) => {
     let sessions = new Sessions();
@@ -128,7 +129,7 @@ export function getAvailablePairs({ context }) {
         .then((pairs) => {
           log.debug('build result');
           if (pairs.length > 0) {
-            resolve({ result: JSON.stringify(pairs) });
+            resolve({ result: Formatter.beautifyAvailablePairs(pairs) });
           } else {
             resolve({ result: '@NO_PAIRS_AVAILABLE' });
           }
