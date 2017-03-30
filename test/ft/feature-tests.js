@@ -344,12 +344,13 @@ describe('User story', function() {
     'As a registered user I want to provide my preferred meeting frequency with quick replies',
     function() {
       it(
-        'after providing preferred meeting frequency as "every weekdays", MB should give instructions for changing the meeting frequenecy',
+        'after providing preferred meeting frequency as "every weekdays", it should tell that no users are searching for a peer',
         function() {
           return expect(
               this.bot.receive(SESSION, 'Arkipäivisin'))
             .to.eventually.become([
               buildResponse('@CHANGE_MEETING_FREQUENCY'),
+              buildResponse('@NO_PAIRS_AVAILABLE'),
             ]);
         }
       );

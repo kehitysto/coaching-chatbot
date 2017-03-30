@@ -19,14 +19,17 @@ module.exports = class InMemoryProvider {
 
   getAvailablePairs(id, meetingFrequency) {
     return new Promise((resolve, reject) => {
+      log.silly('Id: {0}; Frequency: {1}', id, meetingFrequency);
+
       let pairs = [];
       for (let sessionId in this.db) {
-        if (!{}.hasOwnProperty.call(actions, actionId)) continue;
+        if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
 
         log.silly('Evaluating possible pair {0}', sessionId);
         if (sessionId === id) continue;
         if (this.db[sessionId]['searching'] === true &&
-            this.db[sessionId]['meetingFrequency'] == meetingFrequency) {
+            this.db[sessionId]['meetingFrequency'] === meetingFrequency) {
+          log.silly('Found a valid pair!');
           pairs.push(this.db[sessionId]);
         }
       }

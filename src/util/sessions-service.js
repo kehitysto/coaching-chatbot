@@ -28,7 +28,7 @@ module.exports = class Sessions {
     return this.db.write(id, context);
   }
 
-  getAvailablePairs(meetingFrequency) {
-    return this.db.getAvailablePairs(meetingFrequency);
+  getAvailablePairs(id, meetingFrequency) {
+    return this.db.getAvailablePairs(id, meetingFrequency);
   }
 };
