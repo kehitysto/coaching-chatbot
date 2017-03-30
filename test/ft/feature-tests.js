@@ -340,7 +340,7 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'Arkipäivisin'))
             .to.eventually.become([
-              buildResponse('Kiitos. Halutessasi voit muuttaa tapaamisväliä kirjoittamalla "muuta tapaamisväliä".'),
+              buildResponse('@CHANGE_MEETING_FREQUENCY'),
               buildResponse('@DISPLAY_PAIRS'),
             ]);
         }
