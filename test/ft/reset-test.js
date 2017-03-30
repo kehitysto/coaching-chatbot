@@ -124,10 +124,11 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, this.userInformation.job)
             )
-            .to.eventually.become([
-              buildResponse(
-                Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
+            .to.eventually.become(
+                [buildResponse(Formatter.formatFromTemplate('@CONFIRM_JOB', this.userInformation)), buildResponse(Formatter.formatFromTemplate('@INFORMATION_ABOUT_BUTTONS')),
+                  buildResponse(
+                    Formatter.formatFromTemplate(
+                      '@DISPLAY_PROFILE', this.userInformation), Formatter.getPersonalInformationbuttons(this.context)),
             ]);
         });
     });
@@ -149,7 +150,7 @@ describe('User story', function() {
                   '@CONFIRM_AGE', this.userInformation)),
               buildResponse(
                 Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
+                  '@DISPLAY_PROFILE', this.userInformation), Formatter.getPersonalInformationbuttons(this.context)),
             ]);
         });
     });
@@ -170,7 +171,7 @@ describe('User story', function() {
               buildResponse('@CONFIRM_PLACE'),
               buildResponse(
                 Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
+                  '@DISPLAY_PROFILE', this.userInformation), Formatter.getPersonalInformationbuttons(this.context)),
             ]);
         });
     });
@@ -209,7 +210,7 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse(
                 Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
+                  '@DISPLAY_PROFILE', this.userInformation), Formatter.getPersonalInformationbuttons(this.context)),
             ]);
         });
 

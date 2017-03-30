@@ -4,6 +4,8 @@ import CommunicationMethods
 from '../../src/coaching-chatbot/communication-methods.json';
 import MeetingFrequency
 from '../../src/coaching-chatbot/meeting-frequencies.json';
+import PersonalInformation
+from '../../src/coaching-chatbot/personal-information.json';
 
 const Formatter = {
   format,
@@ -15,6 +17,7 @@ const Formatter = {
   getCommunicationMethodsByIdentifier,
   getMeetingFrequency,
   getMeetingFrequencyIdentifierByInput,
+  getPersonalInformationbuttons,
 };
 
 export default Formatter;
@@ -107,6 +110,15 @@ function getCommunicationMethods(context) {
 
 function getMeetingFrequency(context) {
   return MeetingFrequency.reduce((l, m) => {
+      l.push({
+        title: m.description,
+        payload: m.identifier,
+      });
+    return l;
+  }, []);
+}
+function getPersonalInformationbuttons(context) {
+  return PersonalInformation.reduce((l, m) => {
       l.push({
         title: m.description,
         payload: m.identifier,
