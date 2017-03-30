@@ -54,6 +54,7 @@ bot
         session.beginDialog('/set_job');
       },
       (session) => {
+        session.addResult('@INFORMATION_ABOUT_BUTTONS');
         session.switchDialog('/profile');
       },
     ])
