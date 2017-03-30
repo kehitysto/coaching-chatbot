@@ -1,7 +1,9 @@
 import log from '../lib/logger-service';
-
+import PersonalInformationFormatter
+ from '../lib/personal-information-formatter-service';
+import CommunicationMethodsFormatter
+ from '../lib/communication-methods-formatter';
 import Sessions from '../util/sessions-service';
-import Formatter from '../lib/personal-information-formatter-service';
 
 export function setName({ context, input }) {
   return Promise.resolve({
@@ -40,7 +42,7 @@ export function setPlace({ context, input }) {
 }
 
 export function updateProfile({ context, userData }) {
-  let profile = Formatter.createProfile(context);
+  let profile = PersonalInformationFormatter.createProfile(context);
 
   return Promise.resolve({
     userData: {
@@ -52,7 +54,8 @@ export function updateProfile({ context, userData }) {
 
 export function addCommunicationMethod({ context, input }) {
   let undefinedCommunicationInfo = 'UNDEFINED_COMMUNICATION_INFO';
-  let method = Formatter.getCommunicationMethodByInput(input);
+  let method = CommunicationMethodsFormatter
+    .getCommunicationMethodByInput(input);
   return Promise.resolve({
     context: {
       ...context,
@@ -107,7 +110,8 @@ export function addMeetingFrequency( { context, input } ) {
   return Promise.resolve({
     context: {
       ...context,
-      meetingFrequency: Formatter.getMeetingFrequencyIdentifierByInput(input),
+      meetingFrequency: PersonalInformationFormatter
+        .getMeetingFrequencyIdentifierByInput(input),
     },
   });
 }
