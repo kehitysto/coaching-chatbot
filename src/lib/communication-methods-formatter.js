@@ -4,7 +4,7 @@ import CommunicationMethods
 const CommunicationMethodsFormatter = {
   getCommunicationMethods,
   getCommunicationMethodByInput,
-  getCommunicationMethodsByIdentifier,
+  getCommunicationMethodByIdentifier,
   createCommunicationMethodslist,
 };
 
@@ -14,7 +14,7 @@ function createCommunicationMethodslist(context) {
   let a = [];
   for ( let method in context.communicationMethods ) {
     if ( method != null ) {
-      let methodname = getCommunicationMethodsByIdentifier(method);
+      let methodname = getCommunicationMethodByIdentifier(method);
       a.push( methodname.name + ' (' + context
       .communicationMethods[method] + ')');
     }
@@ -32,7 +32,7 @@ function getCommunicationMethodByInput(input) {
   }
 }
 
-function getCommunicationMethodsByIdentifier(input) {
+function getCommunicationMethodByIdentifier(input) {
   for (let i = 0; i < CommunicationMethods.length; i++) {
     if (input === CommunicationMethods[i].identifier) {
       return CommunicationMethods[i];

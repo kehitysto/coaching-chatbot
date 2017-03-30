@@ -75,7 +75,7 @@ describe('Communication methods formatter', function() {
     });
   });
 
-  describe('#getCommunicationMethodsByIdentifier()', function() {
+  describe('#getCommunicationMethodByIdentifier()', function() {
       it(
         'should find right string to ask for right communication Method(Skype)',
         function() {
@@ -86,7 +86,7 @@ describe('Communication methods formatter', function() {
             infoRequestText: '@REQUEST_SKYPE_NAME',
           };
           return expect(CommunicationMethodsFormatter
-            .getCommunicationMethodsByIdentifier(input))
+            .getCommunicationMethodByIdentifier(input))
             .to.deep
             .equal(expected);
         });

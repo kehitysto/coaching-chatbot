@@ -1,5 +1,7 @@
 import PersonalInformationFormatter
- from '../../../src/lib/personal-information-formatter-service';
+from '../../../src/lib/personal-information-formatter-service';
+import PairFormatter
+from '../../../src/lib/pair-formatter';
 import Strings from '../../../src/coaching-chatbot/strings.json';
 
 var assert = require('assert');
@@ -43,7 +45,8 @@ describe('Formatter service', function() {
       };
 
       const expected = 'Pertti';
-      const formatted = PersonalInformationFormatter.format(template, context);
+      const formatted = PersonalInformationFormatter.format(
+        template, context);
       assert(formatted === expected);
     });
 
@@ -55,7 +58,8 @@ describe('Formatter service', function() {
       };
 
       const expected = 'Cook';
-      const formatted = PersonalInformationFormatter.format(template, context);
+      const formatted = PersonalInformationFormatter.format(
+        template, context);
       assert(formatted === expected);
     });
 
@@ -67,7 +71,8 @@ describe('Formatter service', function() {
       };
 
       const expected = '45';
-      const formatted = PersonalInformationFormatter.format(template, context);
+      const formatted = PersonalInformationFormatter.format(
+        template, context);
       assert(formatted === expected);
     });
 
@@ -79,7 +84,8 @@ describe('Formatter service', function() {
       };
 
       const expected = 'Texas';
-      const formatted = PersonalInformationFormatter.format(template, context);
+      const formatted = PersonalInformationFormatter.format(
+        template, context);
       assert(formatted === expected);
     });
 
@@ -91,7 +97,8 @@ describe('Formatter service', function() {
       };
 
       const expected = 'Pertti';
-      const formatted = PersonalInformationFormatter.format(template, context);
+      const formatted = PersonalInformationFormatter.format(
+        template, context);
       assert(formatted === expected);
     });
 
@@ -104,7 +111,8 @@ describe('Formatter service', function() {
       };
 
       const expected = 'Pertti, Cook';
-      const formatted = PersonalInformationFormatter.format(template, context);
+      const formatted = PersonalInformationFormatter.format(
+        template, context);
       assert(formatted === expected);
     });
 
@@ -118,7 +126,8 @@ describe('Formatter service', function() {
       };
 
       const expected = 'Pertti, Cook, 45';
-      const formatted = PersonalInformationFormatter.format(template, context);
+      const formatted = PersonalInformationFormatter.format(
+        template, context);
       assert(formatted === expected);
     });
 
@@ -156,66 +165,115 @@ describe('Formatter service', function() {
   });
 
   describe('#getMeetingFrequencyIdentifierByInput()', function() {
-      it(
-        'should return an identifier(EVERY_WEEKDAY) for the frequeny meeting method',
-        function() {
-          const input = 'arkipäivisin';
-          const meetingFrequency = PersonalInformationFormatter
-            .getMeetingFrequencyIdentifierByInput(input);
-          const expected = 'EVERY_WEEKDAY';
-          return expect(meetingFrequency)
-            .to.deep
-            .equal(expected);
-        });
-
-        it(
-          'should return an identifier(ONCE_A_WEEK) for the frequeny meeting method',
-          function() {
-            const input = 'kerran viikossa';
-            const meetingFrequency = PersonalInformationFormatter
-              .getMeetingFrequencyIdentifierByInput(input);
-            const expected = 'ONCE_A_WEEK';
-            return expect(meetingFrequency)
-              .to.deep
-              .equal(expected);
-          });
-
-          it(
-            'should return an identifier(ONCE_EVERY_TWO_WEEKS) for the frequeny meeting method',
-            function() {
-              const input = 'Joka toinen viikko';
-              const meetingFrequency = PersonalInformationFormatter
-                .getMeetingFrequencyIdentifierByInput(input);
-              const expected = 'ONCE_EVERY_TWO_WEEKS';
-              return expect(meetingFrequency)
-                .to.deep
-                .equal(expected);
-            });
+    it(
+      'should return an identifier (EVERY_WEEKDAY) for the frequeny meeting method',
+      function() {
+        const input = 'arkipäivisin';
+        const meetingFrequency = PersonalInformationFormatter
+          .getMeetingFrequencyIdentifierByInput(input);
+        const expected = 'EVERY_WEEKDAY';
+        return expect(meetingFrequency)
+          .to.deep
+          .equal(expected);
       });
 
-      describe('#getMeetingFrequency', function() {
-      it(
-        'should return an array of all possible meeting-frequencies',
-        function() {
-          const context = {};
-          const meetingFrequency = PersonalInformationFormatter
-            .getMeetingFrequency(context);
-          const expected = [{
-              title: 'Arkipäivisin',
-              payload: 'EVERY_WEEKDAY',
-            },
-            {
-              title: 'Kerran viikossa',
-              payload: 'ONCE_A_WEEK',
-            },
-            {
-              title: 'Joka toinen viikko',
-              payload: 'ONCE_EVERY_TWO_WEEKS',
-            },
-          ];
-          return expect(meetingFrequency)
-            .to.deep
-            .equal(expected);
-        });
+    it(
+      'should return an identifier (ONCE_A_WEEK) for the frequency meeting method',
+      function() {
+        const input = 'kerran viikossa';
+        const meetingFrequency = PersonalInformationFormatter
+          .getMeetingFrequencyIdentifierByInput(input);
+        const expected = 'ONCE_A_WEEK';
+        return expect(meetingFrequency)
+          .to.deep
+          .equal(expected);
       });
+
+    it(
+      'should return an identifier(ONCE_EVERY_TWO_WEEKS) for the frequeny meeting method',
+      function() {
+        const input = 'Joka toinen viikko';
+        const meetingFrequency = PersonalInformationFormatter
+          .getMeetingFrequencyIdentifierByInput(input);
+        const expected = 'ONCE_EVERY_TWO_WEEKS';
+        return expect(meetingFrequency)
+          .to.deep
+          .equal(expected);
+      });
+  });
+
+  describe('#getMeetingFrequency', function() {
+    it(
+      'should return an array of all possible meeting-frequencies',
+      function() {
+        const context = {};
+        const meetingFrequency = PersonalInformationFormatter
+          .getMeetingFrequency(context);
+        const expected = [{
+            title: 'Arkipäivisin',
+            payload: 'EVERY_WEEKDAY',
+          },
+          {
+            title: 'Kerran viikossa',
+            payload: 'ONCE_A_WEEK',
+          },
+          {
+            "payload": "ONCE_EVERY_TWO_WEEKS",
+            "title": "Joka toinen viikko"
+          },
+        ];
+        return expect(meetingFrequency)
+          .to.deep
+          .equal(expected);
+      });
+  });
+
+  describe('#beautifyAvailablePairs', function() {
+    it(
+      'should return a beautiful string constisting of available pairs',
+      function() {
+        const dumps = [{
+            "id": "12345",
+            "context": {
+              "searching": true,
+              "name": "Pertti",
+              "communicationMethods": {
+                "SKYPE": "pertti_52"
+              },
+              "state": "/?0/profile?0/add_meeting_frequency?1",
+              "job": "muurari",
+              "age": "58",
+              "place": "Kuopio",
+              "meetingFrequency": "ONCE_A_WEEK"
+            }
+          },
+          {
+            "id": "67890",
+            "context": {
+              "searching": true,
+              "name": "Seppo",
+              "communicationMethods": {
+                "SKYPE": "sala.seppo42",
+                "CAFETERIA": "Salainen"
+              },
+              "state": "/?0/profile?0",
+              "job": "valastaja",
+              "age": "62",
+              "place": "Oulu",
+              "meetingFrequency": "ONCE_A_WEEK"
+            }
+          }
+        ];
+
+        const expected =
+          'Pertti, muurari, 58, Kuopio\n  - Skype\nSeppo, valastaja, 62, Oulu\n  - Skype\n  - Kahvila';
+
+        const beautifulPairs = PairFormatter.beautifyAvailablePairs(
+          dumps);
+        return expect(beautifulPairs)
+          .to.deep
+          .equal(expected);
+
+      });
+  });
 });
