@@ -1,6 +1,7 @@
-import sinon from 'sinon';
-
-import Formatter from '../../../src/lib/personal-information-formatter-service';
+import PersonalInformationFormatter
+from '../../../src/lib/personal-information-formatter-service';
+import PairFormatter
+from '../../../src/lib/pair-formatter';
 import Strings from '../../../src/coaching-chatbot/strings.json';
 
 var assert = require('assert');
@@ -18,8 +19,8 @@ describe('Formatter service', function() {
       };
       const expected = Strings['@CONFIRM_AGE'].replace('{age}',
         context.age);
-      const formatted = Formatter.formatFromTemplate(templateName,
-        context);
+      const formatted = PersonalInformationFormatter
+        .formatFromTemplate(templateName, context);
       assert(formatted === expected);
     });
 
@@ -27,8 +28,8 @@ describe('Formatter service', function() {
       const template = '@UNCLEAR';
       const context = {};
 
-      const formatted = Formatter.formatFromTemplate(template,
-        context);
+      const formatted = PersonalInformationFormatter
+        .formatFromTemplate(template, context);
 
       expect(Strings[template])
         .to.include(formatted);
@@ -44,7 +45,8 @@ describe('Formatter service', function() {
       };
 
       const expected = 'Pertti';
-      const formatted = Formatter.format(template, context);
+      const formatted = PersonalInformationFormatter.format(
+        template, context);
       assert(formatted === expected);
     });
 
@@ -56,7 +58,8 @@ describe('Formatter service', function() {
       };
 
       const expected = 'Cook';
-      const formatted = Formatter.format(template, context);
+      const formatted = PersonalInformationFormatter.format(
+        template, context);
       assert(formatted === expected);
     });
 
@@ -68,7 +71,8 @@ describe('Formatter service', function() {
       };
 
       const expected = '45';
-      const formatted = Formatter.format(template, context);
+      const formatted = PersonalInformationFormatter.format(
+        template, context);
       assert(formatted === expected);
     });
 
@@ -80,7 +84,8 @@ describe('Formatter service', function() {
       };
 
       const expected = 'Texas';
-      const formatted = Formatter.format(template, context);
+      const formatted = PersonalInformationFormatter.format(
+        template, context);
       assert(formatted === expected);
     });
 
@@ -92,7 +97,8 @@ describe('Formatter service', function() {
       };
 
       const expected = 'Pertti';
-      const formatted = Formatter.format(template, context);
+      const formatted = PersonalInformationFormatter.format(
+        template, context);
       assert(formatted === expected);
     });
 
@@ -105,7 +111,8 @@ describe('Formatter service', function() {
       };
 
       const expected = 'Pertti, Cook';
-      const formatted = Formatter.format(template, context);
+      const formatted = PersonalInformationFormatter.format(
+        template, context);
       assert(formatted === expected);
     });
 
@@ -119,7 +126,8 @@ describe('Formatter service', function() {
       };
 
       const expected = 'Pertti, Cook, 45';
-      const formatted = Formatter.format(template, context);
+      const formatted = PersonalInformationFormatter.format(
+        template, context);
       assert(formatted === expected);
     });
 
@@ -135,7 +143,8 @@ describe('Formatter service', function() {
         };
 
         const expected = 'Pertti, Cook, 45, Texas';
-        const formatted = Formatter.format(template, context);
+        const formatted = PersonalInformationFormatter
+          .format(template, context);
         assert(formatted === expected);
       });
 
@@ -149,210 +158,57 @@ describe('Formatter service', function() {
       };
 
       const expected = 'Pertti, Cook, Texas';
-      const formatted = Formatter.format(template, context);
+      const formatted = PersonalInformationFormatter
+        .format(template, context);
       assert(formatted === expected);
     });
+  });
 
-    it('should get all communication methods', function() {
-
-      const communicationMethods = Formatter.getCommunicationMethods(
-        context);
-
-      const expected = [{
-          title: 'Skype',
-          payload: 'SKYPE',
-        },
-        {
-          title: 'Puhelin',
-          payload: 'PHONE',
-        },
-        {
-          title: 'Kahvila',
-          payload: 'CAFETERIA',
-        },
-      ];
-
-      return expect(communicationMethods)
-        .to.deep
-        .equal(expected);
-    });
-
+  describe('#getMeetingFrequencyIdentifierByInput()', function() {
     it(
-      'should find right string to ask for right communication Method(Skype)',
-      function() {
-        const input = 'Skype';
-
-        const expected = {
-          identifier: 'SKYPE',
-          name: 'Skype',
-          infoRequestText: '@REQUEST_SKYPE_NAME',
-        };
-
-        return expect(Formatter.getCommunicationMethodByInput(input))
-          .to.deep
-          .equal(expected);
-      });
-
-    it(
-      'should find right string to ask for right communication Method(Skype)',
-      function() {
-        const input = 'SKYPE';
-
-        const expected = {
-          identifier: 'SKYPE',
-          name: 'Skype',
-          infoRequestText: '@REQUEST_SKYPE_NAME',
-        };
-
-        return expect(Formatter.getCommunicationMethodByIdentifier(
-            input))
-          .to.deep
-          .equal(expected);
-      });
-
-    it(
-      'should not include skype in communication methods if it has been selected already',
-      function() {
-        const context = {
-          communicationMethods: {
-            SKYPE: '',
-          },
-        };
-
-        const communicationMethods = Formatter.getCommunicationMethods(
-          context);
-
-        const expected = [{
-            title: 'Puhelin',
-            payload: 'PHONE',
-          },
-          {
-            title: 'Kahvila',
-            payload: 'CAFETERIA',
-          },
-        ];
-
-        return expect(communicationMethods)
-          .to.deep
-          .equal(expected);
-      });
-
-    it(
-      'should find right string to ask for right communication Method(Phonenumber)',
-      function() {
-        const input = 'Kahvila';
-        const expected = {
-          identifier: 'CAFETERIA',
-          name: 'Kahvila',
-          infoRequestText: '@REQUEST_PHONE_NUMBER',
-        };
-
-        return expect(Formatter.getCommunicationMethodByInput(input))
-          .to.deep
-          .equal(expected);
-      });
-
-    it(
-      'should only include cafeteria in communication methods if the others have been selected',
-      function() {
-        const context = {
-          communicationMethods: {
-            SKYPE: '',
-            PHONE: '',
-          },
-        };
-
-        const communicationMethods = Formatter.getCommunicationMethods(
-          context);
-
-        const expected = [{
-          title: 'Kahvila',
-          payload: 'CAFETERIA',
-        }];
-
-        return expect(communicationMethods)
-          .to.deep
-          .equal(expected);
-      });
-
-    it(
-      'should find right string to ask for right communication Method(CAFETERIA)',
-      function() {
-        const input = 'Puhelin';
-        const expected = {
-          identifier: 'PHONE',
-          name: 'Puhelin',
-          infoRequestText: '@REQUEST_PHONE_NUMBER',
-        };
-
-        return expect(Formatter.getCommunicationMethodByInput(input))
-          .to.deep
-          .equal(expected);
-      });
-    it(
-      'should retrun a array of added communication methods',
-      function() {
-        const context = {
-          communicationMethods: {
-            SKYPE: 'nickname',
-          },
-        };
-        return expect(Formatter.createCommunicationMethodslist(
-            context))
-          .to.deep
-          .equal('Skype (nickname)');
-      }
-    );
-    it(
-      'should return an identifier(EVERY_WEEKDAY) for the frequeny meeting method',
+      'should return an identifier (EVERY_WEEKDAY) for the frequeny meeting method',
       function() {
         const input = 'arkipäivisin';
-
-        const meetingFrequency = Formatter.getMeetingFrequencyIdentifierByInput(
-          input);
-
+        const meetingFrequency = PersonalInformationFormatter
+          .getMeetingFrequencyIdentifierByInput(input);
         const expected = 'EVERY_WEEKDAY';
-
         return expect(meetingFrequency)
           .to.deep
           .equal(expected);
       });
+
     it(
-      'should return an identifier(ONCE_A_WEEK) for the frequeny meeting method',
+      'should return an identifier (ONCE_A_WEEK) for the frequency meeting method',
       function() {
         const input = 'kerran viikossa';
-
-        const meetingFrequency = Formatter.getMeetingFrequencyIdentifierByInput(
-          input);
-
+        const meetingFrequency = PersonalInformationFormatter
+          .getMeetingFrequencyIdentifierByInput(input);
         const expected = 'ONCE_A_WEEK';
-
         return expect(meetingFrequency)
           .to.deep
           .equal(expected);
       });
+
     it(
       'should return an identifier(ONCE_EVERY_TWO_WEEKS) for the frequeny meeting method',
       function() {
         const input = 'Joka toinen viikko';
-
-        const meetingFrequency = Formatter.getMeetingFrequencyIdentifierByInput(
-          input);
-
+        const meetingFrequency = PersonalInformationFormatter
+          .getMeetingFrequencyIdentifierByInput(input);
         const expected = 'ONCE_EVERY_TWO_WEEKS';
-
         return expect(meetingFrequency)
           .to.deep
           .equal(expected);
       });
+  });
+
+  describe('#getMeetingFrequency', function() {
     it(
       'should return an array of all possible meeting-frequencies',
       function() {
         const context = {};
-
-        const meetingFrequency = Formatter.getMeetingFrequency(
-          context);
-
+        const meetingFrequency = PersonalInformationFormatter
+          .getMeetingFrequency(context);
         const expected = [{
             title: 'Arkipäivisin',
             payload: 'EVERY_WEEKDAY',
@@ -362,18 +218,19 @@ describe('Formatter service', function() {
             payload: 'ONCE_A_WEEK',
           },
           {
-            title: 'Joka toinen viikko',
-            payload: 'ONCE_EVERY_TWO_WEEKS',
+            "payload": "ONCE_EVERY_TWO_WEEKS",
+            "title": "Joka toinen viikko"
           },
         ];
-
         return expect(meetingFrequency)
           .to.deep
           .equal(expected);
       });
+  });
 
+  describe('#beautifyAvailablePairs', function() {
     it(
-      'should format available pairs in a beautiful manner',
+      'should return a beautiful string constisting of available pairs',
       function() {
         const dumps = [{
             "id": "12345",
@@ -381,14 +238,14 @@ describe('Formatter service', function() {
               "searching": true,
               "name": "Pertti",
               "communicationMethods": {
-                "SKYPE": "pertti_52",
+                "SKYPE": "pertti_52"
               },
               "state": "/?0/profile?0/add_meeting_frequency?1",
               "job": "muurari",
               "age": "58",
               "place": "Kuopio",
-              "meetingFrequency": "ONCE_A_WEEK",
-            },
+              "meetingFrequency": "ONCE_A_WEEK"
+            }
           },
           {
             "id": "67890",
@@ -397,24 +254,26 @@ describe('Formatter service', function() {
               "name": "Seppo",
               "communicationMethods": {
                 "SKYPE": "sala.seppo42",
-                "CAFETERIA": "Salainen",
+                "CAFETERIA": "Salainen"
               },
               "state": "/?0/profile?0",
               "job": "valastaja",
               "age": "62",
               "place": "Oulu",
-              "meetingFrequency": "ONCE_A_WEEK",
-            },
-          },
+              "meetingFrequency": "ONCE_A_WEEK"
+            }
+          }
         ];
 
         const expected =
           'Pertti, muurari, 58, Kuopio\n  - Skype\nSeppo, valastaja, 62, Oulu\n  - Skype\n  - Kahvila';
 
-        const beautifulPairs = Formatter.beautifyAvailablePairs(dumps);
+        const beautifulPairs = PairFormatter.beautifyAvailablePairs(
+          dumps);
         return expect(beautifulPairs)
           .to.deep
           .equal(expected);
+
       });
   });
 });
