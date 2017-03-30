@@ -17,7 +17,7 @@ module.exports = {
           /^j[ou]{2,}/i,
           /^ok/i,
           /^(?:oo)?koo/i,
-          /^jep[as]?/i
+          /^jep[as]?/i,
         ],
     },
 
@@ -26,7 +26,7 @@ module.exports = {
           /^e/i,
           /^ei/i,
           /^en/i,
-          /^emmä/i
+          /^emmä/i,
         ],
     },
 
@@ -61,7 +61,7 @@ module.exports = {
     JOB: {
         any: [
           /^ammat(?:tia?|iksi|ikseni|tini)/i,
-          /^työ(?:tä|ksi|kseni|ni)/i
+          /^työ(?:tä|ksi|kseni|ni)/i,
         ],
     },
 
