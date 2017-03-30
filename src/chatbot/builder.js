@@ -2,11 +2,12 @@ import log from '../lib/logger-service';
 
 import Session from './session';
 
-module.exports = class Builder {
+class Builder {
   constructor(strings, maxSteps = 5) {
     this.maxSteps = maxSteps;
 
     this._tree = {};
+    this._match = {};
     this._intents = {};
     this._actions = {};
 
@@ -51,6 +52,11 @@ module.exports = class Builder {
     return this;
   }
 
+  match(intentId, fn) {
+    log.debug('Registering a global intent {0}', intentId);
+    this._match[intentId] = fn;
+  }
+
   /**
    * Register an action with the bot
    * @param {string} actionId ID for the action
@@ -89,18 +95,23 @@ module.exports = class Builder {
       input: input || session.getInput(),
     };
     const promise = Promise.resolve(this._actions[actionId](actionData))
-        .then((result) => {
-          if (result.context) {
-            log.debug('Updating context: {0}',
-                JSON.stringify(result.context));
-            session.context = result.context;
-          }
-          if (result.userData) {
-            log.debug('Updating userData: {0}',
-                JSON.stringify(result.userData));
-            session.setUserData(result.userData);
-          }
-        });
+      .then((result) => {
+        log.silly('Action result: {0}', JSON.stringify(result));
+        if (result.context) {
+          log.debug('Updating context: {0}', JSON.stringify(result.context));
+          session.context = result.context;
+        }
+        if (result.userData) {
+          log.debug('Updating userData: {0}', JSON.stringify(result.userData));
+          session.setUserData(result.userData);
+        }
+        if (result.result) {
+          log.silly('Adding result from action: {0}',
+              JSON.stringify(result.result));
+          session.addResult(result.result);
+        }
+      })
+      .catch((err) => log.error('Action failed!!!\n{0}', err.stack));
 
     return promise;
   }
@@ -230,6 +241,14 @@ module.exports = class Builder {
 
   _runIntents(session, input) {
     return new Promise((resolve, reject) => {
+      log.silly('Running global intents');
+
+      for (let match in this._match) {
+        if (this.checkIntent(match, session) === false) continue;
+        this._match[match](session, input);
+        return resolve();
+      }
+
       const states = session._state;
       const state = states.length - 1;
 
@@ -275,14 +294,15 @@ module.exports = class Builder {
 
         return resolve(
           session.runQueue()
-          .then(() => {
-            if (session.stateId !== state ||
-              session.subStateId !== substate) {
-              return this._runStep(step + 1, session, input);
-            } else {
-              session.next();
-            }
-          })
+              .then(() => {
+                log.silly('Iteration {0} completed', step);
+                if (session.stateId !== state ||
+                  session.subStateId !== substate) {
+                  return this._runStep(step + 1, session, input);
+                } else {
+                  session.next();
+                }
+              })
         );
       }
 
@@ -291,4 +311,14 @@ module.exports = class Builder {
       );
     });
   }
+}
+module.exports = Builder;
+
+Builder.QuickReplies = {
+  create(title, payload) {
+    return {
+      title,
+      payload: (payload === undefined) ? title : payload,
+    };
+  },
 };

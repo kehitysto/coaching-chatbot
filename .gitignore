@@ -65,6 +65,8 @@ Session.vim
 *~
 # auto-generated tag files
 tags
+# project cfg
+.projections.json
 
 
 ### SublimeText ###
@@ -170,3 +172,6 @@ Temporary Items
 
 # mocha-webpack
 .tmp
+
+# local client state
+.state.json

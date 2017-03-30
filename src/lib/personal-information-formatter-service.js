@@ -1,9 +1,20 @@
+import log from '../lib/logger-service';
 import Strings from '../../src/coaching-chatbot/strings.json';
+import CommunicationMethods
+from '../../src/coaching-chatbot/communication-methods.json';
+import MeetingFrequency
+from '../../src/coaching-chatbot/meeting-frequencies.json';
 
 const Formatter = {
   format,
   formatFromTemplate,
   createProfile,
+  getCommunicationMethods,
+  getCommunicationMethodByInput,
+  createCommunicationMethodslist,
+  getCommunicationMethodsByIdentifier,
+  getMeetingFrequency,
+  getMeetingFrequencyIdentifierByInput,
 };
 
 export default Formatter;
@@ -19,27 +30,37 @@ function formatFromTemplate(template, context) {
 }
 
 function format(template, context) {
+  log.debug('Formatting template with variables {0}', JSON.stringify(context));
   let s = template;
 
-  if (context.name) {
-    s = s.replace('{name}', context.name);
-  }
+  s = s.replace(
+    /{(\w+)}/g,
+    (match, name) => {
+      log.silly('Formatting match {0}', match);
 
-  if (context.job) {
-    s = s.replace('{job}', context.job);
-  }
+      if (name === 'profile') {
+        return createProfile(context);
+      } else if (name === 'communicationMethods') {
+        return createCommunicationMethodslist(context);
+      }
 
-  if (context.age) {
-    s = s.replace('{age}', context.age);
-  }
-
-  if (context.place) {
-    s = s.replace('{place}', context.place);
-  }
-
-  s = s.replace('{profile}', createProfile(context));
+      return context[name] != undefined ? context[name] : match;
+    }
+  );
 
   return s;
+}
+
+function createCommunicationMethodslist(context) {
+  let a = [];
+  for ( let method in context.communicationMethods ) {
+    if ( method != null ) {
+      let methodname = getCommunicationMethodsByIdentifier(method);
+      a.push( methodname.name + ' (' + context
+      .communicationMethods[method] + ')');
+    }
+  }
+  return a.join('\n');
 }
 
 function createProfile(context) {
@@ -48,4 +69,55 @@ function createProfile(context) {
     ]
     .filter((val) => val)
     .join(', ');
+}
+
+function getCommunicationMethodByInput(input) {
+  for (let i = 0; i < CommunicationMethods.length; i++) {
+    if (input.toLowerCase()
+      .includes(
+        CommunicationMethods[i].name.toLowerCase())) {
+      return CommunicationMethods[i];
+    }
+  }
+}
+
+function getCommunicationMethodsByIdentifier(input) {
+  for (let i = 0; i < CommunicationMethods.length; i++) {
+    if (input === CommunicationMethods[i].identifier) {
+      return CommunicationMethods[i];
+    }
+  }
+}
+
+function getCommunicationMethods(context) {
+  return CommunicationMethods.reduce((l, m) => {
+    if (context.communicationMethods === undefined ||
+      context.communicationMethods[m.identifier] === undefined) {
+      l.push({
+        title: m.name,
+        payload: m.identifier,
+      });
+    }
+    return l;
+  }, []);
+}
+
+function getMeetingFrequency(context) {
+  return MeetingFrequency.reduce((l, m) => {
+      l.push({
+        title: m.description,
+        payload: m.identifier,
+      });
+    return l;
+  }, []);
+}
+
+function getMeetingFrequencyIdentifierByInput(input) {
+  for (let i = 0; i < MeetingFrequency.length; i++) {
+    if (input.toLowerCase()
+      .includes(
+        MeetingFrequency[i].description.toLowerCase())) {
+      return MeetingFrequency[i].identifier;
+    }
+  }
 }
