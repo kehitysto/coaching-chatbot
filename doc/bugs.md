@@ -1,7 +1,5 @@
 ## Bugs on current mb (test-messenger-bot).
 
-### doesn't understand "k", "j", "kyl", "ju" as true and "emmä", "e" as false
-
 ### START: when bot asks your name, bot thinks everything is name. (bug or feature)
 >user: "vaihda nimi"  
 bot: "kerro nimi"  
@@ -36,3 +34,4 @@ bot forces user to add new method of communacion
 #bot shows methods of communication that users has already told  
 #bot doesn't tell user about the change to reset 'aloita alusta'  
 #mb doesn't react on facebook "basic thumbs up"    
+# doesn't understand "k", "j", "kyl", "ju" as true and "emmä", "e" as false  
