@@ -15,11 +15,9 @@ module.exports = class Sessions {
     log.debug('Initializing Sessions-provider');
 
     // Use in-memory db when running in local client (npm run bot-client)
-    if (process.env.RUN_ENV === 'dev') {
-      this.db = db = new InMemoryProvider();
-    } else {
-      this.db = db = new DynamoDBProvider();
-    }
+    this.db = db = (process.env.RUN_ENV === 'dev') ?
+        new InMemoryProvider() :
+        new DynamoDBProvider();
   }
 
   read(id) {
