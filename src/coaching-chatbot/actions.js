@@ -1,3 +1,4 @@
+import log from '../lib/logger-service';
 import PersonalInformationFormatter
  from '../lib/personal-information-formatter-service';
 import CommunicationMethodsFormatter
@@ -124,15 +125,20 @@ export function markUserAsSearching({ context }) {
   });
 }
 
-export function getAvailablePairs() {
+export function getAvailablePairs({ context }) {
   return new Promise((resolve, reject) => {
-    const sessions = new Sessions();
-
-    sessions.getAvailablePairs()
+    let sessions = new Sessions();
+    return sessions.getAvailablePairs(context.meetingFrequency)
         .then((pairs) => {
-          resolve({ result: [JSON.stringify(pairs)] });
+          log.debug('build result');
+          if (pairs.length > 0) {
+            resolve({ result: JSON.stringify(pairs) });
+          } else {
+            resolve({ result: '@NO_PAIRS_AVAILABLE' });
+          }
         })
         .catch((err) => {
+          log.error('err: {0}', err);
           reject(err);
         });
   });

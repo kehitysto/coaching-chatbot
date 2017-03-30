@@ -68,4 +68,53 @@ describe('Chatbot builder', function() {
       return expect(ret).to.equal(0);
     });
   });
+
+  describe('#_runStep', function() {
+    it('should return a Promise', function() {
+      this.session.stateId = '';
+
+      const ret = this.builder._runStep(0, this.session, 'message');
+
+      expect(ret).to.be.a('Promise');
+      return expect(ret.catch(() => null)).to.be.fulfilled;
+    });
+
+    it('should run all actions before resolving', function() {
+      const actions = ['foo', 'bar', 'baz'];
+
+      this.session.stateId = '';
+      this.session.subStateId = '0';
+      this.session.runQueue = Promise.resolve();
+      this.session.next = () => null;
+      this.builder.dialog(
+        '',
+        [(session) => {
+          for (let action of actions) {
+            session.runQueue = session.runQueue.then(
+              () => this.builder.runAction(action, this.session, '')
+            );
+          }
+        }]
+      );
+
+      const results = [];
+      for (let action of actions) {
+        this.builder.action(action, () => {
+          return new Promise((resolve, reject) => {
+            setTimeout(
+                () => {
+                  results.push(action);
+                  resolve({});
+                },
+                    50);
+          });
+        });
+      }
+
+      const ret = this.builder._runStep(0, this.session, 'message');
+
+      return expect(ret).to.be.fulfilled
+          .then(() => expect(results).to.deep.equal(actions));
+    });
+  });
 });

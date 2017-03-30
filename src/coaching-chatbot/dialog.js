@@ -75,6 +75,8 @@ bot
       },
       (session) => {
         session.runActions(['setJob']);
+        session.addResult('@CONFIRM_JOB');
+        session.addResult('@INFORMATION_ABOUT_BUTTONS');
         session.endDialog();
       },
     ], [
@@ -153,39 +155,36 @@ bot
       },
     ])
   .dialog(
-     '/add_meeting_frequency', [
-       (session) => {
-         if (session.getCommunicationMethodsCount() == 0) {
-           session.addResult('@UNABLE_TO_CHANGE_MEETING_FREQUENCY');
-           session.endDialog();
-         } else {
-           session.next();
-         }
-       },
-       (session) => {
-         session.addResult('@REQUEST_MEETING_FREQUENCY',
-          PersonalInformationFormatter.getMeetingFrequency(session.context));
-       },
-       (session) => {
-         if (session.checkIntent('#MEETING_FREQUENCY')) {
-           session.runActions(['addMeetingFrequency']);
-           session.runActions(['markUserAsSearching']);
-           session.addResult('@CHANGE_MEETING_FREQUENCY');
-           session.endDialog();
-         } else {
-           session.addResult('@UNCLEAR');
-           session.switchDialog('/add_meeting_frequency');
-         }
-       },
-     ]
+    '/add_meeting_frequency', [
+      (session) => {
+        session.addResult('@REQUEST_MEETING_FREQUENCY',
+        PersonalInformationFormatter.getMeetingFrequency(session.context));
+      },
+      (session) => {
+        if (session.checkIntent('#MEETING_FREQUENCY')) {
+          session.runActions([
+              'markUserAsSearching',
+              'addMeetingFrequency']);
+          session.addResult('@CHANGE_MEETING_FREQUENCY');
+          session.endDialog();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.switchDialog('/add_meeting_frequency');
+        }
+      },
+    ]
   )
   .dialog(
     '/profile', [
       (session) => {
         session.runActions(['updateProfile']);
-        session.addResult(session.context.searching ?
-          '@DISPLAY_PAIRS' :
-          '@DISPLAY_PROFILE');
+        if (!session.context.searching) {
+          session.addResult('@DISPLAY_PROFILE',
+           PersonalInformationFormatter
+              .getPersonalInformationbuttons(session.context));
+        } else {
+          session.runActions(['getAvailablePairs']);
+        }
       },
     ], [
       ['#CHANGE_NAME', (session, match) => {
@@ -225,9 +224,6 @@ bot
       }],
       ['#CHANGE_MEETING_FREQUENCY', (session) => {
         session.beginDialog('/add_meeting_frequency');
-      }],
-      ['#RESET', (session) => {
-        session.beginDialog('/reset');
       }],
     ])
   .dialog(
@@ -274,6 +270,11 @@ bot
           session.next();
         }
       },
-    ]);
+    ])
+  .match(
+      '#RESET',
+      (session) => {
+        session.beginDialog('/reset');
+      });
 
 module.exports = bot;

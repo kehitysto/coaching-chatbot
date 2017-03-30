@@ -1,9 +1,11 @@
 import log from '../lib/logger-service';
 import Strings from '../../src/coaching-chatbot/strings.json';
 import MeetingFrequency
- from '../../src/coaching-chatbot/meeting-frequencies.json';
+    from '../../src/coaching-chatbot/meeting-frequencies.json';
+import PersonalInformation
+    from '../../src/coaching-chatbot/personal-information.json';
 import CommunicationMethodsFormatter
- from '../lib/communication-methods-formatter';
+    from '../lib/communication-methods-formatter';
 
 const Formatter = {
   format,
@@ -11,6 +13,7 @@ const Formatter = {
   createProfile,
   getMeetingFrequency,
   getMeetingFrequencyIdentifierByInput,
+  getPersonalInformationbuttons,
 };
 
 export default Formatter;
@@ -26,8 +29,11 @@ function formatFromTemplate(template, context) {
 }
 
 function format(template, context) {
-  log.debug('Formatting template with variables {0}', JSON.stringify(context));
+  log.debug('Formatting template {0} with variables {1}',
+      template, JSON.stringify(context));
   let s = template;
+
+  log.silly('Template type: {0}', typeof template);
 
   s = s.replace(
     /{(\w+)}/g,
@@ -58,6 +64,16 @@ function createProfile(context) {
 
 function getMeetingFrequency(context) {
   return MeetingFrequency.reduce((l, m) => {
+      l.push({
+        title: m.description,
+        payload: m.identifier,
+      });
+    return l;
+  }, []);
+}
+
+function getPersonalInformationbuttons(context) {
+  return PersonalInformation.reduce((l, m) => {
       l.push({
         title: m.description,
         payload: m.identifier,

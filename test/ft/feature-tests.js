@@ -1,3 +1,6 @@
+// normally undefined, set to 'dev' for local client only
+process.env.RUN_ENV = 'dev';
+
 import Chatbot from '../../src/chatbot/chatbot-service';
 import dialog from '../../src/coaching-chatbot/dialog';
 import PersonalInformationFormatter
@@ -5,6 +8,7 @@ import PersonalInformationFormatter
 import CommunicationMethodsFormatter
  from '../../src/lib/communication-methods-formatter';
 import Strings from '../../src/coaching-chatbot/strings.json';
+import Sessions from '../../src/util/sessions-service';
 
 const SESSION = 'SESSION';
 
@@ -22,19 +26,9 @@ function buildResponse(templateId, quickReplies = []) {
 
 describe('User story', function() {
   before(function() {
-    this.context = {};
-    const sessions = {
-      read: (sessionId) => {
-        return Promise.resolve(this.context);
-      },
+    this.sessions = new Sessions();
 
-      write: (sessionId, context) => {
-        this.context = context;
-        return Promise.resolve(this.context);
-      },
-    };
-
-    this.bot = new Chatbot(dialog, sessions);
+    this.bot = new Chatbot(dialog, this.sessions);
 
     this.expectedName = 'Matti';
     this.expectedJob = 'Opiskelija';
@@ -135,7 +129,14 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse(
                 PersonalInformationFormatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
+                  '@CONFIRM_JOB', this.userInformation)),
+              buildResponse(
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@INFORMATION_ABOUT_BUTTONS')),
+              buildResponse(
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation),
+                  PersonalInformationFormatter.getPersonalInformationbuttons(this.context)),
             ]);
         });
     });
@@ -157,7 +158,8 @@ describe('User story', function() {
                   '@CONFIRM_AGE', this.userInformation)),
               buildResponse(
                 PersonalInformationFormatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
+                  '@DISPLAY_PROFILE', this.userInformation),
+                  PersonalInformationFormatter.getPersonalInformationbuttons(this.context)),
             ]);
         });
     });
@@ -178,7 +180,8 @@ describe('User story', function() {
               buildResponse('@CONFIRM_PLACE'),
               buildResponse(
                 PersonalInformationFormatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
+                  '@DISPLAY_PROFILE', this.userInformation),
+                  PersonalInformationFormatter.getPersonalInformationbuttons(this.context)),
             ]);
         });
     });
@@ -213,7 +216,7 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
                 CommunicationMethodsFormatter
-                  .getCommunicationMethods(this.context)),
+                  .getCommunicationMethods(this.sessions.db.dump()[SESSION])),
             ]);
         }
       );
@@ -260,7 +263,7 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
                 CommunicationMethodsFormatter
-                  .getCommunicationMethods(this.context)),
+                  .getCommunicationMethods(this.sessions.db.dump()[SESSION])),
             ]);
         }
       );
@@ -308,7 +311,7 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
                 CommunicationMethodsFormatter
-                  .getCommunicationMethods(this.context)),
+                  .getCommunicationMethods(this.sessions.db.dump()[SESSION])),
             ]);
         }
       );
@@ -331,7 +334,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, '040-123123'))
             .to.eventually.become([
               buildResponse('@REQUEST_MEETING_FREQUENCY', PersonalInformationFormatter
-               .getMeetingFrequency(this.context))]);
+               .getMeetingFrequency(this.sessions.db.dump()[SESSION]))]);
         }
       );
     }
@@ -341,13 +344,13 @@ describe('User story', function() {
     'As a registered user I want to provide my preferred meeting frequency with quick replies',
     function() {
       it(
-        'after providing preferred meeting frequency as "every weekdays", it should give the list of all users that are searching a peer',
+        'after providing preferred meeting frequency as "every weekdays", it should tell that no users are searching for a peer',
         function() {
           return expect(
               this.bot.receive(SESSION, 'Arkipäivisin'))
             .to.eventually.become([
               buildResponse('@CHANGE_MEETING_FREQUENCY'),
-              buildResponse('@DISPLAY_PAIRS'),
+              buildResponse('@NO_PAIRS_AVAILABLE'),
             ]);
         }
       );
@@ -364,7 +367,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'muuta tapaamisväliä'))
             .to.eventually.become([
               buildResponse('@REQUEST_MEETING_FREQUENCY', PersonalInformationFormatter
-               .getMeetingFrequency(this.context))]);
+               .getMeetingFrequency(this.sessions.db.dump()[SESSION]))]);
         }
       );
     }

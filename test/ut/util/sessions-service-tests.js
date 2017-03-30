@@ -2,11 +2,15 @@ import sinon from 'sinon';
 
 import AWS from 'aws-sdk';
 import Sessions from '../../../src/util/sessions-service';
+import DynamoDBProvider from '../../../src/util/sessions-dynamodb-provider';
 
 describe('Sessions service', function() {
   before(function() {
     this.db = sinon.stub(AWS.DynamoDB, 'DocumentClient');
     this.sessions = new Sessions();
+
+    // force reinitialization of provider
+    this.sessions.db = new DynamoDBProvider();
   });
 
   after(function() {
@@ -69,19 +73,18 @@ describe('Sessions service', function() {
   describe('#write()', function() {
     before(function() {
       this.db.prototype.put = sinon.stub()
-        .callsArg(1);
+          .callsArg(1);
     });
 
     it('should return a Promise', function() {
-      const ret = this.sessions.write('SESSION_ID', {
-        key: 'value',
-      });
+      const ret = this.sessions.write(
+          'SESSION_ID', { key: 'value' });
 
       expect(ret)
-        .to.be.a('Promise');
+          .to.be.a('Promise');
 
       return expect(ret)
-        .to.eventually.be.fulfilled;
+          .to.eventually.be.fulfilled;
     });
 
     it('should return an error if id is null', function() {
