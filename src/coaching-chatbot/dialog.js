@@ -72,6 +72,8 @@ bot
       },
       (session) => {
         session.runActions(['setJob']);
+        session.addResult('@CONFIRM_JOB');
+        session.addResult('@INFORMATION_ABOUT_BUTTONS')
         session.endDialog();
       },
     ], [
@@ -173,7 +175,8 @@ bot
       (session) => {
         session.runActions(['updateProfile']);
         if (!session.context.searching) {
-          session.addResult('@DISPLAY_PROFILE');
+          session.addResult('@DISPLAY_PROFILE',
+           Formatter.getPersonalInformationbuttons(session.context));
         } else {
           session.runActions(['getAvailablePairs']);
         }

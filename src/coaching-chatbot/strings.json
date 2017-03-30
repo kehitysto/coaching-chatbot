@@ -12,7 +12,7 @@
   "@RESET_DONE": "Tiedot nollattu.",
 
   "@REQUEST_NAME": "Millä nimellä haluaisit esittäytyä mahdollisille pareillesi?",
-  "@CONFIRM_NAME": "Kiitos {name}. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. \"Vaihda nimi\".",
+  "@CONFIRM_NAME": "Kiitos {name}. Voit vaihtaa nimeäsi myöhemmin.",
   "@REQUEST_JOB": "Seuraavaksi haluaisin tietää ammattisi.",
   "@CONFIRM_JOB": "Kiitos, ammattisi on nyt {job}.",
   "@REQUEST_AGE": "Anna ikäsi.",
@@ -20,8 +20,8 @@
   "@REQUEST_PLACE": "Anna paikkakuntasi.",
   "@CONFIRM_PLACE": "Paikkakunta lisätty profiiliin.",
 
-  "@DISPLAY_PROFILE": "Parin etsijät näkisivät nyt sinut seuraavasti: \"{profile}\". Voit lisätä ikäsi tai paikkakuntasi kertomalla minulle esim. \"Lisää ikä 33\". Jos olet tyytyväinen profiilisi, voit siirtyä parin etsimiseen kirjoittamalla \"Etsi pari\".",
-
+  "@DISPLAY_PROFILE": "Parin etsijät näkisivät nyt sinut seuraavasti: \"{profile}\". Voit siirtyä parin etsimiseen painamalla \"Etsi pari\".",
+  "@INFORMATION_ABOUT_BUTTONS": "Seuraavaksi näet profiilisi, pystyt muokkaamaan/lisäämään tietoja painamalla nappia.",
   "@YES": "Kyllä",
   "@NO": "Ei",
 
