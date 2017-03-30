@@ -1,6 +1,7 @@
 import Chatbot from '../../src/chatbot/chatbot-service';
 import dialog from '../../src/coaching-chatbot/dialog';
-import Formatter from '../../src/lib/personal-information-formatter-service';
+import PersonalInformationFormatter
+ from '../../src/lib/personal-information-formatter-service';
 import Strings from '../../src/coaching-chatbot/strings.json';
 
 const SESSION = 'SESSION';
@@ -111,8 +112,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, this.userInformation.name)
             )
             .to.eventually.become([
-              buildResponse(
-                Formatter.formatFromTemplate(
+              buildResponse(PersonalInformationFormatter.formatFromTemplate(
                   '@CONFIRM_NAME', this.userInformation)),
               buildResponse('@REQUEST_JOB'),
             ]);
@@ -130,8 +130,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, this.userInformation.job)
             )
             .to.eventually.become([
-              buildResponse(
-                Formatter.formatFromTemplate(
+              buildResponse(PersonalInformationFormatter.formatFromTemplate(
                   '@DISPLAY_PROFILE', this.userInformation)),
             ]);
         });
@@ -149,11 +148,9 @@ describe('User story', function() {
                 SESSION,
                 'Lisää ikä ' + this.userInformation.age))
             .to.eventually.become([
-              buildResponse(
-                Formatter.formatFromTemplate(
+              buildResponse(PersonalInformationFormatter.formatFromTemplate(
                   '@CONFIRM_AGE', this.userInformation)),
-              buildResponse(
-                Formatter.formatFromTemplate(
+              buildResponse(PersonalInformationFormatter.formatFromTemplate(
                   '@DISPLAY_PROFILE', this.userInformation)),
             ]);
         });
@@ -173,8 +170,7 @@ describe('User story', function() {
                 'Lisää paikkakunta ' + this.userInformation.place))
             .to.eventually.become([
               buildResponse('@CONFIRM_PLACE'),
-              buildResponse(
-                Formatter.formatFromTemplate(
+              buildResponse(PersonalInformationFormatter.formatFromTemplate(
                   '@DISPLAY_PROFILE', this.userInformation)),
             ]);
         });
@@ -213,7 +209,7 @@ describe('User story', function() {
                 'ei'))
             .to.eventually.become([
               buildResponse(
-                Formatter.formatFromTemplate(
+                PersonalInformationFormatter.formatFromTemplate(
                   '@DISPLAY_PROFILE', this.userInformation)),
             ]);
         });
