@@ -250,7 +250,7 @@ class Builder {
       }
 
       const states = session._state;
-      const state = states.length - 1;
+      const state = states[states.length-1];
 
       log.silly('Running intents for state /{0}', state[0]);
 
