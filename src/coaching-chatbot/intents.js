@@ -1,22 +1,28 @@
 module.exports = {
     GREETING: {
-        any: [/^moi(?:kka)?/i,
-              /^mo(?:ro)?/i,
-              /^morjens(?:ta)/i,
-              /^terve/i,
-              /^tere/i,
-              /^hei/i],
+        any: [
+          /^moi(?:kka)?/i,
+          /^mo(?:ro)?/i,
+          /^morjens(?:ta)/i,
+          /^terve/i,
+          /^tere/i,
+          /^hei/i,
+          ],
     },
 
     YES: {
-        any: [/^kyllä/i,
-              /^j[ou]{2,}/i,
-              /^jep[as]?/i],
+        any: [
+          /^kyllä/i,
+          /^j[ou]{2,}/i,
+          /^jep[as]?/i,
+        ],
     },
 
     NO: {
-        any: [/^ei/i,
-              /^en/i],
+        any: [
+          /^ei/i,
+          /^en/i,
+        ],
     },
 
     SET: {
@@ -48,8 +54,10 @@ module.exports = {
     },
 
     JOB: {
-        any: [/^ammat(?:tia?|iksi|ikseni)/i,
-              /^työ(?:tä|ksi|kseni)/i],
+        any: [
+          /^ammat(?:tia?|iksi|ikseni)/i,
+          /^työ(?:tä|ksi|kseni)/i,
+        ],
     },
 
     AGE: {
@@ -100,6 +108,12 @@ module.exports = {
         each: [
           '#FIND',
           '#PAIR',
+        ],
+    },
+
+    CHANGE_MEETING_FREQUENCY: {
+        any: [
+          /^muuta tapaamisväliä/i,
         ],
     },
 
