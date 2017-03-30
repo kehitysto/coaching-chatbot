@@ -250,7 +250,7 @@ class Builder {
       }
 
       const states = session._state;
-      const state = states.length - 1;
+      const state = states[states.length-1];
 
       log.silly('Running intents for state /{0}', state[0]);
 
@@ -292,17 +292,17 @@ class Builder {
 
         this._tree[state].substates[substate](session, input);
 
+        log.silly('Awaiting iteration {0} run queue completion', step);
         return resolve(
-          session.runQueue()
-              .then(() => {
-                log.silly('Iteration {0} completed', step);
-                if (session.stateId !== state ||
-                  session.subStateId !== substate) {
-                  return this._runStep(step + 1, session, input);
-                } else {
-                  session.next();
-                }
-              })
+          session.runQueue.then(() => {
+            log.silly('Iteration {0} completed', step);
+            if (session.stateId !== state ||
+              session.subStateId !== substate) {
+              return this._runStep(step + 1, session, input);
+            } else {
+              session.next();
+            }
+          })
         );
       }
 

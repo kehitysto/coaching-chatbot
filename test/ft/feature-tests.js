@@ -1,7 +1,11 @@
+// normally undefined, set to 'dev' for local client only
+process.env.RUN_ENV = 'dev';
+
 import Chatbot from '../../src/chatbot/chatbot-service';
 import dialog from '../../src/coaching-chatbot/dialog';
 import Formatter from '../../src/lib/personal-information-formatter-service';
 import Strings from '../../src/coaching-chatbot/strings.json';
+import Sessions from '../../src/util/sessions-service';
 
 const SESSION = 'SESSION';
 
@@ -19,19 +23,9 @@ function buildResponse(templateId, quickReplies = []) {
 
 describe('User story', function() {
   before(function() {
-    this.context = {};
-    const sessions = {
-      read: (sessionId) => {
-        return Promise.resolve(this.context);
-      },
+    this.sessions = new Sessions();
 
-      write: (sessionId, context) => {
-        this.context = context;
-        return Promise.resolve(this.context);
-      },
-    };
-
-    this.bot = new Chatbot(dialog, sessions);
+    this.bot = new Chatbot(dialog, this.sessions);
 
     this.expectedName = 'Matti';
     this.expectedJob = 'Opiskelija';
@@ -209,7 +203,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'kyllä'))
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                Formatter.getCommunicationMethods(this.context)),
+                Formatter.getCommunicationMethods(this.sessions.db.dump()[SESSION])),
             ]);
         }
       );
@@ -255,7 +249,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'Kyllä'))
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                Formatter.getCommunicationMethods(this.context)),
+                Formatter.getCommunicationMethods(this.sessions.db.dump()[SESSION])),
             ]);
         }
       );
@@ -302,7 +296,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'Kyllä'))
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                Formatter.getCommunicationMethods(this.context)),
+                Formatter.getCommunicationMethods(this.sessions.db.dump()[SESSION])),
             ]);
         }
       );
@@ -325,7 +319,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, '040-123123'))
             .to.eventually.become([
               buildResponse('@REQUEST_MEETING_FREQUENCY', Formatter
-               .getMeetingFrequency(this.context))]);
+               .getMeetingFrequency(this.sessions.db.dump()[SESSION]))]);
         }
       );
     }
@@ -335,13 +329,13 @@ describe('User story', function() {
     'As a registered user I want to provide my preferred meeting frequency with quick replies',
     function() {
       it(
-        'after providing preferred meeting frequency as "every weekdays", it should give the list of all users that are searching a peer',
+        'after providing preferred meeting frequency as "every weekdays", it should tell that no users are searching for a peer',
         function() {
           return expect(
               this.bot.receive(SESSION, 'Arkipäivisin'))
             .to.eventually.become([
               buildResponse('@CHANGE_MEETING_FREQUENCY'),
-              buildResponse('@DISPLAY_PAIRS'),
+              buildResponse('@NO_PAIRS_AVAILABLE'),
             ]);
         }
       );
@@ -358,7 +352,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'muuta tapaamisväliä'))
             .to.eventually.become([
               buildResponse('@REQUEST_MEETING_FREQUENCY', Formatter
-               .getMeetingFrequency(this.context))]);
+               .getMeetingFrequency(this.sessions.db.dump()[SESSION]))]);
         }
       );
     }

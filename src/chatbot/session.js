@@ -114,7 +114,7 @@ module.exports = class Session {
 
     for (let i = 0; i < actionArr.length; ++i) {
       this._queue = this._queue.then(
-        this.dialog.runAction(actionArr[i], this, input)
+        () => this.dialog.runAction(actionArr[i], this, input)
       );
     }
   }
@@ -172,7 +172,7 @@ module.exports = class Session {
     return this;
   }
 
-  runQueue() {
+  get runQueue() {
     return this._queue;
   }
 
