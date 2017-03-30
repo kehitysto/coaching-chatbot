@@ -2,6 +2,8 @@ import log from '../lib/logger-service';
 import Strings from '../../src/coaching-chatbot/strings.json';
 import CommunicationMethods
 from '../../src/coaching-chatbot/communication-methods.json';
+import MeetingFrequency
+from '../../src/coaching-chatbot/meeting-frequencies.json';
 
 const Formatter = {
   format,
@@ -9,6 +11,10 @@ const Formatter = {
   createProfile,
   getCommunicationMethods,
   getCommunicationMethodByInput,
+  createCommunicationMethodslist,
+  getCommunicationMethodsByIdentifier,
+  getMeetingFrequency,
+  getMeetingFrequencyIdentifierByInput,
 };
 
 export default Formatter;
@@ -34,6 +40,8 @@ function format(template, context) {
 
       if (name === 'profile') {
         return createProfile(context);
+      } else if (name === 'communicationMethods') {
+        return createCommunicationMethodslist(context);
       }
 
       return context[name] != undefined ? context[name] : match;
@@ -41,6 +49,18 @@ function format(template, context) {
   );
 
   return s;
+}
+
+function createCommunicationMethodslist(context) {
+  let a = [];
+  for ( let method in context.communicationMethods ) {
+    if ( method != null ) {
+      let methodname = getCommunicationMethodsByIdentifier(method);
+      a.push( methodname.name + ' (' + context
+      .communicationMethods[method] + ')');
+    }
+  }
+  return a.join('\n');
 }
 
 function createProfile(context) {
@@ -61,6 +81,14 @@ function getCommunicationMethodByInput(input) {
   }
 }
 
+function getCommunicationMethodsByIdentifier(input) {
+  for (let i = 0; i < CommunicationMethods.length; i++) {
+    if (input === CommunicationMethods[i].identifier) {
+      return CommunicationMethods[i];
+    }
+  }
+}
+
 function getCommunicationMethods(context) {
   return CommunicationMethods.reduce((l, m) => {
     if (context.communicationMethods === undefined ||
@@ -70,7 +98,26 @@ function getCommunicationMethods(context) {
         payload: m.identifier,
       });
     }
-
     return l;
   }, []);
+}
+
+function getMeetingFrequency(context) {
+  return MeetingFrequency.reduce((l, m) => {
+      l.push({
+        title: m.description,
+        payload: m.identifier,
+      });
+    return l;
+  }, []);
+}
+
+function getMeetingFrequencyIdentifierByInput(input) {
+  for (let i = 0; i < MeetingFrequency.length; i++) {
+    if (input.toLowerCase()
+      .includes(
+        MeetingFrequency[i].description.toLowerCase())) {
+      return MeetingFrequency[i].identifier;
+    }
+  }
 }

@@ -1,13 +1,14 @@
 {
   "@GREETING": "Hei! Olen Kehitystön vertaisohjausrobotti. Kiinnostaako sinua löytää pari vertaisohjausta varten?",
   "@GOODBYE": "Hyvästi!",
-  "@GREAT": "Hienoa!",
+  "@GREAT": "Hienoa!\nJos haluat nollata tiedot ja aloittaa alusta, pyydä sitä minulta esim. \"Aloita alusta\".",
   "@UNCLEAR": ["Anteeksi, en ymmärtänyt mitä tarkoitat.",
-               "Valitettavasti en tiedä mitä tarkoitat.",
-               "Valitettavasti en ymmärtänyt mitä tarkoitat."],
+    "Valitettavasti en tiedä mitä tarkoitat.",
+    "Valitettavasti en ymmärtänyt mitä tarkoitat."
+  ],
   "@NOT_IMPLEMENTED": "Toimintoa ei ole vielä toteutettu...",
-  "@RESET_CONFIRMATION": "Haluatko varmasti resetoida?",
-  "@RESET": " ## TIEDOT NOLLATTU ## ",
+  "@RESET_CONFIRMATION": "Haluatko varmasti nollata tiedot ja aloittaa alusta?",
+  "@RESET_DONE": "Tiedot nollattu.",
 
   "@REQUEST_NAME": "Millä nimellä haluaisit esittäytyä mahdollisille pareillesi?",
   "@CONFIRM_NAME": "Kiitos {name}. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. \"Vaihda nimi\".",
@@ -26,5 +27,10 @@
   "@REQUEST_COMMUNICATION_METHOD": "Valitse tapa jolla haluat olla yhteydessä:",
   "@REQUEST_SKYPE_NAME": "Anna Skype-tunnuksesi.",
   "@REQUEST_PHONE_NUMBER": "Anna puhelinnumerosi.",
-  "@PROVIDE_OTHER_COMMUNICATION_METHODS": "Haluatko lisätä muita tapoja olla yhteydessä?"
+  "@PROVIDE_OTHER_COMMUNICATION_METHODS": "Haluatko lisätä muita tapoja olla yhteydessä?",
+  "@CONFIRM_COMMUNICATION_METHODS": "Olet lisännyt seuraavat tavat olla yhteydessä: {communicationMethods}",
+  "@NO_METHODS_ADDED": "Et ole vielä lisännyt yhteydenottotapojasi. Haluatko lisätä niitä nyt?",
+  "@REQUEST_MEETING_FREQUENCY": "Kuinka usein haluaisit tavata parisi kanssa?",
+  "@UNABLE_TO_CHANGE_MEETING_FREQUENCY": "Et voi muuttaa tapaamisväliä ennen kuin olet asettanut tavan yhteydenpitoa varten.",
+  "@CHANGE_MEETING_FREQUENCY": "Kiitos. Halutessasi voit muuttaa tapaamisväliä kirjoittamalla \"muuta tapaamisväliä\"."
 }

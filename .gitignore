@@ -172,3 +172,6 @@ Temporary Items
 
 # mocha-webpack
 .tmp
+
+# local client state
+.state.json
