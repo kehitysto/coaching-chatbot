@@ -51,6 +51,7 @@ bot
         session.beginDialog('/set_job');
       },
       (session) => {
+        session.addResult('@INFORMATION_ABOUT_BUTTONS');
         session.switchDialog('/profile');
       },
     ])
@@ -73,7 +74,6 @@ bot
       (session) => {
         session.runActions(['setJob']);
         session.addResult('@CONFIRM_JOB');
-        session.addResult('@INFORMATION_ABOUT_BUTTONS')
         session.endDialog();
       },
     ], [
