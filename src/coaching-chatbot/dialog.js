@@ -77,7 +77,6 @@ bot
       (session) => {
         session.runActions(['setJob']);
         session.addResult('@CONFIRM_JOB');
-        session.addResult('@INFORMATION_ABOUT_BUTTONS');
         session.endDialog();
       },
     ], [
