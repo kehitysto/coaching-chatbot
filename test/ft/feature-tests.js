@@ -340,11 +340,25 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'Arkipäivisin'))
             .to.eventually.become([
-              buildResponse('dump pairs here'),
-              buildResponse(
-                Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
+              buildResponse('@CHANGE_MEETING_FREQUENCY'),
+              buildResponse('@DISPLAY_PAIRS'),
             ]);
+        }
+      );
+    }
+  );
+
+  describe(
+    'As a registered user I want to be able to change my preferred meeting frequency',
+    function() {
+      it(
+        'should ask for my preferred meeting frequency after I ask to change my preferred meeting frequency',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'muuta tapaamisväliä'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_MEETING_FREQUENCY', Formatter
+               .getMeetingFrequency(this.context))]);
         }
       );
     }
