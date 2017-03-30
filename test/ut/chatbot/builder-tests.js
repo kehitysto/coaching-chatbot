@@ -14,14 +14,14 @@ describe('Chatbot builder', function() {
 
   describe('#run', function() {
     it('should return a Promise', function() {
-      const ret = this.builder.run({}, {});
+      const ret = this.builder.run('SESSION', {}, {});
 
       expect(ret)
         .to.be.a('Promise');
     });
 
     it('should reset state if dialog does not exist', function() {
-      const ret = this.builder.run( { 'state': '/foobar?666' }, 'moi');
+      const ret = this.builder.run('SESSION', { 'state': '/foobar?666' }, 'moi');
       return expect(ret).to.eventually
           .have.property('stateId', '');
     });

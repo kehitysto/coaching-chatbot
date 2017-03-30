@@ -1,3 +1,5 @@
+import log from '../lib/logger-service';
+
 module.exports = class InMemoryProvider {
   constructor() {
     this.db = {};
@@ -15,10 +17,14 @@ module.exports = class InMemoryProvider {
     return Promise.resolve(this.db[sessionId]);
   }
 
-  getAvailablePairs(meetingFrequency) {
+  getAvailablePairs(id, meetingFrequency) {
     return new Promise((resolve, reject) => {
       let pairs = [];
       for (let sessionId in this.db) {
+        if (!{}.hasOwnProperty.call(actions, actionId)) continue;
+
+        log.silly('Evaluating possible pair {0}', sessionId);
+        if (sessionId === id) continue;
         if (this.db[sessionId]['searching'] === true &&
             this.db[sessionId]['meetingFrequency'] == meetingFrequency) {
           pairs.push(this.db[sessionId]);
