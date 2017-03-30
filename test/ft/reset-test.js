@@ -3,7 +3,8 @@ process.env.RUN_ENV = 'dev';
 
 import Chatbot from '../../src/chatbot/chatbot-service';
 import dialog from '../../src/coaching-chatbot/dialog';
-import Formatter from '../../src/lib/personal-information-formatter-service';
+import PersonalInformationFormatter
+ from '../../src/lib/personal-information-formatter-service';
 import Strings from '../../src/coaching-chatbot/strings.json';
 import Sessions from '../../src/util/sessions-service';
 
@@ -107,7 +108,7 @@ describe('User story', function() {
             )
             .to.eventually.become([
               buildResponse(
-                Formatter.formatFromTemplate(
+				PersonalInformationFormatter.formatFromTemplate(
                   '@CONFIRM_NAME', this.userInformation)),
               buildResponse('@REQUEST_JOB'),
             ]);
@@ -124,10 +125,11 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, this.userInformation.job)
             )
-            .to.eventually.become([
-              buildResponse(
-                Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
+            .to.eventually.become(
+                [buildResponse(PersonalInformationFormatter.formatFromTemplate('@CONFIRM_JOB', this.userInformation)), buildResponse(PersonalInformationFormatter.formatFromTemplate('@INFORMATION_ABOUT_BUTTONS')),
+                  buildResponse(
+                    PersonalInformationFormatter.formatFromTemplate(
+                      '@DISPLAY_PROFILE', this.userInformation), PersonalInformationFormatter.getPersonalInformationbuttons(this.context)),
             ]);
         });
     });
@@ -145,11 +147,13 @@ describe('User story', function() {
                 'Lisää ikä ' + this.userInformation.age))
             .to.eventually.become([
               buildResponse(
-                Formatter.formatFromTemplate(
+                PersonalInformationFormatter.formatFromTemplate(
                   '@CONFIRM_AGE', this.userInformation)),
               buildResponse(
-                Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation),
+                PersonalInformationFormatter.getPersonalInformationbuttons(
+                  this.sessions.db.dump())),
             ]);
         });
     });
@@ -169,8 +173,10 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse('@CONFIRM_PLACE'),
               buildResponse(
-                Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation),
+                PersonalInformationFormatter.getPersonalInformationbuttons(
+                  this.sessions.db.dump())),
             ]);
         });
     });
@@ -208,8 +214,10 @@ describe('User story', function() {
                 'ei'))
             .to.eventually.become([
               buildResponse(
-                Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation),
+                PersonalInformationFormatter.getPersonalInformationbuttons(
+                  this.sessions.db.dump())),
             ]);
         });
 

@@ -1,5 +1,8 @@
 import log from '../lib/logger-service';
-import Formatter from '../lib/personal-information-formatter-service';
+import PersonalInformationFormatter
+ from '../lib/personal-information-formatter-service';
+import CommunicationMethodsFormatter
+ from '../lib/communication-methods-formatter';
 
 module.exports = class Session {
   constructor(dialog) {
@@ -220,7 +223,7 @@ module.exports = class Session {
         message,
         quickReplies,
       } = this._results[i];
-      message = Formatter.format(message, variables);
+      message = PersonalInformationFormatter.format(message, variables);
       result.push({
         message,
         quickReplies,
@@ -275,7 +278,7 @@ module.exports = class Session {
   }
 
   allCommunicationMethodsFilled() {
-    return Formatter.getCommunicationMethods(this.context)
+    return CommunicationMethodsFormatter.getCommunicationMethods(this.context)
       .length === 0;
   }
 };
