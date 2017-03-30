@@ -1,9 +1,5 @@
-import sinon from 'sinon';
-
 import PersonalInformationFormatter
  from '../../../src/lib/personal-information-formatter-service';
-import CommunicationMethodsFormatter
- from '../../../src/lib/communication-methods-formatter';
 import Strings from '../../../src/coaching-chatbot/strings.json';
 
 var assert = require('assert');
@@ -157,210 +153,53 @@ describe('Formatter service', function() {
         .format(template, context);
       assert(formatted === expected);
     });
+  });
 
-    it('should get all communication methods', function() {
-
-      const communicationMethods = CommunicationMethodsFormatter
-        .getCommunicationMethods(context);
-
-      const expected = [{
-          title: 'Skype',
-          payload: 'SKYPE',
-        },
-        {
-          title: 'Puhelin',
-          payload: 'PHONE',
-        },
-        {
-          title: 'Kahvila',
-          payload: 'CAFETERIA',
-        },
-      ];
-
-      return expect(communicationMethods)
-        .to.deep
-        .equal(expected);
-    });
-
-    it(
-      'should find right string to ask for right communication Method(Skype)',
-      function() {
-        const input = 'Skype';
-
-        const expected = {
-          identifier: 'SKYPE',
-          name: 'Skype',
-          infoRequestText: '@REQUEST_SKYPE_NAME',
-        };
-
-        return expect(CommunicationMethodsFormatter
-          .getCommunicationMethodByInput(input))
-          .to.deep
-          .equal(expected);
-      });
-
-      it(
-        'should find right string to ask for right communication Method(Skype)',
-        function() {
-          const input = 'SKYPE';
-
-          const expected = {
-            identifier: 'SKYPE',
-            name: 'Skype',
-            infoRequestText: '@REQUEST_SKYPE_NAME',
-          };
-
-          return expect(CommunicationMethodsFormatter
-            .getCommunicationMethodsByIdentifier(input))
-            .to.deep
-            .equal(expected);
-        });
-
-
-    it(
-      'should not include skype in communication methods if it has been selected already',
-      function() {
-        const context = {
-          communicationMethods: {
-              SKYPE : '',
-          },
-        };
-
-        const communicationMethods = CommunicationMethodsFormatter
-          .getCommunicationMethods(context);
-
-        const expected = [{
-            title: 'Puhelin',
-            payload: 'PHONE',
-          },
-          {
-            title: 'Kahvila',
-            payload: 'CAFETERIA',
-          },
-        ];
-
-        return expect(communicationMethods)
-          .to.deep
-          .equal(expected);
-      });
-
-    it(
-      'should find right string to ask for right communication Method(Phonenumber)',
-      function() {
-        const input = 'Kahvila';
-        const expected = {
-          identifier: 'CAFETERIA',
-          name: 'Kahvila',
-          infoRequestText: '@REQUEST_PHONE_NUMBER',
-        };
-
-        return expect(CommunicationMethodsFormatter
-          .getCommunicationMethodByInput(input))
-          .to.deep
-          .equal(expected);
-      });
-
-    it('should only include cafeteria in communication methods if the others have been selected',
-      function() {
-          const context = {
-              communicationMethods: {
-                  SKYPE: '',
-                  PHONE: '',
-              },
-          };
-
-        const communicationMethods = CommunicationMethodsFormatter
-          .getCommunicationMethods(context);
-
-        const expected = [{
-          title: 'Kahvila',
-          payload: 'CAFETERIA',
-        }];
-
-        return expect(communicationMethods)
-          .to.deep
-          .equal(expected);
-      });
-
-    it(
-      'should find right string to ask for right communication Method(CAFETERIA)',
-      function() {
-        const input = 'Puhelin';
-        const expected = {
-          identifier: 'PHONE',
-          name: 'Puhelin',
-          infoRequestText: '@REQUEST_PHONE_NUMBER',
-        };
-
-        return expect(CommunicationMethodsFormatter
-          .getCommunicationMethodByInput(input))
-          .to.deep
-          .equal(expected);
-      });
-      it(
-        'should return an array of added communication methods',
-        function() {
-          const context = {
-            communicationMethods: {
-                SKYPE : 'nickname',
-            },
-          };
-          return expect(CommunicationMethodsFormatter
-            .createCommunicationMethodslist(context))
-            .to.deep
-            .equal('Skype (nickname)');
-        }
-      );
+  describe('#getMeetingFrequencyIdentifierByInput()', function() {
       it(
         'should return an identifier(EVERY_WEEKDAY) for the frequeny meeting method',
         function() {
           const input = 'arkipäivisin';
-
           const meetingFrequency = PersonalInformationFormatter
             .getMeetingFrequencyIdentifierByInput(input);
-
           const expected = 'EVERY_WEEKDAY';
-
           return expect(meetingFrequency)
             .to.deep
             .equal(expected);
         });
+
         it(
           'should return an identifier(ONCE_A_WEEK) for the frequeny meeting method',
           function() {
             const input = 'kerran viikossa';
-
             const meetingFrequency = PersonalInformationFormatter
               .getMeetingFrequencyIdentifierByInput(input);
-
             const expected = 'ONCE_A_WEEK';
-
             return expect(meetingFrequency)
               .to.deep
               .equal(expected);
           });
+
           it(
             'should return an identifier(ONCE_EVERY_TWO_WEEKS) for the frequeny meeting method',
             function() {
               const input = 'Joka toinen viikko';
-
               const meetingFrequency = PersonalInformationFormatter
                 .getMeetingFrequencyIdentifierByInput(input);
-
               const expected = 'ONCE_EVERY_TWO_WEEKS';
-
               return expect(meetingFrequency)
                 .to.deep
                 .equal(expected);
             });
+      });
+
+      describe('#getMeetingFrequency', function() {
       it(
         'should return an array of all possible meeting-frequencies',
         function() {
           const context = {};
-
           const meetingFrequency = PersonalInformationFormatter
             .getMeetingFrequency(context);
-
           const expected = [{
               title: 'Arkipäivisin',
               payload: 'EVERY_WEEKDAY',
@@ -374,7 +213,6 @@ describe('Formatter service', function() {
               payload: 'ONCE_EVERY_TWO_WEEKS',
             },
           ];
-
           return expect(meetingFrequency)
             .to.deep
             .equal(expected);
