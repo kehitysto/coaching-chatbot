@@ -12,6 +12,8 @@ module.exports = {
         any: [/^[kj]/i,
               /^kyl(?:lä)?/i,
               /^j[ou]{2,}/i,
+              /^ok/i,
+              /^[o]?ok[oo]{2,}/i,
               /^jep[as]?/i],
     },
 
@@ -44,12 +46,12 @@ module.exports = {
     },
 
     NAME: {
-        any: /^(?:nimi|nimeä|nimeksi|nimekseni)/i,
+        any: /^(?:nimi|nimeä|nimeksi|nimekseni|nimeni)/i,
     },
 
     JOB: {
-        any: [/^ammat(?:tia?|iksi|ikseni)/i,
-              /^työ(?:tä|ksi|kseni)/i],
+        any: [/^ammat(?:tia?|iksi|ikseni|tini)/i,
+              /^työ(?:tä|ksi|kseni|ni)/i],
     },
 
     AGE: {
