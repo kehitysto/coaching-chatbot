@@ -77,6 +77,13 @@ module.exports = {
         any: /^paria?/i,
     },
 
+    MEETING_FREQUENCY: {
+        any: [
+          /^tapaamisväliä?/i,
+          /^väliä?/i,
+        ],
+    },
+
     CHANGE_NAME: {
         each: [
           '#CHANGE',
@@ -117,8 +124,9 @@ module.exports = {
     },
 
     CHANGE_MEETING_FREQUENCY: {
-        any: [
-          /^muuta tapaamisväliä/i,
+        each: [
+          '#CHANGE',
+          '#MEETING_FREQUENCY',
         ],
     },
 
@@ -136,7 +144,7 @@ module.exports = {
         ],
     },
 
-    MEETING_FREQUENCY: {
+    MEETING_FREQUENCIES: {
         any: [
           /^Arkipäivisin/i,
           /^Kerran viikossa/i,

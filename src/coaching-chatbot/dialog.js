@@ -161,7 +161,7 @@ bot
             PersonalInformationFormatter.getMeetingFrequency(session.context));
       },
       (session) => {
-        if (session.checkIntent('#MEETING_FREQUENCY')) {
+        if (session.checkIntent('#MEETING_FREQUENCIES')) {
           session.runActions([
               'markUserAsSearching',
               'addMeetingFrequency']);
