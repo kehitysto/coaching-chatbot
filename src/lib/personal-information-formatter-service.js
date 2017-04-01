@@ -99,7 +99,11 @@ function createPairString(context) {
     const s =
         Object.keys(context.communicationMethods)
         .filter((v) => v)
-        .map((v) => `  - ${getCommunicationMethodByIdentifier(v).name}`)
+        .map((v) => {
+          let comm = CommunicationMethodsFormatter
+              .getCommunicationMethodByIdentifier(v);
+          return `  - ${comm.name}`;
+        })
         .join('\n');
 
     return `${createProfile(context)}\n${s}`;

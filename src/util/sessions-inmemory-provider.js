@@ -30,7 +30,7 @@ module.exports = class InMemoryProvider {
         if (this.db[sessionId]['searching'] === true &&
             this.db[sessionId]['meetingFrequency'] === meetingFrequency) {
           log.silly('Found a valid pair!');
-          pairs.push(this.db[sessionId]);
+          pairs.push({ id: sessionId, context: this.db[sessionId] });
         }
       }
       resolve(pairs);
