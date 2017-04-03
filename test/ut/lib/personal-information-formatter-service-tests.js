@@ -228,6 +228,40 @@ describe('Formatter service', function() {
       });
   });
 
+  describe('#getPersonalInformationbuttons', function() {
+    it(
+      'should return an array containing all possible ways to change personal information',
+      function() {
+        const context = {};
+        const personalInformationChangers = PersonalInformationFormatter
+          .getPersonalInformationbuttons(context);
+        const expected = [{
+            title: 'Aseta nimi',
+            payload: 'CHANGE_NAME',
+          },
+          {
+            title: 'Aseta ammatti',
+            payload: 'CHANGE_JOB',
+          },
+          {
+            title: 'Aseta ikä',
+            payload: 'SET_AGE',
+          },
+          {
+            title: 'Aseta paikkakunta',
+            payload: 'SET_PLACE',
+          },
+          {
+            title: 'Etsi pari',
+            payload: 'LOOK_FOR_PEER',
+          },
+        ];
+        return expect(personalInformationChangers)
+          .to.deep
+          .equal(expected);
+      });
+  });
+
   describe('#beautifyAvailablePairs', function() {
     it(
       'should return a beautiful string constisting of available pairs',

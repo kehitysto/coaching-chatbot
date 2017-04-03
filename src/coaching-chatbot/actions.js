@@ -3,6 +3,7 @@ import PersonalInformationFormatter
  from '../lib/personal-information-formatter-service';
 import CommunicationMethodsFormatter
  from '../lib/communication-methods-formatter';
+import PairFormatter from '../lib/pair-formatter';
 import Sessions from '../util/sessions-service';
 
 export function setName({ context, input }) {
@@ -132,7 +133,7 @@ export function getAvailablePairs({ sessionId, context }) {
         .then((pairs) => {
           if (pairs.length > 0) {
             resolve({
-              result: PersonalInformationFormatter
+              result: PairFormatter
                   .beautifyAvailablePairs(pairs),
             });
           } else {
