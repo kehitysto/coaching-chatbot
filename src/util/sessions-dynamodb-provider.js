@@ -80,8 +80,8 @@ module.exports = class DynamoDBProvider {
         TableName: this.SESSION_TABLE,
         Limit: 50,
         FilterExpression: 'context.searching = :true AND ' +
-                          'context.meetingFrequency = :freq' +
-                          'id != :id',
+                          'context.meetingFrequency = :freq AND ' +
+                          'NOT id = :id',
         ExpressionAttributeValues: { ':true': true,
                                      ':freq': meetingFrequency,
                                      ':id': id },
