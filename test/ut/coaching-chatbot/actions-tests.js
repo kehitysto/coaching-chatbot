@@ -273,5 +273,27 @@ describe('coaching-bot actions', function() {
         return expect(ret).to.eventually
         .deep.equal( { context: { 'foo': 'bar', 'meetingFrequency': 'ONCE_A_WEEK' } } );
       });
-    })
+    });
+
+    describe('#markUserAsSearching', function() {
+      it('returns a Promise', function() {
+        const ret = actions.markUserAsSearching({
+          context: {},
+          input: '',
+        });
+
+        expect(ret).to.be.a('Promise');
+      });
+    });
+
+    describe('#getAvailablePairs', function() {
+      it('returns a Promise', function() {
+        const ret = actions.getAvailablePairs({
+          context: {},
+          input: '',
+        });
+
+        expect(ret).to.be.a('Promise');
+      });
+    });
 });
