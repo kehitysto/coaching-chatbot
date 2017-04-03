@@ -131,7 +131,10 @@ export function getAvailablePairs({ sessionId, context }) {
     return sessions.getAvailablePairs(sessionId, context.meetingFrequency)
         .then((pairs) => {
           if (pairs.length > 0) {
-            resolve({ result: Formatter.beautifyAvailablePairs(pairs) });
+            resolve({
+              result: PersonalInformationFormatter
+                  .beautifyAvailablePairs(pairs),
+            });
           } else {
             resolve({ result: '@NO_PAIRS_AVAILABLE' });
           }
