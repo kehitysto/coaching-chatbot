@@ -290,7 +290,7 @@ describe('coaching-bot actions', function() {
           context: {},
         });
           return expect(ret).to.eventually
-        .deep.equal( { context:{ searching: true } });
+          .deep.equal({ context: { searching: true } });
       });
     });
 
