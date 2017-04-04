@@ -135,6 +135,22 @@ describe('Chatbot builder', function() {
     });
   });
 
+  describe('#_matchIntentAny', function() {
+    it('should match all intents in array in sequence', function() {
+      const intents = ['foo', 'bar'];
+
+      const matchIntentMock = sinon.mock(this.builder);
+      matchIntentMock.expects('_matchIntent')
+          .withArgs('foo', 'baz').returns(null);
+      matchIntentMock.expects('_matchIntent')
+          .withArgs('bar', 'baz').returns(null);
+
+      this.builder._matchIntentAny(intents, 'baz');
+
+      matchIntentMock.verify();
+    });
+  });
+
   describe('#_runStep', function() {
     it('should return a Promise', function() {
       this.session.stateId = '';
