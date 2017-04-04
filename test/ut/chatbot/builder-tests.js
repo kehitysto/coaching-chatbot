@@ -1,6 +1,7 @@
 import sinon from 'sinon';
 
 import Builder from '../../../src/chatbot/builder.js';
+import log from '../../../src/lib/logger-service';
 
 describe('Chatbot builder', function() {
   beforeEach(function() {
@@ -10,6 +11,39 @@ describe('Chatbot builder', function() {
       getInput: sinon.stub(),
       getUserData: sinon.stub(),
     };
+  });
+
+  describe('#intent', function() {
+    it('should return the builder for call chaining', function() {
+      const intentObj = {
+        any: [/^foo/i, /^bar/i],
+      };
+
+      return expect(this.builder.intent('FOOBAR', intentObj))
+          .to.equal(this.builder);
+    });
+
+    it('should register the intent with the given name', function() {
+      const intentObj = {
+        any: [/^foo/i, /^bar/i],
+      };
+
+      this.builder.intent('FOOBAR', intentObj);
+
+      return expect(this.builder._intents['FOOBAR'])
+          .to.deep.equal(intentObj);
+    });
+
+    it('should accept intent names prefixed with \'#\'', function() {
+      const intentObj = {
+        any: [/^foo/i, /^bar/i],
+      };
+
+      this.builder.intent('#FOOBAR', intentObj);
+
+      return expect(this.builder._intents['FOOBAR'])
+          .to.deep.equal(intentObj);
+    });
   });
 
   describe('#run', function() {
@@ -42,12 +76,25 @@ describe('Chatbot builder', function() {
       return expect(ret).to.be.rejectedWith('No such action: ' + action);
       });
 
-    it('should return A Promise if actionId is found', function() {
+    it('should return a Promise if actionId is found', function() {
       this.builder.action('setInterest', () => ({}, {}, {}));
       const action = 'setInterest';
       const ret = this.builder.runAction(action, this.session, {});
 
       return expect(ret).to.be.a('Promise');
+    });
+
+    it('should succeed even if the action throws', function() {
+      const action = 'setInterest';
+      const actionFn = sinon.stub().throws(new Error());
+      this.builder.action(action, actionFn);
+
+      //const logMock = sinon.mock(log, 'error');
+      //logMock.expects(sinon.ANY).once();
+
+      return expect(this.builder.runAction(action, this.session))
+          .to.be.fulfilled;
+      //        .then(() => logMock.verify());
     });
   });
 
@@ -66,6 +113,25 @@ describe('Chatbot builder', function() {
       const ret = this.builder.getSubStateCount(stateId);
 
       return expect(ret).to.equal(0);
+    });
+  });
+
+  describe('#getStringTemplate', function() {
+    it('should return the requested template', function() {
+      const templateId = '@TEST_TEMPLATE';
+      const template = "foo {bar} baz";
+
+      this.builder._strings[templateId] = template;
+
+      return expect(this.builder.getStringTemplate(templateId))
+          .to.equal(template);
+    });
+
+    it('should return the template id if no template can be found', function() {
+      const templateId = '@TEST_TEMPLATE';
+
+      return expect(this.builder.getStringTemplate(templateId))
+          .to.equal(templateId);
     });
   });
 

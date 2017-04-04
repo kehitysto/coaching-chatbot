@@ -14,7 +14,9 @@ module.exports = {
       isCoverage ? {
           test: /\.js$/,
           include: path.resolve('src'),
-          exclude: path.resolve('src/coaching-chatbot/dialog.js'),
+          exclude: [
+            path.resolve('src/coaching-chatbot/dialog.js'),
+          ],
           // instrument only testing sources with Istanbul, after ts-loader runs
           loader: 'istanbul-instrumenter-loader',
         }: [],
