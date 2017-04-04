@@ -10,7 +10,7 @@ dev:
 </p>
 <p align="center">
 waffle:
-<a href="https://waffle.io/kehitysto/coaching-chatbot"><img src="https://badge.waffle.io/kehitysto/coaching-chatbot.png"></a>
+<a href="https://waffle.io/kehitysto/coaching-chatbot"><img src="https://badge.waffle.io/kehitysto/coaching-chatbot.svg?label=ready&title=Ready"></a>
 </p>
 
 ## Description
