@@ -9,6 +9,8 @@ import CommunicationMethodsFormatter
  from '../../src/lib/communication-methods-formatter';
 import Strings from '../../src/coaching-chatbot/strings.json';
 import Sessions from '../../src/util/sessions-service';
+import PairFormatter
+ from '../../src/lib/pair-formatter';
 
 const SESSION = 'SESSION';
 
@@ -379,6 +381,28 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse('@CHANGE_MEETING_FREQUENCY'),
               buildResponse('@NO_PAIRS_AVAILABLE'),
+            ]);
+        }
+      );
+    }
+  );
+  describe(
+    'As a user searching for a pair I want to get a list of other users wanting to meet as often as I do',
+    function() {
+      it(
+        'should provide user with the list of users who has same meeting frequency',
+        function() {
+          const testUser = { name: 'Matti', job: 'Ope', communicationMethods: { SKYPE: 'Matti123' }, meetingFrequency: 'ONCE_EVERY_TWO_WEEKS', searching: true };
+          this.sessions.write('ID', testUser);
+          return expect(
+            this.bot.receive(SESSION, ''))
+            .to.eventually.become([
+              buildResponse( PairFormatter.beautifyAvailablePairs([
+                  {
+                    id: 'ID',
+                    context: testUser,
+                  },
+                ]))
             ]);
         }
       );
