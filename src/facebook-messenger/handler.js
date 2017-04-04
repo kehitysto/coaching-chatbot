@@ -1,10 +1,10 @@
 import 'source-map-support/register';
 
-require('../lib/envVars').config();
+require('../lib/env-vars').config();
 
-import Messenger from './messenger.service';
+import Messenger from './messenger-service';
 import Sessions from '../util/sessions-service';
-import Chatbot from '../chatbot/chatbot.service';
+import Chatbot from '../chatbot/chatbot-service';
 
 import dialog from '../coaching-chatbot/dialog';
 

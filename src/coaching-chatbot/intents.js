@@ -1,87 +1,154 @@
 module.exports = {
-    greeting: {
-        any: [/^moi(?:kka)?/i,
-              /^mo(?:ro)?/i,
-              /^morjens(?:ta)/i,
-              /^terve/i,
-              /^tere/i,
-              /^hei/i],
+    GREETING: {
+        any: [
+          /^moi(?:kka)?/i,
+          /^mo(?:ro)?/i,
+          /^morjens(?:ta)/i,
+          /^terve/i,
+          /^tere/i,
+          /^hei/i,
+        ],
     },
 
-    yes: {
-        any: [/^kyllä/i,
-              /^j[ou]{2,}/i,
-              /^jep[as]?/i],
+    YES: {
+        any: [
+          /^[kj]/i,
+          /^kyl(?:lä)?/i,
+          /^j[ou]{2,}/i,
+          /^ok/i,
+          /^(?:oo)?koo/i,
+          /^jep[as]?/i,
+        ],
     },
 
-    no: {
-        any: [/^ei/i,
-              /^en/i],
+    NO: {
+        any: [
+          /^e/i,
+          /^ei/i,
+          /^en/i,
+          /^emmä/i,
+        ],
     },
 
-    set: {
+    SET: {
         any: /^(?:lisää|aseta)\s*(?:mun|minun|mulle|minulle)?/i,
     },
 
-    change: {
+    CHANGE: {
         any: /^(?:vaihda|muuta|aseta)\s*(?:mun|minun|mulle|minulle)?/i,
     },
 
-    find: {
+    FIND: {
         any: /^(?:etsi|hae)/i,
     },
 
-    set_or_change: {
-        any: ['set', 'change'],
+    SET_OR_CHANGE: {
+        any: [
+          '#SET',
+          '#CHANGE',
+        ],
     },
 
-    optional_value: {
+    OPTIONAL_VALUE: {
         any: /(\w.*)?/i,
         match: (match) => match[1] || true,
     },
 
-    name: {
-        any: /^(?:nimi|nimeä|nimeksi|nimekseni)/i,
+    NAME: {
+        any: /^(?:nimi|nimeä|nimeksi|nimekseni|nimeni)/i,
     },
 
-    job: {
-        any: [/^ammat(?:tia?|iksi|ikseni)/i,
-              /^työ(?:tä|ksi|kseni)/i],
+    JOB: {
+        any: [
+          /^ammat(?:tia?|iksi|ikseni|tini)/i,
+          /^työ(?:tä|ksi|kseni|ni)/i,
+        ],
     },
 
-    age: {
+    AGE: {
         any: /^(?:ikää?|iäksi)/i,
     },
 
-    place: {
+    PLACE: {
         any: /^paikka(?:kunta)?a?/i,
     },
 
-    pair: {
+    PAIR: {
         any: /^paria?/i,
     },
 
-    change_name: {
-        each: ['change', 'name', 'optional_value'],
+    MEETING_FREQUENCY: {
+        any: [
+          /^tapaamisväliä?/i,
+          /^väliä?/i,
+        ],
     },
 
-    change_job: {
-        each: ['change', 'job', 'optional_value'],
+    CHANGE_NAME: {
+        each: [
+          '#CHANGE',
+          '#NAME',
+          '#OPTIONAL_VALUE',
+        ],
     },
 
-    set_age: {
-        each: ['set_or_change', 'age', 'optional_value'],
+    CHANGE_JOB: {
+        each: [
+          '#CHANGE',
+          '#JOB',
+          '#OPTIONAL_VALUE',
+        ],
     },
 
-    set_place: {
-        each: ['set_or_change', 'place', 'optional_value'],
+    SET_AGE: {
+        each: [
+          '#SET_OR_CHANGE',
+          '#AGE',
+          '#OPTIONAL_VALUE',
+        ],
     },
 
-    find_pair: {
-        each: ['find', 'pair'],
+    SET_PLACE: {
+        each: [
+          '#SET_OR_CHANGE',
+          '#PLACE',
+          '#OPTIONAL_VALUE',
+        ],
     },
 
-    reset: {
-        any: [/^\!reset$/],
+    FIND_PAIR: {
+        each: [
+          '#FIND',
+          '#PAIR',
+        ],
+    },
+
+    CHANGE_MEETING_FREQUENCY: {
+        each: [
+          '#CHANGE',
+          '#MEETING_FREQUENCY',
+        ],
+    },
+
+    RESET: {
+        any: [
+          /^aloita alusta/i,
+        ],
+    },
+
+    COMMUNICATION_METHODS: {
+        any: [
+          /^Skype/i,
+          /^Puhelin/i,
+          /^Kahvila/i,
+        ],
+    },
+
+    MEETING_FREQUENCIES: {
+        any: [
+          /^Arkipäivisin/i,
+          /^Kerran viikossa/i,
+          /^Joka toinen viikko/i,
+        ],
     },
 };

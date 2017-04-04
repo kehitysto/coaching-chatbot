@@ -1,13 +1,13 @@
-import log from '../lib/logger.service';
-import Formatter from '../lib/personal-information-formatter-service';
+import log from '../lib/logger-service';
 
 import Session from './session';
 
-module.exports = class Builder {
+class Builder {
   constructor(strings, maxSteps = 5) {
     this.maxSteps = maxSteps;
 
     this._tree = {};
+    this._match = {};
     this._intents = {};
     this._actions = {};
 
@@ -42,10 +42,19 @@ module.exports = class Builder {
    * @return {Builder}
    */
   intent(intentId, intentObj) {
+    if (intentId.startsWith('#')) {
+      intentId = intentId.substr(1);
+    }
+
     log.debug('Registering intent {0}', intentId);
     this._intents[intentId] = intentObj;
 
     return this;
+  }
+
+  match(intentId, fn) {
+    log.debug('Registering a global intent {0}', intentId);
+    this._match[intentId] = fn;
   }
 
   /**
@@ -62,11 +71,11 @@ module.exports = class Builder {
     return this;
   }
 
-  run(context, input) {
+  run(sessionId, context, input) {
     log.info('Running bot for input "{0}"', input);
 
     const session = new Session(this)
-      ._start(context, input);
+      ._start(sessionId, context, input);
 
     return this._runIntents(session, input)
       .then(() => this._runStep(0, session, input))
@@ -81,12 +90,22 @@ module.exports = class Builder {
     }
 
     const actionData = {
+      sessionId: session.id,
       context: session.context,
       userData: session.getUserData(),
       input: input || session.getInput(),
     };
-    const promise = Promise.resolve(this._actions[actionId](actionData))
-      .then((result) => {
+
+    let promise;
+    try {
+      promise = Promise.resolve(this._actions[actionId](actionData));
+    } catch(err) {
+      promise = Promise.reject(err);
+    }
+
+    promise =
+      promise.then((result) => {
+        log.silly('Action result: {0}', JSON.stringify(result));
         if (result.context) {
           log.debug('Updating context: {0}', JSON.stringify(result.context));
           session.context = result.context;
@@ -95,13 +114,22 @@ module.exports = class Builder {
           log.debug('Updating userData: {0}', JSON.stringify(result.userData));
           session.setUserData(result.userData);
         }
-      });
+        if (result.result) {
+          log.silly('Adding result from action: {0}',
+              JSON.stringify(result.result));
+          session.addResult(result.result);
+        }
+      })
+      .catch((err) => log.error('Action failed!!!\n{0}', err.stack));
 
     return promise;
   }
 
   checkIntent(intentId, session) {
     const input = session.getInput();
+    if (intentId.startsWith('#')) {
+      intentId = intentId.substr(1);
+    }
 
     const match = this._runIntent(intentId, input);
     log.debug('Intent {0} on input "{1}" returned {2}', intentId, input,
@@ -110,10 +138,14 @@ module.exports = class Builder {
     return match || false;
   }
 
-  getFormattedString(stringId, variables) {
-    log.debug('Retrieving string {0}', stringId);
-    log.debug('Retrieving string {0}', JSON.stringify(variables));
-    return Formatter.formatFromTemplate(stringId, variables);
+  getStringTemplate(templateId) {
+    log.debug('Retrieving string template {0}', templateId);
+
+    let template = this._strings[templateId];
+    if (Array.isArray(template)) {
+      template = template[Math.floor(Math.random() * template.length)];
+    }
+    return (template === undefined) ? templateId : template;
   }
 
   getSubStateCount(stateId) {
@@ -131,8 +163,8 @@ module.exports = class Builder {
       anyArray = [anyArray];
     }
 
-    for (let i = 0; i < anyArray.length; ++i) {
-      match = this._matchIntent(anyArray[i], input);
+    for (let intent of anyArray) {
+      match = this._matchIntent(intent, input);
       if (match !== null) break;
     }
 
@@ -146,8 +178,8 @@ module.exports = class Builder {
       eachArray = [eachArray];
     }
 
-    for (let i = 0; i < eachArray.length; ++i) {
-      match = this._matchIntent(eachArray[i], input);
+    for (let intent of eachArray) {
+      match = this._matchIntent(intent, input);
 
       if (match === null) {
         return null;
@@ -180,6 +212,10 @@ module.exports = class Builder {
   }
 
   _runIntent(intentId, input) {
+    if (intentId.startsWith('#')) {
+      intentId = intentId.substr(1);
+    }
+
     if (this._intents[intentId] === undefined) {
       log.error('Intent not found: {0}', intentId);
       return null;
@@ -214,25 +250,33 @@ module.exports = class Builder {
 
   _runIntents(session, input) {
     return new Promise((resolve, reject) => {
+      log.silly('Running global intents');
+
+      for (let match in this._match) {
+        if (this.checkIntent(match, session) === false) continue;
+        this._match[match](session, input);
+        return resolve();
+      }
+
       const states = session._state;
+      const state = states[states.length-1];
 
-      for (let i = 0; i < states.length; ++i) {
-        log.silly('Running intents for state /{0}', states[i][0]);
-        if (this._tree[states[i][0]] === undefined) {
-            session.clearState();
-            log.error('No such dialog: {0}', states[i][0]);
-            return resolve();
-        }
+      log.silly('Running intents for state /{0}', state[0]);
 
-        let intents = this._tree[states[i][0]].intents;
+      if (this._tree[state[0]] === undefined) {
+        session.clearState();
+        log.error('No such dialog: {0}', state[0]);
+        return resolve();
+      }
 
-        for (let j = 0; j < intents.length; ++j) {
-          let match = this.checkIntent(intents[j][0], session);
+      const intents = this._tree[state[0]].intents;
 
-          if (match !== false) {
-            intents[j][1](session, match);
-            return resolve();
-          }
+      for (let intent of intents) {
+        let match = this.checkIntent(intent[0], session);
+
+        if (match !== false) {
+          intent[1](session, match);
+          return resolve();
         }
       }
 
@@ -257,16 +301,17 @@ module.exports = class Builder {
 
         this._tree[state].substates[substate](session, input);
 
+        log.silly('Awaiting iteration {0} run queue completion', step);
         return resolve(
-          session.runQueue()
-              .then(() => {
-                if (session.stateId !== state ||
-                    session.subStateId !== substate) {
-                  return this._runStep(step + 1, session, input);
-                } else {
-                  session.next();
-                }
-              })
+          session.runQueue.then(() => {
+            log.silly('Iteration {0} completed', step);
+            if (session.stateId !== state ||
+              session.subStateId !== substate) {
+              return this._runStep(step + 1, session, input);
+            } else {
+              session.next();
+            }
+          })
         );
       }
 
@@ -275,4 +320,14 @@ module.exports = class Builder {
       );
     });
   }
+}
+module.exports = Builder;
+
+Builder.QuickReplies = {
+  create(title, payload) {
+    return {
+      title,
+      payload: (payload === undefined) ? title : payload,
+    };
+  },
 };

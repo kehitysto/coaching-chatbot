@@ -1,69 +1,34 @@
-import AWS from 'aws-sdk';
-import log from '../lib/logger.service';
+import DynamoDBProvider from './sessions-dynamodb-provider';
+import InMemoryProvider from './sessions-inmemory-provider';
+
+import log from '../lib/logger-service';
+
+let db = null;
 
 module.exports = class Sessions {
   constructor() {
-    this.SESSION_TABLE =
-      `${process.env.SERVERLESS_PROJECT}` +
-      `-sessions-${process.env.SERVERLESS_STAGE}`;
-    this.db = new AWS.DynamoDB.DocumentClient();
+    if (db != null) {
+      this.db = db;
+      return;
+    }
+
+    log.debug('Initializing Sessions-provider');
+
+    // Use in-memory db when running in local client (npm run bot-client)
+    this.db = db = (process.env.RUN_ENV === 'dev') ?
+        new InMemoryProvider() :
+        new DynamoDBProvider();
   }
 
   read(id) {
-    return new Promise((resolve, reject) => {
-      const params = {
-        Key: {
-          id,
-        },
-        TableName: this.SESSION_TABLE,
-        ConsistentRead: true,
-      };
-
-      this.db.get(params, (err, data) => {
-        if (err) {
-          console.error(err.toString());
-          return reject(err);
-        }
-
-        log.info('db read: {0}', JSON.stringify(data));
-
-        if (data.Item !== undefined) {
-          return resolve(data.Item.context);
-        } else {
-          // return an empty context for new sessions
-          return resolve({});
-        }
-      });
-    });
+    return this.db.read(id);
   }
 
   write(id, context) {
-    return new Promise((resolve, reject) => {
-      if (!id) {
-        return reject(new TypeError('No session ID'));
-      }
+    return this.db.write(id, context);
+  }
 
-      // coerce session id to string
-      id = id + '';
-
-      const params = {
-        TableName: this.SESSION_TABLE,
-        Item: {
-          id,
-          context,
-        },
-      };
-
-      log.info('db write: {0}', JSON.stringify(context));
-
-      this.db.put(params, (err, data) => {
-        if (err) {
-          console.error(err.toString());
-          return reject(err);
-        }
-
-        return resolve(context);
-      });
-    });
+  getAvailablePairs(id, meetingFrequency) {
+    return this.db.getAvailablePairs(id, meetingFrequency);
   }
 };

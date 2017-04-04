@@ -1,10 +1,10 @@
 import sinon from 'sinon';
 
 var assert = require('assert');
-import Logger from '../../../src/lib/logger.service';
+import Logger from '../../../src/lib/logger-service';
 import {
   LEVELS
-} from '../../../src/lib/logger.service';
+} from '../../../src/lib/logger-service';
 
 describe('Logging service', function() {
   before(function() {
