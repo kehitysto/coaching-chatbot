@@ -21,6 +21,12 @@ bot: "kerro nimesi"
 user: "lisää ikä 33  
 bot: "Kiitos lisää ikä 33. Jos haluat vaihtaa nimeäsi myöhemmin, pyydä sitä minulta esim. "Vaihda nimi"."  
 
+### before "etsi pari" bot sets weird things on name
+>user: "muuta tapaamisväliä  
+bot:  "kuinka usein haluaisit tavata parisi kanssa?"  
+user can skip the part where bot ask comunication methods 
+it will break dumb because user has no added communication methods  
+
 ### Bot doesn't tell user how to change skype account(or phone number)    
   
 ### 'aloita alusta' can be name, job, age and location
@@ -34,4 +40,4 @@ bot forces user to add new method of communacion
 #bot shows methods of communication that users has already told  
 #bot doesn't tell user about the change to reset 'aloita alusta'  
 #mb doesn't react on facebook "basic thumbs up"    
-# doesn't understand "k", "j", "kyl", "ju" as true and "emmä", "e" as false  
+#doesn't understand "k", "j", "kyl", "ju" as true and "emmä", "e" as false  
