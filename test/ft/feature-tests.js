@@ -406,6 +406,25 @@ describe('User story', function() {
             ]);
         }
       );
+      it(
+        'should provide user with the list of users who has same meeting frequency while there are other users with different frequency',
+        function() {
+          const testUser = { name: 'Matti', job: 'Ope', communicationMethods: { SKYPE: 'Matti123' }, meetingFrequency: 'ONCE_EVERY_TWO_WEEKS', searching: true };
+          this.sessions.write('ID', testUser);
+          const testUser2 = { name: 'Laura', job: 'Student', communicationMethods: { SKYPE: 'Laura123' }, meetingFrequency: 'EVERY_WEEKDAY', searching: true };
+          this.sessions.write('ID1', testUser2);
+          return expect(
+            this.bot.receive(SESSION, ''))
+            .to.eventually.become([
+              buildResponse( PairFormatter.beautifyAvailablePairs([
+                  {
+                    id: 'ID',
+                    context: testUser,
+                  },
+                ]))
+            ]);
+        }
+      )
     }
   );
 });
