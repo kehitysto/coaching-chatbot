@@ -116,6 +116,25 @@ describe('Chatbot builder', function() {
     });
   });
 
+  describe('#getStringTemplate', function() {
+    it('should return the requested template', function() {
+      const templateId = '@TEST_TEMPLATE';
+      const template = "foo {bar} baz";
+
+      this.builder._strings[templateId] = template;
+
+      return expect(this.builder.getStringTemplate(templateId))
+          .to.equal(template);
+    });
+
+    it('should return the template id if no template can be found', function() {
+      const templateId = '@TEST_TEMPLATE';
+
+      return expect(this.builder.getStringTemplate(templateId))
+          .to.equal(templateId);
+    });
+  });
+
   describe('#_runStep', function() {
     it('should return a Promise', function() {
       this.session.stateId = '';
