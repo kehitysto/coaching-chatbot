@@ -95,8 +95,16 @@ class Builder {
       userData: session.getUserData(),
       input: input || session.getInput(),
     };
-    const promise = Promise.resolve(this._actions[actionId](actionData))
-      .then((result) => {
+
+    let promise;
+    try {
+      promise = Promise.resolve(this._actions[actionId](actionData));
+    } catch(err) {
+      promise = Promise.reject(err);
+    }
+
+    promise =
+      promise.then((result) => {
         log.silly('Action result: {0}', JSON.stringify(result));
         if (result.context) {
           log.debug('Updating context: {0}', JSON.stringify(result.context));
