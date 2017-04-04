@@ -16,7 +16,6 @@ module.exports = {
           include: path.resolve('src'),
           exclude: [
             path.resolve('src/coaching-chatbot/dialog.js'),
-            path.resolve('src/util/sessions-inmemory-provider.js'),
           ],
           // instrument only testing sources with Istanbul, after ts-loader runs
           loader: 'istanbul-instrumenter-loader',
