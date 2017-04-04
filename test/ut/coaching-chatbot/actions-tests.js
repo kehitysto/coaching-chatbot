@@ -284,6 +284,14 @@ describe('coaching-bot actions', function() {
 
         expect(ret).to.be.a('Promise');
       });
+
+      it('Should return searching value as true', function(){
+        const ret = actions.markUserAsSearching({
+          context: {},
+        });
+          return expect(ret).to.eventually
+        .deep.equal( { context:{ searching: true } });
+      });
     });
 
     describe('#getAvailablePairs', function() {
