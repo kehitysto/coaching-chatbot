@@ -425,6 +425,25 @@ describe('User story', function() {
             ]);
         }
       )
+      it(
+        'shouldnt put in the list users who are not in searching mode',
+        function() {
+          const testUser = { name: 'Matti', job: 'Ope', communicationMethods: { SKYPE: 'Matti123' }, meetingFrequency: 'ONCE_EVERY_TWO_WEEKS', searching: true };
+          this.sessions.write('ID', testUser);
+          const testUser2 = { name: 'Laura', job: 'Student', communicationMethods: { SKYPE: 'Laura123' }, meetingFrequency: 'ONCE_EVERY_TWO_WEEKS', searching: false };
+          this.sessions.write('ID1', testUser2);
+          return expect(
+            this.bot.receive(SESSION, ''))
+            .to.eventually.become([
+              buildResponse( PairFormatter.beautifyAvailablePairs([
+                  {
+                    id: 'ID',
+                    context: testUser,
+                  },
+                ]))
+            ]);
+        }
+      )
     }
   );
 });
