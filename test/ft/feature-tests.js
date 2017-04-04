@@ -344,7 +344,7 @@ describe('User story', function() {
     'As a registered user I want to provide my preferred meeting frequency with quick replies',
     function() {
       it(
-        'after providing preferred meeting frequency as "every weekdays", it should tell that no users are searching for a peer',
+        'after providing preferred meeting frequency as "every weekdays", it should tell that no other users with the same preferred frequency are searching for a peer',
         function() {
           return expect(
               this.bot.receive(SESSION, 'Arkipäivisin'))
@@ -368,6 +368,18 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse('@REQUEST_MEETING_FREQUENCY', PersonalInformationFormatter
                .getMeetingFrequency(this.sessions.db.dump()[SESSION]))]);
+        }
+      );
+
+      it(
+        'after providing preferred meeting frequency as "every second week", it should tell that no other users with the same preferred frequency are searching for a peer',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'Joka toinen viikko'))
+            .to.eventually.become([
+              buildResponse('@CHANGE_MEETING_FREQUENCY'),
+              buildResponse('@NO_PAIRS_AVAILABLE'),
+            ]);
         }
       );
     }
