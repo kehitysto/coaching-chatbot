@@ -29,7 +29,7 @@ export const SILLY = LEVELS.SILLY;
 
 export default Logger;
 
-let logLevel = process.env.LOGLEVEL || WARNING;
+let logLevel = process.env.LOGLEVEL || INFO;
 
 function setLevel(level) {
   if (level < ERROR) {
@@ -45,8 +45,8 @@ function getLevel() {
   return logLevel;
 }
 
-function log(...args) {
-  _logMessage(logLevel, args[0], args.slice(1));
+function log(level, ...args) {
+  _logMessage(level, args[0], args.slice(1));
 }
 
 function error(...args) {
