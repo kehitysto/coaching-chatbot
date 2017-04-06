@@ -259,6 +259,10 @@ describe('Formatter service', function() {
           .getPersonalInformationbuttons(context);
 
         const expected = [{
+          title: 'Etsi pari',
+          payload: 'LOOK_FOR_PEER',
+          },
+          {
             title: 'Aseta nimi',
             payload: 'CHANGE_NAME',
           },
@@ -273,10 +277,6 @@ describe('Formatter service', function() {
           {
             title: 'Aseta paikkakunta',
             payload: 'SET_PLACE',
-          },
-          {
-            title: 'Etsi pari',
-            payload: 'LOOK_FOR_PEER',
           },
         ];
 
