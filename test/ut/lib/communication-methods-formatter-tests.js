@@ -1,5 +1,5 @@
 import CommunicationMethodsFormatter
- from '../../../src/lib/communication-methods-formatter';
+from '../../../src/lib/communication-methods-formatter';
 
 describe('Communication methods formatter', function() {
   before(function() {});
@@ -7,15 +7,18 @@ describe('Communication methods formatter', function() {
   after(function() {});
 
   describe('#getCommunicationMethods()', function() {
-    it('should not include skype in communication methods if it has been selected already',
+    it(
+      'should not include skype in communication methods if it has been selected already',
       function() {
         const context = {
           communicationMethods: {
-              SKYPE : '',
+            SKYPE: '',
           },
         };
+
         const communicationMethods = CommunicationMethodsFormatter
           .getCommunicationMethods(context);
+
         const expected = [{
             title: 'Puhelin',
             payload: 'PHONE',
@@ -25,36 +28,39 @@ describe('Communication methods formatter', function() {
             payload: 'CAFETERIA',
           },
         ];
+
         return expect(communicationMethods)
           .to.deep
           .equal(expected);
       });
 
-    it('should only include cafeteria in communication methods if the others have been selected',
-        function() {
-            const context = {
-                communicationMethods: {
-                    SKYPE: '',
-                    PHONE: '',
-                },
-            };
+    it(
+      'should only include cafeteria in communication methods if the others have been selected',
+      function() {
+        const context = {
+          communicationMethods: {
+            SKYPE: '',
+            PHONE: '',
+          },
+        };
 
-          const communicationMethods = CommunicationMethodsFormatter
-            .getCommunicationMethods(context);
+        const communicationMethods = CommunicationMethodsFormatter
+          .getCommunicationMethods(context);
 
-          const expected = [{
-            title: 'Kahvila',
-            payload: 'CAFETERIA',
-          }];
+        const expected = [{
+          title: 'Kahvila',
+          payload: 'CAFETERIA',
+        }];
 
-          return expect(communicationMethods)
-            .to.deep
-            .equal(expected);
-        });
+        return expect(communicationMethods)
+          .to.deep
+          .equal(expected);
+      });
 
     it('should get all communication methods', function() {
       const communicationMethods = CommunicationMethodsFormatter
         .getCommunicationMethods(context);
+
       const expected = [{
           title: 'Skype',
           payload: 'SKYPE',
@@ -76,24 +82,27 @@ describe('Communication methods formatter', function() {
   });
 
   describe('#getCommunicationMethodByIdentifier()', function() {
-      it(
-        'should find right string to ask for right communication Method(Skype)',
-        function() {
-          const input = 'SKYPE';
-          const expected = {
-            identifier: 'SKYPE',
-            name: 'Skype',
-            infoRequestText: '@REQUEST_SKYPE_NAME',
-          };
-          return expect(CommunicationMethodsFormatter
+    it(
+      'should find right string to ask for right communication Method(Skype)',
+      function() {
+        const input = 'SKYPE';
+
+        const expected = {
+          identifier: 'SKYPE',
+          name: 'Skype',
+          infoRequestText: '@REQUEST_SKYPE_NAME',
+        };
+
+        return expect(CommunicationMethodsFormatter
             .getCommunicationMethodByIdentifier(input))
-            .to.deep
-            .equal(expected);
-        });
+          .to.deep
+          .equal(expected);
       });
+  });
 
   describe('#getCommunicationMethodByInput()', function() {
-    it('should find right string to ask for right communication Method(Skype)',
+    it(
+      'should find right string to ask for right communication Method(Skype)',
       function() {
         const input = 'Skype';
 
@@ -104,12 +113,13 @@ describe('Communication methods formatter', function() {
         };
 
         return expect(CommunicationMethodsFormatter
-          .getCommunicationMethodByInput(input))
+            .getCommunicationMethodByInput(input))
           .to.deep
           .equal(expected);
       });
 
-    it('should find right string to ask for right communication Method(Phonenumber)',
+    it(
+      'should find right string to ask for right communication Method(Phonenumber)',
       function() {
         const input = 'Kahvila';
         const expected = {
@@ -119,40 +129,42 @@ describe('Communication methods formatter', function() {
         };
 
         return expect(CommunicationMethodsFormatter
-          .getCommunicationMethodByInput(input))
+            .getCommunicationMethodByInput(input))
           .to.deep
           .equal(expected);
       });
 
-      it('should find right string to ask for right communication Method(CAFETERIA)',
-        function() {
-          const input = 'Puhelin';
-          const expected = {
-            identifier: 'PHONE',
-            name: 'Puhelin',
-            infoRequestText: '@REQUEST_PHONE_NUMBER',
-          };
+    it(
+      'should find right string to ask for right communication Method(CAFETERIA)',
+      function() {
+        const input = 'Puhelin';
+        const expected = {
+          identifier: 'PHONE',
+          name: 'Puhelin',
+          infoRequestText: '@REQUEST_PHONE_NUMBER',
+        };
 
-          return expect(CommunicationMethodsFormatter
+        return expect(CommunicationMethodsFormatter
             .getCommunicationMethodByInput(input))
-            .to.deep
-            .equal(expected);
-        });
-    });
-
-    describe('#createCommunicationMethodslist()', function() {
-      it(
-        'should return an array of added communication methods',
-        function() {
-          const context = {
-            communicationMethods: {
-                SKYPE : 'nickname',
-            },
-          };
-          return expect(CommunicationMethodsFormatter
-            .createCommunicationMethodslist(context))
-            .to.deep
-            .equal('Skype (nickname)');
-        });
+          .to.deep
+          .equal(expected);
       });
+  });
+
+  describe('#createCommunicationMethodslist()', function() {
+    it(
+      'should return an array of added communication methods',
+      function() {
+        const context = {
+          communicationMethods: {
+            SKYPE: 'nickname',
+          },
+        };
+
+        return expect(CommunicationMethodsFormatter
+            .createCommunicationMethodslist(context))
+          .to.deep
+          .equal('Skype (nickname)');
+      });
+  });
 });

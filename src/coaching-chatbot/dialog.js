@@ -4,9 +4,9 @@ import strings from './strings.json';
 import * as actions from './actions';
 import * as intents from './intents';
 import PersonalInformationFormatter
- from '../lib/personal-information-formatter-service';
+from '../lib/personal-information-formatter-service';
 import CommunicationMethodsFormatter
- from '../lib/communication-methods-formatter';
+from '../lib/communication-methods-formatter';
 
 const bot = new Builder(strings);
 
@@ -116,7 +116,7 @@ bot
       (session) => {
         session.addResult('@REQUEST_COMMUNICATION_METHOD',
           CommunicationMethodsFormatter
-            .getCommunicationMethods(session.context));
+          .getCommunicationMethods(session.context));
       },
       (session) => {
         if (session.checkIntent('#COMMUNICATION_METHODS')) {
@@ -158,13 +158,14 @@ bot
     '/add_meeting_frequency', [
       (session) => {
         session.addResult('@REQUEST_MEETING_FREQUENCY',
-            PersonalInformationFormatter.getMeetingFrequency(session.context));
+          PersonalInformationFormatter.getMeetingFrequency(session.context));
       },
       (session) => {
         if (session.checkIntent('#MEETING_FREQUENCIES')) {
           session.runActions([
-              'markUserAsSearching',
-              'addMeetingFrequency']);
+            'markUserAsSearching',
+            'addMeetingFrequency',
+          ]);
           session.addResult('@CHANGE_MEETING_FREQUENCY');
           session.endDialog();
         } else {
@@ -180,8 +181,8 @@ bot
         session.runActions(['updateProfile']);
         if (!session.context.searching) {
           session.addResult('@DISPLAY_PROFILE',
-           PersonalInformationFormatter
-              .getPersonalInformationbuttons(session.context));
+            PersonalInformationFormatter
+            .getPersonalInformationbuttons(session.context));
         } else {
           session.runActions(['getAvailablePairs']);
         }
@@ -272,9 +273,9 @@ bot
       },
     ])
   .match(
-      '#RESET',
-      (session) => {
-        session.beginDialog('/reset');
-      });
+    '#RESET',
+    (session) => {
+      session.beginDialog('/reset');
+    });
 
 module.exports = bot;

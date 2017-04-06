@@ -129,20 +129,23 @@ export function markUserAsSearching({ context }) {
 export function getAvailablePairs({ sessionId, context }) {
   return new Promise((resolve, reject) => {
     let sessions = new Sessions();
+
     return sessions.getAvailablePairs(sessionId, context.meetingFrequency)
-        .then((pairs) => {
-          if (pairs.length > 0) {
-            resolve({
-              result: PairFormatter
-                  .beautifyAvailablePairs(pairs),
-            });
-          } else {
-            resolve({ result: '@NO_PAIRS_AVAILABLE' });
-          }
-        })
-        .catch((err) => {
-          log.error('err: {0}', err);
-          reject(err);
-        });
+      .then((pairs) => {
+        if (pairs.length > 0) {
+          resolve({
+            result: PairFormatter
+              .beautifyAvailablePairs(pairs),
+          });
+        } else {
+          resolve({
+            result: '@NO_PAIRS_AVAILABLE',
+          });
+        }
+      })
+      .catch((err) => {
+        log.error('err: {0}', err);
+        reject(err);
+      });
   });
 }

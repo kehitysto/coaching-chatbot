@@ -49,17 +49,17 @@ describe('Facebook Messenger service', function() {
                   /https:\/\/graph\.facebook\.com\/.*\/me\/messages/
                 ),
                 qs: {
-                  access_token: 'DUMMY_ACCESS_TOKEN'
+                  access_token: 'DUMMY_ACCESS_TOKEN',
                 },
                 method: 'POST',
                 json: sinon.match({
                   recipient: {
-                    id: 'USER_ID'
+                    id: 'USER_ID',
                   },
                   message: {
-                    text: 'Message...'
-                  }
-                })
+                    text: 'Message...',
+                  },
+                }),
               })
             );
         });

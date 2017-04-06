@@ -16,6 +16,7 @@ const Messenger = {
     if (quickReplies.length) {
       body.message['quick_replies'] = [];
     }
+
     for (let quickReply of quickReplies) {
       body.message['quick_replies'].push({
         'content_type': 'text',
@@ -67,6 +68,7 @@ const Messenger = {
     return Promise.reject(new Error('400 Bad Token'));
   },
 };
+
 module.exports = Messenger;
 
 function _receiveMessage(messageEvent, chatbot) {

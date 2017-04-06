@@ -4,13 +4,13 @@ process.env.RUN_ENV = 'dev';
 import Chatbot from '../../src/chatbot/chatbot-service';
 import dialog from '../../src/coaching-chatbot/dialog';
 import PersonalInformationFormatter
- from '../../src/lib/personal-information-formatter-service';
+from '../../src/lib/personal-information-formatter-service';
 import CommunicationMethodsFormatter
- from '../../src/lib/communication-methods-formatter';
+from '../../src/lib/communication-methods-formatter';
 import Strings from '../../src/coaching-chatbot/strings.json';
 import Sessions from '../../src/util/sessions-service';
 import PairFormatter
- from '../../src/lib/pair-formatter';
+from '../../src/lib/pair-formatter';
 
 const SESSION = 'SESSION';
 
@@ -138,7 +138,8 @@ describe('User story', function() {
               buildResponse(
                 PersonalInformationFormatter.formatFromTemplate(
                   '@DISPLAY_PROFILE', this.userInformation),
-                  PersonalInformationFormatter.getPersonalInformationbuttons(this.context)),
+                PersonalInformationFormatter.getPersonalInformationbuttons(
+                  this.context)),
             ]);
         });
     });
@@ -161,7 +162,8 @@ describe('User story', function() {
               buildResponse(
                 PersonalInformationFormatter.formatFromTemplate(
                   '@DISPLAY_PROFILE', this.userInformation),
-                  PersonalInformationFormatter.getPersonalInformationbuttons(this.context)),
+                PersonalInformationFormatter.getPersonalInformationbuttons(
+                  this.context)),
             ]);
         });
     });
@@ -183,7 +185,8 @@ describe('User story', function() {
               buildResponse(
                 PersonalInformationFormatter.formatFromTemplate(
                   '@DISPLAY_PROFILE', this.userInformation),
-                  PersonalInformationFormatter.getPersonalInformationbuttons(this.context)),
+                PersonalInformationFormatter.getPersonalInformationbuttons(
+                  this.context)),
             ]);
         });
     });
@@ -218,7 +221,8 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
                 CommunicationMethodsFormatter
-                  .getCommunicationMethods(this.sessions.db.dump()[SESSION])),
+                .getCommunicationMethods(this.sessions.db.dump()[
+                  SESSION])),
             ]);
         }
       );
@@ -265,7 +269,8 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
                 CommunicationMethodsFormatter
-                  .getCommunicationMethods(this.sessions.db.dump()[SESSION])),
+                .getCommunicationMethods(this.sessions.db.dump()[
+                  SESSION])),
             ]);
         }
       );
@@ -313,7 +318,8 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
                 CommunicationMethodsFormatter
-                  .getCommunicationMethods(this.sessions.db.dump()[SESSION])),
+                .getCommunicationMethods(this.sessions.db.dump()[
+                  SESSION])),
             ]);
         }
       );
@@ -335,8 +341,11 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, '040-123123'))
             .to.eventually.become([
-              buildResponse('@REQUEST_MEETING_FREQUENCY', PersonalInformationFormatter
-               .getMeetingFrequency(this.sessions.db.dump()[SESSION]))]);
+              buildResponse('@REQUEST_MEETING_FREQUENCY',
+                PersonalInformationFormatter
+                .getMeetingFrequency(this.sessions.db.dump()[SESSION])
+              )
+            ]);
         }
       );
     }
@@ -368,8 +377,11 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'muuta tapaamisväliä'))
             .to.eventually.become([
-              buildResponse('@REQUEST_MEETING_FREQUENCY', PersonalInformationFormatter
-               .getMeetingFrequency(this.sessions.db.dump()[SESSION]))]);
+              buildResponse('@REQUEST_MEETING_FREQUENCY',
+                PersonalInformationFormatter
+                .getMeetingFrequency(this.sessions.db.dump()[SESSION])
+              )
+            ]);
         }
       );
 
@@ -392,58 +404,108 @@ describe('User story', function() {
       it(
         'should provide user with the list of users who has same meeting frequency',
         function() {
-          const testUser = { name: 'Matti', job: 'Ope', communicationMethods: { SKYPE: 'Matti123' }, meetingFrequency: 'ONCE_EVERY_TWO_WEEKS', searching: true };
+          const testUser = {
+            name: 'Matti',
+            job: 'Ope',
+            communicationMethods: {
+              SKYPE: 'Matti123',
+            },
+            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
+            searching: true,
+          };
+
           this.sessions.write('ID', testUser);
+
+          const expected = buildResponse(PairFormatter.beautifyAvailablePairs(
+            [{
+              id: 'ID',
+              context: testUser,
+            }, ]
+          ));
+
           return expect(
-            this.bot.receive(SESSION, ''))
-            .to.eventually.become([
-              buildResponse( PairFormatter.beautifyAvailablePairs([
-                  {
-                    id: 'ID',
-                    context: testUser,
-                  },
-                ]))
-            ]);
+              this.bot.receive(SESSION, ''))
+            .to.eventually.become([expected]);
         }
       );
+
       it(
         'should provide user with the list of users who has same meeting frequency while there are other users with different frequency',
         function() {
-          const testUser = { name: 'Matti', job: 'Ope', communicationMethods: { SKYPE: 'Matti123' }, meetingFrequency: 'ONCE_EVERY_TWO_WEEKS', searching: true };
+          const testUser = {
+            name: 'Matti',
+            job: 'Ope',
+            communicationMethods: {
+              SKYPE: 'Matti123',
+            },
+            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
+            searching: true,
+          };
+
           this.sessions.write('ID', testUser);
-          const testUser2 = { name: 'Laura', job: 'Student', communicationMethods: { SKYPE: 'Laura123' }, meetingFrequency: 'EVERY_WEEKDAY', searching: true };
+
+          const testUser2 = {
+            name: 'Laura',
+            job: 'Student',
+            communicationMethods: {
+              SKYPE: 'Laura123',
+            },
+            meetingFrequency: 'EVERY_WEEKDAY',
+            searching: true,
+          };
+
           this.sessions.write('ID1', testUser2);
+
           return expect(
-            this.bot.receive(SESSION, ''))
+              this.bot.receive(SESSION, ''))
             .to.eventually.become([
-              buildResponse( PairFormatter.beautifyAvailablePairs([
-                  {
-                    id: 'ID',
-                    context: testUser,
-                  },
-                ]))
+              buildResponse(PairFormatter.beautifyAvailablePairs(
+                [{
+                  id: 'ID',
+                  context: testUser,
+                }])),
             ]);
         }
-      )
+      );
+
       it(
         'shouldnt put in the list users who are not in searching mode',
         function() {
-          const testUser = { name: 'Matti', job: 'Ope', communicationMethods: { SKYPE: 'Matti123' }, meetingFrequency: 'ONCE_EVERY_TWO_WEEKS', searching: true };
+          const testUser = {
+            name: 'Matti',
+            job: 'Ope',
+            communicationMethods: {
+              SKYPE: 'Matti123',
+            },
+            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
+            searching: true,
+          };
+
           this.sessions.write('ID', testUser);
-          const testUser2 = { name: 'Laura', job: 'Student', communicationMethods: { SKYPE: 'Laura123' }, meetingFrequency: 'ONCE_EVERY_TWO_WEEKS', searching: false };
+
+          const testUser2 = {
+            name: 'Laura',
+            job: 'Student',
+            communicationMethods: {
+              SKYPE: 'Laura123',
+            },
+            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
+            searching: false,
+          };
+
           this.sessions.write('ID1', testUser2);
+
           return expect(
-            this.bot.receive(SESSION, ''))
+              this.bot.receive(SESSION, ''))
             .to.eventually.become([
-              buildResponse( PairFormatter.beautifyAvailablePairs([
-                  {
-                    id: 'ID',
-                    context: testUser,
-                  },
-                ]))
+              buildResponse(PairFormatter.beautifyAvailablePairs(
+                [{
+                  id: 'ID',
+                  context: testUser,
+                }])),
             ]);
         }
-      )
+      );
     }
   );
 });

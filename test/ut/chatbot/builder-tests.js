@@ -20,7 +20,7 @@ describe('Chatbot builder', function() {
       };
 
       return expect(this.builder.intent('FOOBAR', intentObj))
-          .to.equal(this.builder);
+        .to.equal(this.builder);
     });
 
     it('should register the intent with the given name', function() {
@@ -31,7 +31,7 @@ describe('Chatbot builder', function() {
       this.builder.intent('FOOBAR', intentObj);
 
       return expect(this.builder._intents['FOOBAR'])
-          .to.deep.equal(intentObj);
+        .to.deep.equal(intentObj);
     });
 
     it('should accept intent names prefixed with \'#\'', function() {
@@ -42,7 +42,7 @@ describe('Chatbot builder', function() {
       this.builder.intent('#FOOBAR', intentObj);
 
       return expect(this.builder._intents['FOOBAR'])
-          .to.deep.equal(intentObj);
+        .to.deep.equal(intentObj);
     });
   });
 
@@ -55,9 +55,12 @@ describe('Chatbot builder', function() {
     });
 
     it('should reset state if dialog does not exist', function() {
-      const ret = this.builder.run('SESSION', { 'state': '/foobar?666' }, 'moi');
-      return expect(ret).to.eventually
-          .have.property('stateId', '');
+      const ret = this.builder.run('SESSION', {
+        'state': '/foobar?666',
+      }, 'moi');
+      return expect(ret)
+        .to.eventually
+        .have.property('stateId', '');
     });
   });
 
@@ -69,11 +72,13 @@ describe('Chatbot builder', function() {
         .to.be.a('Promise');
     });
 
-    it('should return an Error when there is no such actionId', function() {
-      const action = 'UNDEFINED_ACTION';
-      const ret = this.builder.runAction(action, {}, {});
+    it('should return an Error when there is no such actionId',
+      function() {
+        const action = 'UNDEFINED_ACTION';
+        const ret = this.builder.runAction(action, {}, {});
 
-      return expect(ret).to.be.rejectedWith('No such action: ' + action);
+        return expect(ret)
+          .to.be.rejectedWith('No such action: ' + action);
       });
 
     it('should return a Promise if actionId is found', function() {
@@ -81,20 +86,18 @@ describe('Chatbot builder', function() {
       const action = 'setInterest';
       const ret = this.builder.runAction(action, this.session, {});
 
-      return expect(ret).to.be.a('Promise');
+      return expect(ret)
+        .to.be.a('Promise');
     });
 
     it('should succeed even if the action throws', function() {
       const action = 'setInterest';
-      const actionFn = sinon.stub().throws(new Error());
+      const actionFn = sinon.stub()
+        .throws(new Error());
       this.builder.action(action, actionFn);
 
-      //const logMock = sinon.mock(log, 'error');
-      //logMock.expects(sinon.ANY).once();
-
       return expect(this.builder.runAction(action, this.session))
-          .to.be.fulfilled;
-      //        .then(() => logMock.verify());
+        .to.be.fulfilled;
     });
   });
 
@@ -103,7 +106,8 @@ describe('Chatbot builder', function() {
       const ret = this.builder.checkIntent('UNDEFINED_INTENT', this
         .session);
 
-      return expect(ret).to.be.false;
+      return expect(ret)
+        .to.be.false;
     });
   });
 
@@ -112,27 +116,29 @@ describe('Chatbot builder', function() {
       const stateId = 'UNDEFINED_STATEID';
       const ret = this.builder.getSubStateCount(stateId);
 
-      return expect(ret).to.equal(0);
+      return expect(ret)
+        .to.equal(0);
     });
   });
 
   describe('#getStringTemplate', function() {
     it('should return the requested template', function() {
       const templateId = '@TEST_TEMPLATE';
-      const template = "foo {bar} baz";
+      const template = 'foo {bar} baz';
 
       this.builder._strings[templateId] = template;
 
       return expect(this.builder.getStringTemplate(templateId))
-          .to.equal(template);
+        .to.equal(template);
     });
 
-    it('should return the template id if no template can be found', function() {
-      const templateId = '@TEST_TEMPLATE';
+    it('should return the template id if no template can be found',
+      function() {
+        const templateId = '@TEST_TEMPLATE';
 
-      return expect(this.builder.getStringTemplate(templateId))
+        return expect(this.builder.getStringTemplate(templateId))
           .to.equal(templateId);
-    });
+      });
   });
 
   describe('#_matchIntentAny', function() {
@@ -141,9 +147,11 @@ describe('Chatbot builder', function() {
 
       const matchIntentMock = sinon.mock(this.builder);
       matchIntentMock.expects('_matchIntent')
-          .withArgs('foo', 'baz').returns(null);
+        .withArgs('foo', 'baz')
+        .returns(null);
       matchIntentMock.expects('_matchIntent')
-          .withArgs('bar', 'baz').returns(null);
+        .withArgs('bar', 'baz')
+        .returns(null);
 
       this.builder._matchIntentAny(intents, 'baz');
 
@@ -157,8 +165,10 @@ describe('Chatbot builder', function() {
 
       const ret = this.builder._runStep(0, this.session, 'message');
 
-      expect(ret).to.be.a('Promise');
-      return expect(ret.catch(() => null)).to.be.fulfilled;
+      expect(ret)
+        .to.be.a('Promise');
+      return expect(ret.catch(() => null))
+        .to.be.fulfilled;
     });
 
     it('should run all actions before resolving', function() {
@@ -169,11 +179,11 @@ describe('Chatbot builder', function() {
       this.session.runQueue = Promise.resolve();
       this.session.next = () => null;
       this.builder.dialog(
-        '',
-        [(session) => {
+        '', [(session) => {
           for (let action of actions) {
             session.runQueue = session.runQueue.then(
-              () => this.builder.runAction(action, this.session, '')
+              () => this.builder.runAction(action, this.session,
+                '')
             );
           }
         }]
@@ -184,19 +194,21 @@ describe('Chatbot builder', function() {
         this.builder.action(action, () => {
           return new Promise((resolve, reject) => {
             setTimeout(
-                () => {
-                  results.push(action);
-                  resolve({});
-                },
-                    50);
+              () => {
+                results.push(action);
+                resolve({});
+              },
+              50);
           });
         });
       }
 
       const ret = this.builder._runStep(0, this.session, 'message');
 
-      return expect(ret).to.be.fulfilled
-          .then(() => expect(results).to.deep.equal(actions));
+      return expect(ret)
+        .to.be.fulfilled
+        .then(() => expect(results)
+          .to.deep.equal(actions));
     });
   });
 });

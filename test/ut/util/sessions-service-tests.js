@@ -73,24 +73,29 @@ describe('Sessions service', function() {
   describe('#write()', function() {
     before(function() {
       this.db.prototype.put = sinon.stub()
-          .callsArg(1);
+        .callsArg(1);
     });
 
     it('should return a Promise', function() {
       const ret = this.sessions.write(
-          'SESSION_ID', { key: 'value' });
+        'SESSION_ID', {
+          key: 'value',
+        });
 
       expect(ret)
-          .to.be.a('Promise');
+        .to.be.a('Promise');
 
       return expect(ret)
-          .to.eventually.be.fulfilled;
+        .to.eventually.be.fulfilled;
     });
 
     it('should return an error if id is null', function() {
-      const ret = this.sessions.write(null, { key: 'value' } );
+      const ret = this.sessions.write(null, {
+        key: 'value',
+      });
 
-      return expect(ret).to.be.rejectedWith('No session ID');
+      return expect(ret)
+        .to.be.rejectedWith('No session ID');
     });
 
     it('should post the session context to DynamoDB', function() {

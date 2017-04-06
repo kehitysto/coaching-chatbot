@@ -173,29 +173,35 @@ describe('coaching-bot actions', function() {
         return expect(ret).to.eventually.deep.equal(
         { userData: { profile: 'Matti, Opiskelija' } } );
       });
+
       it('Should return everything', function() {
         const ret = actions.updateProfile({
           context: { 'name': 'Matti', 'job':
           'Opiskelija', 'age': '23', 'place': 'Helsinki' },
           userData: '',
         });
+
         return expect(ret).to.eventually.deep.equal(
         { userData: { profile: 'Matti, Opiskelija, 23, Helsinki' } } );
       });
     });
+
     describe('#reset', function() {
       it('returns a Promise', function() {
         const ret = actions.reset({
           context: {},
           input: '',
         });
+
         expect(ret).to.be.a('Promise');
       });
+
       it('returns empty context', function() {
         const ret = actions.reset({
           context: {},
           input: '',
         });
+
         return expect(ret).to.eventually.deep.equal( { context: {} } );
       });
     });
@@ -206,6 +212,7 @@ describe('coaching-bot actions', function() {
           context: {},
           input: 'Skype',
         });
+
         return expect(ret).to.eventually.deep.equal(
           { context: { communicationMethods: { 'SKYPE': 'UNDEFINED_COMMUNICATION_INFO' } }, result: '@REQUEST_SKYPE_NAME' } );
       });
@@ -215,6 +222,7 @@ describe('coaching-bot actions', function() {
           context: { communicationMethods: { 'SKYPE': 'nickname' } },
           input: 'Puhelin',
         });
+
         return expect(ret).to.eventually.deep.equal(
           { context: { communicationMethods: { 'SKYPE': 'nickname', 'PHONE': 'UNDEFINED_COMMUNICATION_INFO' } }, result: '@REQUEST_PHONE_NUMBER' } );
       });
@@ -226,10 +234,11 @@ describe('coaching-bot actions', function() {
          context: {
            communicationMethods: {
              'Skype': 'UNDEFINED_COMMUNICATION_INFO',
-           }
+           },
          },
          input: 'nickname',
        });
+
        return expect(ret).to.eventually.deep.equal(
          { context: { communicationMethods: { 'Skype': 'nickname' } } } );
      });
@@ -239,6 +248,7 @@ describe('coaching-bot actions', function() {
          context: {},
          input: 'nickname',
        });
+
        return expect(ret).to.eventually.deep.equal(
          { context: { communicationMethods: { input: 'nickname' } } } );
      });

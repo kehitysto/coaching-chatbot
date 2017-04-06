@@ -4,7 +4,7 @@ process.env.RUN_ENV = 'dev';
 import Chatbot from '../../src/chatbot/chatbot-service';
 import dialog from '../../src/coaching-chatbot/dialog';
 import PersonalInformationFormatter
- from '../../src/lib/personal-information-formatter-service';
+from '../../src/lib/personal-information-formatter-service';
 import Strings from '../../src/coaching-chatbot/strings.json';
 import Sessions from '../../src/util/sessions-service';
 
@@ -108,7 +108,7 @@ describe('User story', function() {
             )
             .to.eventually.become([
               buildResponse(
-				PersonalInformationFormatter.formatFromTemplate(
+                PersonalInformationFormatter.formatFromTemplate(
                   '@CONFIRM_NAME', this.userInformation)),
               buildResponse('@REQUEST_JOB'),
             ]);
@@ -126,11 +126,16 @@ describe('User story', function() {
               this.bot.receive(SESSION, this.userInformation.job)
             )
             .to.eventually.become(
-                [buildResponse(PersonalInformationFormatter.formatFromTemplate('@CONFIRM_JOB', this.userInformation)), buildResponse(PersonalInformationFormatter.formatFromTemplate('@INFORMATION_ABOUT_BUTTONS')),
-                  buildResponse(
-                    PersonalInformationFormatter.formatFromTemplate(
-                      '@DISPLAY_PROFILE', this.userInformation), PersonalInformationFormatter.getPersonalInformationbuttons(this.context)),
-            ]);
+              [buildResponse(PersonalInformationFormatter.formatFromTemplate(
+                  '@CONFIRM_JOB', this.userInformation)), buildResponse(
+                  PersonalInformationFormatter.formatFromTemplate(
+                    '@INFORMATION_ABOUT_BUTTONS')),
+                buildResponse(
+                  PersonalInformationFormatter.formatFromTemplate(
+                    '@DISPLAY_PROFILE', this.userInformation),
+                  PersonalInformationFormatter.getPersonalInformationbuttons(
+                    this.context)),
+              ]);
         });
     });
 
