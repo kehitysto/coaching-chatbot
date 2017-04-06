@@ -39,5 +39,6 @@
   "@PEER_NO_LONGER_AVAILABLE": "Hups, valitsemasi vertaispari ei olekaan enää vapaana. Jatka etsintää!",
   "@CONFIRM_STOP_SEARCHING": "Haluatko varmasti lopettaa parinhaun?",
   "@NOT_CURRENTLY_SEARCHING": "Et hae pareja tällä hetkellä.",
-  "@STOPPED_SEARCHING": "Parinhakusi on lopetettu."
+  "@STOPPED_SEARCHING": "Parinhakusi on lopetettu.",
+  "@INFORMATION_ABOUT_LIST": "Tässä on lista henkilöistä joilla on sama tapamisväli:"
 }
