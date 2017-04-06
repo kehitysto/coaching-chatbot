@@ -136,6 +136,12 @@ module.exports = {
         ],
     },
 
+    STOP_SEARCHING: {
+      any: [
+        /^lopeta haku/i,
+      ],
+    },
+
     COMMUNICATION_METHODS: {
         any: [
           /^Skype/i,
