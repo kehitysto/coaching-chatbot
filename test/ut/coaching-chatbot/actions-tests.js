@@ -303,15 +303,4 @@ describe('coaching-bot actions', function() {
           .deep.equal({ context: { searching: true } });
       });
     });
-
-    describe('#getAvailablePairs', function() {
-      it('returns a Promise', function() {
-        const ret = actions.getAvailablePairs({
-          context: {},
-          input: '',
-        });
-
-        expect(ret).to.be.a('Promise');
-      });
-    });
 });

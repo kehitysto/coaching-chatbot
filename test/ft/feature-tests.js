@@ -425,7 +425,10 @@ describe('User story', function() {
 
           return expect(
               this.bot.receive(SESSION, ''))
-            .to.eventually.become([expected]);
+            .to.eventually.become([
+              buildResponse('@INFORMATION_ABOUT_LIST'),
+              expected
+            ]);
         }
       );
 
@@ -457,8 +460,9 @@ describe('User story', function() {
           this.sessions.write('ID1', testUser2);
 
           return expect(
-              this.bot.receive(SESSION, ''))
+              this.bot.receive(SESSION, 'seuraava'))
             .to.eventually.become([
+              buildResponse('@INFORMATION_ABOUT_LIST'),
               buildResponse(PairFormatter.beautifyAvailablePairs(
                 [{
                   id: 'ID',
@@ -496,8 +500,9 @@ describe('User story', function() {
           this.sessions.write('ID1', testUser2);
 
           return expect(
-              this.bot.receive(SESSION, ''))
+              this.bot.receive(SESSION, 'Seuraava'))
             .to.eventually.become([
+              buildResponse('@INFORMATION_ABOUT_LIST'),
               buildResponse(PairFormatter.beautifyAvailablePairs(
                 [{
                   id: 'ID',
