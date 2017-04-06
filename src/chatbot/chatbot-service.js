@@ -8,12 +8,17 @@ module.exports = class Chatbot {
 
   receive(sessionId, text) {
     return this._sessions.read(sessionId)
+      .then((context) => {
+        log.info('Context retrieved: {0}', JSON.stringify(context));
+        return context;
+      })
       .catch((err) => {
         console.error(err.message.toString());
         return {};
       })
       .then((context) => {
         return this._dialog.run(
+          sessionId,
           context,
           text
         );

@@ -1,29 +1,38 @@
 import readline from 'readline';
+import fs from 'fs';
+import path from 'path';
 
+import Sessions from '../src/util/sessions-service';
 import Chatbot from '../src/chatbot/chatbot-service';
 import dialog from '../src/coaching-chatbot/dialog';
 
 require('../src/lib/env-vars')
   .config();
 
+// normally undefined, set to 'dev' for local client only
+process.env.RUN_ENV = 'dev';
+
+const STATE_STORE = '.state.json';
+const sessions = new Sessions();
+
 function main() {
-  let context = {};
-  const sessions = {
-    read: (sessionId) => {
-      return Promise.resolve(context);
-    },
-
-    write: (sessionId, ctx) => {
-      context = ctx;
-      return Promise.resolve(context);
-    },
-
-    getAvailablePairs: () => [],
-  };
-
   const bot = new Chatbot(dialog, sessions);
 
   interactive(bot);
+}
+
+function snapState() {
+  const storePath = path.resolve(__dirname, '..', STATE_STORE);
+  const data = sessions.db.dump();
+
+  fs.writeFileSync(storePath, JSON.stringify(data));
+}
+
+function loadState() {
+  const storePath = path.resolve(__dirname, '..', STATE_STORE);
+  const data = fs.readFileSync(storePath);
+
+  sessions.db.load(JSON.parse(data));
 }
 
 function interactive(bot) {
@@ -37,6 +46,12 @@ function interactive(bot) {
     line = line.trim();
 
     if (!line) {
+      return rl.prompt();
+    } else if (line === '!snap') {
+      snapState();
+      return rl.prompt();
+    } else if (line === '!load') {
+      loadState();
       return rl.prompt();
     }
 

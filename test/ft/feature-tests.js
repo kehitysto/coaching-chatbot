@@ -1,7 +1,16 @@
+// normally undefined, set to 'dev' for local client only
+process.env.RUN_ENV = 'dev';
+
 import Chatbot from '../../src/chatbot/chatbot-service';
 import dialog from '../../src/coaching-chatbot/dialog';
-import Formatter from '../../src/lib/personal-information-formatter-service';
+import PersonalInformationFormatter
+from '../../src/lib/personal-information-formatter-service';
+import CommunicationMethodsFormatter
+from '../../src/lib/communication-methods-formatter';
 import Strings from '../../src/coaching-chatbot/strings.json';
+import Sessions from '../../src/util/sessions-service';
+import PairFormatter
+from '../../src/lib/pair-formatter';
 
 const SESSION = 'SESSION';
 
@@ -19,19 +28,9 @@ function buildResponse(templateId, quickReplies = []) {
 
 describe('User story', function() {
   before(function() {
-    this.context = {};
-    const sessions = {
-      read: (sessionId) => {
-        return Promise.resolve(this.context);
-      },
+    this.sessions = new Sessions();
 
-      write: (sessionId, context) => {
-        this.context = context;
-        return Promise.resolve(this.context);
-      },
-    };
-
-    this.bot = new Chatbot(dialog, sessions);
+    this.bot = new Chatbot(dialog, this.sessions);
 
     this.expectedName = 'Matti';
     this.expectedJob = 'Opiskelija';
@@ -112,7 +111,7 @@ describe('User story', function() {
             )
             .to.eventually.become([
               buildResponse(
-                Formatter.formatFromTemplate(
+                PersonalInformationFormatter.formatFromTemplate(
                   '@CONFIRM_NAME', this.userInformation)),
               buildResponse('@REQUEST_JOB'),
             ]);
@@ -131,8 +130,16 @@ describe('User story', function() {
             )
             .to.eventually.become([
               buildResponse(
-                Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@CONFIRM_JOB', this.userInformation)),
+              buildResponse(
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@INFORMATION_ABOUT_BUTTONS')),
+              buildResponse(
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation),
+                PersonalInformationFormatter.getPersonalInformationbuttons(
+                  this.context)),
             ]);
         });
     });
@@ -150,11 +157,13 @@ describe('User story', function() {
                 'Lisää ikä ' + this.userInformation.age))
             .to.eventually.become([
               buildResponse(
-                Formatter.formatFromTemplate(
+                PersonalInformationFormatter.formatFromTemplate(
                   '@CONFIRM_AGE', this.userInformation)),
               buildResponse(
-                Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation),
+                PersonalInformationFormatter.getPersonalInformationbuttons(
+                  this.context)),
             ]);
         });
     });
@@ -174,8 +183,10 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse('@CONFIRM_PLACE'),
               buildResponse(
-                Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation),
+                PersonalInformationFormatter.getPersonalInformationbuttons(
+                  this.context)),
             ]);
         });
     });
@@ -184,12 +195,34 @@ describe('User story', function() {
     'As a registered user I want to provide my acceptable methods of communication with quick replies',
     function() {
       it(
-        'should provide a list of communication methods from which the user can choose one',
+        'should tell the user there are no communication methods added yet',
         function() {
           return expect(
               this.bot.receive(SESSION, 'Etsi pari'))
+            .to.eventually.become(
+              [
+                buildResponse('@NO_METHODS_ADDED', [{
+                  'title': 'Kyllä',
+                  'payload': '@YES',
+                }, {
+                  'title': 'Ei',
+                  'payload': '@NO',
+                }]),
+              ]
+            );
+        }
+      );
+
+      it(
+        'after agreeing should provide a list of communication methods from which the user can choose one',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'kyllä'))
             .to.eventually.become([
-              buildResponse('@REQUEST_COMMUNICATION_METHOD', Formatter.getCommunicationMethods(this.context)),
+              buildResponse('@REQUEST_COMMUNICATION_METHOD',
+                CommunicationMethodsFormatter
+                .getCommunicationMethods(this.sessions.db.dump()[
+                  SESSION])),
             ]);
         }
       );
@@ -200,16 +233,23 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'Skype'))
             .to.eventually.become([
-              buildResponse('@REQUEST_SKYPE_NAME')]);
+              buildResponse('@REQUEST_SKYPE_NAME'),
+            ]);
         }
       );
 
       it(
-        'should ask if I want to add more communication methods after giving my Skype username',
+        'should ask if the user wants to add more methods',
         function() {
           return expect(
-              this.bot.receive(SESSION, 'username'))
+              this.bot.receive(SESSION, 'nickname'))
             .to.eventually.become([
+              buildResponse(PersonalInformationFormatter.formatFromTemplate(
+                '@CONFIRM_COMMUNICATION_METHODS', {
+                  communicationMethods: {
+                    SKYPE: 'nickname'
+                  }
+                })),
               buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
                 'title': 'Kyllä',
                 'payload': '@YES',
@@ -228,7 +268,9 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'Kyllä'))
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                Formatter.getCommunicationMethods(this.context)),
+                CommunicationMethodsFormatter
+                .getCommunicationMethods(this.sessions.db.dump()[
+                  SESSION])),
             ]);
         }
       );
@@ -239,7 +281,8 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'Puhelin'))
             .to.eventually.become([
-              buildResponse('@REQUEST_PHONE_NUMBER')]);
+              buildResponse('@REQUEST_PHONE_NUMBER')
+            ]);
         }
       );
 
@@ -248,15 +291,22 @@ describe('User story', function() {
         function() {
           return expect(
               this.bot.receive(SESSION, '040-123123'))
-            .to.eventually.become([
-              buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
-            ]);
+            .to.eventually.become(
+              [buildResponse(PersonalInformationFormatter.formatFromTemplate(
+                  '@CONFIRM_COMMUNICATION_METHODS', {
+                    communicationMethods: {
+                      SKYPE: 'nickname',
+                      PHONE: '040-123123'
+                    }
+                  })),
+                buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
+                  'title': 'Kyllä',
+                  'payload': '@YES',
+                }, {
+                  'title': 'Ei',
+                  'payload': '@NO',
+                }]),
+              ]);
         }
       );
 
@@ -267,7 +317,9 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'Kyllä'))
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                Formatter.getCommunicationMethods(this.context)),
+                CommunicationMethodsFormatter
+                .getCommunicationMethods(this.sessions.db.dump()[
+                  SESSION])),
             ]);
         }
       );
@@ -278,36 +330,21 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'Kahvila'))
             .to.eventually.become([
-              buildResponse('@REQUEST_PHONE_NUMBER')]);
-        }
-      );
-
-      it(
-        'should ask if I want to add more communication methods after giving my phone number',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, '040-123123'))
-            .to.eventually.become([
-              buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
+              buildResponse('@REQUEST_PHONE_NUMBER'),
             ]);
         }
       );
 
       it(
-        'if I do not want to add more communication methods, it should show my profile info and ask to start the search for a peer',
+        'should go straight to pair searching after all methods are given',
         function() {
           return expect(
-              this.bot.receive(SESSION, 'Ei'))
+              this.bot.receive(SESSION, '040-123123'))
             .to.eventually.become([
-              buildResponse(
-                Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
+              buildResponse('@REQUEST_MEETING_FREQUENCY',
+                PersonalInformationFormatter
+                .getMeetingFrequency(this.sessions.db.dump()[SESSION])
+              )
             ]);
         }
       );
@@ -315,72 +352,160 @@ describe('User story', function() {
   );
 
   describe(
-    'As a registered user I want to be able to restart the process and remove my data',
+    'As a registered user I want to provide my preferred meeting frequency with quick replies',
     function() {
-
-      beforeEach(function() {});
-
       it(
-        'should ask user for a confirmation when user has requested a reset',
+        'after providing preferred meeting frequency as "every weekdays", it should tell that no other users with the same preferred frequency are searching for a peer',
         function() {
           return expect(
-              this.bot.receive(
-                SESSION,
-                '!reset'))
+              this.bot.receive(SESSION, 'Arkipäivisin'))
             .to.eventually.become([
-              buildResponse('@RESET_CONFIRMATION', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
+              buildResponse('@CHANGE_MEETING_FREQUENCY'),
+              buildResponse('@NO_PAIRS_AVAILABLE'),
             ]);
-        });
-
-      it(
-        'should repeat the last question if the user declines to reset',
-        function() {
-          return expect(
-              this.bot.receive(
-                SESSION,
-                'ei'))
-            .to.eventually.become([
-              buildResponse(
-                Formatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation)),
-            ]);
-        });
-
-      it(
-        'should reset the context and go to the start if the user agrees to reset',
-        function() {
-          let backupContext = this.context;
-
-          let g = this.bot.receive(
-            SESSION,
-            '!reset');
-
-          return g.then(_ => {
-            let response = this.bot.receive(
-              SESSION,
-              'kyllä');
-
-            response.then(_ => this.context = backupContext);
-
-            return expect(response)
-              .to.eventually.become([
-                buildResponse('@RESET', []),
-                buildResponse('@GREETING', [{
-                  'title': 'Kyllä',
-                  'payload': '@YES',
-                }, {
-                  'title': 'Ei',
-                  'payload': '@NO',
-                }]),
-              ]);
-          });
         }
       );
-    });
+    }
+  );
+
+  describe(
+    'As a registered user I want to be able to change my preferred meeting frequency',
+    function() {
+      it(
+        'should ask for my preferred meeting frequency after I ask to change my preferred meeting frequency',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'muuta tapaamisväliä'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_MEETING_FREQUENCY',
+                PersonalInformationFormatter
+                .getMeetingFrequency(this.sessions.db.dump()[SESSION])
+              )
+            ]);
+        }
+      );
+
+      it(
+        'after providing preferred meeting frequency as "every second week", it should tell that no other users with the same preferred frequency are searching for a peer',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'Joka toinen viikko'))
+            .to.eventually.become([
+              buildResponse('@CHANGE_MEETING_FREQUENCY'),
+              buildResponse('@NO_PAIRS_AVAILABLE'),
+            ]);
+        }
+      );
+    }
+  );
+  describe(
+    'As a user searching for a pair I want to get a list of other users wanting to meet as often as I do',
+    function() {
+      it(
+        'should provide user with the list of users who has same meeting frequency',
+        function() {
+          const testUser = {
+            name: 'Matti',
+            job: 'Ope',
+            communicationMethods: {
+              SKYPE: 'Matti123',
+            },
+            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
+            searching: true,
+          };
+
+          this.sessions.write('ID', testUser);
+
+          const expected = buildResponse(PairFormatter.beautifyAvailablePairs(
+            [{
+              id: 'ID',
+              context: testUser,
+            }, ]
+          ));
+
+          return expect(
+              this.bot.receive(SESSION, ''))
+            .to.eventually.become([expected]);
+        }
+      );
+
+      it(
+        'should provide user with the list of users who has same meeting frequency while there are other users with different frequency',
+        function() {
+          const testUser = {
+            name: 'Matti',
+            job: 'Ope',
+            communicationMethods: {
+              SKYPE: 'Matti123',
+            },
+            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
+            searching: true,
+          };
+
+          this.sessions.write('ID', testUser);
+
+          const testUser2 = {
+            name: 'Laura',
+            job: 'Student',
+            communicationMethods: {
+              SKYPE: 'Laura123',
+            },
+            meetingFrequency: 'EVERY_WEEKDAY',
+            searching: true,
+          };
+
+          this.sessions.write('ID1', testUser2);
+
+          return expect(
+              this.bot.receive(SESSION, ''))
+            .to.eventually.become([
+              buildResponse(PairFormatter.beautifyAvailablePairs(
+                [{
+                  id: 'ID',
+                  context: testUser,
+                }])),
+            ]);
+        }
+      );
+
+      it(
+        'shouldnt put in the list users who are not in searching mode',
+        function() {
+          const testUser = {
+            name: 'Matti',
+            job: 'Ope',
+            communicationMethods: {
+              SKYPE: 'Matti123',
+            },
+            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
+            searching: true,
+          };
+
+          this.sessions.write('ID', testUser);
+
+          const testUser2 = {
+            name: 'Laura',
+            job: 'Student',
+            communicationMethods: {
+              SKYPE: 'Laura123',
+            },
+            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
+            searching: false,
+          };
+
+          this.sessions.write('ID1', testUser2);
+
+          return expect(
+              this.bot.receive(SESSION, ''))
+            .to.eventually.become([
+              buildResponse(PairFormatter.beautifyAvailablePairs(
+                [{
+                  id: 'ID',
+                  context: testUser,
+                }])),
+            ]);
+        }
+      );
+    }
+  );
 });

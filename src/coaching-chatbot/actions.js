@@ -1,5 +1,9 @@
-import Formatter from '../lib/personal-information-formatter-service';
-
+import log from '../lib/logger-service';
+import PersonalInformationFormatter
+ from '../lib/personal-information-formatter-service';
+import CommunicationMethodsFormatter
+ from '../lib/communication-methods-formatter';
+import PairFormatter from '../lib/pair-formatter';
 import Sessions from '../util/sessions-service';
 
 export function setName({ context, input }) {
@@ -39,7 +43,7 @@ export function setPlace({ context, input }) {
 }
 
 export function updateProfile({ context, userData }) {
-  let profile = Formatter.createProfile(context);
+  let profile = PersonalInformationFormatter.createProfile(context);
 
   return Promise.resolve({
     userData: {
@@ -51,7 +55,8 @@ export function updateProfile({ context, userData }) {
 
 export function addCommunicationMethod({ context, input }) {
   let undefinedCommunicationInfo = 'UNDEFINED_COMMUNICATION_INFO';
-  let method = Formatter.getCommunicationMethodByInput(input);
+  let method = CommunicationMethodsFormatter
+    .getCommunicationMethodByInput(input);
   return Promise.resolve({
     context: {
       ...context,
@@ -102,6 +107,15 @@ export function reset() {
     context: {},
   });
 }
+export function addMeetingFrequency( { context, input } ) {
+  return Promise.resolve({
+    context: {
+      ...context,
+      meetingFrequency: PersonalInformationFormatter
+        .getMeetingFrequencyIdentifierByInput(input),
+    },
+  });
+}
 
 export function markUserAsSearching({ context }) {
   return Promise.resolve({
@@ -112,16 +126,26 @@ export function markUserAsSearching({ context }) {
   });
 }
 
-export function getAvailablePairs() {
+export function getAvailablePairs({ sessionId, context }) {
   return new Promise((resolve, reject) => {
-    const sessions = new Sessions();
+    let sessions = new Sessions();
 
-    sessions.getAvailablePairs()
-        .then((pairs) => {
-          resolve({ result: [JSON.stringify(pairs)] });
-        })
-        .catch((err) => {
-          reject(err);
-        });
+    return sessions.getAvailablePairs(sessionId, context.meetingFrequency)
+      .then((pairs) => {
+        if (pairs.length > 0) {
+          resolve({
+            result: PairFormatter
+              .beautifyAvailablePairs(pairs),
+          });
+        } else {
+          resolve({
+            result: '@NO_PAIRS_AVAILABLE',
+          });
+        }
+      })
+      .catch((err) => {
+        log.error('err: {0}', err);
+        reject(err);
+      });
   });
 }

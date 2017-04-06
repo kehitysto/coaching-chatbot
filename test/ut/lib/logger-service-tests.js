@@ -16,35 +16,45 @@ describe('Logging service', function() {
     this.spy.restore();
   });
 
+  beforeEach(function() {
+    this.spy.reset();
+    Logger.setLevel(LEVELS.SILLY);
+  });
+
   describe('#log()', function() {
     it('should indicate "ERROR" log level', function() {
-      Logger.setLevel(LEVELS.ERROR);
-      Logger.log(this.message);
+      Logger.log(LEVELS.ERROR, this.message);
       assert(this.spy.calledWith('ERROR::juuh'));
     });
 
     it('should indicate "WARNING" log level', function() {
-      Logger.setLevel(LEVELS.WARNING);
-      Logger.log(this.message);
+      Logger.log(LEVELS.WARNING, this.message);
       assert(this.spy.calledWith('WARNING::juuh'));
     });
 
     it('should indicate "INFO" log level', function() {
-      Logger.setLevel(LEVELS.INFO);
-      Logger.log(this.message);
+      Logger.log(LEVELS.INFO, this.message);
       assert(this.spy.calledWith('INFO::juuh'));
     });
 
     it('should indicate "DEBUG" log level', function() {
-      Logger.setLevel(LEVELS.DEBUG);
-      Logger.log(this.message);
+      Logger.log(LEVELS.DEBUG, this.message);
       assert(this.spy.calledWith('DEBUG::juuh'));
     });
 
     it('should indicate "SILLY" log level', function() {
-      Logger.setLevel(LEVELS.SILLY);
-      Logger.log(this.message);
+      Logger.log(LEVELS.SILLY, this.message);
       assert(this.spy.calledWith('SILLY::juuh'));
+    });
+
+    it('should not log messages with priority above log level', function() {
+      Logger.setLevel(LEVELS.DEBUG);
+      Logger.log(LEVELS.SILLY, this.message);
+      assert(this.spy.notCalled);
+
+      Logger.setLevel(LEVELS.DEBUG);
+      Logger.log(LEVELS.DEBUG, this.message);
+      assert(this.spy.calledOnce);
     });
   });
 
@@ -83,19 +93,15 @@ describe('Logging service', function() {
     });
   });
 
-  describe('#_logMessage()', function() {
-    it('should have "SILLY" log level with too high log level',
-      function() {
-        Logger.setLevel(15);
-        assert(Logger.getLevel() == LEVELS.SILLY);
-      });
-  });
+  describe('#setLevel()', function() {
+    it('should have "SILLY" log level with too high log level', function() {
+      Logger.setLevel(15);
+      assert(Logger.getLevel() == LEVELS.SILLY);
+    });
 
-  describe('#_logMessage()', function() {
-    it('should have "ERROR" log level with too high log level',
-      function() {
-        Logger.setLevel(-1);
-        assert(Logger.getLevel() == LEVELS.ERROR);
-      });
+    it('should have "ERROR" log level with too low log level', function() {
+      Logger.setLevel(-1);
+      assert(Logger.getLevel() == LEVELS.ERROR);
+    });
   });
 });

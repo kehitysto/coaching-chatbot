@@ -3,7 +3,10 @@ import Builder from '../chatbot/builder';
 import strings from './strings.json';
 import * as actions from './actions';
 import * as intents from './intents';
-import Formatter from '../lib/personal-information-formatter-service';
+import PersonalInformationFormatter
+from '../lib/personal-information-formatter-service';
+import CommunicationMethodsFormatter
+from '../lib/communication-methods-formatter';
 
 const bot = new Builder(strings);
 
@@ -26,9 +29,9 @@ bot
   .dialog(
     '/', [
       (session) => {
-        session.addResult('@GREETING',
-            [Builder.QuickReplies.create('@YES'),
-             Builder.QuickReplies.create('@NO')]);
+        session.addResult('@GREETING', [Builder.QuickReplies.create('@YES'),
+          Builder.QuickReplies.create('@NO'),
+        ]);
       },
       (session) => {
         if (session.checkIntent('#YES')) {
@@ -51,6 +54,7 @@ bot
         session.beginDialog('/set_job');
       },
       (session) => {
+        session.addResult('@INFORMATION_ABOUT_BUTTONS');
         session.switchDialog('/profile');
       },
     ])
@@ -72,6 +76,7 @@ bot
       },
       (session) => {
         session.runActions(['setJob']);
+        session.addResult('@CONFIRM_JOB');
         session.endDialog();
       },
     ], [
@@ -108,41 +113,79 @@ bot
     ])
   .dialog(
     '/add_communication_method', [
-        (session) => {
-          session.addResult('@REQUEST_COMMUNICATION_METHOD',
-          Formatter.getCommunicationMethods( session.context ));
-        },
-        (session) => {
-          if (session.checkIntent('#COMMUNICATION_METHODS')) {
-            session.runActions(['addCommunicationMethod']);
-          } else {
-            session.addResult('@UNCLEAR');
-            session.switchDialog('/add_communication_method');
-          }
-        },
-        (session) => {
-          session.runActions(['addCommunicationInfo']);
-          session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS',
-              [Builder.QuickReplies.create('@YES'),
-               Builder.QuickReplies.create('@NO')]);
-        },
-        (session) => {
-          if(session.checkIntent('#YES')) {
-            session.switchDialog('/add_communication_method');
-          }else if (session.checkIntent('#NO')) {
-            session.runActions(['getAvailablePairs']);
-            session.endDialog();
-          }else{
-            session.addResult('@UNCLEAR');
-            session.prev();
-          }
+      (session) => {
+        session.addResult('@REQUEST_COMMUNICATION_METHOD',
+          CommunicationMethodsFormatter
+          .getCommunicationMethods(session.context));
+      },
+      (session) => {
+        if (session.checkIntent('#COMMUNICATION_METHODS')) {
+          session.runActions(['addCommunicationMethod']);
+        } else {
+          session.addResult('@UNCLEAR');
+          session.switchDialog('/add_communication_method');
+        }
+      },
+      (session) => {
+        session.runActions(['addCommunicationInfo']);
+        session.next();
+      },
+      (session) => {
+        // check if all methods have been filled and
+        // go to dumping automatically if so
+        if (session.allCommunicationMethodsFilled()) {
+          session.switchDialog('/add_meeting_frequency');
+        } else {
+          session.addResult('@CONFIRM_COMMUNICATION_METHODS');
+          session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS', [
+            Builder.QuickReplies.create('@YES'),
+            Builder.QuickReplies.create('@NO'),
+          ]);
+        }
+      },
+      (session) => {
+        if (session.checkIntent('#YES')) {
+          session.switchDialog('/add_communication_method');
+        } else if (session.checkIntent('#NO')) {
+          session.switchDialog('/add_meeting_frequency');
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
+        }
       },
     ])
+  .dialog(
+    '/add_meeting_frequency', [
+      (session) => {
+        session.addResult('@REQUEST_MEETING_FREQUENCY',
+          PersonalInformationFormatter.getMeetingFrequency(session.context));
+      },
+      (session) => {
+        if (session.checkIntent('#MEETING_FREQUENCIES')) {
+          session.runActions([
+            'markUserAsSearching',
+            'addMeetingFrequency',
+          ]);
+          session.addResult('@CHANGE_MEETING_FREQUENCY');
+          session.endDialog();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.switchDialog('/add_meeting_frequency');
+        }
+      },
+    ]
+  )
   .dialog(
     '/profile', [
       (session) => {
         session.runActions(['updateProfile']);
-        session.addResult('@DISPLAY_PROFILE');
+        if (!session.context.searching) {
+          session.addResult('@DISPLAY_PROFILE',
+            PersonalInformationFormatter
+            .getPersonalInformationbuttons(session.context));
+        } else {
+          session.runActions(['getAvailablePairs']);
+        }
       },
     ], [
       ['#CHANGE_NAME', (session, match) => {
@@ -178,23 +221,48 @@ bot
         }
       }],
       ['#FIND_PAIR', (session) => {
-        session.beginDialog('/add_communication_method');
+        session.beginDialog('/find_pair');
       }],
-      ['#RESET', (session) => {
-        session.beginDialog('/reset');
+      ['#CHANGE_MEETING_FREQUENCY', (session) => {
+        session.beginDialog('/add_meeting_frequency');
       }],
+    ])
+  .dialog(
+    '/find_pair', [
+      (session) => {
+        if (session.getCommunicationMethodsCount() === 0) {
+          session.addResult('@NO_METHODS_ADDED', [Builder.QuickReplies.create(
+              '@YES'),
+            Builder.QuickReplies.create('@NO'),
+          ]);
+        } else {
+          session.switchDialog('/add_meeting_frequency');
+        }
+      },
+      (session) => {
+        if (session.checkIntent('#YES')) {
+          session.prev();
+          session.switchDialog('/add_communication_method');
+        } else if (session.checkIntent('#NO')) {
+          session.endDialog();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.next();
+        }
+      },
     ])
   .dialog(
     '/reset', [
       (session) => {
-        session.addResult('@RESET_CONFIRMATION',
-            [Builder.QuickReplies.create('@YES'),
-             Builder.QuickReplies.create('@NO')]);
+        session.addResult('@RESET_CONFIRMATION', [Builder.QuickReplies.create(
+            '@YES'),
+          Builder.QuickReplies.create('@NO'),
+        ]);
       },
       (session) => {
         if (session.checkIntent('#YES')) {
           session.runActions(['reset']);
-          session.addResult('@RESET');
+          session.addResult('@RESET_DONE');
           session.clearState();
         } else if (session.checkIntent('#NO')) {
           session.endDialog();
@@ -203,6 +271,11 @@ bot
           session.next();
         }
       },
-    ]);
+    ])
+  .match(
+    '#RESET',
+    (session) => {
+      session.beginDialog('/reset');
+    });
 
 module.exports = bot;

@@ -2,11 +2,15 @@ import sinon from 'sinon';
 
 import AWS from 'aws-sdk';
 import Sessions from '../../../src/util/sessions-service';
+import DynamoDBProvider from '../../../src/util/sessions-dynamodb-provider';
 
 describe('Sessions service', function() {
   before(function() {
     this.db = sinon.stub(AWS.DynamoDB, 'DocumentClient');
     this.sessions = new Sessions();
+
+    // force reinitialization of provider
+    this.sessions.db = new DynamoDBProvider();
   });
 
   after(function() {
@@ -73,9 +77,10 @@ describe('Sessions service', function() {
     });
 
     it('should return a Promise', function() {
-      const ret = this.sessions.write('SESSION_ID', {
-        key: 'value',
-      });
+      const ret = this.sessions.write(
+        'SESSION_ID', {
+          key: 'value',
+        });
 
       expect(ret)
         .to.be.a('Promise');
@@ -85,9 +90,12 @@ describe('Sessions service', function() {
     });
 
     it('should return an error if id is null', function() {
-      const ret = this.sessions.write(null, { key: 'value' } );
+      const ret = this.sessions.write(null, {
+        key: 'value',
+      });
 
-      return expect(ret).to.be.rejectedWith('No session ID');
+      return expect(ret)
+        .to.be.rejectedWith('No session ID');
     });
 
     it('should post the session context to DynamoDB', function() {

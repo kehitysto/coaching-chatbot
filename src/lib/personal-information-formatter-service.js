@@ -1,14 +1,19 @@
 import log from '../lib/logger-service';
 import Strings from '../../src/coaching-chatbot/strings.json';
-import CommunicationMethods
-from '../../src/coaching-chatbot/communication-methods.json';
+import MeetingFrequency
+    from '../../src/coaching-chatbot/meeting-frequencies.json';
+import PersonalInformation
+    from '../../src/coaching-chatbot/personal-information.json';
+import CommunicationMethodsFormatter
+    from '../lib/communication-methods-formatter';
 
 const Formatter = {
   format,
   formatFromTemplate,
   createProfile,
-  getCommunicationMethods,
-  getCommunicationMethodByInput,
+  getMeetingFrequency,
+  getMeetingFrequencyIdentifierByInput,
+  getPersonalInformationbuttons,
 };
 
 export default Formatter;
@@ -24,8 +29,11 @@ function formatFromTemplate(template, context) {
 }
 
 function format(template, context) {
-  log.debug('Formatting template with variables {0}', JSON.stringify(context));
+  log.debug('Formatting template {0} with variables {1}',
+      template, JSON.stringify(context));
   let s = template;
+
+  log.silly('Template type: {0}', typeof template);
 
   s = s.replace(
     /{(\w+)}/g,
@@ -34,6 +42,9 @@ function format(template, context) {
 
       if (name === 'profile') {
         return createProfile(context);
+      } else if (name === 'communicationMethods') {
+        return CommunicationMethodsFormatter
+          .createCommunicationMethodslist(context);
       }
 
       return context[name] != undefined ? context[name] : match;
@@ -51,26 +62,34 @@ function createProfile(context) {
     .join(', ');
 }
 
-function getCommunicationMethodByInput(input) {
-  for (let i = 0; i < CommunicationMethods.length; i++) {
-    if (input.toLowerCase()
-      .includes(
-        CommunicationMethods[i].name.toLowerCase())) {
-      return CommunicationMethods[i];
-    }
-  }
-}
-
-function getCommunicationMethods(context) {
-  return CommunicationMethods.reduce((l, m) => {
-    if (context.communicationMethods === undefined ||
-      context.communicationMethods[m.identifier] === undefined) {
+function getMeetingFrequency(context) {
+  return MeetingFrequency.reduce((l, m) => {
       l.push({
-        title: m.name,
+        title: m.description,
         payload: m.identifier,
       });
-    }
-
     return l;
   }, []);
+}
+
+function getPersonalInformationbuttons(context) {
+  return PersonalInformation.reduce((l, m) => {
+      l.push({
+        title: m.description,
+        payload: m.identifier,
+      });
+    return l;
+  }, []);
+}
+
+function getMeetingFrequencyIdentifierByInput(input) {
+  for (let i = 0; i < MeetingFrequency.length; i++) {
+    if (input.toLowerCase()
+      .includes(
+        MeetingFrequency[i].description.toLowerCase())) {
+      return MeetingFrequency[i].identifier;
+    }
+  }
+
+  return 'undefined';
 }
