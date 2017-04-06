@@ -47,13 +47,6 @@ describe('Chatbot builder', function() {
   });
 
   describe('#run', function() {
-    it('should return a Promise', function() {
-      const ret = this.builder.run('SESSION', {}, {});
-
-      expect(ret)
-        .to.be.a('Promise');
-    });
-
     it('should reset state if dialog does not exist', function() {
       const ret = this.builder.run('SESSION', {
         'state': '/foobar?666',
@@ -65,13 +58,6 @@ describe('Chatbot builder', function() {
   });
 
   describe('#runAction', function() {
-    it('should return a Promise', function() {
-      const ret = this.builder.runAction({}, {}, {});
-
-      expect(ret)
-        .to.be.a('Promise');
-    });
-
     it('should return an Error when there is no such actionId',
       function() {
         const action = 'UNDEFINED_ACTION';
@@ -80,15 +66,6 @@ describe('Chatbot builder', function() {
         return expect(ret)
           .to.be.rejectedWith('No such action: ' + action);
       });
-
-    it('should return a Promise if actionId is found', function() {
-      this.builder.action('setInterest', () => ({}, {}, {}));
-      const action = 'setInterest';
-      const ret = this.builder.runAction(action, this.session, {});
-
-      return expect(ret)
-        .to.be.a('Promise');
-    });
 
     it('should succeed even if the action throws', function() {
       const action = 'setInterest';
@@ -160,17 +137,6 @@ describe('Chatbot builder', function() {
   });
 
   describe('#_runStep', function() {
-    it('should return a Promise', function() {
-      this.session.stateId = '';
-
-      const ret = this.builder._runStep(0, this.session, 'message');
-
-      expect(ret)
-        .to.be.a('Promise');
-      return expect(ret.catch(() => null))
-        .to.be.fulfilled;
-    });
-
     it('should run all actions before resolving', function() {
       const actions = ['foo', 'bar', 'baz'];
 

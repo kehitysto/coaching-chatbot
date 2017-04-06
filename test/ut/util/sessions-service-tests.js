@@ -33,15 +33,6 @@ describe('Sessions service', function() {
         );
     });
 
-    it('should return a Promise', function() {
-      const ret = this.sessions.read('SESSION_ID');
-
-      expect(ret)
-        .to.be.a('Promise');
-
-      return ret;
-    });
-
     it('should request the session context from DynamoDB', function() {
       return expect(
           this.sessions.read('SESSION_ID')
