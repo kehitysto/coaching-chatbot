@@ -1,5 +1,9 @@
 [
   {
+    "identifier": "LOOK_FOR_PEER",
+    "description": "Etsi pari"
+  },
+  {
     "identifier": "CHANGE_NAME",
     "description": "Aseta nimi"
   },
@@ -14,9 +18,5 @@
   {
     "identifier": "SET_PLACE",
     "description": "Aseta paikkakunta"
-  },
-  {
-    "identifier": "LOOK_FOR_PEER",
-    "description": "Etsi pari"
   }
 ]
