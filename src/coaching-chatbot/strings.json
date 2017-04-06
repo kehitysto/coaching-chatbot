@@ -36,6 +36,7 @@
   "@CHANGE_MEETING_FREQUENCY": "Kiitos. Halutessasi voit muuttaa tapaamisväliä kirjoittamalla \"muuta tapaamisväliä\".",
   "@NO_PAIRS_AVAILABLE": "Valitettavasti antamillasi ehdoilla ei juuri nyt löydy mahdollisia pareja. Voit joko odottaa että sinuun otetaan yhteyttä, tai palata tarkistamaan tilanne uudelleen myöhemmin.",
   "@PERMISSION_TO_RECEIVE_MESSAGES": "Sopiiko, että näytän parinhakuprofiilisi muille käyttäjille ja ilmoitan sinulle viestillä, kun sopiva pari löytyy?",
+  "@PEER_NO_LONGER_AVAILABLE": "Hups, valitsemasi vertaispari ei olekaan enää vapaana. Jatka etsintää!",
   "@CONFIRM_STOP_SEARCHING": "Haluatko varmasti lopettaa parinhaun?",
   "@NOT_CURRENTLY_SEARCHING": "Et hae pareja tällä hetkellä.",
   "@STOPPED_SEARCHING": "Parinhakusi on lopetettu."
