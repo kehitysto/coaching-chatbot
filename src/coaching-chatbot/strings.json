@@ -34,5 +34,6 @@
   "@REQUEST_MEETING_FREQUENCY": "Kuinka usein haluaisit tavata parisi kanssa?",
   "@UNABLE_TO_CHANGE_MEETING_FREQUENCY": "Et voi muuttaa tapaamisväliä ennen kuin olet asettanut tavan yhteydenpitoa varten.",
   "@CHANGE_MEETING_FREQUENCY": "Kiitos. Halutessasi voit muuttaa tapaamisväliä kirjoittamalla \"muuta tapaamisväliä\".",
-  "@NO_PAIRS_AVAILABLE": "Valitettavasti antamillasi ehdoilla ei juuri nyt löydy mahdollisia pareja. Voit joko odottaa että sinuun otetaan yhteyttä, tai palata tarkistamaan tilanne uudelleen myöhemmin."
+  "@NO_PAIRS_AVAILABLE": "Valitettavasti antamillasi ehdoilla ei juuri nyt löydy mahdollisia pareja. Voit joko odottaa että sinuun otetaan yhteyttä, tai palata tarkistamaan tilanne uudelleen myöhemmin.",
+  "@PERMISSION_TO_RECEIVE_MESSAGES": "Sopiiko, että näytän parinhakuprofiilisi muille käyttäjille ja ilmoitan sinulle viestillä, kun sopiva pari löytyy?"
 }
