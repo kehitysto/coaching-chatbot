@@ -48,14 +48,14 @@ describe('Logging service', function() {
     });
 
     it('should not log messages with priority above log level', function() {
-        Logger.setLevel(LEVELS.DEBUG);
-        Logger.log(LEVELS.SILLY, this.message);
-        assert(this.spy.notCalled);
+      Logger.setLevel(LEVELS.DEBUG);
+      Logger.log(LEVELS.SILLY, this.message);
+      assert(this.spy.notCalled);
 
-        Logger.setLevel(LEVELS.DEBUG);
-        Logger.log(LEVELS.DEBUG, this.message);
-        assert(this.spy.calledOnce);
-      });
+      Logger.setLevel(LEVELS.DEBUG);
+      Logger.log(LEVELS.DEBUG, this.message);
+      assert(this.spy.calledOnce);
+    });
   });
 
   describe('#error()', function() {
@@ -94,16 +94,14 @@ describe('Logging service', function() {
   });
 
   describe('#setLevel()', function() {
-    it('should have "SILLY" log level with too high log level',
-      function() {
-        Logger.setLevel(15);
-        assert(Logger.getLevel() == LEVELS.SILLY);
-      });
+    it('should have "SILLY" log level with too high log level', function() {
+      Logger.setLevel(15);
+      assert(Logger.getLevel() == LEVELS.SILLY);
+    });
 
-    it('should have "ERROR" log level with too low log level',
-      function() {
-        Logger.setLevel(-1);
-        assert(Logger.getLevel() == LEVELS.ERROR);
-      });
+    it('should have "ERROR" log level with too low log level', function() {
+      Logger.setLevel(-1);
+      assert(Logger.getLevel() == LEVELS.ERROR);
+    });
   });
 });

@@ -9,6 +9,7 @@ module.exports = class InMemoryProvider {
     if (this.db[sessionId] === undefined) {
       this.db[sessionId] = {};
     }
+
     return Promise.resolve(this.db[sessionId]);
   }
 
@@ -22,6 +23,7 @@ module.exports = class InMemoryProvider {
       log.silly('Id: {0}; Frequency: {1}', id, meetingFrequency);
 
       let pairs = [];
+
       for (let sessionId in this.db) {
         if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
 
@@ -33,6 +35,7 @@ module.exports = class InMemoryProvider {
           pairs.push({ id: sessionId, context: this.db[sessionId] });
         }
       }
+
       resolve(pairs);
     });
   }

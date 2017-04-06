@@ -11,16 +11,15 @@ const Formatter = {
 export default Formatter;
 
 function createPairString(context) {
-    const s =
-        Object.keys(context.communicationMethods)
-        .filter((v) => v)
-        .map((v) => `  - ${cmf.getCommunicationMethodByIdentifier(v).name}`)
-        .join('\n');
+  const s =
+    Object.keys(context.communicationMethods)
+    .map((v) => `  - ${cmf.getCommunicationMethodByIdentifier(v).name}`)
+    .join('\n');
 
-    return `${pif.createProfile(context)}\n${s}`;
+  return `${pif.createProfile(context)}\n${s}`;
 }
 
 function beautifyAvailablePairs(dumps) {
-    const a = dumps.map((d) => createPairString(d.context));
-    return a.join('\n');
+  const a = dumps.map((d) => createPairString(d.context));
+  return a.join('\n\n');
 }

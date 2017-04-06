@@ -97,6 +97,7 @@ class Builder {
     };
 
     let promise;
+
     try {
       promise = Promise.resolve(this._actions[actionId](actionData));
     } catch(err) {
@@ -127,6 +128,7 @@ class Builder {
 
   checkIntent(intentId, session) {
     const input = session.getInput();
+
     if (intentId.startsWith('#')) {
       intentId = intentId.substr(1);
     }
@@ -142,9 +144,11 @@ class Builder {
     log.debug('Retrieving string template {0}', templateId);
 
     let template = this._strings[templateId];
+
     if (Array.isArray(template)) {
       template = template[Math.floor(Math.random() * template.length)];
     }
+
     return (template === undefined) ? templateId : template;
   }
 
@@ -198,6 +202,7 @@ class Builder {
 
   _matchIntent(intentObj, input) {
     let ret;
+
     if (typeof intentObj === 'string') {
       ret = this._runIntent(intentObj, input);
     } else {

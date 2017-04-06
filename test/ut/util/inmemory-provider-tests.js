@@ -1,18 +1,13 @@
 import sinon from 'sinon';
 
 import InMemoryDB from '../../../src/util/sessions-inmemory-provider';
-const assert = require('assert');
 
 describe('Inmemory database service', function() {
   before(function() {
-    // this.db = sinon.stub(AWS.DynamoDB, 'DocumentClient');
-
-    // force reinitialization of provider
     this.db = new InMemoryDB();
   });
 
   after(function() {
-    // this.db.restore();
   });
 
   describe('#load()', function() {
@@ -26,6 +21,7 @@ describe('Inmemory database service', function() {
       };
 
       this.db.load(expected);
+
       return expect(this.db.dump())
         .to.deep.equal(expected);
     });
@@ -38,6 +34,7 @@ describe('Inmemory database service', function() {
       };
 
       this.db.load(expected);
+
       return expect(this.db.dump())
         .to.deep.equal(expected);
     });
@@ -114,7 +111,7 @@ describe('Inmemory database service', function() {
                 'ONCE_A_WEEK'))
               .to.become([{
                 id: 'SESSION_IDD',
-                context: expected
+                context: expected,
               }])
             );
         });
