@@ -17,16 +17,6 @@ describe('Facebook Messenger service', function() {
   });
 
   describe('#send()', function() {
-    it('should return a Promise', function() {
-      const ret = this.Messenger.send('USER_ID', 'Message...');
-
-      expect(ret)
-        .to.be.a('Promise');
-
-      return expect(ret)
-        .to.eventually.be.fulfilled;
-    });
-
     it('Should return an error when page acces token is empty',
       function() {
         delete process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
@@ -81,16 +71,6 @@ describe('Facebook Messenger service', function() {
       };
     });
 
-    it('should return a Promise', function() {
-      const ret = this.Messenger.receive(this.data.body, this.cb);
-
-      expect(ret)
-        .to.be.a('Promise');
-
-      return expect(ret.catch())
-        .to.eventually.be.fulfilled;
-    });
-
     it('should call callback with the message sender and body',
       function() {
         const mock = sinon.mock(this.Messenger);
@@ -135,14 +115,6 @@ describe('Facebook Messenger service', function() {
   });
 
   describe('#verify()', function() {
-    it('Should return a Promise', function() {
-      const ret = this.Messenger.verify(process.env.FACEBOOK_VERIFY_TOKEN,
-        'challenge');
-
-      return expect(ret)
-        .to.be.a('Promise');
-    });
-
     it('Should return challenge as response parameter value', function() {
       const ret = this.Messenger.verify(process.env.FACEBOOK_VERIFY_TOKEN,
         'chall');

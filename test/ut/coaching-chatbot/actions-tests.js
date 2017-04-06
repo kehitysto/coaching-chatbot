@@ -3,15 +3,6 @@ import * as actions from '../../../src/coaching-chatbot/actions.js';
 
 describe('coaching-bot actions', function() {
     describe('#setJob', function() {
-      it('returns a Promise', function() {
-        const ret = actions.setJob({
-          context: {},
-          input: '',
-        });
-
-        expect(ret).to.be.a('Promise');
-        });
-
       it('returns the job from entity job', function() {
         const ret = actions.setJob({
           context: {},
@@ -34,15 +25,6 @@ describe('coaching-bot actions', function() {
     });
 
     describe('#setAge', function() {
-      it('returns a Promise', function() {
-        const ret = actions.setAge({
-          context: {},
-          input: '',
-        });
-
-        return expect(ret).to.be.a('Promise');
-      });
-
       it('returns the age from entity age', function() {
           const ret = actions.setAge({
             context: {},
@@ -64,15 +46,6 @@ describe('coaching-bot actions', function() {
     });
 
     describe('#setName', function() {
-      it('returns a Promise', function() {
-        const ret = actions.setName({
-          context: {},
-          input: '',
-        });
-
-        expect(ret).to.be.a('Promise');
-      });
-
       it('returns the name from entity name', function() {
         const ret = actions.setName({
           context: {},
@@ -102,15 +75,6 @@ describe('coaching-bot actions', function() {
       });
     });
     describe('#setPlace', function() {
-      it('returns a Promise', function() {
-        const ret = actions.setPlace({
-          context: {},
-          input: '',
-        });
-
-        expect(ret).to.be.a('Promise');
-      });
-
       it('returns the name from entity place', function() {
         const ret = actions.setPlace({
           context: {},
@@ -140,14 +104,6 @@ describe('coaching-bot actions', function() {
       });
     });
     describe('#updateProfile', function() {
-      it('Should return a Promise', function() {
-        const ret = actions.updateProfile({
-          context: {},
-          input: '',
-        });
-        expect(ret).to.be.a('Promise');
-      });
-
       it('Should return without age', function() {
         const ret = actions.updateProfile({
           context: { 'name': 'Matti', 'job': 'Opiskelija',
@@ -187,15 +143,6 @@ describe('coaching-bot actions', function() {
     });
 
     describe('#reset', function() {
-      it('returns a Promise', function() {
-        const ret = actions.reset({
-          context: {},
-          input: '',
-        });
-
-        expect(ret).to.be.a('Promise');
-      });
-
       it('returns empty context', function() {
         const ret = actions.reset({
           context: {},
@@ -255,15 +202,6 @@ describe('coaching-bot actions', function() {
   });
 
     describe('#MeetingFrequency', function() {
-      it('returns a Promise', function() {
-        const ret = actions.addMeetingFrequency({
-          context: {},
-          input: '',
-        });
-
-        expect(ret).to.be.a('Promise');
-      });
-
       it('returns the name from entity meetingfrequency', function() {
         const ret = actions.addMeetingFrequency({
           context: {},
@@ -286,15 +224,6 @@ describe('coaching-bot actions', function() {
     });
 
     describe('#markUserAsSearching', function() {
-      it('returns a Promise', function() {
-        const ret = actions.markUserAsSearching({
-          context: {},
-          input: '',
-        });
-
-        expect(ret).to.be.a('Promise');
-      });
-
       it('Should return searching value as true', function(){
         const ret = actions.markUserAsSearching({
           context: {},
@@ -305,13 +234,5 @@ describe('coaching-bot actions', function() {
     });
 
     describe('#getAvailablePairs', function() {
-      it('returns a Promise', function() {
-        const ret = actions.getAvailablePairs({
-          context: {},
-          input: '',
-        });
-
-        expect(ret).to.be.a('Promise');
-      });
     });
 });
