@@ -427,7 +427,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, ''))
             .to.eventually.become([
               buildResponse('@INFORMATION_ABOUT_LIST'),
-              expected
+              expected,
             ]);
         }
       );
@@ -500,7 +500,7 @@ describe('User story', function() {
           this.sessions.write('ID1', testUser2);
 
           return expect(
-              this.bot.receive(SESSION, 'Seuraava'))
+              this.bot.receive(SESSION, 'seuraava'))
             .to.eventually.become([
               buildResponse('@INFORMATION_ABOUT_LIST'),
               buildResponse(PairFormatter.beautifyAvailablePairs(

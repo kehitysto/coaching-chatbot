@@ -29,10 +29,9 @@ bot
   .dialog(
     '/', [
       (session) => {
-        session.addResult(
-          '@GREETING', [
-            Builder.QuickReplies.create('@YES'),
-            Builder.QuickReplies.create('@NO'),
+        session.addResult('@GREETING', [
+          Builder.QuickReplies.create('@YES'),
+          Builder.QuickReplies.create('@NO'),
         ]);
       },
       (session) => {
@@ -253,6 +252,10 @@ bot
   .dialog(
     '/searching', [
       (session) => {
+        if (!session.context.searching) {
+          return session.endDialog();
+        }
+
         session.runActions(['updateAvailablePeers']);
         session.next();
       },
@@ -288,7 +291,37 @@ bot
       ['#CHANGE_MEETING_FREQUENCY', (session) => {
         session.beginDialog('/add_meeting_frequency');
       }],
+      ['#STOP_SEARCHING', (session) => {
+        session.beginDialog('/stop_searching');
+      }],
     ])
+  .dialog(
+      '/stop_searching', [
+        (session) => {
+          if (session.context.searching) {
+            session.addResult('@CONFIRM_STOP_SEARCHING', [Builder.QuickReplies
+              .create(
+                '@YES'),
+              Builder.QuickReplies.create('@NO'),
+            ]);
+          } else {
+            session.addResult('@NOT_CURRENTLY_SEARCHING');
+            session.endDialog();
+          }
+        },
+        (session) => {
+          if (session.checkIntent('#YES')) {
+            session.runActions(['markUserAsNotSearching']);
+            session.addResult('@STOPPED_SEARCHING');
+            session.endDialog();
+          } else if (session.checkIntent('#NO')) {
+            session.endDialog();
+          } else {
+            session.addResult('@UNCLEAR');
+            session.next();
+          }
+        },
+      ])
   .dialog(
     '/reset', [
       (session) => {

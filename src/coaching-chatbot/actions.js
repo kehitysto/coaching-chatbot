@@ -126,6 +126,15 @@ export function markUserAsSearching({ context }) {
   });
 }
 
+export function markUserAsNotSearching({ context }) {
+    return Promise.resolve({
+        context: {
+            ...context,
+            searching: false,
+        },
+    });
+}
+
 export function updateAvailablePeers({ sessionId, context }) {
   return new Promise((resolve, reject) => {
     let sessions = new Sessions();
