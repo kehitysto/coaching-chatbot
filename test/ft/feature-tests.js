@@ -377,6 +377,7 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'Joo'))
             .to.eventually.become([
+              buildResponse('@TELL_HOW_TO_STOP_SEARCH'),
               buildResponse('@NO_PAIRS_AVAILABLE'),
             ]);
         }

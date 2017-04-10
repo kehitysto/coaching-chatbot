@@ -188,6 +188,7 @@ bot
       },
       (session) => {
         if (session.checkIntent('#YES')) {
+          session.addResult('@TELL_HOW_TO_STOP_SEARCH'),
           session.runActions([
             'markUserAsSearching',
           ]);
