@@ -3,6 +3,8 @@ import sinon from 'sinon';
 import Builder from '../../../src/chatbot/builder.js';
 import log from '../../../src/lib/logger-service';
 
+var assert = require('assert');
+
 describe('Chatbot builder', function() {
   beforeEach(function() {
     this.builder = new Builder({});
@@ -155,7 +157,7 @@ describe('Chatbot builder', function() {
 
       this.builder._matchIntentAny(intents, 'baz');
 
-      matchIntentMock.verify();
+    return matchIntentMock.verify();
     });
   });
 
@@ -198,7 +200,7 @@ describe('Chatbot builder', function() {
                 results.push(action);
                 resolve({});
               },
-              50);
+              ~~(Math.random() * 10));
           });
         });
       }
@@ -209,6 +211,79 @@ describe('Chatbot builder', function() {
         .to.be.fulfilled
         .then(() => expect(results)
           .to.deep.equal(actions));
+    });
+  });
+
+  describe('#_matchIntentEach', function() {
+    it('should try match all intents', function() {
+      const intents = ['dead', 'beef'];
+
+      const matchIntentMock = sinon.mock(this.builder);
+      matchIntentMock.expects('_matchIntent')
+        .withArgs('dead', 'dead beef')
+        .returns(true);
+
+      matchIntentMock.expects('_matchIntent')
+        .withArgs('beef', 'dead beef')
+        .returns(true);
+
+      this.builder._matchIntentEach(intents, 'dead beef');
+
+      return matchIntentMock.verify();
+    });
+
+    it('should trim input if it matches', function() {
+      const intents = ['dead', 'beef'];
+
+      const matchIntentMock = sinon.mock(this.builder);
+      matchIntentMock.expects('_matchIntent')
+        .withArgs('dead', 'dead beef')
+        .returns(['dead']);
+
+      matchIntentMock.expects('_matchIntent')
+        .withArgs('beef', 'beef')
+        .returns(true);
+
+      this.builder._matchIntentEach(intents, 'dead beef');
+
+      return matchIntentMock.verify();
+    });
+
+    it('should return null if match is null', function() {
+      const intents = ['dead', 'beef'];
+
+      const matchIntentMock = sinon.mock(this.builder);
+      matchIntentMock.expects('_matchIntent')
+          .withArgs('dead', 'dead beef')
+          .returns(null);
+
+      const ret = this.builder._matchIntentEach(intents, 'dead beef');
+
+      assert(ret === null);
+    });
+  });
+
+  describe('#_matchIntent', function() {
+    it('should use _runIntent() if input is a string', function() {
+      const intentObject = 'dead';
+      const input = 'dead';
+
+      const runIntentMock = sinon.mock(this.builder);
+      runIntentMock.expects('_runIntent')
+        .withArgs(intentObject, input)
+        .returns(true);
+
+      this.builder._matchIntent(intentObject, input);
+
+      return runIntentMock.verify();
+    });
+
+    it('should use exec() on intentObj', function() {
+      const mockObject = { exec: function(i) { return 0; }};
+      const input = 'dead';
+
+      const ret = this.builder._matchIntent(mockObject, input);
+      assert(ret === 0);
     });
   });
 });
