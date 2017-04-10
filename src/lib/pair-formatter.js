@@ -5,6 +5,7 @@ import cmf
 from './communication-methods-formatter';
 
 const Formatter = {
+  createPairString,
   beautifyAvailablePairs,
 };
 

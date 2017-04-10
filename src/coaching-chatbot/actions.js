@@ -135,26 +135,68 @@ export function markUserAsNotSearching({ context }) {
     });
 }
 
-export function getAvailablePairs({ sessionId, context }) {
+export function updateAvailablePeers({ sessionId, context }) {
   return new Promise((resolve, reject) => {
     let sessions = new Sessions();
 
+    const rejectedPeers = context.rejectedPeers || [];
+
     return sessions.getAvailablePairs(sessionId, context.meetingFrequency)
       .then((pairs) => {
-        if (pairs.length > 0) {
-          resolve({
-            result: PairFormatter
-              .beautifyAvailablePairs(pairs),
-          });
-        } else {
-          resolve({
-            result: '@NO_PAIRS_AVAILABLE',
-          });
-        }
+        resolve({
+          context: {
+            ...context,
+            availablePeers: pairs
+                .map((entry) => entry.id)
+                .filter((entry) => rejectedPeers.indexOf(entry) < 0),
+          },
+        });
       })
       .catch((err) => {
         log.error('err: {0}', err);
         reject(err);
       });
   });
+}
+
+export function displayAvailablePeer({ context }) {
+  return new Promise((resolve, reject) => {
+    let sessions = new Sessions();
+
+    return sessions.read(context.availablePeers[0])
+      .then((profile) => {
+        resolve({
+          result: PairFormatter.createPairString(profile),
+        });
+      })
+      .catch((err) => {
+        log.error('err: {0}', err);
+        reject(err);
+      });
+  });
+}
+
+export function nextAvailablePeer({ context }) {
+  return Promise.resolve({
+    context: {
+      ...context,
+      availablePeers: context.availablePeers.slice(1),
+    },
+  });
+}
+
+export function rejectAvailablePeer({ context }) {
+  const rejectedPeers = context.rejectedPeers || [];
+  rejectedPeers.push(context.availablePeers[0]);
+
+  return Promise.resolve({
+    context: {
+      ...context,
+      rejectedPeers,
+    },
+  });
+}
+
+export function requestAvailablePeer({ context }) {
+  return Promise.resolve({});
 }

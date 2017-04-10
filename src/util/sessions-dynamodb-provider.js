@@ -85,6 +85,7 @@ module.exports = class DynamoDBProvider {
         ExpressionAttributeValues: { ':true': true,
                                      ':freq': meetingFrequency,
                                      ':id': id },
+        ProjectionExpression: 'id',
       };
 
       this.db.scan(params, (err, data) => {

@@ -355,32 +355,16 @@ describe('User story', function() {
     'As a registered user I want to provide my preferred meeting frequency with quick replies',
     function() {
       it(
-        'after providing preferred meeting frequency as "every weekdays", it should ask to provide confirmation to use users data',
+        'after providing preferred meeting frequency as "every weekdays", it should tell that no other users with the same preferred frequency are searching for a peer',
         function() {
           return expect(
               this.bot.receive(SESSION, 'Arkipäivisin'))
             .to.eventually.become([
               buildResponse('@CHANGE_MEETING_FREQUENCY'),
-              buildResponse('@PERMISSION_TO_RECEIVE_MESSAGES', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
-            ]);
-        }
-      );
-      it(
-        'after user confirmed, it should tell that no other users with the same preferred frequency are searching for a peer',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Joo'))
-            .to.eventually.become([
               buildResponse('@NO_PAIRS_AVAILABLE'),
             ]);
         }
-      )
+      );
     }
   );
 
@@ -414,7 +398,6 @@ describe('User story', function() {
       );
     }
   );
-
   describe(
     'As a user searching for a pair I want to get a list of other users wanting to meet as often as I do',
     function() {
@@ -442,7 +425,10 @@ describe('User story', function() {
 
           return expect(
               this.bot.receive(SESSION, ''))
-            .to.eventually.become([expected]);
+            .to.eventually.become([
+              buildResponse('@INFORMATION_ABOUT_LIST'),
+              expected,
+            ]);
         }
       );
 
@@ -474,8 +460,9 @@ describe('User story', function() {
           this.sessions.write('ID1', testUser2);
 
           return expect(
-              this.bot.receive(SESSION, ''))
+              this.bot.receive(SESSION, 'seuraava'))
             .to.eventually.become([
+              buildResponse('@INFORMATION_ABOUT_LIST'),
               buildResponse(PairFormatter.beautifyAvailablePairs(
                 [{
                   id: 'ID',
@@ -513,95 +500,14 @@ describe('User story', function() {
           this.sessions.write('ID1', testUser2);
 
           return expect(
-              this.bot.receive(SESSION, ''))
+              this.bot.receive(SESSION, 'seuraava'))
             .to.eventually.become([
+              buildResponse('@INFORMATION_ABOUT_LIST'),
               buildResponse(PairFormatter.beautifyAvailablePairs(
                 [{
                   id: 'ID',
                   context: testUser,
                 }])),
-            ]);
-        }
-      );
-    }
-  );
-
-  describe(
-    'As a user searching for a pair I want to be able to stop my search for a pair',
-    function() {
-      it(
-        'should request for confirmation from me, when I request to stop the search',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Lopeta haku'))
-            .to.eventually.become([
-              buildResponse('@CONFIRM_STOP_SEARCHING', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
-            ]);
-        }
-      );
-
-      it(
-        'should go back to showing the situation of pair searching if I decline',
-        function() {
-          const testUser = {
-            name: 'Matti',
-            job: 'Ope',
-            communicationMethods: {
-              SKYPE: 'Matti123',
-            },
-            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
-            searching: true,
-          };
-
-          this.sessions.write('ID', testUser);
-
-          return expect(
-              this.bot.receive(SESSION, 'ei'))
-            .to.eventually.become([
-              buildResponse(PairFormatter.beautifyAvailablePairs(
-                [{
-                  id: 'ID',
-                  context: testUser,
-                }])),
-            ]);
-        }
-      );
-
-      it(
-        'should request for confirmation from me again, when I request to stop the search again',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Lopeta haku'))
-            .to.eventually.become([
-              buildResponse('@CONFIRM_STOP_SEARCHING', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
-            ]);
-        }
-      );
-
-      it(
-        'should confirm me that the search has ended and show me the info of my profile and the quick reply buttons for modifying it',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Kyllä'))
-            .to.eventually.become([
-              buildResponse('@STOPPED_SEARCHING'),
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation),
-                PersonalInformationFormatter.getPersonalInformationbuttons(
-                  this.context)),
             ]);
         }
       );
