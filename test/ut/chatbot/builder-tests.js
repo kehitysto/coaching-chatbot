@@ -155,7 +155,7 @@ describe('Chatbot builder', function() {
 
       this.builder._matchIntentAny(intents, 'baz');
 
-      matchIntentMock.verify();
+    return matchIntentMock.verify();
     });
   });
 
@@ -198,7 +198,7 @@ describe('Chatbot builder', function() {
                 results.push(action);
                 resolve({});
               },
-              50);
+              ~~(Math.random() * 10));
           });
         });
       }
@@ -209,6 +209,42 @@ describe('Chatbot builder', function() {
         .to.be.fulfilled
         .then(() => expect(results)
           .to.deep.equal(actions));
+    });
+  });
+
+  describe('#_matchIntentEach', function() {
+    it('should try match all intents', function() {
+      const intents = ['dead', 'beef'];
+
+      const matchIntentMock = sinon.mock(this.builder);
+      matchIntentMock.expects('_matchIntent')
+        .withArgs('dead', 'dead beef')
+        .returns(true);
+
+      matchIntentMock.expects('_matchIntent')
+        .withArgs('beef', 'dead beef')
+        .returns(true);
+
+      this.builder._matchIntentEach(intents, 'dead beef');
+
+      return matchIntentMock.verify();
+    });
+
+    it('should trim input if it matches', function() {
+      const intents = ['dead', 'beef'];
+
+      const matchIntentMock = sinon.mock(this.builder);
+      matchIntentMock.expects('_matchIntent')
+        .withArgs('dead', 'dead beef')
+        .returns(['dead']);
+
+      matchIntentMock.expects('_matchIntent')
+        .withArgs('beef', 'beef')
+        .returns(true);
+
+      this.builder._matchIntentEach(intents, 'dead beef');
+
+      return matchIntentMock.verify();
     });
   });
 });
