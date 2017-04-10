@@ -34,5 +34,5 @@ module.exports = {
     ),
   },
   externals: [nodeExternals()], // ignore node_modules
-  devtool: 'inline-cheap-module-eval-source-map',
+  devtool: 'source-map',
 };
