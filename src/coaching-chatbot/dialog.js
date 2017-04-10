@@ -280,7 +280,7 @@ bot
         } else if (session.checkIntent('#NO')) {
           session.runActions(['rejectAvailablePeer', 'nextAvailablePeer']);
         } else if (session.checkIntent('#YES')) {
-          session.runActions(['requestAvailablePeer', 'nextAvailablePeer']);
+          session.runActions(['addPairRequest', 'nextAvailablePeer']);
         } else {
           session.addResult('@UNCLEAR');
         }

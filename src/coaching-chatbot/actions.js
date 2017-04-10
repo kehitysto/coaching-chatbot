@@ -197,6 +197,11 @@ export function rejectAvailablePeer({ context }) {
   });
 }
 
-export function requestAvailablePeer({ context }) {
-  return Promise.resolve({});
+export function addPairRequest({ sessionId, context }) {
+  let peerId = context.availablePeers[0];
+  let session = new Sessions();
+  return session.addPairRequest(peerId, sessionId)
+       .then(() => {
+          return {};
+        });
 }

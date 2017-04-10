@@ -10,11 +10,16 @@ module.exports = class InMemoryProvider {
       this.db[sessionId] = {};
     }
 
+    log.silly('Retrieved context for {0}: {1}',
+        sessionId, JSON.stringify(this.db[sessionId]));
     return Promise.resolve(this.db[sessionId]);
   }
 
   write(sessionId, context) {
     this.db[sessionId] = context;
+
+    log.silly('Writing context for {0}: {1}',
+        sessionId, JSON.stringify(this.db[sessionId]));
     return Promise.resolve(this.db[sessionId]);
   }
 
