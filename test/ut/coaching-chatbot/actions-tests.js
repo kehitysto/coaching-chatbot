@@ -1,4 +1,9 @@
+import sinon from 'sinon';
+
 import * as actions from '../../../src/coaching-chatbot/actions.js';
+import Sessions from '../../../src/util/sessions-service';
+
+const TEST_SESSION = 'SESSION';
 
 describe('coaching-bot actions', function() {
   describe('#setJob', function() {
@@ -486,14 +491,82 @@ describe('coaching-bot actions', function() {
   });
 
   describe('#updateAvailablePeers', function() {
-    it('returns a Promise', function() {
+    it('adds retrieved user ids to context', function() {
+      const sessions = new Sessions();
+      const stubGetAvailablePairs = sinon.stub(
+        sessions.db,
+        'getAvailablePairs'
+      );
+      stubGetAvailablePairs.returns(
+        Promise.resolve([
+          { id: 'TEST1' },
+          { id: 'TEST2' },
+        ])
+      );
+
       const ret = actions.updateAvailablePeers({
+        sessionId: TEST_SESSION,
         context: {},
-        input: '',
       });
 
-      return expect(ret)
-        .to.be.a('Promise');
+      return expect(ret).to.become({
+        context: { availablePeers: ['TEST1', 'TEST2'] },
+      }).then(() => stubGetAvailablePairs.restore());
+    });
+  });
+
+  describe('#nextAvailablePeer', function() {
+    it('drops the current peer from availablePeers array', function() {
+      const ret = actions.nextAvailablePeer({
+        context: { availablePeers: ['TEST1', 'TEST2'] },
+      });
+
+      return expect(ret).to.become({
+        context: { availablePeers: ['TEST2'] },
+      });
+    });
+  });
+
+  describe('#rejectAvailablePeer', function() {
+    it('adds the current peer to the rejectedPeers array', function() {
+      const ret = actions.rejectAvailablePeer({
+        context: {
+          rejectedPeers: ['TEST1'],
+          availablePeers: ['TEST2'],
+        },
+      });
+
+      return expect(ret).to.become({
+        context: {
+          rejectedPeers: ['TEST1', 'TEST2'],
+          availablePeers: ['TEST2'],
+        },
+      });
+    });
+
+    it('creates the rejectedPeers array if it does not exist', function() {
+      const ret = actions.rejectAvailablePeer({
+        context: {
+          availablePeers: ['TEST2'],
+        },
+      });
+
+      return expect(ret).to.become({
+        context: {
+          rejectedPeers: ['TEST2'],
+          availablePeers: ['TEST2'],
+        },
+      });
+    });
+  });
+
+  describe('#requestAvailablePeer', function() {
+    it('returns a Promise', function() {
+      const ret = actions.requestAvailablePeer({});
+
+      expect(ret).to.be.a('Promise');
+
+      return expect(ret).to.be.fulfilled;
     });
   });
 });
