@@ -278,7 +278,9 @@ bot
         if (session.checkIntent('#NEXT')) {
           session.runActions(['nextAvailablePeer']);
         } else if (session.checkIntent('#NO')) {
-          session.runActions(['rejectAvailablePeer', 'nextAvailablePeer']);
+          session.runActions(['rejectAvailablePeer']);
+          session.addResult('@REQUEST_FOR_PEER');
+          session.runActions(['nextAvailablePeer']);
         } else if (session.checkIntent('#YES')) {
           session.runActions(['addPairRequest', 'nextAvailablePeer']);
         } else {

@@ -213,15 +213,3 @@ export function addPairRequest({ sessionId, context }) {
     }
   });
 }
-
-export function waittingforPairRequest( { context }) {
-  const pairRequests = context.pairRequests || [];
-  pairRequests.push(context.availablePeers[0]);
-
-  return Promise.resolve({
-    context: {
-      ...context,
-      pairRequests,
-    },
-  });
-}
