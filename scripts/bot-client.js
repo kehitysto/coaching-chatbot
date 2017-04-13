@@ -1,4 +1,5 @@
 import readline from 'readline';
+import minimist from 'minimist';
 import fs from 'fs';
 import path from 'path';
 
@@ -13,7 +14,39 @@ require('../src/lib/env-vars')
 process.env.RUN_ENV = 'dev';
 
 const STATE_STORE = '.state.json';
+
+const options = minimist(process.argv.slice(2));
 const sessions = new Sessions();
+
+if (options.h || options.help) {
+  console.log('USAGE:');
+  console.log(
+    `\n> bot-client` +
+    ` [-t|--test] [-h|--help] [--session=<ID>]\n`);
+  console.log('\tt, test\t-- run client without persisting state to disk');
+  console.log('\th, help\t-- print usage guide');
+  console.log('\tsession\t-- use ID as session id');
+  process.exit(255);
+}
+
+if (!options.test && !options.t) {
+  const dbRead = sessions.db.read.bind(sessions.db);
+  const dbWrite = sessions.db.write.bind(sessions.db);
+
+  // hack persistent state
+  sessions.db.write = (sessionId, context) => {
+    return dbWrite(sessionId, context)
+        .then((ret) => {
+          snapState();
+          return ret;
+        });
+  };
+
+  sessions.db.read = (sessionId) => {
+    loadState();
+    return dbRead(sessionId);
+  };
+}
 
 function main() {
   const bot = new Chatbot(dialog, sessions);
@@ -36,7 +69,7 @@ function loadState() {
 }
 
 function interactive(bot) {
-  const sessionId = 'INTERACTIVE';
+  const sessionId = options.session || 'INTERACTIVE';
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
