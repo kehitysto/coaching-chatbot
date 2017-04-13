@@ -164,14 +164,41 @@ bot
       (session) => {
         if (session.checkIntent('#MEETING_FREQUENCIES')) {
           session.runActions([
-            'markUserAsSearching',
             'addMeetingFrequency',
           ]);
           session.addResult('@CHANGE_MEETING_FREQUENCY');
-          session.endDialog();
+          session.switchDialog('/confirm_permission');
         } else {
           session.addResult('@UNCLEAR');
           session.switchDialog('/add_meeting_frequency');
+        }
+      },
+    ]
+  )
+  .dialog(
+    '/confirm_permission', [
+      (session) => {
+        if (session.context.searching) {
+          session.next();
+        } else {
+          session.addResult('@PERMISSION_TO_RECEIVE_MESSAGES', [
+            Builder.QuickReplies.create('@YES'),
+            Builder.QuickReplies.create('@NO'),
+          ]);
+        }
+      },
+      (session) => {
+        if (session.context.searching || session.checkIntent('#YES')) {
+          session.runActions([
+            'markUserAsSearching',
+          ]);
+          session.addResult('@TELL_HOW_TO_STOP_SEARCH'),
+          session.endDialog();
+        } else if (session.checkIntent('#NO')) {
+          session.endDialog();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
         }
       },
     ]
