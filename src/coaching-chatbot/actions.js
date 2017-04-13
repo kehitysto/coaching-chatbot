@@ -202,7 +202,6 @@ export function addPairRequest({ sessionId, context }) {
   let session = new Sessions();
   return session.read(peerId).then((chosenPeer) => {
     if ( chosenPeer.searching ) {
-      context.availablePeers.slice(0, 1);
       return session.addPairRequest(peerId, sessionId)
            .then(() => {
               return {};
