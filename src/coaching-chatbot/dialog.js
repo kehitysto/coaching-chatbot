@@ -192,6 +192,7 @@ bot
           session.runActions([
             'markUserAsSearching',
           ]);
+          session.addResult('@TELL_HOW_TO_STOP_SEARCH'),
           session.endDialog();
         } else if (session.checkIntent('#NO')) {
           session.endDialog();

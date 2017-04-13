@@ -409,6 +409,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'Joka toinen viikko'))
             .to.eventually.become([
               buildResponse('@CHANGE_MEETING_FREQUENCY'),
+              buildResponse('@TELL_HOW_TO_STOP_SEARCH'),
               buildResponse('@NO_PAIRS_AVAILABLE'),
             ]);
         }
@@ -570,6 +571,7 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'ei'))
             .to.eventually.become([
+              buildResponse('@INFORMATION_ABOUT_LIST'),
               buildResponse(PairFormatter.beautifyAvailablePairs(
                 [{
                   id: 'ID',
