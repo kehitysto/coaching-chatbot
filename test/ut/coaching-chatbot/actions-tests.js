@@ -559,14 +559,4 @@ describe('coaching-bot actions', function() {
       });
     });
   });
-
-  describe('#requestAvailablePeer', function() {
-    it('returns a Promise', function() {
-      const ret = actions.requestAvailablePeer({});
-
-      expect(ret).to.be.a('Promise');
-
-      return expect(ret).to.be.fulfilled;
-    });
-  });
 });
