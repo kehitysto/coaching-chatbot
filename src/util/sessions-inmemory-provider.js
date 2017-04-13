@@ -6,6 +6,7 @@ module.exports = class InMemoryProvider {
   }
 
   read(sessionId) {
+    log.silly('DB contents: {0}', JSON.stringify(this.db));
     if (this.db[sessionId] === undefined) {
       this.db[sessionId] = {};
     }
