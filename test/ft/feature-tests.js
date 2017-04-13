@@ -103,7 +103,7 @@ describe('User story', function() {
     'As a registered user I want to provide my name to the bot so other people can see it and ask for occupation after name is confirmed',
     function() {
       it(
-        'should ask user for a occupation when user has provided his/her name',
+        'should ask user for occupation when user has provided his/her name',
         function() {
           this.userInformation.name = this.expectedName;
           return expect(
@@ -122,7 +122,7 @@ describe('User story', function() {
     'As a registered user I want to provide my occupation to the bot so other people can see it and bot will show the information and asks for additional information',
     function() {
       it(
-        'should ask user for a occupation when user has provided his/her name',
+        'should show user he\'s profile information and ask if the user want\'s to provide more info or start the search for a pair',
         function() {
           this.userInformation.job = this.expectedJob;
           return expect(
@@ -145,10 +145,29 @@ describe('User story', function() {
     });
 
   describe(
+    'As a registered user I don\'t want to be able to change my preferred meeting frequency before I have added any info for my communication methods',
+    function() {
+      it(
+        'should show user his profile information again when user tries to change the meeting frequency',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'muuta tapaamisväliä'))
+            .to.eventually.become([
+              buildResponse(
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation),
+                PersonalInformationFormatter.getPersonalInformationbuttons(
+                  this.context))
+            ]);
+        }
+      );
+    });
+
+  describe(
     'As a registered user I want to provide my age to the bot so other people can see it and bot will show the information and asks for additional information',
     function() {
       it(
-        'should ask user for a additional information when user has provided his/her name and occupation',
+        'after user has given his age, it should show the user he\'s profile information and ask if the user want\'s to provide more info or start the search for a pair',
         function() {
           this.userInformation.age = this.expectedAge;
           return expect(
@@ -172,7 +191,7 @@ describe('User story', function() {
     'As a registered user I want to provide my location to the bot so other people can see it and bot will show the information',
     function() {
       it(
-        'should ask user for a additional information when user has provided his/her name and occupation',
+        'after user has given his location, it should show the user he\'s profile information and ask if the user want\'s to provide more info or start the search for a pair',
         function() {
           this.userInformation.place = this.expectedPlace;
 
@@ -195,7 +214,7 @@ describe('User story', function() {
     'As a registered user I want to provide my acceptable methods of communication with quick replies',
     function() {
       it(
-        'should tell the user there are no communication methods added yet',
+        'after user requests to start the search for a pair, it should tell the user there are no communication methods added yet',
         function() {
           return expect(
               this.bot.receive(SESSION, 'Etsi pari'))
@@ -398,6 +417,7 @@ describe('User story', function() {
       );
     }
   );
+
   describe(
     'As a user searching for a pair I want to get a list of other users wanting to meet as often as I do',
     function() {
