@@ -208,7 +208,7 @@ export function addPairRequest({ sessionId, context }) {
             });
     } else {
       return Promise.resolve({
-        // result: 'Valittu henkilö ei ole etsimässä enää',
+        result: 'Valittu henkilö ei ole etsimässä enää',
       });
     }
   });
