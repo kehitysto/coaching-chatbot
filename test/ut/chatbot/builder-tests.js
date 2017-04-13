@@ -286,4 +286,76 @@ describe('Chatbot builder', function() {
       assert(ret === 0);
     });
   });
+
+  describe('#_runIntent', function() {
+    it('should return null if no such intent is found', function() {
+      assert(this.builder._runIntent('#-1', '') === null);
+    });
+
+    it('should return a result if input matches the intent (any)', function() {
+      const intentId = '#DEAD';
+      const intent = {
+        any: [
+          /^dead/i,
+        ],
+      };
+
+      const input = 'dead';
+
+      this.builder.intent(intentId, intent);
+      assert(this.builder._runIntent(intentId, input) !== null);
+    });
+
+    it('should return a result if input matches the intent (each)', function() {
+      const intentId = '#DEAD';
+      const intent = {
+        each: [
+          /^dead/i,
+          /^beef/i,
+        ],
+      };
+
+      const input = 'dead beef';
+
+      this.builder.intent(intentId, intent);
+      assert(this.builder._runIntent(intentId, input) !== null);
+    });
+
+    it('should throw error if intent doesn\'t have any or each', function() {
+      const intentId = '#DEAD';
+      const intent = {
+        beef: [
+          /^dead/i,
+        ],
+      };
+
+      const input = 'beef';
+
+      this.builder.intent(intentId, intent);
+
+      var spy = sinon.spy(this.builder._runIntent);
+      spy.withArgs(intentId, input);
+
+      try {
+        spy();
+      } catch (e) {
+      }
+
+      assert(spy.threw());
+    });
+
+    it('should return null if input doesn\'t match the intent', function() {
+      const intentId = '#DEAD';
+      const intent = {
+        any: [
+          /^dead/i,
+        ],
+      };
+
+      const input = 'beef';
+
+      this.builder.intent(intentId, intent);
+      assert(this.builder._runIntent(intentId, input) === null);
+    });
+  });
 });
