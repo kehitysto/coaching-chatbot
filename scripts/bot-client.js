@@ -26,7 +26,7 @@ if (options.h || options.help) {
   console.log('\tt, test\t-- run client without persisting state to disk');
   console.log('\th, help\t-- print usage guide');
   console.log('\tsession\t-- use ID as session id');
-  process.exit(255);
+  process.exit();
 }
 
 if (!options.test && !options.t) {
