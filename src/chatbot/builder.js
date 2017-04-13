@@ -3,7 +3,7 @@ import log from '../lib/logger-service';
 import Session from './session';
 
 class Builder {
-  constructor(strings, maxSteps = 5) {
+  constructor(strings, maxSteps = 10) {
     this.maxSteps = maxSteps;
 
     this._tree = {};

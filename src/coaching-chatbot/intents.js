@@ -42,6 +42,10 @@ module.exports = {
         any: /^(?:etsi|hae)/i,
     },
 
+    NEXT: {
+        any: /^seuraava/i,
+    },
+
     SET_OR_CHANGE: {
         any: [
           '#SET',
