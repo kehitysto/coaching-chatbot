@@ -58,7 +58,7 @@ describe('User story', function() {
     });
 
   describe(
-    'As a user I want the bot to respond if my input is not understood so that I can reply with valid input',
+    'As a user I want the bot to respond if my input is not understood so that I can reply with a valid input',
     function() {
       it(
         'should tell that the input is not understood if the input is bad',
@@ -87,7 +87,7 @@ describe('User story', function() {
     'As a non-registered user I want the bot to ask for my name, when I have confirmed that I want to start searching for a peer',
     function() {
       it(
-        'should ask user for a name when user has confirmed that he wants to find a peer',
+        'should ask user for a name when user has confirmed that they want to find a peer',
         function() {
           return expect(
               this.bot.receive(SESSION, 'Kyllä')
@@ -100,10 +100,10 @@ describe('User story', function() {
     });
 
   describe(
-    'As a registered user I want to provide my name to the bot so other people can see it and ask for occupation after name is confirmed',
+    'As a registered user I want to provide my name to the bot',
     function() {
       it(
-        'should ask user for occupation when user has provided his/her name',
+        'should ask user their occupation when user has provided their name',
         function() {
           this.userInformation.name = this.expectedName;
           return expect(
@@ -119,10 +119,10 @@ describe('User story', function() {
     });
 
   describe(
-    'As a registered user I want to provide my occupation to the bot so other people can see it and bot will show the information and asks for additional information',
+    'As a registered user I want to provide my occupation to the bot',
     function() {
       it(
-        'should show user he\'s profile information and ask if the user want\'s to provide more info or start the search for a pair',
+        'after user has provided their occupation, it should show user their profile information and ask if the user want\'s to provide more info or start the search for a pair',
         function() {
           this.userInformation.job = this.expectedJob;
           return expect(
@@ -148,7 +148,7 @@ describe('User story', function() {
     'As a registered user I don\'t want to be able to change my preferred meeting frequency before I have added any info for my communication methods',
     function() {
       it(
-        'should show user his profile information again when user tries to change the meeting frequency',
+        'should show the user their profile information again when user tries to change the meeting frequency',
         function() {
           return expect(
               this.bot.receive(SESSION, 'muuta tapaamisväliä'))
@@ -164,10 +164,10 @@ describe('User story', function() {
     });
 
   describe(
-    'As a registered user I want to provide my age to the bot so other people can see it and bot will show the information and asks for additional information',
+    'As a registered user I want to provide my age to the bot',
     function() {
       it(
-        'after user has given his age, it should show the user he\'s profile information and ask if the user want\'s to provide more info or start the search for a pair',
+        'after the user has given their age, it should show the user their profile information and ask if the user want\'s to provide more info or start the search for a pair',
         function() {
           this.userInformation.age = this.expectedAge;
           return expect(
@@ -188,10 +188,10 @@ describe('User story', function() {
     });
 
   describe(
-    'As a registered user I want to provide my location to the bot so other people can see it and bot will show the information',
+    'As a registered user I want to provide my location to the bot',
     function() {
       it(
-        'after user has given his location, it should show the user he\'s profile information and ask if the user want\'s to provide more info or start the search for a pair',
+        'after user has given his location, it should show the user their profile information and ask if the user want\'s to provide more info or start the search for a pair',
         function() {
           this.userInformation.place = this.expectedPlace;
 
