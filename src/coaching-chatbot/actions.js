@@ -203,6 +203,53 @@ export function rejectAvailablePeer({ context }) {
   });
 }
 
+export function nextRequest({ context }) {
+  return Promise.resolve({
+    context: {
+      ...context,
+      pairRequests: context.pairRequests.slice(1).concat(
+          context.pairRequests.slice(0, 1)),
+    },
+  });
+}
+
+export function rejectRequest({ context }) {
+  return Promise.resolve({
+    context: {
+      ...context,
+      pairRequests: context.pairRequests.slice(1),
+    },
+  });
+}
+
+export function acceptRequest({ context }) {
+  // TODO: This is a placeholder!!!
+  return Promise.resolve({
+    context: {
+      ...context,
+      pairRequests: context.pairRequests.slice(1).concat(
+          context.pairRequests.slice(0, 1)),
+    },
+  });
+}
+
+export function displayRequest({ context }) {
+  return new Promise((resolve, reject) => {
+    let sessions = new Sessions();
+
+    return sessions.read(context.pairRequests[0])
+      .then((profile) => {
+        resolve({
+          result: PairFormatter.createPairString(profile),
+        });
+      })
+      .catch((err) => {
+        log.error('err: {0}', err);
+        reject(err);
+      });
+  });
+}
+
 export function addPairRequest({ sessionId, context }) {
   let peerId = context.availablePeers[0];
   let session = new Sessions();
