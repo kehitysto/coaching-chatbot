@@ -309,8 +309,7 @@ class Builder {
       if (this._tree[state].substates[substate] === undefined) {
         log.error('No such substate: {0}?{1}', state, substate);
 
-        // reset to substate 0
-        session.switchDialog(state);
+        session.resetDialog();
         substate = session.subStateId;
       }
 

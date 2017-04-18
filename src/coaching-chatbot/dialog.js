@@ -124,7 +124,7 @@ bot
           session.runActions(['addCommunicationMethod']);
         } else {
           session.addResult('@UNCLEAR');
-          session.switchDialog('/add_communication_method');
+          session.resetDialog();
         }
       },
       (session) => {
@@ -146,7 +146,7 @@ bot
       },
       (session) => {
         if (session.checkIntent('#YES')) {
-          session.switchDialog('/add_communication_method');
+          session.resetDialog();
         } else if (session.checkIntent('#NO')) {
           session.switchDialog('/add_meeting_frequency');
         } else {
@@ -170,7 +170,7 @@ bot
           session.switchDialog('/confirm_permission');
         } else {
           session.addResult('@UNCLEAR');
-          session.switchDialog('/add_meeting_frequency');
+          session.resetDialog();
         }
       },
     ]
@@ -296,7 +296,7 @@ bot
       },
       (session) => {
         if (session.context.availablePeers.length <= 0) {
-          return session.switchDialog('/searching');
+          return session.resetDialog();
         }
 
         session.runActions(['displayAvailablePeer']);
@@ -323,6 +323,7 @@ bot
       },
     ], [
       ['#CHANGE_MEETING_FREQUENCY', (session) => {
+        session.resetDialog();
         session.beginDialog('/add_meeting_frequency');
       }],
       ['#STOP_SEARCHING', (session) => {
