@@ -44,6 +44,7 @@
     "inject-loader": "^3.0.0-beta4",
     "istanbul-instrumenter-loader": "^1.2.0",
     "json-loader": "^0.5.4",
+    "minimist": "^1.2.0",
     "mocha": "*",
     "mocha-webpack": "^1.0.0-beta.1",
     "mockery": "^2.0.0",
