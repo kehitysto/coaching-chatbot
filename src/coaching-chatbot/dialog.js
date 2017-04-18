@@ -300,6 +300,11 @@ bot
         }
 
         session.runActions(['displayAvailablePeer']);
+        session.addQuickReplies([
+          Builder.QuickReplies.create('@YES'),
+          Builder.QuickReplies.create('@NO'),
+          Builder.QuickReplies.create('@LATER'),
+        ]);
       },
       (session) => {
         if (session.checkIntent('#NEXT')) {
