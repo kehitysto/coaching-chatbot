@@ -24,8 +24,9 @@ module.exports = class Session {
   /**
    * Start a new dialog
    * @param {string} dialogId ID of the new dialog to start
+   * @param {boolean} inPlace do not progress dialog on returning
    */
-  beginDialog(dialogId) {
+  beginDialog(dialogId, inPlace=false) {
     if (dialogId.startsWith('/')) {
       dialogId = dialogId.substr(1);
     }
@@ -36,7 +37,7 @@ module.exports = class Session {
       }
     }
 
-    this.next();
+    if (!inPlace) this.next();
     this._state.push([dialogId, 0]);
   }
 

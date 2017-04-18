@@ -324,7 +324,7 @@ bot
     ], [
       ['#CHANGE_MEETING_FREQUENCY', (session) => {
         session.resetDialog();
-        session.beginDialog('/add_meeting_frequency');
+        session.beginDialog('/add_meeting_frequency', true);
       }],
       ['#STOP_SEARCHING', (session) => {
         session.beginDialog('/stop_searching');
