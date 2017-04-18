@@ -6,15 +6,7 @@ bot: "kerro nimi"
 user: "vaihda nimi  
 bot: "kiitos vaihda nimi. jos haluat..."  
 
-### Bot doesn't tell user how to change skype account(or phone number)    
-
-### When finding a peer
->users wants to change meeting freq from once in a 2 week to every weekday  
-user: "muuta tapaamisväliä"  
-bot: "Kiitos. Halutessasi voit muuttaa tapaamisväliä kirjoittamalla "muuta tapaamisväliä".  
-bot: "Anteeksi, en ymmärtänyt mitä tarkoitat."  
-bot: "Tässä on lista henkilöistä, jotka haluavat tavata yhtä usein:"  
-it works, but bot says pointless "Anteeksi, en ymmärtänyt mitä tarkoitat."  
+### Bot doesn't tell user how to change skype account(or phone number)     
 
 #### Fixed/solved bugs (not all of them):  
 >#when choosing a method of communication, user cant spell on lowercase  
@@ -25,5 +17,6 @@ bot forces user to add new method of communacion
 #bot doesn't tell user about the change to reset 'aloita alusta'  
 #mb doesn't react on facebook "basic thumbs up"    
 #doesn't understand "k", "j", "kyl", "ju" as true and "emmä", "e" as false  
-#'aloita alusta' can be name, job, age and location
-#you can skip the part where bot asks communaciont methods
+#'aloita alusta' can be name, job, age and location  
+#you can skip the part where bot asks communaciont methods  
+#When finding a peer users wants to change meeting freq from once in a 2 week to every weekday   
