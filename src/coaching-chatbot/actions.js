@@ -1,4 +1,7 @@
 import log from '../lib/logger-service';
+import Messenger from '../facebook-messenger/messenger-service';
+
+import strings from './strings.json';
 import PersonalInformationFormatter
  from '../lib/personal-information-formatter-service';
 import CommunicationMethodsFormatter
@@ -206,6 +209,15 @@ export function addPairRequest({ sessionId, context }) {
   return session.read(peerId).then((chosenPeer) => {
     if ( chosenPeer.searching ) {
       return session.addPairRequest(peerId, sessionId)
+           .then(() => {
+              // skip notification on local client
+              if (process.env.RUN_ENV === 'dev') return;
+
+              return Messenger.send(
+                peerId,
+                strings['@TELL_USER_HAS_NEW_REQUEST']
+              );
+           })
            .then(() => {
               return {
                 result: '@CONFIRM_NEW_PEER_ASK',
