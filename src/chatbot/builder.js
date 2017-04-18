@@ -299,29 +299,36 @@ class Builder {
 
       const state = session.stateId;
 
-      if (this._tree[state] !== undefined) {
-        const substate = session.subStateId;
-
-        log.debug('Running state /{0}?{1}', state, substate);
-
-        this._tree[state].substates[substate](session, input);
-
-        log.silly('Awaiting iteration {0} run queue completion', step);
-        return resolve(
-          session.runQueue.then(() => {
-            log.silly('Iteration {0} completed', step);
-            if (session.stateId !== state ||
-              session.subStateId !== substate) {
-              return this._runStep(step + 1, session, input);
-            } else {
-              session.next();
-            }
-          })
+      if (this._tree[state] === undefined) {
+        return reject(
+          new Error(`Unknown state: ${state}`)
         );
       }
 
-      return reject(
-        new Error(`Unknown state: ${state}`)
+      let substate = session.subStateId;
+      if (this._tree[state].substates[substate] === undefined) {
+        log.error('No such substate: {0}?{1}', state, substate);
+
+        // reset to substate 0
+        session.switchDialog(state);
+        substate = session.subStateId;
+      }
+
+      log.debug('Running state /{0}?{1}', state, substate);
+
+      this._tree[state].substates[substate](session, input);
+
+      log.silly('Awaiting iteration {0} run queue completion', step);
+      return resolve(
+        session.runQueue.then(() => {
+          log.silly('Iteration {0} completed', step);
+          if (session.stateId !== state ||
+            session.subStateId !== substate) {
+            return this._runStep(step + 1, session, input);
+          } else {
+            session.next();
+          }
+        })
       );
     });
   }
