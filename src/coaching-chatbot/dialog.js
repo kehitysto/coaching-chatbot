@@ -314,7 +314,6 @@ bot
           session.runActions(['nextAvailablePeer']);
         } else if (session.checkIntent('#YES')) {
           session.runActions(['addPairRequest']);
-          session.addResult('@CONFIRM_NEW_PEER_ASK');
           session.runActions(['nextAvailablePeer']);
         } else {
           session.addResult('@UNCLEAR');

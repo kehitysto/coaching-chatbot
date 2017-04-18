@@ -207,11 +207,13 @@ export function addPairRequest({ sessionId, context }) {
     if ( chosenPeer.searching ) {
       return session.addPairRequest(peerId, sessionId)
            .then(() => {
-              return {};
+              return {
+                result: '@CONFIRM_NEW_PEER_ASK',
+              };
             });
     } else {
       return Promise.resolve({
-        result: 'Valittu henkilö ei ole etsimässä enää',
+        result: '@PEER_NO_LONGER_AVAILABLE',
       });
     }
   });
