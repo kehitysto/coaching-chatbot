@@ -43,7 +43,10 @@ module.exports = {
     },
 
     NEXT: {
-        any: /^seuraava/i,
+        any: [
+          /^seuraava/i,
+          /^myöhemmin/i,
+        ],
     },
 
     SET_OR_CHANGE: {
