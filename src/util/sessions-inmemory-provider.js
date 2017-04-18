@@ -35,10 +35,12 @@ module.exports = class InMemoryProvider {
 
         log.silly('Evaluating possible pair {0}', sessionId);
         if (sessionId === id) continue;
-        if (this.db[sessionId]['searching'] === true &&
-            this.db[sessionId]['meetingFrequency'] === meetingFrequency &&
-            (!this.db[sessionId]['pairRequests'] || !this.db[sessionId]['pairRequests'].includes(id)) &&
-            (!this.db[sessionId]['pairRequests'] || !this.db[sessionId]['rejectedPeers'].includes(id))) {
+        let session = this.db[sessionId];
+
+        if (session.searching === true &&
+            session.meetingFrequency === meetingFrequency &&
+            (!session.pairRequests || !session.pairRequests.includes(id)) &&
+            (!session.rejectedPeers || !session.rejectedPeers.includes(id))) {
           log.silly('Found a valid pair!');
           pairs.push({ id: sessionId });
         }
