@@ -200,8 +200,16 @@ export function rejectAvailablePeer({ context }) {
 export function addPairRequest({ sessionId, context }) {
   let peerId = context.availablePeers[0];
   let session = new Sessions();
-  return session.addPairRequest(peerId, sessionId)
-       .then(() => {
-          return {};
-        });
+  return session.read(peerId).then((chosenPeer) => {
+    if ( chosenPeer.searching ) {
+      return session.addPairRequest(peerId, sessionId)
+           .then(() => {
+              return {};
+            });
+    } else {
+      return Promise.resolve({
+        result: 'Valittu henkilö ei ole etsimässä enää',
+      });
+    }
+  });
 }

@@ -81,7 +81,9 @@ module.exports = class DynamoDBProvider {
         Limit: 50,
         FilterExpression: 'context.searching = :true AND ' +
                           'context.meetingFrequency = :freq AND ' +
-                          'NOT id = :id',
+                          'NOT id = :id AND ' +
+                          'NOT contains(:id, context.pairRequests) AND ' +
+                          'NOT contains(:id, context.rejectedPeers)',
         ExpressionAttributeValues: { ':true': true,
                                      ':freq': meetingFrequency,
                                      ':id': id },

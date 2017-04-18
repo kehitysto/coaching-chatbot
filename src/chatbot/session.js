@@ -52,6 +52,13 @@ module.exports = class Session {
   }
 
   /**
+   * Restart the current dialog from the beginning
+   */
+  resetDialog() {
+    this._state[this._state.length - 1][1] = 0;
+  }
+
+  /**
    * Switch execution to a different dialog
    * Replaces the top level of the dialog stack with the new dialog,
    *  control will be returned to current parent when
