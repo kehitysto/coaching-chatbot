@@ -1,27 +1,32 @@
 // normally undefined, set to 'dev' for local client only
 process.env.RUN_ENV = 'dev';
 
+import Builder from '../../src/chatbot/builder';
 import Chatbot from '../../src/chatbot/chatbot-service';
 import dialog from '../../src/coaching-chatbot/dialog';
+import Strings from '../../src/coaching-chatbot/strings.json';
 import PersonalInformationFormatter
 from '../../src/lib/personal-information-formatter-service';
 import CommunicationMethodsFormatter
 from '../../src/lib/communication-methods-formatter';
-import Strings from '../../src/coaching-chatbot/strings.json';
 import Sessions from '../../src/util/sessions-service';
 import PairFormatter
 from '../../src/lib/pair-formatter';
 
 const SESSION = 'SESSION';
 
+function getTemplate(templateId) {
+  return (Strings[templateId] !== undefined) ?
+      Strings[templateId] :  templateId;
+}
+
 function buildResponse(templateId, quickReplies = []) {
-  let message = Strings[templateId];
-  if (message === undefined) {
-    message = templateId;
+  for (let i = 0; i < quickReplies.length; ++i) {
+    quickReplies[i].title = getTemplate(quickReplies[i].title);
   }
 
   return {
-    message,
+    message: getTemplate(templateId),
     quickReplies,
   };
 }
@@ -435,12 +440,15 @@ describe('User story', function() {
 
           this.sessions.write('ID', testUser);
 
-          const expected = buildResponse(PairFormatter.beautifyAvailablePairs(
-            [{
-              id: 'ID',
-              context: testUser,
-            }, ]
-          ));
+          const expected = buildResponse(
+            PairFormatter.beautifyAvailablePairs(
+              [{
+                id: 'ID',
+                context: testUser,
+              }]
+            ),
+            Builder.QuickReplies.createArray(['@YES', '@NO', '@LATER'])
+          );
 
           return expect(
               this.bot.receive(SESSION, ''))
@@ -482,11 +490,15 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'seuraava'))
             .to.eventually.become([
               buildResponse('@INFORMATION_ABOUT_LIST'),
-              buildResponse(PairFormatter.beautifyAvailablePairs(
-                [{
-                  id: 'ID',
-                  context: testUser,
-                }])),
+              buildResponse(
+                PairFormatter.beautifyAvailablePairs(
+                  [{
+                    id: 'ID',
+                    context: testUser,
+                  }]
+                ),
+                Builder.QuickReplies.createArray(['@YES', '@NO', '@LATER'])
+              ),
             ]);
         }
       );
@@ -522,11 +534,14 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'seuraava'))
             .to.eventually.become([
               buildResponse('@INFORMATION_ABOUT_LIST'),
-              buildResponse(PairFormatter.beautifyAvailablePairs(
-                [{
-                  id: 'ID',
-                  context: testUser,
-                }])),
+              buildResponse(
+                PairFormatter.beautifyAvailablePairs(
+                  [{
+                    id: 'ID',
+                    context: testUser,
+                  }]),
+                Builder.QuickReplies.createArray(['@YES', '@NO', '@LATER'])
+              ),
             ]);
         }
       );
@@ -576,7 +591,9 @@ describe('User story', function() {
                 [{
                   id: 'ID',
                   context: testUser,
-                }])),
+                }]),
+                Builder.QuickReplies.createArray(['@YES', '@NO', '@LATER'])
+              ),
             ]);
         }
       );

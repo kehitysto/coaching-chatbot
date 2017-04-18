@@ -118,7 +118,7 @@ class Builder {
         if (result.result) {
           log.silly('Adding result from action: {0}',
               JSON.stringify(result.result));
-          session.addResult(result.result);
+          session._addResult(result.result);
         }
       })
       .catch((err) => log.error('Action failed!!!\n{0}', err.stack));
@@ -334,5 +334,16 @@ Builder.QuickReplies = {
       title,
       payload: (payload === undefined) ? title : payload,
     };
+  },
+
+  createArray(titles, payloads=[]) {
+    const quickReplies = [];
+
+    for (let i = 0; i < titles.length; ++i) {
+      quickReplies.push(Builder.QuickReplies.create(
+          titles[i], payloads[i]));
+    }
+
+    return quickReplies;
   },
 };
