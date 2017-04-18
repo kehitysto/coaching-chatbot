@@ -311,10 +311,11 @@ bot
           session.runActions(['nextAvailablePeer']);
         } else if (session.checkIntent('#NO')) {
           session.runActions(['rejectAvailablePeer']);
-          session.addResult('@REQUEST_FOR_PEER');
           session.runActions(['nextAvailablePeer']);
         } else if (session.checkIntent('#YES')) {
-          session.runActions(['addPairRequest', 'nextAvailablePeer']);
+          session.runActions(['addPairRequest']);
+          session.addResult('@CONFIRM_NEW_PEER_ASK');
+          session.runActions(['nextAvailablePeer']);
         } else {
           session.addResult('@UNCLEAR');
         }

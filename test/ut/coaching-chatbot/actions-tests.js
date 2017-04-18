@@ -484,6 +484,9 @@ describe('coaching-bot actions', function() {
         .to.eventually
         .deep.equal({
           context: {
+            availablePeers: [],
+            rejectedPeers: [],
+            pairRequests: [],
             searching: false,
           },
         });

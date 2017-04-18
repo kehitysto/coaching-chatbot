@@ -130,6 +130,9 @@ export function markUserAsNotSearching({ context }) {
     return Promise.resolve({
         context: {
             ...context,
+            rejectedPeers: [],
+            availablePeers: [],
+            pairRequests: [],
             searching: false,
         },
     });
