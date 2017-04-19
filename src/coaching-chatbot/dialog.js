@@ -349,7 +349,6 @@ bot
             return session.addResult('@NO_REQUESTS_AVAILABLE');
           }
 
-          session.addResult('@INFORMATION_ABOUT_REQUESTS');
           session.next();
         },
         (session) => {
@@ -357,6 +356,7 @@ bot
             return session.endDialog();
           }
 
+          session.addResult('@INFORMATION_ABOUT_REQUESTS');
           session.runActions(['displayRequest']);
           session.addQuickReplies([
             Builder.QuickReplies.create('@YES'),

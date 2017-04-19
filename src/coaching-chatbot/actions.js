@@ -1,4 +1,5 @@
 import log from '../lib/logger-service';
+import Builder from '../chatbot/builder';
 import Messenger from '../facebook-messenger/messenger-service';
 
 import strings from './strings.json';
@@ -262,7 +263,11 @@ export function addPairRequest({ sessionId, context }) {
 
               return Messenger.send(
                 peerId,
-                strings['@TELL_USER_HAS_NEW_REQUEST']
+                strings['@TELL_USER_HAS_NEW_REQUEST'],
+                Builder.QuickReplies.createArray([
+                  strings['@SHOW_REQUESTS'],
+                  strings['@STOP_SEARCHING'],
+                ])
               );
            })
            .then(() => {
