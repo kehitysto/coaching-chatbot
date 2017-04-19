@@ -31,17 +31,4 @@ module.exports = class Sessions {
   getAvailablePairs(id, meetingFrequency) {
     return this.db.getAvailablePairs(id, meetingFrequency);
   }
-
-  addPairRequest(id, sessionId) {
-    return this.db.read(id).then((context) => {
-      const pairRequests = context.pairRequests || [];
-      return this.db.write(id, {
-        ...context,
-        pairRequests: [
-          ...pairRequests,
-          sessionId,
-        ],
-      });
-    });
-  }
 };

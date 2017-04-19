@@ -254,27 +254,33 @@ export function displayRequest({ context }) {
 export function addPairRequest({ sessionId, context }) {
   let peerId = context.availablePeers[0];
   let session = new Sessions();
-  return session.read(peerId).then((chosenPeer) => {
-    if ( chosenPeer.searching ) {
-      return session.addPairRequest(peerId, sessionId)
-           .then(() => {
-              // skip notification on local client
-              if (process.env.RUN_ENV === 'dev') return;
 
-              return Messenger.send(
-                peerId,
-                strings['@TELL_USER_HAS_NEW_REQUEST'],
-                Builder.QuickReplies.createArray([
-                  strings['@SHOW_REQUESTS'],
-                  strings['@STOP_SEARCHING'],
-                ])
-              );
-           })
-           .then(() => {
-              return {
-                result: '@CONFIRM_NEW_PEER_ASK',
-              };
-            });
+  return session.read(peerId).then((chosenPeer) => {
+    if (chosenPeer.searching) {
+      if (chosenPeer.pairRequests === undefined) {
+        chosenPeer.pairRequests = [];
+      }
+      chosenPeer.pairRequests.push(sessionId);
+
+      return session.write(peerId, chosenPeer)
+          .then(() => {
+            // skip notification on local client
+            if (process.env.RUN_ENV === 'dev') return;
+
+            return Messenger.send(
+              peerId,
+              strings['@TELL_USER_HAS_NEW_REQUEST'],
+              Builder.QuickReplies.createArray([
+                strings['@SHOW_REQUESTS'],
+                strings['@STOP_SEARCHING'],
+              ])
+            );
+          })
+          .then(() => {
+            return {
+              result: '@CONFIRM_NEW_PEER_ASK',
+            };
+          });
     } else {
       return Promise.resolve({
         result: '@PEER_NO_LONGER_AVAILABLE',
