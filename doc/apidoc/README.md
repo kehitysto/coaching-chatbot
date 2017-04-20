@@ -5,11 +5,11 @@ Class for defining the dialog structure.
 
 [API documentation](builder.md)
 
-## Sessions
+## Session
 Maintains the current state of the chatbot during execution, and provides
 the API for controlling the chatbot from dialog functions.
 
-[API documentation](sessions.md)
+[API documentation](session.md)
 
 ## Chatbot-Service
 Wrapper providing the full chatbot execution flow as an
