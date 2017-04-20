@@ -1,21 +1,19 @@
 # General architecture
 
-### Facebook messenger -> AWS -> Wit -> AWS -> Facebook messenger
+### Facebook messenger -> AWS -> Coaching chatbot -> AWS -> Facebook messenger
 
 1. Facebook messenger receives a message from the user. The message is sent to AWS (API Gateway -> Lambda -> Serverless stuff).
-2. Facebook bot receives the message and relays the message to Wit.
-3. Wit processes the message
-4. Wit calls any functions that are required to be called (save name to database, save occupation to database, see below). The database is DynamoDB.
-5. Wit sends back a message to the Facebook bot
-6. Facebook bot sends the message back to the Facebook messenger
+2. Coaching chatbot receives the message and processes it.
+3. Coaching chatbot calls any functions that are required to be called (save name to database, save occupation to database, see below). The database is DynamoDB.
+4. Coaching chatbot sends a message back to Facebook Messenger 
 
-# API for Wit #
+# API for Coaching chatbot #
 
-These are the functions Wit.ai will call from our bot service.
+These are the functions from our bot service.
 
 *note: These are only guidelines for now.*
 
-*note: messenger_id === wit_session_id unless it needs to be something else.*
+*note: messenger_id === sessionId unless it needs to be something else.*
 
 ### set_name(messenger_id, name)
 ```
