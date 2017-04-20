@@ -1,7 +1,7 @@
 {
   "@GREETING": "Hei! Olen Kehitystön vertaisohjausrobotti. Kiinnostaako sinua löytää pari vertaisohjausta varten?",
   "@GOODBYE": "Hyvästi!",
-  "@GREAT": "Hienoa!\nJos haluat nollata tiedot ja aloittaa alusta, pyydä sitä minulta esim. \"Aloita alusta\".",
+  "@GREAT": "Hienoa!\nJos haluat nollata tiedot ja aloittaa alusta, pyydä sitä minulta esim. 'Aloita alusta'.",
   "@UNCLEAR": [
     "Anteeksi, en ymmärtänyt mitä tarkoitat.",
     "Valitettavasti en tiedä mitä tarkoitat.",
@@ -10,7 +10,6 @@
   "@NOT_IMPLEMENTED": "Toimintoa ei ole vielä toteutettu...",
   "@RESET_CONFIRMATION": "Haluatko varmasti nollata tiedot ja aloittaa alusta?",
   "@RESET_DONE": "Tiedot nollattu.",
-
   "@REQUEST_NAME": "Millä nimellä haluaisit esittäytyä mahdolliselle parillesi?",
   "@CONFIRM_NAME": "Kiitos {name}. Voit vaihtaa nimeäsi myöhemmin.",
   "@REQUEST_JOB": "Seuraavaksi haluaisin tietää ammattisi.",
@@ -19,13 +18,11 @@
   "@CONFIRM_AGE": "Iäksesi on nyt asetettu {age}.",
   "@REQUEST_PLACE": "Anna paikkakuntasi.",
   "@CONFIRM_PLACE": "Paikkakunta lisätty profiiliin.",
-
-  "@DISPLAY_PROFILE": "Parin etsijät näkisivät nyt sinut seuraavasti: \"{profile}\". Voit siirtyä parin etsimiseen painamalla \"Etsi pari\".",
+  "@DISPLAY_PROFILE": "Parin etsijät näkisivät nyt sinut seuraavasti: '{profile}'. Voit siirtyä parin etsimiseen painamalla 'Etsi pari'.",
   "@INFORMATION_ABOUT_BUTTONS": "Pystyt asettamaan tietoja painamalla nappia.",
   "@YES": "Kyllä",
   "@NO": "Ei",
   "@LATER": "Myöhemmin",
-
   "@REQUEST_COMMUNICATION_METHOD": "Valitse tapa jolla haluat olla yhteydessä:",
   "@REQUEST_SKYPE_NAME": "Anna Skype-tunnuksesi.",
   "@REQUEST_PHONE_NUMBER": "Anna puhelinnumerosi.",
@@ -34,22 +31,19 @@
   "@NO_METHODS_ADDED": "Et ole vielä lisännyt yhteydenottotapojasi. Haluatko lisätä niitä nyt?",
   "@REQUEST_MEETING_FREQUENCY": "Kuinka usein haluaisit tavata parisi kanssa?",
   "@UNABLE_TO_CHANGE_MEETING_FREQUENCY": "Et voi muuttaa tapaamisväliä ennen kuin olet asettanut tavan yhteydenpitoa varten.",
-  "@CHANGE_MEETING_FREQUENCY": "Kiitos. Halutessasi voit muuttaa tapaamisväliä kirjoittamalla \"muuta tapaamisväliä\".",
-  "@NO_PAIRS_AVAILABLE": "Valitettavasti antamillasi ehdoilla ei juuri nyt löydy mahdollisia pareja. Voit joko odottaa, että sinuun otetaan yhteyttä, tai palata tarkistamaan tilanteen myöhemmin.",
+  "@CHANGE_MEETING_FREQUENCY": "Kiitos. Halutessasi voit muuttaa tapaamisväliä kirjoittamalla 'muuta tapaamisväliä'.",
+  "@NO_PAIRS_AVAILABLE": "Valitettavasti antamillasi ehdoilla ei juuri nyt löydy mahdollisia pareja. Voit joko odottaa, että sinuun otetaan yhteyttä, tai palata tarkistamaan tilanteen myöhemmin kirjoittamalla 'tarkista'.",
   "@PERMISSION_TO_RECEIVE_MESSAGES": "Sopiiko, että näytän parinhakuprofiilisi muille käyttäjille ja ilmoitan sinulle viestillä, kun sopiva pari löytyy?",
-  "@PEER_NO_LONGER_AVAILABLE": "Hups, valitsemasi vertaispari ei olekaan enää vapaana. Jatka etsintää!",
-
+  "@PEER_NO_LONGER_AVAILABLE": "Hups, valitsemasi vertaispari ei olekaan enää vapaana. Jatka etsimistä!",
   "@TELL_HOW_TO_STOP_SEARCH": "Jos haluat lopettaa, kirjoita 'lopeta haku'",
   "@STOP_SEARCHING": "Lopeta haku",
   "@CONFIRM_STOP_SEARCHING": "Haluatko varmasti lopettaa parinhaun?",
   "@NOT_CURRENTLY_SEARCHING": "Et hae pareja tällä hetkellä.",
   "@STOPPED_SEARCHING": "Parinhakusi on lopetettu.",
-
   "@CONFIRM_NEW_PEER_ASK": "Pyyntö on lähetetty, ilmoitan jos pyyntö hyväksytään",
   "@TELL_USER_HAS_NEW_REQUEST": "Olet saanut uuden parinhakupyynnön",
   "@INFORMATION_ABOUT_LIST": "Tässä on lista henkilöistä, jotka haluavat tavata yhtä usein:",
-
   "@INFORMATION_ABOUT_REQUESTS": "Seuraava käyttäjä haluaisi lisätä sinut vertaisohjausparikseen:",
-  "@NO_REQUESTS_AVAILABLE": "Valitettavasti sinulla ei juuri nyt ole avoimia parinhakupyyntöjä.",
-  "@SHOW_REQUESTS": "Näytä parinhakupyynnöt"
+  "@NO_REQUESTS_AVAILABLE": "Valitettavasti sinulla ei juuri nyt ole avoimia parinhakupyyntöjä.\nSelataksesi vapaita parinhakijoita kirjoita 'seuraava'",
+  "@SHOW_REQUESTS": "Näytä pyynnöt"
 }
