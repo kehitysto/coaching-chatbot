@@ -215,9 +215,13 @@ export function nextRequest({ context }) {
 }
 
 export function rejectRequest({ context }) {
+  const rejectedPeers = context.rejectedPeers || [];
+  rejectedPeers.push(context.pairRequests[0]);
+
   return Promise.resolve({
     context: {
       ...context,
+      rejectedPeers,
       pairRequests: context.pairRequests.slice(1),
     },
   });
