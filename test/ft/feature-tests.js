@@ -668,6 +668,19 @@ describe('User story', function() {
             ]);
         }
       );
+      it(
+        'should go straight to pair searching after all methods are given',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'etsi pari'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_MEETING_FREQUENCY',
+                PersonalInformationFormatter
+                .getMeetingFrequency(this.sessions.db.dump()[SESSION])
+              )
+            ]);
+        }
+      );
     }
   );
 });
