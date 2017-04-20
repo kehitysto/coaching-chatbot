@@ -43,6 +43,7 @@ $ npm run bot-client
 ## Documentation
  - [Deploy instructions](doc/deploy-instructions.md)
  - [Testing instructions](doc/testing-instructions.md)
+ - [Chatbot framework API](doc/chatbot/)
 
 ## Links
  - [Definition of Done](doc/dod.md)
