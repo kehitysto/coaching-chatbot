@@ -38,11 +38,18 @@
   "@NO_PAIRS_AVAILABLE": "Valitettavasti antamillasi ehdoilla ei juuri nyt löydy mahdollisia pareja. Voit joko odottaa, että sinuun otetaan yhteyttä, tai palata tarkistamaan tilanteen myöhemmin.",
   "@PERMISSION_TO_RECEIVE_MESSAGES": "Sopiiko, että näytän parinhakuprofiilisi muille käyttäjille ja ilmoitan sinulle viestillä, kun sopiva pari löytyy?",
   "@PEER_NO_LONGER_AVAILABLE": "Hups, valitsemasi vertaispari ei olekaan enää vapaana. Jatka etsintää!",
+
   "@TELL_HOW_TO_STOP_SEARCH": "Jos haluat lopettaa, kirjoita 'lopeta haku'",
+  "@STOP_SEARCHING": "Lopeta haku",
   "@CONFIRM_STOP_SEARCHING": "Haluatko varmasti lopettaa parinhaun?",
   "@NOT_CURRENTLY_SEARCHING": "Et hae pareja tällä hetkellä.",
   "@STOPPED_SEARCHING": "Parinhakusi on lopetettu.",
+
   "@CONFIRM_NEW_PEER_ASK": "Pyyntö on lähetetty, ilmoitan jos pyyntö hyväksytään",
   "@TELL_USER_HAS_NEW_REQUEST": "Olet saanut uuden parinhakupyynnön",
-  "@INFORMATION_ABOUT_LIST": "Tässä on lista henkilöistä, jotka haluavat tavata yhtä usein:"
+  "@INFORMATION_ABOUT_LIST": "Tässä on lista henkilöistä, jotka haluavat tavata yhtä usein:",
+
+  "@INFORMATION_ABOUT_REQUESTS": "Seuraava käyttäjä haluaisi lisätä sinut vertaisohjausparikseen:",
+  "@NO_REQUESTS_AVAILABLE": "Valitettavasti sinulla ei juuri nyt ole avoimia parinhakupyyntöjä.",
+  "@SHOW_REQUESTS": "Näytä parinhakupyynnöt"
 }

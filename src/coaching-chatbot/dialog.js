@@ -327,9 +327,57 @@ bot
         session.beginDialog('/add_meeting_frequency', true);
       }],
       ['#STOP_SEARCHING', (session) => {
-        session.beginDialog('/stop_searching');
+        session.resetDialog();
+        session.beginDialog('/stop_searching', true);
+      }],
+      ['#SHOW_PAIR_REQUESTS', (session) => {
+        session.resetDialog();
+        session.beginDialog('/list_requests', true);
       }],
     ])
+  .dialog(
+      '/list_requests', [
+        (session) => {
+          if (!session.context.searching) {
+            return session.endDialog();
+          }
+
+          session.next();
+        },
+        (session) => {
+          if (session.context.pairRequests.length <= 0) {
+            return session.addResult('@NO_REQUESTS_AVAILABLE');
+          }
+
+          session.next();
+        },
+        (session) => {
+          if (session.context.pairRequests.length <= 0) {
+            return session.endDialog();
+          }
+
+          session.addResult('@INFORMATION_ABOUT_REQUESTS');
+          session.runActions(['displayRequest']);
+          session.addQuickReplies([
+            Builder.QuickReplies.create('@YES'),
+            Builder.QuickReplies.create('@NO'),
+            Builder.QuickReplies.create('@LATER'),
+          ]);
+        },
+        (session) => {
+          if (session.checkIntent('#NEXT')) {
+            session.runActions(['nextRequest']);
+          } else if (session.checkIntent('#NO')) {
+            session.runActions(['rejectRequest']);
+          } else if (session.checkIntent('#YES')) {
+            session.runActions(['acceptRequest']);
+          } else {
+            session.addResult('@UNCLEAR');
+          }
+
+          return session.prev();
+        },
+      ])
   .dialog(
       '/stop_searching', [
         (session) => {

@@ -1,4 +1,5 @@
 import log from '../lib/logger-service';
+import Builder from '../chatbot/builder';
 import Messenger from '../facebook-messenger/messenger-service';
 
 import strings from './strings.json';
@@ -203,26 +204,83 @@ export function rejectAvailablePeer({ context }) {
   });
 }
 
+export function nextRequest({ context }) {
+  return Promise.resolve({
+    context: {
+      ...context,
+      pairRequests: context.pairRequests.slice(1).concat(
+          context.pairRequests.slice(0, 1)),
+    },
+  });
+}
+
+export function rejectRequest({ context }) {
+  return Promise.resolve({
+    context: {
+      ...context,
+      pairRequests: context.pairRequests.slice(1),
+    },
+  });
+}
+
+export function acceptRequest({ context }) {
+  // TODO: This is a placeholder!!!
+  return Promise.resolve({
+    context: {
+      ...context,
+      pairRequests: context.pairRequests.slice(1).concat(
+          context.pairRequests.slice(0, 1)),
+    },
+  });
+}
+
+export function displayRequest({ context }) {
+  return new Promise((resolve, reject) => {
+    let sessions = new Sessions();
+
+    return sessions.read(context.pairRequests[0])
+      .then((profile) => {
+        resolve({
+          result: PairFormatter.createPairString(profile),
+        });
+      })
+      .catch((err) => {
+        log.error('err: {0}', err);
+        reject(err);
+      });
+  });
+}
+
 export function addPairRequest({ sessionId, context }) {
   let peerId = context.availablePeers[0];
   let session = new Sessions();
-  return session.read(peerId).then((chosenPeer) => {
-    if ( chosenPeer.searching ) {
-      return session.addPairRequest(peerId, sessionId)
-           .then(() => {
-              // skip notification on local client
-              if (process.env.RUN_ENV === 'dev') return;
 
-              return Messenger.send(
-                peerId,
-                strings['@TELL_USER_HAS_NEW_REQUEST']
-              );
-           })
-           .then(() => {
-              return {
-                result: '@CONFIRM_NEW_PEER_ASK',
-              };
-            });
+  return session.read(peerId).then((chosenPeer) => {
+    if (chosenPeer.searching) {
+      if (chosenPeer.pairRequests === undefined) {
+        chosenPeer.pairRequests = [];
+      }
+      chosenPeer.pairRequests.push(sessionId);
+
+      return session.write(peerId, chosenPeer)
+          .then(() => {
+            // skip notification on local client
+            if (process.env.RUN_ENV === 'dev') return;
+
+            return Messenger.send(
+              peerId,
+              strings['@TELL_USER_HAS_NEW_REQUEST'],
+              Builder.QuickReplies.createArray([
+                strings['@SHOW_REQUESTS'],
+                strings['@STOP_SEARCHING'],
+              ])
+            );
+          })
+          .then(() => {
+            return {
+              result: '@CONFIRM_NEW_PEER_ASK',
+            };
+          });
     } else {
       return Promise.resolve({
         result: '@PEER_NO_LONGER_AVAILABLE',

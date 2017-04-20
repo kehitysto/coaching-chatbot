@@ -56,6 +56,10 @@ module.exports = {
         ],
     },
 
+    SHOW: {
+        any: /^näytä/i,
+    },
+
     OPTIONAL_VALUE: {
         any: /(\w.*)?/i,
         match: (match) => match[1] || true,
@@ -88,6 +92,13 @@ module.exports = {
         any: [
           /^tapaamisväliä?/i,
           /^väliä?/i,
+        ],
+    },
+
+    PAIR_REQUEST: {
+        any: [
+          /^parinhaku(?:pyyntö|pyynnöt)/i,
+          /^(?:pyyntö|pyynnöt)/i,
         ],
     },
 
@@ -144,9 +155,16 @@ module.exports = {
     },
 
     STOP_SEARCHING: {
-      any: [
-        /^lopeta haku/i,
-      ],
+        any: [
+          /^lopeta haku/i,
+        ],
+    },
+
+    SHOW_PAIR_REQUESTS: {
+        each: [
+          '#SHOW',
+          '#PAIR_REQUEST',
+        ],
     },
 
     COMMUNICATION_METHODS: {
