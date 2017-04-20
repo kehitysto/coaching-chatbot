@@ -41,8 +41,8 @@ $ npm run bot-client
 ```
 
 ## Documentation
- - [Deploy instructions](doc/deployInstructions.md)
- - [Testing instructions](doc/testingInstructions.md)
+ - [Deploy instructions](doc/deploy-instructions.md)
+ - [Testing instructions](doc/testing-instructions.md)
  - [API Documentation](doc/apidoc/)
 
 ## Links
