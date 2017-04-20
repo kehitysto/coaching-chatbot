@@ -13,7 +13,7 @@
   * Create Facebook application -> https://developers.facebook.com/quickstarts/?platform=web
   * Create Facebook page -> https://www.facebook.com/pages/create (if the page already exists, use it when we refer to the page created in step 1)
 2. Go to the App Dashboard and under Product Settings and setup webhook by clicking `Setup Webhooks`
-  * Callback URL -> url from step 4 in Coaching chatbot Installation
+  * Callback URL -> url from step 5 in Coaching chatbot Installation
   * Verify Token -> from step 3 in Coaching chatbot Installation
   * Select Subscription field `messages` 
   * At this stage, the application is available only for developers and testers. The application needs to be approved by Facebook for public access
