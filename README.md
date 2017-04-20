@@ -41,8 +41,10 @@ $ npm run bot-client
 ```
 
 ## Documentation
- - [Deploy instructions](doc/deployInstructions.md)
- - [Testing instructions](doc/testingInstructions.md)
+ - [Deploy instructions](doc/deploy-instructions.md)
+ - [Testing instructions](doc/testing-instructions.md)
+ - [Architecture](doc/architecture.md)
+ - [Chatbot framework API](doc/apidoc/README.md)
 
 ## Links
  - [Definition of Done](doc/dod.md)
