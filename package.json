@@ -43,6 +43,7 @@
     "eslint-config-google": "^0.7.1",
     "inject-loader": "^3.0.0-beta4",
     "istanbul-instrumenter-loader": "^1.2.0",
+    "jsdox": "^0.4.10",
     "json-loader": "^0.5.4",
     "minimist": "^1.2.0",
     "mocha": "*",
@@ -71,7 +72,9 @@
     "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run test",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "ci": "npm run cover && npm run ft",
-    "validate": "npm ls"
+    "validate": "npm ls",
+    "doc": "npm run doc:framework",
+    "doc:framework": "jsdox --output ./doc/apidoc ./src/chatbot"
   },
   "pre-commit": [
     "lint",
