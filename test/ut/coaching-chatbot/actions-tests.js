@@ -631,6 +631,7 @@ describe('coaching-bot actions', function() {
         .to.become({
             context: {
               pairRequests: [1, 2],
+              rejectedPeers: [0],
             },
         });
     });
