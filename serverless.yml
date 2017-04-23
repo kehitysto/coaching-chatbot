@@ -54,10 +54,10 @@ resources:
       DeletionPolicy: Delete
       Properties:
         AttributeDefinitions:
-          - AttributeName: pair
+          - AttributeName: id
             AttributeType: S
         KeySchema:
-          - AttributeName: pair
+          - AttributeName: id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
