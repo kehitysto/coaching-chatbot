@@ -14,9 +14,8 @@ function createCommunicationMethodslist(context) {
   let a = [];
   for (let method in context.communicationMethods) {
     if (method != null) {
-      let methodname = getCommunicationMethodByIdentifier(method);
-      a.push(' ${methodname.name} (${context
-        .communicationMethods[method]})');
+      let methodName = getCommunicationMethodByIdentifier(method);
+      a.push(` ${methodName.name} (${context.communicationMethods[method]})`);
     }
   }
   return a;
