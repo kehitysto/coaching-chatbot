@@ -568,6 +568,25 @@ describe('User story', function() {
   );
 
   describe(
+    'As a user searching for a pair I want to send a request to an available pair',
+    function() {
+      it(
+        'should send the request when choosing a potential pair',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'kyllä'))
+            .to.eventually.become([
+              buildResponse('@CONFIRM_NEW_PEER_ASK'),
+              buildResponse('@NO_PAIRS_AVAILABLE'),
+            ])
+            .then(() => expect(this.sessions.read('ID'))
+                .to.eventually.include.keys({ 'pairRequests': [SESSION] }));
+        }
+      );
+    }
+  );
+
+  describe(
     'As a user searching for a pair I want to be able to stop my search for a pair',
     function() {
       it(
@@ -646,6 +665,19 @@ describe('User story', function() {
                   '@DISPLAY_PROFILE', this.userInformation),
                 PersonalInformationFormatter.getPersonalInformationbuttons(
                   this.context)),
+            ]);
+        }
+      );
+      it(
+        'should go straight to pair searching after all methods are given',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'etsi pari'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_MEETING_FREQUENCY',
+                PersonalInformationFormatter
+                .getMeetingFrequency(this.sessions.db.dump()[SESSION])
+              )
             ]);
         }
       );

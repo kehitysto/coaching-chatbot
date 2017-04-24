@@ -350,7 +350,8 @@ bot
           session.next();
         },
         (session) => {
-          if (session.context.pairRequests.length <= 0) {
+          if (!sessions.context.pairRequests ||
+              session.context.pairRequests.length <= 0) {
             return session.addResult('@NO_REQUESTS_AVAILABLE');
           }
 

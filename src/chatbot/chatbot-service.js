@@ -6,6 +6,12 @@ module.exports = class Chatbot {
     this._sessions = sessions;
   }
 
+  /**
+   * Process an incoming message
+   * @param {string} sessionId Session ID for the message recipient
+   * @param {string} text The message received
+   * @return {Array<{message: string, quickReplies: Array}>} Response messages
+   */
   receive(sessionId, text) {
     return this._sessions.read(sessionId)
       .then((context) => {
