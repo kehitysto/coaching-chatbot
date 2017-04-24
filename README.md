@@ -29,9 +29,9 @@ Utilizing cutting edge language processing capabilities, our bot allows you to t
 
 ## How To Use
 
-- Get Node
-
 Locally:
+
+- Download and install Node.js, then:
 
 ```
 $ git clone https://github.com/kehitysto/coaching-chatbot
