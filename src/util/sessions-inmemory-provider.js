@@ -34,7 +34,7 @@ module.exports = class InMemoryProvider {
         if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
 
         log.silly('Evaluating possible pair {0}', sessionId);
-        if (sessionId === id) continue;
+        if (sessionId == id) continue;
         let session = this.db[sessionId];
 
         if (session.searching === true &&
