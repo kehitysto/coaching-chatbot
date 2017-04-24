@@ -13,7 +13,7 @@ export default Formatter;
 
 function createPairString(context) {
   const s = cmf.createCommunicationMethodslist(context).map(function(v) {
-    return '\n -'+v;
+    return `\n - ${v}`;
   });
   return `${pif.createProfile(context)}${s}`;
 }
