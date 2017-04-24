@@ -63,6 +63,28 @@ module.exports = {
         any: /^näytä/i,
     },
 
+    STOP: {
+        any: [
+          /^lopeta/i,
+          /^keskeytä/i,
+        ],
+    },
+
+    BREAK: {
+        any: [
+          /^hajoi?ta/i,
+          /^riko/i,
+          /^särj?e/i,
+        ],
+    },
+
+    STOP_OR_BREAK: {
+        any: [
+          '#STOP',
+          '#BREAK',
+        ],
+    },
+
     OPTIONAL_VALUE: {
         any: /(\w.*)?/i,
         match: (match) => match[1] || true,
@@ -95,6 +117,13 @@ module.exports = {
         any: [
           /^tapaamisväliä?/i,
           /^väliä?/i,
+        ],
+    },
+
+    SEARCHING: {
+        any: [
+          /^(?:parin ?)?(?:haku|hakeminen)/i,
+          /^etsiminen/i,
         ],
     },
 
@@ -158,8 +187,9 @@ module.exports = {
     },
 
     STOP_SEARCHING: {
-        any: [
-          /^lopeta haku/i,
+        each: [
+          '#STOP',
+          '#SEARCHING',
         ],
     },
 
@@ -183,6 +213,13 @@ module.exports = {
           /^Arkipäivisin/i,
           /^Kerran viikossa/i,
           /^Joka toinen viikko/i,
+        ],
+    },
+
+    BREAK_PAIR: {
+        each: [
+          '#STOP_OR_BREAK',
+          /^pari/i,
         ],
     },
 };
