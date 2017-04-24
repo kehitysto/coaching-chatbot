@@ -16,6 +16,7 @@ module.exports = {
           /^kyl(?:lä)?/i,
           /^j[ou]{2,}/i,
           /^ok/i,
+          /^yes/i,
           /^(?:oo)?koo/i,
           /^jep[as]?/i,
         ],
@@ -27,6 +28,7 @@ module.exports = {
           /^ei/i,
           /^en/i,
           /^emmä/i,
+          /^no/i,
         ],
     },
 
@@ -46,6 +48,7 @@ module.exports = {
         any: [
           /^seuraava/i,
           /^myöhemmin/i,
+          /^later/i,
         ],
     },
 

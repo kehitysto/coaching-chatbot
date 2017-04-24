@@ -287,6 +287,11 @@ bot
         session.next();
       },
       (session) => {
+        if (session.context.pairRequests &&
+            session.context.pairRequests.length > 0) {
+          session.addResult('@TELL_USER_HAS_NEW_REQUEST');
+        }
+
         if (session.context.availablePeers.length <= 0) {
           return session.addResult('@NO_PAIRS_AVAILABLE');
         }
@@ -345,7 +350,7 @@ bot
           session.next();
         },
         (session) => {
-          if (!sessions.context.pairRequests ||
+          if (!session.context.pairRequests ||
               session.context.pairRequests.length <= 0) {
             return session.addResult('@NO_REQUESTS_AVAILABLE');
           }
