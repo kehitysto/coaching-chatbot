@@ -164,7 +164,7 @@ describe('Communication methods formatter', function() {
         return expect(CommunicationMethodsFormatter
             .createCommunicationMethodslist(context))
           .to.deep
-          .equal('Skype (nickname)');
+          .equal([' Skype (nickname)']);
       });
   });
 });
