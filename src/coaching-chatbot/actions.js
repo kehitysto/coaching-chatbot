@@ -10,6 +10,7 @@ import CommunicationMethodsFormatter
 import PairFormatter from '../lib/pair-formatter';
 import Sessions from '../util/sessions-service';
 import Pairs from '../util/pairs-service';
+import AcceptedPairFormatter from '../lib/accepted-pair-formatter';
 
 export function setName({ context, input }) {
   return Promise.resolve({
@@ -183,6 +184,23 @@ export function displayAvailablePeer({ context }) {
       });
   });
 }
+export function displayAcceptedPeer({ context }) {
+  return new Promise((resolve, reject) => {
+    let sessions = new Sessions();
+
+    return sessions.read(context.pairRequests[0])
+      .then((profile) => {
+        resolve({
+          result: AcceptedPairFormatter.createPairString(profile),
+        });
+      })
+      .catch((err) => {
+        log.error('err: {0}', err);
+        reject(err);
+      });
+  });
+}
+
 
 export function nextAvailablePeer({ context }) {
   return Promise.resolve({

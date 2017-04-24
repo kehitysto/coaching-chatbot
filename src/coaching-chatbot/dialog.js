@@ -372,6 +372,7 @@ bot
             session.runActions(['rejectRequest']);
           } else if (session.checkIntent('#YES')) {
             session.runActions(['acceptRequest']);
+            session.switchDialog('/accepted_pair_information');
           } else {
             session.addResult('@UNCLEAR');
           }
@@ -379,6 +380,14 @@ bot
           return session.prev();
         },
       ])
+  .dialog(
+      '/accepted_pair_information', [
+        (session) => {
+          session.addResult('@PAIR_CREATED');
+          session.runActions('displayAcceptedPeer');
+        },
+      ]
+  )
   .dialog(
       '/stop_searching', [
         (session) => {
