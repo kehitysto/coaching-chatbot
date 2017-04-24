@@ -390,8 +390,12 @@ bot
         (session) => {
           session.runActions(['displayAcceptedPeer']);
         },
-      ]
-  )
+      ], [
+        ['#BREAK_PAIR', (session) => {
+          session.runActions(['breakPair']);
+          session.endDialog();
+        }],
+      ])
   .dialog(
       '/stop_searching', [
         (session) => {

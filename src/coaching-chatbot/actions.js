@@ -275,6 +275,24 @@ export function acceptRequest({ sessionId, context }) {
       });
 }
 
+export function breakPair({ sessionId }) {
+  let pairs = new Pairs();
+  let sessions = new Sessions();
+
+  return pairs.read(sessionId)
+      .then((pairs) => {
+        const pairId = pairs[0];
+
+        return pairs.breakPair(sessionId, pairId)
+            .then(() => sessions.read(pairId))
+            .then((context) => sessions.write(pairId, {
+              ...context,
+              state: '/?0/profile?0',
+            }));
+      })
+      .then(() => {});
+}
+
 export function displayRequest({ context }) {
   return new Promise((resolve, reject) => {
     let sessions = new Sessions();
