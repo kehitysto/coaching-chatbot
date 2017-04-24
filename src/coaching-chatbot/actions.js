@@ -11,7 +11,6 @@ import PairFormatter from '../lib/pair-formatter';
 import Sessions from '../util/sessions-service';
 import Pairs from '../util/pairs-service';
 
-
 export function setName({ context, input }) {
   return Promise.resolve({
     context: {
