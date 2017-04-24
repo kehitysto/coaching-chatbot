@@ -9,7 +9,6 @@ import CommunicationMethodsFormatter
  from '../lib/communication-methods-formatter';
 import PairFormatter from '../lib/pair-formatter';
 import Sessions from '../util/sessions-service';
-// import AcceptedPairFormatter from '../lib/accepted-pair-formatter';
 import Pairs from '../util/pairs-service';
 
 
