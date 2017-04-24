@@ -6,8 +6,10 @@
 2. Coaching chatbot receives the message and processes it.
 3. Coaching chatbot calls any functions that are required to be called (save name to database, save occupation to database, see below). The database is DynamoDB.
 4. Coaching chatbot sends a message back to Facebook Messenger
-##
-<p align="center"><img src="/img/Chatbot Architecture1.png" alt="Coaching chatbot architecture"/></p>
+## High-level design diagram
+<p align="center"><img src="/img/Chatbot Architecture1.png" alt="High-level design diagram"/></p>
+## Low-level design diagram
+<p align="center"><img src="/img/Low Level Diagram.png" alt="Low-level design diagram"/></p>
 
 # API for Coaching chatbot #
 
