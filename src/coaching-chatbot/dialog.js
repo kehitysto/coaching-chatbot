@@ -377,12 +377,24 @@ bot
             session.runActions(['rejectRequest']);
           } else if (session.checkIntent('#YES')) {
             session.runActions(['acceptRequest']);
+            session.switchDialog('/accepted_pair_information');
           } else {
             session.addResult('@UNCLEAR');
           }
 
           return session.prev();
         },
+      ])
+  .dialog(
+      '/accepted_pair_information', [
+        (session) => {
+          session.runActions(['displayAcceptedPeer']);
+        },
+      ], [
+        ['#BREAK_PAIR', (session) => {
+          session.runActions(['breakPair']);
+          session.endDialog();
+        }],
       ])
   .dialog(
       '/stop_searching', [

@@ -10,6 +10,7 @@ import CommunicationMethodsFormatter
 import PairFormatter from '../lib/pair-formatter';
 import Sessions from '../util/sessions-service';
 import Pairs from '../util/pairs-service';
+import AcceptedPairFormatter from '../lib/accepted-pair-formatter';
 
 export function setName({ context, input }) {
   return Promise.resolve({
@@ -183,6 +184,25 @@ export function displayAvailablePeer({ context }) {
       });
   });
 }
+export function displayAcceptedPeer({ sessionId, context }) {
+  let pairs = new Pairs();
+  return new Promise((resolve, reject) => {
+    let sessions = new Sessions();
+    return pairs.read(sessionId)
+      .then((pairIds) => {
+        return sessions.read(pairIds[0])
+          .then((profile) => {
+            resolve({
+              result: AcceptedPairFormatter.createPairString(profile),
+            });
+          });
+      })
+      .catch((err) => {
+        log.error('err: {0}', err);
+        reject(err);
+      });
+  });
+}
 
 export function nextAvailablePeer({ context }) {
   return Promise.resolve({
@@ -230,11 +250,47 @@ export function rejectRequest({ context }) {
 
 export function acceptRequest({ sessionId, context }) {
   let pairs = new Pairs();
-
-  return pairs.createPair(sessionId, context.pairRequests[0])
+  let sessions = new Sessions();
+  const chosenPeerId = context.pairRequests[0];
+  return pairs.createPair(sessionId, chosenPeerId)
       .then(() => {
-        return { result: '@PAIR_CREATED' };
+        return sessions.read(chosenPeerId).then((chosenPeer) => {
+          chosenPeer.state = '/?0/profile?0/accepted_pair_information?0';
+          return sessions.write(chosenPeerId, chosenPeer);
+        });
+      })
+      .then(() => {
+        // skip notification on local client
+        if (process.env.RUN_ENV === 'dev') return;
+
+        return Messenger.send(
+          chosenPeerId,
+          strings['@ACCEPTED_REQUEST'],
+          Builder.QuickReplies.createArray(['Vahvista'])
+        );
+      })
+      .then(() => markUserAsNotSearching({ context }))
+      .then((resultObject) => {
+        return { ...resultObject, result: '@PAIR_CREATED' };
       });
+}
+
+export function breakPair({ sessionId }) {
+  let pairs = new Pairs();
+  let sessions = new Sessions();
+
+  return pairs.read(sessionId)
+      .then((pairList) => {
+        const pairId = pairList[0];
+
+        return pairs.breakPair(sessionId, pairId)
+            .then(() => sessions.read(pairId))
+            .then((context) => sessions.write(pairId, {
+              ...context,
+              state: '/?0/profile?0',
+            }));
+      })
+      .then(() => {});
 }
 
 export function displayRequest({ context }) {

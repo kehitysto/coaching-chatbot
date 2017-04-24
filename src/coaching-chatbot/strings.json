@@ -46,5 +46,6 @@
   "@INFORMATION_ABOUT_REQUESTS": "Seuraava käyttäjä haluaisi lisätä sinut vertaisohjausparikseen:",
   "@NO_REQUESTS_AVAILABLE": "Valitettavasti sinulla ei juuri nyt ole avoimia parinhakupyyntöjä.\nSelataksesi vapaita parinhakijoita kirjoita 'seuraava'",
   "@SHOW_REQUESTS": "Näytä pyynnöt",
-  "@PAIR_CREATED": "Vertaisohjauspari luotu"
+  "@PAIR_CREATED": "Vertaisohjauspari luotu",
+  "@ACCEPTED_REQUEST" : "Pyyntösi on hyväksytty. Sano 'vahvista' muodostaaksesi parin."
 }
