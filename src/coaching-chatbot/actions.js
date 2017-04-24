@@ -9,6 +9,7 @@ import CommunicationMethodsFormatter
  from '../lib/communication-methods-formatter';
 import PairFormatter from '../lib/pair-formatter';
 import Sessions from '../util/sessions-service';
+import Pairs from '../util/pairs-service';
 
 export function setName({ context, input }) {
   return Promise.resolve({
@@ -227,15 +228,13 @@ export function rejectRequest({ context }) {
   });
 }
 
-export function acceptRequest({ context }) {
-  // TODO: This is a placeholder!!!
-  return Promise.resolve({
-    context: {
-      ...context,
-      pairRequests: context.pairRequests.slice(1).concat(
-          context.pairRequests.slice(0, 1)),
-    },
-  });
+export function acceptRequest({ sessionId, context }) {
+  let pairs = new Pairs();
+
+  return pairs.createPair(sessionId, context.pairRequests[0])
+      .then(() => {
+        return { result: '@PAIR_CREATED' };
+      });
 }
 
 export function displayRequest({ context }) {
