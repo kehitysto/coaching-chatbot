@@ -35,7 +35,6 @@ function getCommunicationMethodByInput(input) {
 function getCommunicationMethodByIdentifier(input) {
   for (let i = 0; i < CommunicationMethods.length; i++) {
     if (input === CommunicationMethods[i].identifier) {
-        console.log(JSON.stringify(CommunicationMethods[i]));
       return CommunicationMethods[i];
     }
   }
