@@ -1,5 +1,5 @@
 {
-  "@GREETING": "Hei! Olen Kehitystön vertaisohjausrobotti. Kiinnostaako sinua löytää pari vertaisohjausta varten?",
+  "@GREETING": "Olen Kehitystön vertaisohjausrobotti. Kiinnostaako sinua löytää pari vertaisohjausta varten?",
   "@GOODBYE": "Hyvästi!",
   "@GREAT": "Hienoa!\nJos haluat nollata tiedot ja aloittaa alusta, pyydä sitä minulta esim. 'Aloita alusta'.",
   "@UNCLEAR": [
