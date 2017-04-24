@@ -250,8 +250,9 @@ export function acceptRequest({ sessionId, context }) {
   let pairs = new Pairs();
 
   return pairs.createPair(sessionId, context.pairRequests[0])
-      .then(() => {
-        return { result: '@PAIR_CREATED' };
+      .then(() => markUserAsNotSearching({ context }))
+      .then((resultObject) => {
+        return { ...resultObject, result: '@PAIR_CREATED' };
       });
 }
 
