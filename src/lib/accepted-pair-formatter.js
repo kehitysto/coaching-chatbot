@@ -15,7 +15,6 @@ function createPairString(context) {
   const s = cmf.createCommunicationMethodslist(context).map(function(v) {
     return '\n -'+v;
   });
-  s.join('\n');
   return `${pif.createProfile(context)}${s}`;
 }
 
