@@ -345,7 +345,7 @@ bot
           session.next();
         },
         (session) => {
-          if (!sessions.context.pairRequests ||
+          if (!session.context.pairRequests ||
               session.context.pairRequests.length <= 0) {
             return session.addResult('@NO_REQUESTS_AVAILABLE');
           }

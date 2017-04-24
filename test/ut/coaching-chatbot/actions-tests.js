@@ -562,4 +562,116 @@ describe('coaching-bot actions', function() {
       });
     });
   });
+
+  describe('#displayAvailablePeer', function() {
+    it('should return a pair string if a pair is found', function() {
+        const sessions = new Sessions();
+        const stubSessionsRead = sinon.stub(
+        sessions.db,
+        'read'
+        );
+
+        stubSessionsRead.returns(
+        Promise.resolve({
+            name: 'Pertti',
+            communicationMethods: {
+            SKYPE: 'pertti_42',
+            },
+        })
+        );
+
+        const context = {
+        availablePeers: [
+            1,
+            2,
+        ],
+        };
+
+        const expected = {
+        result: 'Pertti\n  - Skype',
+        };
+
+        const ret = actions.displayAvailablePeer({
+        context,
+        });
+
+        return expect(ret)
+        .to.become(expected)
+        .then(() => stubSessionsRead.restore());
+    });
+  });
+
+  describe('#nextRequest', function() {
+    it('should switch the next item in the list to be the first',
+        function() {
+        const ret = actions.nextRequest({
+            context: {
+              pairRequests: [0, 1, 2],
+            },
+        });
+
+        return expect(ret)
+            .to.become({
+            context: {
+              pairRequests: [1, 2, 0],
+            },
+            });
+    });
+  });
+
+  describe('#rejectRequest', function() {
+    it('should drop the first item from the list', function() {
+        const ret = actions.rejectRequest({
+        context: {
+          pairRequests: [0, 1, 2],
+        },
+        });
+
+        return expect(ret)
+        .to.become({
+            context: {
+              pairRequests: [1, 2],
+              rejectedPeers: [0],
+            },
+        });
+    });
+  });
+
+  describe('#displayRequest', function() {
+    it('should display the profile of the requesting user', function() {
+        const sessions = new Sessions();
+        const stubSessionsRead = sinon.stub(
+        sessions.db,
+        'read'
+        );
+
+        stubSessionsRead.returns(
+        Promise.resolve({
+            name: 'Pertti',
+            communicationMethods: {
+            SKYPE: 'pertti_42',
+            },
+        })
+        );
+
+        const context = {
+        pairRequests: [
+            1,
+            2,
+        ],
+        };
+
+        const expected = {
+        result: 'Pertti\n  - Skype',
+        };
+
+        const ret = actions.displayRequest({
+        context,
+        });
+
+        return expect(ret)
+        .to.become(expected)
+        .then(() => stubSessionsRead.restore());
+    });
+  });
 });
