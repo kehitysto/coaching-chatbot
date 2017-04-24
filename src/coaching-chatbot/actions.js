@@ -184,15 +184,18 @@ export function displayAvailablePeer({ context }) {
       });
   });
 }
-export function displayAcceptedPeer({ context }) {
+export function displayAcceptedPeer({ sessionId, context }) {
+  let pairs = new Pairs();
   return new Promise((resolve, reject) => {
     let sessions = new Sessions();
-
-    return sessions.read(context.pairRequests[0])
-      .then((profile) => {
-        resolve({
-          result: AcceptedPairFormatter.createPairString(profile),
-        });
+    return pairs.read(sessionId)
+      .then((pairIds) => {
+        return sessions.read(pairIds[0])
+          .then((profile) => {
+            resolve({
+              result: AcceptedPairFormatter.createPairString(profile),
+            });
+          });
       })
       .catch((err) => {
         log.error('err: {0}', err);
@@ -200,7 +203,6 @@ export function displayAcceptedPeer({ context }) {
       });
   });
 }
-
 
 export function nextAvailablePeer({ context }) {
   return Promise.resolve({
@@ -248,8 +250,25 @@ export function rejectRequest({ context }) {
 
 export function acceptRequest({ sessionId, context }) {
   let pairs = new Pairs();
+  let sessions = new Sessions();
+  const chosenPeerId = context.pairRequests[0];
+  return pairs.createPair(sessionId, chosenPeerId)
+      .then(() => {
+        return sessions.read(chosenPeerId).then((chosenPeer) => {
+          chosenPeer.state = '/?0/profile?0/accepted_pair_information?0';
+          return sessions.write(chosenPeerId, chosenPeer);
+        });
+      })
+      .then(() => {
+        // skip notification on local client
+        if (process.env.RUN_ENV === 'dev') return;
 
-  return pairs.createPair(sessionId, context.pairRequests[0])
+        return Messenger.send(
+          chosenPeerId,
+          strings['@ACCEPTED_REQUEST'],
+          Builder.QuickReplies.createArray(['Vahvista'])
+        );
+      })
       .then(() => markUserAsNotSearching({ context }))
       .then((resultObject) => {
         return { ...resultObject, result: '@PAIR_CREATED' };

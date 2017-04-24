@@ -383,8 +383,7 @@ bot
   .dialog(
       '/accepted_pair_information', [
         (session) => {
-          session.addResult('@PAIR_CREATED');
-          session.runActions('displayAcceptedPeer');
+          session.runActions(['displayAcceptedPeer']);
         },
       ]
   )
