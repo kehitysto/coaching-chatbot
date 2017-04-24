@@ -280,8 +280,8 @@ export function breakPair({ sessionId }) {
   let sessions = new Sessions();
 
   return pairs.read(sessionId)
-      .then((pairs) => {
-        const pairId = pairs[0];
+      .then((pairList) => {
+        const pairId = pairList[0];
 
         return pairs.breakPair(sessionId, pairId)
             .then(() => sessions.read(pairId))
