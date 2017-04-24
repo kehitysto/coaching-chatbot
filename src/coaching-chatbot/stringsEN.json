@@ -37,7 +37,7 @@
   "@TELL_USER_HAS_NEW_REQUEST": "You have new request. Say 'show requests' to see request",
   "@INFORMATION_ABOUT_LIST": "Here are list of people who wants to meet as often as you:",
   "@INFORMATION_ABOUT_REQUESTS": "Following user want to peer with you:",
-  "@NO_REQUESTS_AVAILABLE": "You have no open requests.\nIf you want to see available users write 'seuraava'",
+  "@NO_REQUESTS_AVAILABLE": "You have no open requests.\nIf you want to see available users write 'later'",
   "@SHOW_REQUESTS": "show requests",
   "@PAIR_CREATED": "We have a perfect match"
 }
