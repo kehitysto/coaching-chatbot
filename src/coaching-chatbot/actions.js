@@ -293,6 +293,23 @@ export function breakPair({ sessionId }) {
       .then(() => {});
 }
 
+export function breakAllPairs({ sessionId }) {
+  let pairs = new Pairs();
+
+  return pairs.read(sessionId)
+      .then((pairList) => {
+        const promises = [];
+        for (let pairId of pairList) {
+          promises.push(
+            pairs.breakPair(sessionId, pairId)
+          );
+        }
+
+        return Promise.all(promises);
+      })
+      .then(() => {});
+}
+
 export function displayRequest({ context }) {
   return new Promise((resolve, reject) => {
     let sessions = new Sessions();
