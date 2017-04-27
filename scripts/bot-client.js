@@ -85,7 +85,13 @@ function snapState() {
 
 function loadState() {
   const storePath = path.resolve(__dirname, '..', STATE_STORE);
-  const data = JSON.parse(fs.readFileSync(storePath));
+  let data;
+
+  try {
+    data = JSON.parse(fs.readFileSync(storePath));
+  } catch (error) {
+    data = {};
+  }
 
   if (data.sessions === undefined)
     return sessions.db.load(data);
