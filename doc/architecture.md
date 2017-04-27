@@ -10,5 +10,9 @@
 ## High-level design diagram
 <p align="center"><img src="/img/chatbot_architecture.png" alt="High-level design diagram"/></p>
 
-## Low-level design diagram
+## Low-level design diagram (non-chronological)
 <p align="center"><img src="/img/low_level_diagram.jpg" alt="Low-level design diagram"/></p>
+
+## Sequence diagram
+<p align="center"><img src="/img/sequence_diagram.jpg" alt="Sequence diagram"/></p>
+
