@@ -2,10 +2,10 @@
  - Prerequisites: npm must be installed
 
 1. Run `npm install -g serverless`
-1. Run `serverless install --url https://github.com/kehitysto/coaching-chatbot`
-2. Run `npm install`
-3. Rename .env.example to .env and fill in `FACEBOOK_BOT_VERIFY_TOKEN`
-4. Run `serverless deploy` then copy the GET endpoint url
+2. Run `serverless install --url https://github.com/kehitysto/coaching-chatbot`
+3. Run `npm install`
+4. Rename .env.example to .env and fill in `FACEBOOK_BOT_VERIFY_TOKEN`
+5. Run `serverless deploy` then copy the GET endpoint url
 
 ## Facebook App Configuration
 
