@@ -186,21 +186,26 @@ export function displayAvailablePeer({ context }) {
 }
 export function displayAcceptedPeer({ sessionId, context }) {
   let pairs = new Pairs();
-  return new Promise((resolve, reject) => {
-    let sessions = new Sessions();
-    return pairs.read(sessionId)
-      .then((pairIds) => {
-        return sessions.read(pairIds[0])
-          .then((profile) => {
-            resolve({
-              result: AcceptedPairFormatter.createPairString(profile),
-            });
-          });
-      })
-      .catch((err) => {
-        log.error('err: {0}', err);
-        reject(err);
-      });
+  let sessions = new Sessions();
+
+  return pairs.read(sessionId).then((pairIds) => {
+    const promises = [];
+
+    log.silly('{0}', JSON.stringify(pairIds));
+    for (let pairId of pairIds) {
+      log.silly('PAIR {0}', pairId);
+      promises.push(
+        sessions.read(pairId).then((profile) => {
+          return AcceptedPairFormatter.createPairString(profile);
+        })
+      );
+    }
+
+    return Promise.all(promises).then((profiles) => {
+      return {
+        result: profiles.join('\n'),
+      };
+    });
   });
 }
 
@@ -289,6 +294,23 @@ export function breakPair({ sessionId }) {
               ...context,
               state: '/?0/profile?0',
             }));
+      })
+      .then(() => {});
+}
+
+export function breakAllPairs({ sessionId }) {
+  let pairs = new Pairs();
+
+  return pairs.read(sessionId)
+      .then((pairList) => {
+        const promises = [];
+        for (let pairId of pairList) {
+          promises.push(
+            pairs.breakPair(sessionId, pairId)
+          );
+        }
+
+        return Promise.all(promises);
       })
       .then(() => {});
 }

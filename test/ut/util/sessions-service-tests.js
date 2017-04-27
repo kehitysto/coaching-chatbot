@@ -142,7 +142,7 @@ describe('Sessions service', function() {
         [{ id: 'TEST1' }, { id: 'TEST2' }]
       );
 
-      this.sessions.db.db.scan = scanStub;
+      this.sessions.db.table.db.scan = scanStub;
 
       return this.sessions.getAvailablePairs('SESSION_ID', 'EVERY_WEEKDAY')
           .then(() => expect(scanStub).to.have.been.calledOnce);

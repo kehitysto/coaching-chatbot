@@ -389,6 +389,7 @@ bot
       '/accepted_pair_information', [
         (session) => {
           session.runActions(['displayAcceptedPeer']);
+          session.addResult('@LINK_TO_HELP');
         },
       ], [
         ['#BREAK_PAIR', (session) => {
@@ -433,6 +434,7 @@ bot
       },
       (session) => {
         if (session.checkIntent('#YES')) {
+          session.runActions('breakAllPairs');
           session.runActions(['reset']);
           session.addResult('@RESET_DONE');
           session.clearState();
