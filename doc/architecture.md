@@ -8,7 +8,7 @@
 4. Coaching chatbot sends a message back to Facebook Messenger
 
 ## High-level design diagram
-<p align="center"><img src="/img/Chatbot Architecture1.png" alt="High-level design diagram"/></p>
+<p align="center"><img src="/img/chatbot_architecture.png" alt="High-level design diagram"/></p>
 
 ## Low-level design diagram
-<p align="center"><img src="/img/Low Level Diagram3.png" alt="Low-level design diagram"/></p>
+<p align="center"><img src="/img/low_level_diagram.jpg" alt="Low-level design diagram"/></p>
