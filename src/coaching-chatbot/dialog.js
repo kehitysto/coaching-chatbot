@@ -389,6 +389,7 @@ bot
       '/accepted_pair_information', [
         (session) => {
           session.runActions(['displayAcceptedPeer']);
+          session.addResult('@LINK_TO_HELP');
         },
       ], [
         ['#BREAK_PAIR', (session) => {
