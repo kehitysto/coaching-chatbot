@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 import Sessions from '../src/util/sessions-service';
+import Pairs from '../src/util/pairs-service';
 import Chatbot from '../src/chatbot/chatbot-service';
 import dialog from '../src/coaching-chatbot/dialog';
 
@@ -17,6 +18,7 @@ const STATE_STORE = '.state.json';
 
 const options = minimist(process.argv.slice(2));
 const sessions = new Sessions();
+const pairs = new Pairs();
 
 if (options.h || options.help) {
   console.log('USAGE:');
@@ -46,6 +48,23 @@ if (!options.test && !options.t) {
     loadState();
     return dbRead(sessionId);
   };
+
+  const pairsRead = pairs.db.read.bind(pairs.db);
+  const pairsWrite = pairs.db.write.bind(pairs.db);
+
+  // hack persistent state
+  pairs.db.write = (sessionId, pairs) => {
+    return pairsWrite(sessionId, pairs)
+        .then((ret) => {
+          snapState();
+          return ret;
+        });
+  };
+
+  pairs.db.read = (sessionId) => {
+    loadState();
+    return pairsRead(sessionId);
+  };
 }
 
 function main() {
@@ -56,16 +75,23 @@ function main() {
 
 function snapState() {
   const storePath = path.resolve(__dirname, '..', STATE_STORE);
-  const data = sessions.db.dump();
+  const data = {
+    sessions: sessions.db.dump(),
+    pairs: pairs.db.dump(),
+  };
 
   fs.writeFileSync(storePath, JSON.stringify(data));
 }
 
 function loadState() {
   const storePath = path.resolve(__dirname, '..', STATE_STORE);
-  const data = fs.readFileSync(storePath);
+  const data = JSON.parse(fs.readFileSync(storePath));
 
-  sessions.db.load(JSON.parse(data));
+  if (data.sessions === undefined)
+    return sessions.db.load(data);
+
+  sessions.db.load(data.sessions);
+  pairs.db.load(data.pairs);
 }
 
 function interactive(bot) {
