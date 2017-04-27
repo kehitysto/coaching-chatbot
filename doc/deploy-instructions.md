@@ -1,11 +1,18 @@
 ## Coaching chatbot Installation
- - Prerequisites: npm must be installed
+ - Prerequisites:
+    * npm and node must be installed
+    * Set up AWS, instructions could be found: https://serverless.com/framework/docs/providers/aws/guide/credentials/
+```
+$ npm install -g serverless
+$ git clone https://github.com/kehitysto/coaching-chatbot.git
+$ npm install
+```
+Rename .env.example to .env and fill in `FACEBOOK_BOT_VERIFY_TOKEN`
 
-1. Run `npm install -g serverless`
-2. Run `serverless install --url https://github.com/kehitysto/coaching-chatbot`
-3. Run `npm install`
-4. Rename .env.example to .env and fill in `FACEBOOK_BOT_VERIFY_TOKEN`
-5. Run `serverless deploy` then copy the GET endpoint url
+```
+$ serverless deploy
+```
+Copy the GET endpoint url
 
 ## Facebook App Configuration
 
@@ -13,15 +20,17 @@
   * Create Facebook application -> https://developers.facebook.com/quickstarts/?platform=web
   * Create Facebook page -> https://www.facebook.com/pages/create (if the page already exists, use it when we refer to the page created in step 1)
 2. Go to the App Dashboard and under Product Settings and setup webhook by clicking `Setup Webhooks`
-  * Callback URL -> url from step 5 in Coaching chatbot Installation
-  * Verify Token -> from step 4 in Coaching chatbot Installation
-  * Select Subscription field `messages` 
+  * Callback URL -> use endpoint url coppied in Coaching chatbot Installation
+  * Verify Token -> use FACEBOOK_BOT_VERIFY_TOKEN filled in Coaching chatbot Installation
+  * Select Subscription field `messages`
   * At this stage, the application is available only for developers and testers. The application needs to be approved by Facebook for public access
 3. Click `Verify and Save`
-4. In the Token Generation section, select the page created in step 1(Facebook App Configuration) and copy the generated token
+4. In the Token Generation section, select the page created in step 1 and copy the generated token
 5. In Webhooks section, select page created in step 1(Facebook App Configuration) to be the one that subscribes the webhooks
-6. Paste token copied in step 4(Facebook App Configuration) to .env file as `FACEBOOK_BOT_PAGE_ACCESS_TOKEN`
+6. Paste token copied in step 4 to .env file as `FACEBOOK_BOT_PAGE_ACCESS_TOKEN`
 
 More detailed instructions for Facebook Messenger platform configuration can be found from https://developers.facebook.com/docs/messenger-platform/quickstart/
 
-- Run `serverless deploy`
+```
+$ serverless deploy
+```
