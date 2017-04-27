@@ -12,6 +12,9 @@ import Sessions from '../util/sessions-service';
 import Pairs from '../util/pairs-service';
 import AcceptedPairFormatter from '../lib/accepted-pair-formatter';
 
+import Chatbot from '../chatbot/chatbot-service';
+import dialog from './dialog';
+
 export function setName({ context, input }) {
   return Promise.resolve({
     context: {
@@ -256,7 +259,9 @@ export function rejectRequest({ context }) {
 export function acceptRequest({ sessionId, context }) {
   let pairs = new Pairs();
   let sessions = new Sessions();
+
   const chosenPeerId = context.pairRequests[0];
+
   return pairs.createPair(sessionId, chosenPeerId)
       .then(() => {
         return sessions.read(chosenPeerId).then((chosenPeer) => {
@@ -268,19 +273,23 @@ export function acceptRequest({ sessionId, context }) {
         // skip notification on local client
         if (process.env.RUN_ENV === 'dev') return;
 
-        return Messenger.send(
-          chosenPeerId,
-          strings['@ACCEPTED_REQUEST'],
-          Builder.QuickReplies.createArray(['Vahvista'])
-        );
+        const bot = new Chatbot(dialog, sessions);
+
+        return bot.receive(chosenPeerId, '').then((out) => {
+          // run the chatbot for the chosen peer
+          let promises = [];
+          for (let r of out) {
+            promises.push(
+              Messenger.send(chosenPeerId, r.message, r.quickReplies)
+            );
+          }
+          return Promise.all(promises);
+        });
       })
-      .then(() => markUserAsNotSearching({ context }))
-      .then((resultObject) => {
-        return { ...resultObject, result: '@PAIR_CREATED' };
-      });
+      .then(() => markUserAsNotSearching({ context }));
 }
 
-export function breakPair({ sessionId }) {
+export function breakPair({ sessionId, userData, context }) {
   let pairs = new Pairs();
   let sessions = new Sessions();
 
@@ -293,9 +302,20 @@ export function breakPair({ sessionId }) {
             .then((context) => sessions.write(pairId, {
               ...context,
               state: '/?0/profile?0',
-            }));
+            }))
+            .then(() => Messenger.send(
+              pairId,
+              PersonalInformationFormatter.format(
+                strings['@NOTIFY_PAIR_BROKEN'],
+                { peerName: context.name }
+              )
+            ));
       })
-      .then(() => {});
+      .then(() => {
+        return {
+          result: '@PAIR_BROKEN',
+        };
+      });
 }
 
 export function breakAllPairs({ sessionId }) {
