@@ -6,15 +6,21 @@ module.exports = class InMemoryProvider {
   }
 
   read(sessionId) {
+    log.silly('DB contents: {0}', JSON.stringify(this.db));
     if (this.db[sessionId] === undefined) {
       this.db[sessionId] = {};
     }
 
+    log.silly('Retrieved context for {0}: {1}',
+        sessionId, JSON.stringify(this.db[sessionId]));
     return Promise.resolve(this.db[sessionId]);
   }
 
   write(sessionId, context) {
     this.db[sessionId] = context;
+
+    log.silly('Writing context for {0}: {1}',
+        sessionId, JSON.stringify(this.db[sessionId]));
     return Promise.resolve(this.db[sessionId]);
   }
 
@@ -28,11 +34,15 @@ module.exports = class InMemoryProvider {
         if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
 
         log.silly('Evaluating possible pair {0}', sessionId);
-        if (sessionId === id) continue;
-        if (this.db[sessionId]['searching'] === true &&
-            this.db[sessionId]['meetingFrequency'] === meetingFrequency) {
+        if (sessionId == id) continue;
+        let session = this.db[sessionId];
+
+        if (session.searching === true &&
+            session.meetingFrequency === meetingFrequency &&
+            (!session.pairRequests || !session.pairRequests.includes(id)) &&
+            (!session.rejectedPeers || !session.rejectedPeers.includes(id))) {
           log.silly('Found a valid pair!');
-          pairs.push({ id: sessionId, context: this.db[sessionId] });
+          pairs.push({ id: sessionId });
         }
       }
 

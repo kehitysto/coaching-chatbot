@@ -24,8 +24,9 @@ module.exports = class Session {
   /**
    * Start a new dialog
    * @param {string} dialogId ID of the new dialog to start
+   * @param {boolean} inPlace do not progress dialog on returning
    */
-  beginDialog(dialogId) {
+  beginDialog(dialogId, inPlace=false) {
     if (dialogId.startsWith('/')) {
       dialogId = dialogId.substr(1);
     }
@@ -36,7 +37,7 @@ module.exports = class Session {
       }
     }
 
-    this.next();
+    if (!inPlace) this.next();
     this._state.push([dialogId, 0]);
   }
 
@@ -49,6 +50,13 @@ module.exports = class Session {
     } else {
       this._state[0] = ['', 0];
     }
+  }
+
+  /**
+   * Restart the current dialog from the beginning
+   */
+  resetDialog() {
+    this._state[this._state.length - 1][1] = 0;
   }
 
   /**
@@ -82,8 +90,27 @@ module.exports = class Session {
    * @param {Array<{title: string, payload: string}>} quickReplies
    */
   addResult(templateId, quickReplies = []) {
+    this._queueFunction(() => this._addResult(templateId, quickReplies));
+  }
+
+  _addResult(templateId, quickReplies = []) {
     let template = this.dialog.getStringTemplate(templateId);
 
+    this._send(template, quickReplies);
+
+    if (quickReplies.length !== 0) {
+      this.addQuickReplies(quickReplies);
+    }
+  }
+
+  addQuickReplies(quickReplies) {
+    this._queueFunction(() => this._addQuickReplies(quickReplies));
+  }
+
+  _addQuickReplies(quickReplies) {
+    if (this._results.length <= 0) return;
+
+    log.debug('Adding quick replies: {0}', JSON.stringify(quickReplies));
     for (let quickReply of quickReplies) {
       if (quickReply.title !== undefined) {
         let quickReplyTemplate =
@@ -92,7 +119,7 @@ module.exports = class Session {
       }
     }
 
-    this.send(template, quickReplies);
+    this._results[this._results.length-1].quickReplies = quickReplies;
   }
 
   /**
@@ -101,6 +128,10 @@ module.exports = class Session {
    * @param {Array<{name: string, payload: string}>} quickReplies
    */
   send(message, quickReplies = []) {
+    this._queueFunction(() => this._send(message, quickReplies));
+  }
+
+  _send(message, quickReplies = []) {
     log.debug('Adding result: {0}', message);
     this._results.push({
       message,
@@ -118,7 +149,7 @@ module.exports = class Session {
     }
 
     for (let i = 0; i < actionArr.length; ++i) {
-      this._queue = this._queue.then(
+      this._queueFunction(
         () => this.dialog.runAction(actionArr[i], this, input)
       );
     }
@@ -243,6 +274,10 @@ module.exports = class Session {
 
   checkIntent(intentId) {
     return this.dialog.checkIntent(intentId, this);
+  }
+
+  _queueFunction(fn) {
+    this._queue = this._queue.then(() => fn());
   }
 
   _getStateArray() {

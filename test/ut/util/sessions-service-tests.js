@@ -132,4 +132,20 @@ describe('Sessions service', function() {
         });
     });
   });
+
+  describe('#getAvailablePairs()', function() {
+    it('should scan DynamoDB for available pairs', function() {
+      const scanStub = sinon.stub();
+      scanStub.callsArgWith(
+        1,
+        undefined,
+        [{ id: 'TEST1' }, { id: 'TEST2' }]
+      );
+
+      this.sessions.db.table.db.scan = scanStub;
+
+      return this.sessions.getAvailablePairs('SESSION_ID', 'EVERY_WEEKDAY')
+          .then(() => expect(scanStub).to.have.been.calledOnce);
+    });
+  });
 });

@@ -16,6 +16,7 @@ module.exports = {
           /^kyl(?:lä)?/i,
           /^j[ou]{2,}/i,
           /^ok/i,
+          /^yes/i,
           /^(?:oo)?koo/i,
           /^jep[as]?/i,
         ],
@@ -27,6 +28,7 @@ module.exports = {
           /^ei/i,
           /^en/i,
           /^emmä/i,
+          /^no/i,
         ],
     },
 
@@ -42,10 +44,44 @@ module.exports = {
         any: /^(?:etsi|hae)/i,
     },
 
+    NEXT: {
+        any: [
+          /^seuraava/i,
+          /^myöhemmin/i,
+          /^later/i,
+        ],
+    },
+
     SET_OR_CHANGE: {
         any: [
           '#SET',
           '#CHANGE',
+        ],
+    },
+
+    SHOW: {
+        any: /^näytä/i,
+    },
+
+    STOP: {
+        any: [
+          /^lopeta/i,
+          /^keskeytä/i,
+        ],
+    },
+
+    BREAK: {
+        any: [
+          /^hajoi?ta/i,
+          /^riko/i,
+          /^särj?e/i,
+        ],
+    },
+
+    STOP_OR_BREAK: {
+        any: [
+          '#STOP',
+          '#BREAK',
         ],
     },
 
@@ -81,6 +117,20 @@ module.exports = {
         any: [
           /^tapaamisväliä?/i,
           /^väliä?/i,
+        ],
+    },
+
+    SEARCHING: {
+        any: [
+          /^(?:parin ?)?(?:haku|hakeminen)/i,
+          /^etsiminen/i,
+        ],
+    },
+
+    PAIR_REQUEST: {
+        any: [
+          /^parinhaku(?:pyyntö|pyynnöt)/i,
+          /^(?:pyyntö|pyynnöt)/i,
         ],
     },
 
@@ -136,6 +186,20 @@ module.exports = {
         ],
     },
 
+    STOP_SEARCHING: {
+        each: [
+          '#STOP',
+          '#SEARCHING',
+        ],
+    },
+
+    SHOW_PAIR_REQUESTS: {
+        each: [
+          '#SHOW',
+          '#PAIR_REQUEST',
+        ],
+    },
+
     COMMUNICATION_METHODS: {
         any: [
           /^Skype/i,
@@ -149,6 +213,13 @@ module.exports = {
           /^Arkipäivisin/i,
           /^Kerran viikossa/i,
           /^Joka toinen viikko/i,
+        ],
+    },
+
+    BREAK_PAIR: {
+        each: [
+          '#STOP_OR_BREAK',
+          /^pari/i,
         ],
     },
 };

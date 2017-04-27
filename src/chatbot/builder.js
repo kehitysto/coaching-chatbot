@@ -3,7 +3,7 @@ import log from '../lib/logger-service';
 import Session from './session';
 
 class Builder {
-  constructor(strings, maxSteps = 5) {
+  constructor(strings, maxSteps = 10) {
     this.maxSteps = maxSteps;
 
     this._tree = {};
@@ -118,7 +118,7 @@ class Builder {
         if (result.result) {
           log.silly('Adding result from action: {0}',
               JSON.stringify(result.result));
-          session.addResult(result.result);
+          session._addResult(result.result);
         }
       })
       .catch((err) => log.error('Action failed!!!\n{0}', err.stack));
@@ -299,29 +299,35 @@ class Builder {
 
       const state = session.stateId;
 
-      if (this._tree[state] !== undefined) {
-        const substate = session.subStateId;
-
-        log.debug('Running state /{0}?{1}', state, substate);
-
-        this._tree[state].substates[substate](session, input);
-
-        log.silly('Awaiting iteration {0} run queue completion', step);
-        return resolve(
-          session.runQueue.then(() => {
-            log.silly('Iteration {0} completed', step);
-            if (session.stateId !== state ||
-              session.subStateId !== substate) {
-              return this._runStep(step + 1, session, input);
-            } else {
-              session.next();
-            }
-          })
+      if (this._tree[state] === undefined) {
+        return reject(
+          new Error(`Unknown state: ${state}`)
         );
       }
 
-      return reject(
-        new Error(`Unknown state: ${state}`)
+      let substate = session.subStateId;
+      if (this._tree[state].substates[substate] === undefined) {
+        log.error('No such substate: {0}?{1}', state, substate);
+
+        session.resetDialog();
+        substate = session.subStateId;
+      }
+
+      log.debug('Running state /{0}?{1}', state, substate);
+
+      this._tree[state].substates[substate](session, input);
+
+      log.silly('Awaiting iteration {0} run queue completion', step);
+      return resolve(
+        session.runQueue.then(() => {
+          log.silly('Iteration {0} completed', step);
+          if (session.stateId !== state ||
+            session.subStateId !== substate) {
+            return this._runStep(step + 1, session, input);
+          } else {
+            session.next();
+          }
+        })
       );
     });
   }
@@ -334,5 +340,16 @@ Builder.QuickReplies = {
       title,
       payload: (payload === undefined) ? title : payload,
     };
+  },
+
+  createArray(titles, payloads=[]) {
+    const quickReplies = [];
+
+    for (let i = 0; i < titles.length; ++i) {
+      quickReplies.push(Builder.QuickReplies.create(
+          titles[i], payloads[i]));
+    }
+
+    return quickReplies;
   },
 };

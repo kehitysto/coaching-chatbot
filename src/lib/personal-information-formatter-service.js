@@ -44,7 +44,7 @@ function format(template, context) {
         return createProfile(context);
       } else if (name === 'communicationMethods') {
         return CommunicationMethodsFormatter
-          .createCommunicationMethodslist(context);
+          .createCommunicationMethodslist(context).join('\n');
       }
 
       return context[name] != undefined ? context[name] : match;

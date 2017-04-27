@@ -87,7 +87,7 @@ describe('Inmemory database service', function() {
 
       it('should return pairs when there are some',
         function() {
-          const expected = {
+          const context = {
             name: 'Pertti',
             searching: true,
             meetingFrequency: 'ONCE_A_WEEK',
@@ -104,14 +104,13 @@ describe('Inmemory database service', function() {
             )
             .then(
               () => this.db.write(
-                'SESSION_IDD', expected)
+                'SESSION_IDD', context)
             )
             .then(() =>
               expect(this.db.getAvailablePairs('SESSION_ID',
                 'ONCE_A_WEEK'))
               .to.become([{
                 id: 'SESSION_IDD',
-                context: expected,
               }])
             );
         });

@@ -6,21 +6,19 @@ from './communication-methods-formatter';
 
 const Formatter = {
   createPairString,
-  beautifyAvailablePairs,
+  beautifyAcceptedPair,
 };
 
 export default Formatter;
 
 function createPairString(context) {
-  const s =
-    Object.keys(context.communicationMethods)
-    .map((v) => `  - ${cmf.getCommunicationMethodByIdentifier(v).name}`)
-    .join('\n');
-
-  return `${pif.createProfile(context)}\n${s}`;
+  const s = cmf.createCommunicationMethodslist(context).map(function(v) {
+    return `\n - ${v}`;
+  });
+  return `${pif.createProfile(context)}${s}`;
 }
 
-function beautifyAvailablePairs(dumps) {
+function beautifyAcceptedPair(dumps) {
   const a = dumps.map((d) => createPairString(d.context));
   return a.join('\n\n');
 }

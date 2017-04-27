@@ -29,7 +29,8 @@ bot
   .dialog(
     '/', [
       (session) => {
-        session.addResult('@GREETING', [Builder.QuickReplies.create('@YES'),
+        session.addResult('@GREETING', [
+          Builder.QuickReplies.create('@YES'),
           Builder.QuickReplies.create('@NO'),
         ]);
       },
@@ -123,7 +124,7 @@ bot
           session.runActions(['addCommunicationMethod']);
         } else {
           session.addResult('@UNCLEAR');
-          session.switchDialog('/add_communication_method');
+          session.resetDialog();
         }
       },
       (session) => {
@@ -145,7 +146,7 @@ bot
       },
       (session) => {
         if (session.checkIntent('#YES')) {
-          session.switchDialog('/add_communication_method');
+          session.resetDialog();
         } else if (session.checkIntent('#NO')) {
           session.switchDialog('/add_meeting_frequency');
         } else {
@@ -163,14 +164,41 @@ bot
       (session) => {
         if (session.checkIntent('#MEETING_FREQUENCIES')) {
           session.runActions([
-            'markUserAsSearching',
             'addMeetingFrequency',
           ]);
           session.addResult('@CHANGE_MEETING_FREQUENCY');
+          session.switchDialog('/confirm_permission');
+        } else {
+          session.addResult('@UNCLEAR');
+          session.resetDialog();
+        }
+      },
+    ]
+  )
+  .dialog(
+    '/confirm_permission', [
+      (session) => {
+        if (session.context.searching) {
+          session.next();
+        } else {
+          session.addResult('@PERMISSION_TO_RECEIVE_MESSAGES', [
+            Builder.QuickReplies.create('@YES'),
+            Builder.QuickReplies.create('@NO'),
+          ]);
+        }
+      },
+      (session) => {
+        if (session.context.searching || session.checkIntent('#YES')) {
+          session.runActions([
+            'markUserAsSearching',
+          ]);
+          session.addResult('@TELL_HOW_TO_STOP_SEARCH'),
+          session.endDialog();
+        } else if (session.checkIntent('#NO')) {
           session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
-          session.switchDialog('/add_meeting_frequency');
+          session.prev();
         }
       },
     ]
@@ -184,7 +212,7 @@ bot
             PersonalInformationFormatter
             .getPersonalInformationbuttons(session.context));
         } else {
-          session.runActions(['getAvailablePairs']);
+          session.beginDialog('/searching');
         }
       },
     ], [
@@ -223,9 +251,6 @@ bot
       ['#FIND_PAIR', (session) => {
         session.beginDialog('/find_pair');
       }],
-      ['#CHANGE_MEETING_FREQUENCY', (session) => {
-        session.beginDialog('/add_meeting_frequency');
-      }],
     ])
   .dialog(
     '/find_pair', [
@@ -252,6 +277,154 @@ bot
       },
     ])
   .dialog(
+    '/searching', [
+      (session) => {
+        if (!session.context.searching) {
+          return session.endDialog();
+        }
+
+        session.runActions(['updateAvailablePeers']);
+        session.next();
+      },
+      (session) => {
+        if (session.context.pairRequests &&
+            session.context.pairRequests.length > 0) {
+          session.addResult('@TELL_USER_HAS_NEW_REQUEST');
+        }
+
+        if (session.context.availablePeers.length <= 0) {
+          return session.addResult('@NO_PAIRS_AVAILABLE');
+        }
+
+        session.addResult('@INFORMATION_ABOUT_LIST');
+        session.next();
+      },
+      (session) => {
+        if (session.context.availablePeers.length <= 0) {
+          return session.resetDialog();
+        }
+
+        session.runActions(['displayAvailablePeer']);
+        session.addQuickReplies([
+          Builder.QuickReplies.create('@YES'),
+          Builder.QuickReplies.create('@NO'),
+          Builder.QuickReplies.create('@LATER'),
+        ]);
+      },
+      (session) => {
+        if (session.checkIntent('#NEXT')) {
+          session.runActions(['nextAvailablePeer']);
+        } else if (session.checkIntent('#NO')) {
+          session.runActions(['rejectAvailablePeer']);
+          session.runActions(['nextAvailablePeer']);
+        } else if (session.checkIntent('#YES')) {
+          session.runActions(['addPairRequest']);
+          session.runActions(['nextAvailablePeer']);
+        } else {
+          session.addResult('@UNCLEAR');
+        }
+
+        return session.prev();
+      },
+    ], [
+      ['#CHANGE_MEETING_FREQUENCY', (session) => {
+        session.resetDialog();
+        session.beginDialog('/add_meeting_frequency', true);
+      }],
+      ['#STOP_SEARCHING', (session) => {
+        session.resetDialog();
+        session.beginDialog('/stop_searching', true);
+      }],
+      ['#SHOW_PAIR_REQUESTS', (session) => {
+        session.resetDialog();
+        session.beginDialog('/list_requests', true);
+      }],
+    ])
+  .dialog(
+      '/list_requests', [
+        (session) => {
+          if (!session.context.searching) {
+            return session.endDialog();
+          }
+
+          session.next();
+        },
+        (session) => {
+          if (!session.context.pairRequests ||
+              session.context.pairRequests.length <= 0) {
+            return session.addResult('@NO_REQUESTS_AVAILABLE');
+          }
+
+          session.next();
+        },
+        (session) => {
+          if (session.context.pairRequests.length <= 0) {
+            return session.endDialog();
+          }
+
+          session.addResult('@INFORMATION_ABOUT_REQUESTS');
+          session.runActions(['displayRequest']);
+          session.addQuickReplies([
+            Builder.QuickReplies.create('@YES'),
+            Builder.QuickReplies.create('@NO'),
+            Builder.QuickReplies.create('@LATER'),
+          ]);
+        },
+        (session) => {
+          if (session.checkIntent('#NEXT')) {
+            session.runActions(['nextRequest']);
+          } else if (session.checkIntent('#NO')) {
+            session.runActions(['rejectRequest']);
+          } else if (session.checkIntent('#YES')) {
+            session.runActions(['acceptRequest']);
+            session.switchDialog('/accepted_pair_information');
+          } else {
+            session.addResult('@UNCLEAR');
+          }
+
+          return session.prev();
+        },
+      ])
+  .dialog(
+      '/accepted_pair_information', [
+        (session) => {
+          session.runActions(['displayAcceptedPeer']);
+          session.addResult('@LINK_TO_HELP');
+        },
+      ], [
+        ['#BREAK_PAIR', (session) => {
+          session.runActions(['breakPair']);
+          session.endDialog();
+        }],
+      ])
+  .dialog(
+      '/stop_searching', [
+        (session) => {
+          if (session.context.searching) {
+            session.addResult('@CONFIRM_STOP_SEARCHING', [Builder.QuickReplies
+              .create(
+                '@YES'),
+              Builder.QuickReplies.create('@NO'),
+            ]);
+          } else {
+            session.addResult('@NOT_CURRENTLY_SEARCHING');
+            session.endDialog();
+          }
+        },
+        (session) => {
+          if (session.checkIntent('#YES')) {
+            session.runActions(['markUserAsNotSearching']);
+            session.addResult('@STOPPED_SEARCHING');
+            session.endDialog();
+          } else if (session.checkIntent('#NO')) {
+            session.endDialog();
+          } else {
+            session.addResult('@UNCLEAR');
+            session.next();
+          }
+        },
+      ])
+  .dialog(
     '/reset', [
       (session) => {
         session.addResult('@RESET_CONFIRMATION', [Builder.QuickReplies.create(
@@ -261,6 +434,7 @@ bot
       },
       (session) => {
         if (session.checkIntent('#YES')) {
+          session.runActions('breakAllPairs');
           session.runActions(['reset']);
           session.addResult('@RESET_DONE');
           session.clearState();
