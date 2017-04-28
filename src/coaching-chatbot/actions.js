@@ -270,9 +270,6 @@ export function acceptRequest({ sessionId, context }) {
         });
       })
       .then(() => {
-        // skip notification on local client
-        if (process.env.RUN_ENV === 'dev') return;
-
         const bot = new Chatbot(dialog, sessions);
 
         return bot.receive(chosenPeerId, '').then((out) => {
@@ -296,20 +293,26 @@ export function breakPair({ sessionId, userData, context }) {
   return pairs.read(sessionId)
       .then((pairList) => {
         const pairId = pairList[0];
+        if (pairId === undefined) return;
 
         return pairs.breakPair(sessionId, pairId)
             .then(() => sessions.read(pairId))
-            .then((context) => sessions.write(pairId, {
-              ...context,
-              state: '/?0/profile?0',
-            }))
-            .then(() => Messenger.send(
+            .then((context) => sessions.write(
               pairId,
-              PersonalInformationFormatter.format(
-                strings['@NOTIFY_PAIR_BROKEN'],
-                { peerName: context.name }
-              )
-            ));
+              {
+                ...context,
+                state: '/?0/profile?0',
+              }
+            ))
+            .then(() => {
+              return Messenger.send(
+                pairId,
+                PersonalInformationFormatter.format(
+                  strings['@NOTIFY_PAIR_BROKEN'],
+                  { pairName: context.name }
+                )
+              );
+            });
       })
       .then(() => {
         return {
@@ -365,9 +368,6 @@ export function addPairRequest({ sessionId, context }) {
 
       return session.write(peerId, chosenPeer)
           .then(() => {
-            // skip notification on local client
-            if (process.env.RUN_ENV === 'dev') return;
-
             return Messenger.send(
               peerId,
               strings['@TELL_USER_HAS_NEW_REQUEST'],

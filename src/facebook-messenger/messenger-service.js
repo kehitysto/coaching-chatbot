@@ -25,6 +25,8 @@ const Messenger = {
       });
     }
 
+    log.info('Sending FB message to {0}: "{1}"', id, text);
+
     return _fbMessageRequest(body);
   },
 
@@ -97,6 +99,11 @@ function _receiveMessage(messageEvent, chatbot) {
 }
 
 function _fbMessageRequest(json) {
+  // skip facebook message sending on local client
+  if (process.env.RUN_ENV === 'dev') {
+    return Promise.resolve();
+  }
+
   if (!process.env.FACEBOOK_PAGE_ACCESS_TOKEN) {
     return Promise
       .reject(new Error('No FACEBOOK_PAGE_ACCESS_TOKEN defined'));
