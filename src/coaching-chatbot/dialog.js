@@ -388,12 +388,16 @@ bot
   .dialog(
       '/accepted_pair_information', [
         (session) => {
+          session.addResult('@PAIR_CREATED');
           session.runActions(['displayAcceptedPeer']);
           session.addResult('@LINK_TO_HELP');
         },
       ], [
         ['#BREAK_PAIR', (session) => {
           session.runActions(['breakPair']);
+
+          // end dialog twice to get back to /profile
+          session.endDialog();
           session.endDialog();
         }],
       ])
@@ -452,4 +456,4 @@ bot
       session.beginDialog('/reset');
     });
 
-module.exports = bot;
+export default bot;
