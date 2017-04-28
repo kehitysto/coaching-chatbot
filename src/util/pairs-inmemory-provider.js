@@ -11,7 +11,7 @@ module.exports = class InMemoryProvider {
       this.db[userId] = [];
     }
 
-    log.silly('Retrieved context for {0}: {1}',
+    log.silly('Retrieved pairs for {0}: {1}',
         userId, JSON.stringify(this.db[userId]));
     return Promise.resolve(this.db[userId]);
   }
