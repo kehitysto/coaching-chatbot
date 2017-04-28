@@ -395,6 +395,9 @@ bot
       ], [
         ['#BREAK_PAIR', (session) => {
           session.runActions(['breakPair']);
+
+          // end dialog twice to get back to /profile
+          session.endDialog();
           session.endDialog();
         }],
       ])
@@ -453,4 +456,4 @@ bot
       session.beginDialog('/reset');
     });
 
-module.exports = bot;
+export default bot;
