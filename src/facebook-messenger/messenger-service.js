@@ -25,6 +25,8 @@ const Messenger = {
       });
     }
 
+    log.info('Sending FB message to {0}: "{1}"', id, text);
+
     return _fbMessageRequest(body);
   },
 
@@ -69,8 +71,6 @@ const Messenger = {
   },
 };
 
-module.exports = Messenger;
-
 function _receiveMessage(messageEvent, chatbot) {
   return new Promise((resolve, reject) => {
     const sender = messageEvent.sender.id;
@@ -82,11 +82,10 @@ function _receiveMessage(messageEvent, chatbot) {
       return resolve(Messenger.send(sender, unhandledMessageTypeResponse));
     }
 
-    return resolve(
-      chatbot.receive(sender, text)
+    return resolve(Messenger.toggleTypingIndicator(sender, true)
+      .then(() => chatbot.receive(sender, text))
       .then((response) => {
-        let promise = Messenger.toggleTypingIndicator(sender, true);
-
+        let promise = Promise.resolve();
         for (let r of response) {
           promise = promise.then(() => {
             return Messenger.send(sender,
@@ -95,12 +94,16 @@ function _receiveMessage(messageEvent, chatbot) {
         }
         return promise
           .then(() => Messenger.toggleTypingIndicator(sender, false));
-      })
-    );
+      }));
   });
 }
 
 function _fbMessageRequest(json) {
+  // skip facebook message sending on local client
+  if (process.env.RUN_ENV === 'dev') {
+    return Promise.resolve();
+  }
+
   if (!process.env.FACEBOOK_PAGE_ACCESS_TOKEN) {
     return Promise
       .reject(new Error('No FACEBOOK_PAGE_ACCESS_TOKEN defined'));
@@ -117,3 +120,5 @@ function _fbMessageRequest(json) {
     json,
   });
 }
+
+module.exports = Messenger;
