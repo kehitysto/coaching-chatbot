@@ -62,6 +62,6 @@ Instructions of approvals:
         <p align="center"><img src="/img/pages-messaging-subscription.png" alt="Pages messaging"/></p>
         * Add description:
         "Our application will use pages_messaging_subscriptions to notify the user that some other users want to became their pair. The user can quite pair searching at any point if he/she doesn't want to get notification anymore.  Permission is needed because the pair could be found after 24 hours after subscribing and it's possible that during this time few users want to send a request to the user."
-        <span style="color : yellow">  Feel free to change the description </span>
+        <span style="color : yellow">  Feel free to change the description </span></br>
         * Upload Screencast
 6. Press Submit for Review
