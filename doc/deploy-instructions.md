@@ -56,9 +56,8 @@ Instructions of approvals:
     * `pages_messaging`
       * Example:
     <p align="center"><img src="/img/page-messaging.png" alt="Pages messaging"/></p>
+    
     * `pages_messaging_subscription`  
-    <span style="color : red">
-      IMPORTANT!!   at the point "Please select the use case your bot matches". Select "News". </span>
         <p align="center"><img src="/img/pages-messaging-subscription.png" alt="Pages messaging"/></p>
         * Add description:
         "Our application will use pages_messaging_subscriptions to notify the user that some other users want to became their pair. The user can quite pair searching at any point if he/she doesn't want to get notification anymore.  Permission is needed because the pair could be found after 24 hours after subscribing and it's possible that during this time few users want to send a request to the user."
