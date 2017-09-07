@@ -40,6 +40,11 @@ $ npm i
 $ npm run bot-client
 ```
 
+Multiple users locally use a different session ID on multiple terminals, --help for all commands
+```
+$ npm run bot-client -- --session=<ID>
+```
+
 ## Documentation
  - [Architecture](doc/architecture.md)
  - [Deploy instructions](doc/deploy-instructions.md)
