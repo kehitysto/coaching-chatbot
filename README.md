@@ -40,6 +40,12 @@ $ npm i
 $ npm run bot-client
 ```
 
+To test multiple users use different session IDs
+
+```
+$ npm run bot-client -- --session=<ID>
+```
+
 ## Documentation
  - [Architecture](doc/architecture.md)
  - [Deploy instructions](doc/deploy-instructions.md)
