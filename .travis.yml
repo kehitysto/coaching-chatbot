@@ -12,6 +12,7 @@ deploy:
   skip-cleanup: true
   on:
     branch: dev
+    branch: feature/get-travis-to-deploy
 
 cache:
   directories:
