@@ -215,6 +215,30 @@ describe('User story', function() {
         });
     });
 
+    describe(
+      'As a registered user I want to provide my bio to the bot',
+      function() {
+        it(
+          'after user has given his bio, it should confirm and ask for more information',
+          function() {
+            this.userInformation.bio = 'My long bio in long text';
+  
+            return expect(
+                this.bot.receive(
+                  SESSION,
+                  'Aseta kuvaus ' + this.userInformation.bio))
+              .to.eventually.become([
+                buildResponse('@CONFIRM_BIO'),
+                buildResponse(
+                  PersonalInformationFormatter.formatFromTemplate(
+                    '@DISPLAY_PROFILE', this.userInformation),
+                  PersonalInformationFormatter.getPersonalInformationbuttons(
+                    this.context)),
+              ]);
+          });
+      });
+  
+
   describe(
     'As a registered user I want to provide my acceptable methods of communication with quick replies',
     function() {
