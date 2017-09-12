@@ -377,7 +377,8 @@ bot
           session.next();
         },
         (session) => {
-          if (session.context.pairRequests.length <= 0) {
+          if (!session.context.pairRequests ||
+              session.context.pairRequests.length <= 0) {
             return session.endDialog();
           }
 
