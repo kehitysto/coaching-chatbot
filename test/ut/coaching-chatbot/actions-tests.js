@@ -210,6 +210,51 @@ describe('coaching-bot actions', function() {
         });
     });
   });
+
+  describe('#setBio', function() {
+    it('returns a Promise', function() {
+      const ret = actions.setBio({
+        context: {},
+        input: '',
+      });
+
+      expect(ret)
+      .to.be.a('Promise');
+    });
+
+    it('returns the bio from user', function() {
+      const ret = actions.setBio({
+        context: {},
+        input: 'My name is X and I\'m a human',
+      });
+
+      return expect(ret)
+        .to.become({
+          context: {
+            bio: 'My name is X and I\'m a human',
+          },
+        });
+    });
+
+    it('preserves context', function() {
+      const ret = actions.setBio({
+        context: {
+          'foo': 'bar',
+        },
+        input: 'Long bio string',
+      });
+
+      return expect(ret)
+        .to.eventually
+        .deep.equal({
+          context: {
+            'foo': 'bar',
+            'bio': 'Long bio string',
+          },
+        });
+    });
+  });
+
   describe('#updateProfile', function() {
     it('Should return a Promise', function() {
       const ret = actions.updateProfile({

@@ -51,6 +51,15 @@ export function setPlace({ context, input }) {
   });
 }
 
+export function setBio({ context, input }) {
+  return Promise.resolve({
+    context: {
+      ...context,
+      bio: input,
+    },
+  });
+}
+
 export function updateProfile({ context, userData }) {
   let profile = PersonalInformationFormatter.createProfile(context);
 
