@@ -113,6 +113,17 @@ bot
       },
     ])
   .dialog(
+    '/set_bio', [
+      (session) => {
+        session.addResult('@REQUEST_BIO');
+      },
+      (session) => {
+        session.runActions(['setBio']);
+        session.addResult('@CONFIRM_BIO');
+        session.endDialog();
+      },
+    ])
+  .dialog(
     '/add_communication_method', [
       (session) => {
         session.addResult('@REQUEST_COMMUNICATION_METHOD',
@@ -246,6 +257,14 @@ bot
           session.addResult('@CONFIRM_PLACE');
         } else {
           session.beginDialog('/set_place');
+        }
+      }],
+      ['#SET_BIO', (session, match) => {
+        if (match !== true) {
+          session.runActions(['setBio'], match);
+          session.addResult('@CONFIRM_BIO');
+        } else {
+          session.beginDialog('/set_bio');
         }
       }],
       ['#FIND_PAIR', (session) => {

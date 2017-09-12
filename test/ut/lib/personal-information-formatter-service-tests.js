@@ -278,6 +278,10 @@ describe('Formatter service', function() {
             title: 'Aseta paikkakunta',
             payload: 'SET_PLACE',
           },
+          {
+            title: 'Aseta kuvaus',
+            payload: 'SET_BIO',
+          }
         ];
 
         return expect(personalInformationChangers)
