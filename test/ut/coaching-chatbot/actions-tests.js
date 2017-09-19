@@ -2,6 +2,7 @@ import sinon from 'sinon';
 
 import * as actions from '../../../src/coaching-chatbot/actions.js';
 import Sessions from '../../../src/util/sessions-service';
+import Pairs from '../../../src/util/pairs-service';
 
 const TEST_SESSION = 'SESSION';
 
@@ -646,6 +647,67 @@ describe('coaching-bot actions', function() {
     });
   });
 
+  describe('#displayAcceptedPeer', function() {
+    it('should return a profile string if pairs are found', function () {
+        const sessions = new Sessions();
+        const stubSessionsRead = sinon.stub(
+          sessions.db,
+          'read'
+        );
+
+        const pairs = new Pairs();
+        const stubPairsRead = sinon.stub(
+          pairs.db,
+          'read'
+        );
+
+        const profiles = [
+          {
+            name: 'Pertti',
+            communicationMethods: {
+              SKYPE: 'pertti_42',
+            },
+          },
+          {
+            name: 'Masa',
+            communicationMethods: {
+              PHONE: '040566123',
+            },
+          },
+          {
+            name: 'Antti',
+            communicationMethods: {
+              PHONE: '044123123',
+              CAFETERIA: 'Fazer',
+            },
+          },
+        ];
+
+        stubSessionsRead.onCall(0).returns(Promise.resolve(profiles[0]));
+        stubSessionsRead.onCall(1).returns(Promise.resolve(profiles[1]));
+        stubSessionsRead.onCall(2).returns(Promise.resolve(profiles[2]));
+
+        stubPairsRead.returns(Promise.resolve([1, 2, 3]));
+
+        const expected = {
+          result: 'Pertti\n -  Skype (pertti_42)\n' +
+                  'Masa\n -  Puhelin (040566123)\n' +
+                  'Antti\n -  Puhelin (044123123),\n -  Kahvila (Fazer)',
+        };
+        
+        const ret = actions.displayAcceptedPeer({
+          sessionId: sessions.sessionId,
+        });
+
+        return expect(ret)
+          .to.become(expected)
+          .then(() => {
+            stubSessionsRead.restore();
+            stubPairsRead.restore();
+          });
+    });
+  });
+
   describe('#nextRequest', function() {
     it('should switch the next item in the list to be the first',
         function() {
@@ -680,6 +742,64 @@ describe('coaching-bot actions', function() {
             },
         });
     });
+  });
+
+  describe('#acceptRequests', function() {
+    it('should write a state and mark user as not searching', function() {
+        const sessions = new Sessions();
+
+        const stubSessionsRead = sinon.stub(
+          sessions.db,
+          'read'
+        );
+
+        const spySessionsWrite = sinon.spy(
+          sessions.db,
+          'write'
+        );
+
+        const profile = {
+          name: 'Pertti',
+          communicationMethods: {
+            SKYPE: 'pertti_42',
+          },
+        };
+
+        stubSessionsRead.returns(Promise.resolve(
+          profile
+        ));
+
+        const expectedFromMarkUser = {
+          context: {
+            availablePeers: [],
+            pairRequests: [],
+            rejectedPeers: [],
+            searching: false,
+          }
+        };
+
+        const expectedToWrite = {
+          ...profile,
+          ...expectedFromMarkUser.context,
+          state: '/?0/profile?0/accepted_pair_information?0',
+        };
+
+        const ret = actions.acceptRequest({
+          sessionId: 0,
+          context: {
+            pairRequests: [1],  
+          },
+        });
+
+        return ret.then((result) => {
+          expect(result).to.deep.equal(expectedFromMarkUser);
+        }).then(() => {          
+          expect(spySessionsWrite.calledWith(1, expectedToWrite)).to.equal(true);
+        }).then(() => {
+          spySessionsWrite.restore();
+          stubSessionsRead.restore();
+        });
+      });
   });
 
   describe('#displayRequest', function() {
@@ -719,4 +839,64 @@ describe('coaching-bot actions', function() {
         .then(() => stubSessionsRead.restore());
     });
   });
+});
+
+describe('#breakPair', function() {
+  it('should set pair state to profile and return pair broken', function() {
+      const sessions = new Sessions();
+      const stubSessionsRead = sinon.stub(
+        sessions.db,
+        'read'
+      );
+
+      const spySessionsWrite = sinon.spy(
+        sessions.db,
+        'write'
+      );
+
+      const profile = {
+        name: 'Pertti',
+        communicationMethods: {
+          SKYPE: 'pertti_42',
+        },
+      };
+
+      stubSessionsRead.returns(Promise.resolve(
+        profile
+      ));
+
+      const pairs = new Pairs()
+      const stubPairsRead = sinon.stub(
+        pairs.db,
+        'read'
+      );
+
+      stubPairsRead.returns(Promise.resolve(
+        [1]
+      ));
+
+      const expectedPairBroken = {
+        result: '@PAIR_BROKEN',
+      };
+
+      const expectedToWrite = {
+        ...profile,
+        state: '/?0/profile?0',
+      };
+
+      const ret = actions.breakPair({
+        sessionId: 0,
+        context: { ...profile },
+      });
+
+      return ret.then((result) => {
+        expect(result).to.deep.equal(expectedPairBroken);
+      }).then(() => {          
+        expect(spySessionsWrite.calledWith(1, expectedToWrite)).to.equal(true);
+      }).then(() => {
+        stubPairsRead.restore();
+        spySessionsWrite.restore();
+        stubSessionsRead.restore();
+      });
+    });
 });
