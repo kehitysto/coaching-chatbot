@@ -178,7 +178,7 @@ module.exports = class Session {
   /**
    * Start processing a new message by user
    * @param {string} sessionId The id for the current session
-   * @param {Object} context The current conversation context
+   * @param {Context} context The current conversation context
    * @param {string} input The message sent by the user
    * @return {Session}
    */

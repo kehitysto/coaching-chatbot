@@ -42,6 +42,11 @@ const Messenger = {
     return _fbMessageRequest(body);
   },
 
+  /**
+   * @param {any} data
+   * @param {Chatbot} chatbot
+   * @return {Promise}
+   */
   receive(data, chatbot) {
     if (data.object === 'page') {
       const promises = [];
