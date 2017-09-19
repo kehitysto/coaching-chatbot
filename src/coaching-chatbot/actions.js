@@ -273,11 +273,18 @@ export function acceptRequest({ sessionId, context }) {
 
   return pairs.createPair(sessionId, chosenPeerId)
       .then(() => {
-        return sessions.read(chosenPeerId).then((chosenPeer) => {
-          chosenPeer.state = '/?0/profile?0/accepted_pair_information?0';
-          return sessions.write(chosenPeerId, chosenPeer);
-        });
-      })
+        return sessions.read(chosenPeerId)
+            .then((chosenPeer) => {
+              const peer = { context: { ...chosenPeer } };
+              return markUserAsNotSearching(peer);
+            }
+          )
+            .then((chosenPeer) => {
+              const peer = chosenPeer.context;
+              peer.state = '/?0/profile?0/accepted_pair_information?0';
+              return sessions.write(chosenPeerId, peer);
+            });
+        })
       .then(() => {
         const bot = new Chatbot(dialog, sessions);
 
