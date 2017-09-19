@@ -309,7 +309,7 @@ export function breakPair({ sessionId, userData, context }) {
   return pairs.read(sessionId)
       .then((pairList) => {
         const pairId = pairList[0];
-        if (pairId === undefined) return;
+        if (pairId === undefined) return Promise.reject();
 
         return pairs.breakPair(sessionId, pairId)
             .then(() => sessions.read(pairId))

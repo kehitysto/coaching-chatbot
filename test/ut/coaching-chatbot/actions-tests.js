@@ -842,6 +842,26 @@ describe('coaching-bot actions', function() {
 });
 
 describe('#breakPair', function() {
+  it('should reject if there is no pairId', function() {
+      const pairs = new Pairs()
+      const stubPairsRead = sinon.stub(
+        pairs.db,
+        'read'
+      );
+
+      stubPairsRead.returns(Promise.resolve(
+        []
+      ));
+
+      const ret = actions.breakPair({
+        sessionId: 0,
+      });
+
+      return expect(ret).be.rejected.then(() => {
+        stubPairsRead.restore()
+      });
+  });
+
   it('should set pair state to profile and return pair broken', function() {
       const sessions = new Sessions();
       const stubSessionsRead = sinon.stub(
