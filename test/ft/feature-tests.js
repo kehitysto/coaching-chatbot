@@ -707,4 +707,72 @@ describe('User story', function() {
       );
     }
   );
+
+  describe(
+    'As a registered user I want to be able to restart the process and remove my data',
+    function() {
+
+      it(
+        'should ask user for a confirmation when user has requested a reset',
+        function() {
+          return expect(
+              this.bot.receive(
+                SESSION,
+                'aloita alusta'))
+            .to.eventually.become([
+              buildResponse('@RESET_CONFIRMATION', [{
+                'title': 'Kyllä',
+                'payload': '@YES',
+              }, {
+                'title': 'Ei',
+                'payload': '@NO',
+              }]),
+            ]);
+        });
+
+      it(
+        'should repeat the last question if the user declines to reset',
+        function() {
+          return expect(
+              this.bot.receive(
+                SESSION,
+                'ei'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_MEETING_FREQUENCY',
+              PersonalInformationFormatter
+              .getMeetingFrequency(this.sessions.db.dump()[SESSION])),
+            ]);
+        });
+
+      it(
+        'should reset the context and go to the start if the user agrees to reset',
+        function() {
+          let backupContext = this.sessions.db.dump();
+
+          let g = this.bot.receive(
+            SESSION,
+            'aloita alusta');
+
+          return g.then(_ => {
+            let response = this.bot.receive(
+              SESSION,
+              'kyllä');
+
+            response.then(_ => this.sessions.db.load(backupContext));
+
+            return expect(response)
+              .to.eventually.become([
+                buildResponse('@RESET_DONE', []),
+                buildResponse('@GREETING', [{
+                  'title': 'Kyllä',
+                  'payload': '@YES',
+                }, {
+                  'title': 'Ei',
+                  'payload': '@NO',
+                }]),
+              ]);
+          });
+        }
+      );
+    });
 });
