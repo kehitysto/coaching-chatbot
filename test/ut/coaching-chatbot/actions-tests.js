@@ -840,3 +840,63 @@ describe('coaching-bot actions', function() {
     });
   });
 });
+
+describe('#breakPair', function() {
+  it('should set pair state to profile and return pair broken', function() {
+      const sessions = new Sessions();
+      const stubSessionsRead = sinon.stub(
+        sessions.db,
+        'read'
+      );
+
+      const spySessionsWrite = sinon.spy(
+        sessions.db,
+        'write'
+      );
+
+      const profile = {
+        name: 'Pertti',
+        communicationMethods: {
+          SKYPE: 'pertti_42',
+        },
+      };
+
+      stubSessionsRead.returns(Promise.resolve(
+        profile
+      ));
+
+      const pairs = new Pairs()
+      const stubPairsRead = sinon.stub(
+        pairs.db,
+        'read'
+      );
+
+      stubPairsRead.returns(Promise.resolve(
+        [1]
+      ));
+
+      const expectedPairBroken = {
+        result: '@PAIR_BROKEN',
+      };
+
+      const expectedToWrite = {
+        ...profile,
+        state: '/?0/profile?0',
+      };
+
+      const ret = actions.breakPair({
+        sessionId: 0,
+        context: { ...profile },
+      });
+
+      return ret.then((result) => {
+        expect(result).to.deep.equal(expectedPairBroken);
+      }).then(() => {          
+        expect(spySessionsWrite.calledWith(1, expectedToWrite)).to.equal(true);
+      }).then(() => {
+        stubPairsRead.restore();
+        spySessionsWrite.restore();
+        stubSessionsRead.restore();
+      });
+    });
+});
