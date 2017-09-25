@@ -1,6 +1,10 @@
 import log from '../lib/logger-service';
 
 module.exports = class Chatbot {
+  /**
+   * @param {Builder} dialog
+   * @param {Sessions} sessions
+   */
   constructor(dialog, sessions) {
     this._dialog = dialog;
     this._sessions = sessions;
