@@ -1,6 +1,6 @@
 declare class Builder {
     checkIntent(intentId: string, session: Session): boolean;
-    run(sessionId: string, context: Context, input: string);
+    run(sessionId: string, context: Context, input: string): Promise<Session>;
 }
 
 declare class Chatbot {
@@ -35,7 +35,7 @@ declare class Session {
     id: string;
     context: Context;
     _context: Context;
-    _state: any[];
+    _state: Array<Array<string|number>>;
     _results: any[];
     _done: boolean;
     addQuickReplies(quickReplies: QuickReplies): void;
@@ -45,6 +45,7 @@ declare class Session {
     checkIntent(intentId: string): boolean;
     clearState(): void;
     getCommunicationMethodsCount(): number;
+    getResult(): QuickReplies;
     endDialog(): void;
     next(): void;
     prev(): void;
@@ -55,7 +56,7 @@ declare class Session {
 }
 
 declare class Sessions {
-
+    read(sessionId: string): Promise<Context>;
 }
 
 type QuickReplies = Array<{title: string, payload: string}>;
