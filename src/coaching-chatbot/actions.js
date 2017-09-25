@@ -348,10 +348,8 @@ export function breakAllPairs({ sessionId }) {
             pairs.breakPair(sessionId, pairId)
           );
         }
-
         return Promise.all(promises);
-      })
-      .then(() => {});
+      });
 }
 
 export function displayRequest({ context }) {
