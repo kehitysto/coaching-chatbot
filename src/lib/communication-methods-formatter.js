@@ -40,7 +40,7 @@ function getCommunicationMethodByIdentifier(input) {
 }
 
 /**
- * @param {Context} context 
+ * @param {Context} context
  * @return {Array<{title: string, payload: string}>}
  */
 function getCommunicationMethods(context) {
