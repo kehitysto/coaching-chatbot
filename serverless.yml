@@ -13,11 +13,6 @@ provider:
       - dynamodb:PutItem
       - dynamodb:DeleteItem
       Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:*
-    - Effect: Allow
-      Action:
-      - cloudformation:ValidateTemplate
-      Resource: arn:aws:cloudformation:${opt:region, self:provider.region}:*:*
-
 functions:
   facebookMessenger:
     handler: src/facebook-messenger/handler.handler
