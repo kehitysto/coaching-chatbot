@@ -970,3 +970,71 @@ describe('#breakAllPairs', function() {
     });
 });
 
+describe('#addPairRequest', function() {
+  it('should return peer no longer available if peer is not searching', function() {
+    const sessions = new Sessions();
+
+    const stubSessionsRead = sinon.stub(
+      sessions.db,
+      'read'
+    );
+
+    const profile = {
+      name: 'Pertti',
+      communicationMethods: {
+        SKYPE: 'pertti_42',
+      },
+      searching: false,
+    };
+
+    stubSessionsRead.returns(Promise.resolve(
+      profile
+    ));
+
+    const ret = actions.addPairRequest({
+      context: {
+        availablePeers: [1],
+      },
+    })
+
+    return ret.then((result) => {
+      expect(result.result).to.equal('@PEER_NO_LONGER_AVAILABLE');
+    }).then(() => {
+      stubSessionsRead.restore();
+    });
+  });
+
+  it('should confirm added request', function() {
+    const sessions = new Sessions();
+
+    const stubSessionsRead = sinon.stub(
+      sessions.db,
+      'read'
+    );
+
+    const profile = {
+      name: 'Pertti',
+      communicationMethods: {
+        SKYPE: 'pertti_42',
+      },
+      searching: true,
+    };
+
+    stubSessionsRead.returns(Promise.resolve(
+      profile
+    ));
+
+    const ret = actions.addPairRequest({
+      context: {
+        availablePeers: [1],
+      },
+    })
+
+    return ret.then((result) => {
+      expect(result.result).to.equal('@CONFIRM_NEW_PEER_ASK');
+    }).then(() => {
+      stubSessionsRead.restore();
+    });
+  });
+});
+

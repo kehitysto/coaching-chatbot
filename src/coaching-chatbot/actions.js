@@ -375,9 +375,7 @@ export function addPairRequest({ sessionId, context }) {
 
   return session.read(peerId).then((chosenPeer) => {
     if (chosenPeer.searching) {
-      if (chosenPeer.pairRequests === undefined) {
-        chosenPeer.pairRequests = [];
-      }
+      chosenPeer.pairRequests = chosenPeer.pairRequests || [];
       chosenPeer.pairRequests.push(sessionId);
 
       return session.write(peerId, chosenPeer)
