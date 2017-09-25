@@ -16,9 +16,9 @@ declare class Context {
     communicationMethods: {};
     meetingFrequency: string;
     searching: boolean;
-    availablePeers: string[];
-    pairRequests: string[];
-    rejectedPeers: string[];
+    availablePeers: (number|string)[];
+    pairRequests: (number|string)[];
+    rejectedPeers: (number|string)[];
     state: string;
 }
 
