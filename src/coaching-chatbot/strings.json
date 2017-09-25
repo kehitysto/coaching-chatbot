@@ -18,6 +18,8 @@
   "@CONFIRM_AGE": "Iäksesi on nyt asetettu {age}.",
   "@REQUEST_PLACE": "Anna paikkakuntasi.",
   "@CONFIRM_PLACE": "Paikkakunta lisätty profiiliin.",
+  "@REQUEST_BIO": "Anna kuvauksesi.",
+  "@CONFIRM_BIO": "Kuvaus lisätty profiiliin.",
   "@DISPLAY_PROFILE": "Parin etsijät näkisivät nyt sinut seuraavasti: '{profile}'. Voit siirtyä parin etsimiseen painamalla 'Etsi pari'.",
   "@INFORMATION_ABOUT_BUTTONS": "Pystyt asettamaan tietoja painamalla nappia.",
   "@YES": "Kyllä",

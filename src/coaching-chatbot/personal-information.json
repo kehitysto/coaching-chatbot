@@ -18,5 +18,9 @@
   {
     "identifier": "SET_PLACE",
     "description": "Aseta paikkakunta"
+  },
+  {
+    "identifier": "SET_BIO",
+    "description": "Aseta kuvaus"
   }
 ]

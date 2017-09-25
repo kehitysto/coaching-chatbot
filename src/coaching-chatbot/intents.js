@@ -109,6 +109,10 @@ module.exports = {
         any: /^paikka(?:kunta)?a?/i,
     },
 
+    BIO: {
+        any: /^(?:kuvaus|kuvaukseksi)/i,
+    },
+
     PAIR: {
         any: /^paria?/i,
     },
@@ -162,6 +166,14 @@ module.exports = {
         each: [
           '#SET_OR_CHANGE',
           '#PLACE',
+          '#OPTIONAL_VALUE',
+        ],
+    },
+
+    SET_BIO: {
+        each: [
+          '#SET_OR_CHANGE',
+          '#BIO',
           '#OPTIONAL_VALUE',
         ],
     },

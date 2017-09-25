@@ -16,7 +16,7 @@ provider:
 
 functions:
   facebookMessenger:
-    handler: facebook-messenger/handler.handler
+    handler: src/facebook-messenger/handler.handler
     memorySize: 128
     timeout: 15
     events:
