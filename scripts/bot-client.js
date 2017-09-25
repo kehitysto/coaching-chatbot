@@ -15,6 +15,7 @@ require('../src/lib/env-vars')
 process.env.RUN_ENV = 'dev';
 
 const STATE_STORE = '.state.json';
+const SNAP_STATE_STORE = '.state-snap.json';
 
 const options = minimist(process.argv.slice(2));
 const sessions = new Sessions();
@@ -73,8 +74,8 @@ function main() {
   interactive(bot);
 }
 
-function snapState() {
-  const storePath = path.resolve(__dirname, '..', STATE_STORE);
+function snapState(state_store = STATE_STORE) {
+  const storePath = path.resolve(__dirname, '..', state_store);
   const data = {
     sessions: sessions.db.dump(),
     pairs: pairs.db.dump(),
@@ -83,8 +84,8 @@ function snapState() {
   fs.writeFileSync(storePath, JSON.stringify(data));
 }
 
-function loadState() {
-  const storePath = path.resolve(__dirname, '..', STATE_STORE);
+function loadState(state_store = STATE_STORE) {
+  const storePath = path.resolve(__dirname, '..', state_store);
   let data;
 
   try {
@@ -113,10 +114,11 @@ function interactive(bot) {
     if (!line) {
       return rl.prompt();
     } else if (line === '!snap') {
-      snapState();
+      snapState(SNAP_STATE_STORE);
       return rl.prompt();
     } else if (line === '!load') {
-      loadState();
+      loadState(SNAP_STATE_STORE);
+      snapState();
       return rl.prompt();
     }
 

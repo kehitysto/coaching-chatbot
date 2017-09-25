@@ -175,3 +175,6 @@ Temporary Items
 
 # local client state
 .state.json
+
+# local snapped state
+.state-snap.json
