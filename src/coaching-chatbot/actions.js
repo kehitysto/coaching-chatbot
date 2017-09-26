@@ -309,7 +309,7 @@ export function breakPair({ sessionId, userData, context }) {
   return pairs.read(sessionId)
       .then((pairList) => {
         const pairId = pairList[0];
-        if (pairId === undefined) return;
+        if (pairId === undefined) return Promise.reject();
 
         return pairs.breakPair(sessionId, pairId)
             .then(() => sessions.read(pairId))
@@ -348,10 +348,8 @@ export function breakAllPairs({ sessionId }) {
             pairs.breakPair(sessionId, pairId)
           );
         }
-
         return Promise.all(promises);
-      })
-      .then(() => {});
+      });
 }
 
 export function displayRequest({ context }) {
@@ -377,9 +375,7 @@ export function addPairRequest({ sessionId, context }) {
 
   return session.read(peerId).then((chosenPeer) => {
     if (chosenPeer.searching) {
-      if (chosenPeer.pairRequests === undefined) {
-        chosenPeer.pairRequests = [];
-      }
+      chosenPeer.pairRequests = chosenPeer.pairRequests || [];
       chosenPeer.pairRequests.push(sessionId);
 
       return session.write(peerId, chosenPeer)

@@ -842,6 +842,26 @@ describe('coaching-bot actions', function() {
 });
 
 describe('#breakPair', function() {
+  it('should reject if there is no pairId', function() {
+      const pairs = new Pairs()
+      const stubPairsRead = sinon.stub(
+        pairs.db,
+        'read'
+      );
+
+      stubPairsRead.returns(Promise.resolve(
+        []
+      ));
+
+      const ret = actions.breakPair({
+        sessionId: 0,
+      });
+
+      return expect(ret).be.rejected.then(() => {
+        stubPairsRead.restore()
+      });
+  });
+
   it('should set pair state to profile and return pair broken', function() {
       const sessions = new Sessions();
       const stubSessionsRead = sinon.stub(
@@ -900,3 +920,121 @@ describe('#breakPair', function() {
       });
     });
 });
+
+describe('#breakAllPairs', function() {
+  it('should read pairs and call breakPair for them', function() {
+      const sessions = new Sessions();
+      const pairs = new Pairs();
+
+      const stubSessionsRead = sinon.stub(
+        sessions.db,
+        'read'
+      );
+
+      const stubPairsRead = sinon.stub(
+        pairs.db,
+        'read'
+      );
+
+      const spyPairsBreakPair = sinon.spy(
+        Pairs.prototype,
+        'breakPair'
+      );
+
+      const profile = {
+        name: 'Pertti',
+        communicationMethods: {
+          SKYPE: 'pertti_42',
+        },
+      };
+
+      stubSessionsRead.returns(Promise.resolve(
+        profile
+      ));
+
+      stubPairsRead.returns(Promise.resolve(
+        [1, 2, 3]
+      ));
+
+      const ret = actions.breakAllPairs({
+        sessionId: 0,
+      });
+
+      return ret.then((result) => {
+        expect(spyPairsBreakPair.args).to.deep.equal([[0, 1], [0, 2], [0, 3]]);
+      }).then(() => {
+        spyPairsBreakPair.restore();
+        stubPairsRead.restore();
+        stubSessionsRead.restore();
+      });
+    });
+});
+
+describe('#addPairRequest', function() {
+  it('should return peer no longer available if peer is not searching', function() {
+    const sessions = new Sessions();
+
+    const stubSessionsRead = sinon.stub(
+      sessions.db,
+      'read'
+    );
+
+    const profile = {
+      name: 'Pertti',
+      communicationMethods: {
+        SKYPE: 'pertti_42',
+      },
+      searching: false,
+    };
+
+    stubSessionsRead.returns(Promise.resolve(
+      profile
+    ));
+
+    const ret = actions.addPairRequest({
+      context: {
+        availablePeers: [1],
+      },
+    })
+
+    return ret.then((result) => {
+      expect(result.result).to.equal('@PEER_NO_LONGER_AVAILABLE');
+    }).then(() => {
+      stubSessionsRead.restore();
+    });
+  });
+
+  it('should confirm added request', function() {
+    const sessions = new Sessions();
+
+    const stubSessionsRead = sinon.stub(
+      sessions.db,
+      'read'
+    );
+
+    const profile = {
+      name: 'Pertti',
+      communicationMethods: {
+        SKYPE: 'pertti_42',
+      },
+      searching: true,
+    };
+
+    stubSessionsRead.returns(Promise.resolve(
+      profile
+    ));
+
+    const ret = actions.addPairRequest({
+      context: {
+        availablePeers: [1],
+      },
+    })
+
+    return ret.then((result) => {
+      expect(result.result).to.equal('@CONFIRM_NEW_PEER_ASK');
+    }).then(() => {
+      stubSessionsRead.restore();
+    });
+  });
+});
+
