@@ -39,6 +39,10 @@ function getCommunicationMethodByIdentifier(input) {
   }
 }
 
+/**
+ * @param {Context} context
+ * @return {Array<{title: string, payload: string}>}
+ */
 function getCommunicationMethods(context) {
   return CommunicationMethods.reduce((l, m) => {
     if (context.communicationMethods === undefined ||

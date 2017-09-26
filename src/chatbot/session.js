@@ -103,6 +103,9 @@ module.exports = class Session {
     }
   }
 
+  /**
+   * @param {Array<{title: string, payload: string}>} quickReplies
+   */
   addQuickReplies(quickReplies) {
     this._queueFunction(() => this._addQuickReplies(quickReplies));
   }

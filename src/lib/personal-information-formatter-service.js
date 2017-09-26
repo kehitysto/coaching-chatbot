@@ -54,12 +54,20 @@ function format(template, context) {
   return s;
 }
 
+/**
+ * @param {Context} context
+ * @return {string}
+ */
 function createProfile(context) {
   return [context.name, context.job, context.age, context.place, context.bio]
     .filter((val) => val)
     .join(', ');
 }
 
+/**
+ * @param {Context} context
+ * @return {Array<{title: string, payload: string}>}
+ */
 function getMeetingFrequency(context) {
   return MeetingFrequency.reduce((l, m) => {
       l.push({
