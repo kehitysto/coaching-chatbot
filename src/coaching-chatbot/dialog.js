@@ -377,7 +377,8 @@ bot
           session.next();
         },
         (session) => {
-          if (session.context.pairRequests.length <= 0) {
+          if (!session.context.pairRequests ||
+              session.context.pairRequests.length <= 0) {
             return session.endDialog();
           }
 
@@ -414,9 +415,6 @@ bot
       ], [
         ['#BREAK_PAIR', (session) => {
           session.runActions(['breakPair']);
-
-          // end dialog twice to get back to /profile
-          session.endDialog();
           session.endDialog();
         }],
       ])

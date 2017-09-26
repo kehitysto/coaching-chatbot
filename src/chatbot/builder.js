@@ -17,8 +17,8 @@ class Builder {
   /**
    * Register a dialog with the bot
    * @param {string} stateId
-   * @param {Array<Function>|function(Session, string)} substates
-   * @param {Array} intents
+   * @param {Array<dialogHandler>|function(Session, string)} substates
+   * @param {dialogHandler|Array<Array<string|dialogHandler>>} intents
    * @return {Builder}
    */
   dialog(stateId, substates, intents = []) {
@@ -52,6 +52,11 @@ class Builder {
     return this;
   }
 
+  /**
+   * Register a match-making function for the given intent id
+   * @param {string} intentId
+   * @param {dialogHandler} fn
+   */
   match(intentId, fn) {
     log.debug('Registering a global intent {0}', intentId);
     this._match[intentId] = fn;
