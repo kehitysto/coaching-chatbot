@@ -31,12 +31,10 @@ module.exports = class DynamoDBProvider {
     const params = {
       Limit: 50,
       FilterExpression: 'context.searching = :true AND ' +
-                        'context.meetingFrequency = :freq AND ' +
                         '(NOT id = :id) AND ' +
                         '(NOT contains(context.pairRequests, :id)) AND ' +
                         '(NOT contains(context.rejectedPeers, :id))',
       ExpressionAttributeValues: { ':true': true,
-                                   ':freq': meetingFrequency,
                                    ':id': id },
       ProjectionExpression: 'id',
     };

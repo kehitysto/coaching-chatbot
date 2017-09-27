@@ -146,7 +146,7 @@ bot
         // check if all methods have been filled and
         // go to dumping automatically if so
         if (session.allCommunicationMethodsFilled()) {
-          session.switchDialog('/add_meeting_frequency');
+          session.switchDialog('/confirm_permission');
         } else {
           session.addResult('@CONFIRM_COMMUNICATION_METHODS');
           session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS', [
@@ -159,7 +159,7 @@ bot
         if (session.checkIntent('#YES')) {
           session.resetDialog();
         } else if (session.checkIntent('#NO')) {
-          session.switchDialog('/add_meeting_frequency');
+          session.switchDialog('/confirm_permission');
         } else {
           session.addResult('@UNCLEAR');
           session.prev();
@@ -275,12 +275,12 @@ bot
     '/find_pair', [
       (session) => {
         if (session.getCommunicationMethodsCount() === 0) {
-          session.addResult('@NO_METHODS_ADDED', [Builder.QuickReplies.create(
-              '@YES'),
+          session.addResult('@NO_METHODS_ADDED', [
+            Builder.QuickReplies.create('@YES'),
             Builder.QuickReplies.create('@NO'),
           ]);
         } else {
-          session.switchDialog('/add_meeting_frequency');
+          session.switchDialog('/confirm_permission');
         }
       },
       (session) => {

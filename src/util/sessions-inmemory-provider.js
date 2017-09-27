@@ -38,7 +38,6 @@ module.exports = class InMemoryProvider {
         let session = this.db[sessionId];
 
         if (session.searching === true &&
-            session.meetingFrequency === meetingFrequency &&
             (!session.pairRequests || !session.pairRequests.includes(id)) &&
             (!session.rejectedPeers || !session.rejectedPeers.includes(id))) {
           log.silly('Found a valid pair!');
