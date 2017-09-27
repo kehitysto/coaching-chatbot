@@ -24,9 +24,9 @@ module.exports = class InMemoryProvider {
     return Promise.resolve(this.db[sessionId]);
   }
 
-  getAvailablePairs(id, meetingFrequency) {
+  getAvailablePairs(id) {
     return new Promise((resolve, reject) => {
-      log.silly('Id: {0}; Frequency: {1}', id, meetingFrequency);
+      log.silly('Id: {0}', id);
 
       let pairs = [];
 

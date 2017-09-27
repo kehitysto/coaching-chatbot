@@ -167,26 +167,6 @@ bot
       },
     ])
   .dialog(
-    '/add_meeting_frequency', [
-      (session) => {
-        session.addResult('@REQUEST_MEETING_FREQUENCY',
-          PersonalInformationFormatter.getMeetingFrequency(session.context));
-      },
-      (session) => {
-        if (session.checkIntent('#MEETING_FREQUENCIES')) {
-          session.runActions([
-            'addMeetingFrequency',
-          ]);
-          session.addResult('@CHANGE_MEETING_FREQUENCY');
-          session.switchDialog('/confirm_permission');
-        } else {
-          session.addResult('@UNCLEAR');
-          session.resetDialog();
-        }
-      },
-    ]
-  )
-  .dialog(
     '/confirm_permission', [
       (session) => {
         if (session.context.searching) {
@@ -346,10 +326,6 @@ bot
         return session.prev();
       },
     ], [
-      ['#CHANGE_MEETING_FREQUENCY', (session) => {
-        session.resetDialog();
-        session.beginDialog('/add_meeting_frequency', true);
-      }],
       ['#STOP_SEARCHING', (session) => {
         session.resetDialog();
         session.beginDialog('/stop_searching', true);

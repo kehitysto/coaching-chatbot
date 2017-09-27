@@ -150,25 +150,6 @@ describe('User story', function() {
     });
 
   describe(
-    'As a registered user I don\'t want to be able to change my preferred meeting frequency before I have added any info for my communication methods',
-    function() {
-      it(
-        'should show the user their profile information again when user tries to change the meeting frequency',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'muuta tapaamisväliä'))
-            .to.eventually.become([
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation),
-                PersonalInformationFormatter.getPersonalInformationbuttons(
-                  this.context))
-            ]);
-        }
-      );
-    });
-
-  describe(
     'As a registered user I want to provide my age to the bot',
     function() {
       it(
@@ -406,7 +387,7 @@ describe('User story', function() {
     'As a user searching for a pair I want to get a list of other users wanting to meet as often as I do',
     function() {
       it(
-        'should provide user with the list of users who has same meeting frequency',
+        'should provide user with the list of users',
         function() {
           const testUser = {
             name: 'Matti',
@@ -414,7 +395,6 @@ describe('User story', function() {
             communicationMethods: {
               SKYPE: 'Matti123',
             },
-            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
             searching: true,
           };
 
@@ -449,7 +429,6 @@ describe('User story', function() {
             communicationMethods: {
               SKYPE: 'Matti123',
             },
-            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
             searching: true,
           };
 
@@ -461,7 +440,6 @@ describe('User story', function() {
             communicationMethods: {
               SKYPE: 'Laura123',
             },
-            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
             searching: false,
           };
 
@@ -533,7 +511,6 @@ describe('User story', function() {
             communicationMethods: {
               SKYPE: 'Matti123',
             },
-            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
             searching: true,
           };
 

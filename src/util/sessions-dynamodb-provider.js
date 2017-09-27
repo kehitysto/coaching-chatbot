@@ -27,7 +27,7 @@ module.exports = class DynamoDBProvider {
     });
   }
 
-  getAvailablePairs(id, meetingFrequency) {
+  getAvailablePairs(id) {
     const params = {
       Limit: 50,
       FilterExpression: 'context.searching = :true AND ' +
