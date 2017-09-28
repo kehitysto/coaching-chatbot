@@ -124,7 +124,51 @@ bot
       },
     ])
   .dialog(
+    '/communication_methods', [
+    (session) => {
+      if (session.getCommunicationMethodsCount() === 0) {
+        session.switchDialog('/add_communication_method');
+      } else {
+        session.addResult('@CONFIRM_COMMUNICATION_METHODS');
+        session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS', [
+          Builder.QuickReplies.create('@YES'),
+          Builder.QuickReplies.create('@NO'),
+        ]);
+      }
+    },
+    (session) => {
+      if (session.checkIntent('#YES')) {
+        session.switchDialog('/add_communication_method');
+      } else if (session.checkIntent('#NO')) {
+        session.switchDialog('/add_meeting_frequency');
+      } else {
+        session.addResult('@UNCLEAR');
+        session.prev();
+      }
+    },
+  ])
+  .dialog(
     '/add_communication_method', [
+    (session) => {
+      session.addResult('@REQUEST_COMMUNICATION_METHOD',
+        CommunicationMethodsFormatter
+            .getCommunicationMethods({})
+      );
+    },
+    (session) => {
+      if (session.checkIntent('#COMMUNICATION_METHODS')) {
+        session.runActions(['addCommunicationMethod']);
+      } else {
+        session.addResult('@UNCLEAR');
+        session.resetDialog();
+      }
+    },
+    (session) => {
+      session.runActions(['addCommunicationInfo']);
+      session.switchDialog('/communication_methods');
+    },
+  ])
+  .dialog('/add_communication_method_traditional', [
       (session) => {
         session.addResult('@REQUEST_COMMUNICATION_METHOD',
           CommunicationMethodsFormatter
@@ -286,7 +330,7 @@ bot
       (session) => {
         if (session.checkIntent('#YES')) {
           session.prev();
-          session.switchDialog('/add_communication_method');
+          session.switchDialog('/add_communication_method_traditional');
         } else if (session.checkIntent('#NO')) {
           session.endDialog();
         } else {
