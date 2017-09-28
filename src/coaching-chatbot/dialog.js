@@ -282,7 +282,7 @@ bot
             Builder.QuickReplies.create('@NO'),
           ]);
         } else {
-          session.switchDialog('/add_meeting_frequency');
+          session.switchDialog('/communication_methods');
         }
       },
       (session) => {
