@@ -368,9 +368,6 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, '040-123123'))
             .to.eventually.become([
-<<<<<<< Updated upstream
-              buildResponse('@PERMISSION_TO_RECEIVE_MESSAGES', [{
-=======
               buildResponse(PersonalInformationFormatter.formatFromTemplate(
                 '@CONFIRM_COMMUNICATION_METHODS', {
                   communicationMethods: {
@@ -380,14 +377,11 @@ describe('User story', function() {
                   }
                 })),
               buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
->>>>>>> Stashed changes
                 'title': 'Kyllä',
                 'payload': '@YES',
               }, {
                 'title': 'Ei',
                 'payload': '@NO',
-<<<<<<< Updated upstream
-=======
               }]),
             ]);
         }
@@ -405,7 +399,6 @@ describe('User story', function() {
               }, {
                 'title': 'Ei',
                 'payload': '@NO',
->>>>>>> Stashed changes
               }])
             ]);
         }
@@ -599,9 +592,6 @@ describe('User story', function() {
           return expect(
               this.bot.receive(SESSION, 'etsi pari'))
             .to.eventually.become([
-<<<<<<< Updated upstream
-              buildResponse('@PERMISSION_TO_RECEIVE_MESSAGES', [{
-=======
               buildResponse(PersonalInformationFormatter.formatFromTemplate(
                 '@CONFIRM_COMMUNICATION_METHODS', {
                   communicationMethods: {
@@ -611,17 +601,12 @@ describe('User story', function() {
                   }
                 })),
               buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
->>>>>>> Stashed changes
                 'title': 'Kyllä',
                 'payload': '@YES',
               }, {
                 'title': 'Ei',
                 'payload': '@NO',
-<<<<<<< Updated upstream
-              }])
-=======
               }]),
->>>>>>> Stashed changes
             ]);
         }
       );
