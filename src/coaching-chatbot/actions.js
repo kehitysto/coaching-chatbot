@@ -11,17 +11,22 @@ import PairFormatter from '../lib/pair-formatter';
 import Sessions from '../util/sessions-service';
 import Pairs from '../util/pairs-service';
 import AcceptedPairFormatter from '../lib/accepted-pair-formatter';
+import Feedback from '../util/feedback-service';
+
 
 import Chatbot from '../chatbot/chatbot-service';
 import dialog from './dialog';
 
 export function setName({ context, input }) {
-  return Promise.resolve({
-    context: {
-      ...context,
-      name: input,
-    },
-  });
+  return Messenger.getUserProfile(context.sessionId, input)
+    .then(({ firstName, lastName }) => {
+      return Promise.resolve({
+        context: {
+          ...context,
+          name: firstName + lastName,
+        },
+      });
+   });
 }
 
 export function setJob({ context, input }) {
@@ -391,4 +396,19 @@ export function addPairRequest({ sessionId, context }) {
       });
     }
   });
+}
+
+export function giveFeedback({ sessionId, input }) {
+  let pairs = new Pairs();
+  let feedback = new Feedback();
+
+  return pairs.read(sessionId)
+      .then((pairList) => {
+        const pairId = pairList[0];
+        if (pairId === undefined) return Promise.reject();
+
+        return feedback.createFeedback({
+          giver: sessionId, pair: pairId, feedback: input,
+        });
+      });
 }
