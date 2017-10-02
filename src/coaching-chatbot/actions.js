@@ -145,15 +145,39 @@ export function markUserAsSearching({ context }) {
 }
 
 export function markUserAsNotSearching({ context }) {
-    return Promise.resolve({
-        context: {
+  return Promise.resolve({
+    context: {
             ...context,
             rejectedPeers: [],
             availablePeers: [],
             pairRequests: [],
+            sentRequests: [],
             searching: false,
         },
-    });
+  });
+}
+
+export function removeSentRequests(id, requests){
+  let sessions = new Sessions();
+  for (let request of requests) {
+    console.log("sisällä?");
+    console.log(request);
+    sessions.read(request)
+      .then((peer) => {
+        console.log("SISEMÄÄÄ");
+        console.log("paskaaaaa " + peer.pairRequests);
+        let index = peer.pairRequests.indexOf(parseInt(id));
+        console.log("index on " + index)
+        if (index > -1) {
+          console.log("homo1" + peer.pairRequests);
+          peer.pairRequests.splice(index, 1);
+          console.log("homo2" + peer.pairRequests);
+
+          sessions.write(request, peer);
+        }
+      }
+      );
+  }
 }
 
 export function updateAvailablePeers({ sessionId, context }) {
@@ -276,6 +300,8 @@ export function acceptRequest({ sessionId, context }) {
         return sessions.read(chosenPeerId)
             .then((chosenPeer) => {
               const peer = { context: { ...chosenPeer } };
+              let chosenPeerSentRequests = peer.context.sentRequests || [];
+              removeSentRequests(chosenPeerId, chosenPeerSentRequests);
               return markUserAsNotSearching(peer);
             }
           )
@@ -299,7 +325,12 @@ export function acceptRequest({ sessionId, context }) {
           return Promise.all(promises);
         });
       })
-      .then(() => markUserAsNotSearching({ context }));
+      .then(() => {
+        console.log("VITUN JUSSI" + context.sentRequests);
+        removeSentRequests(sessionId, context.sentRequests || []);
+        return markUserAsNotSearching({ context });
+        }
+      );
 }
 
 export function breakPair({ sessionId, userData, context }) {
@@ -339,7 +370,6 @@ export function breakPair({ sessionId, userData, context }) {
 
 export function breakAllPairs({ sessionId }) {
   let pairs = new Pairs();
-  let sessions = new Sessions();
 
   return pairs.read(sessionId)
       .then((pairList) => {
@@ -347,23 +377,6 @@ export function breakAllPairs({ sessionId }) {
         for (let pairId of pairList) {
           promises.push(
             pairs.breakPair(sessionId, pairId)
-            .then(() => sessions.read(pairId))
-            .then((context) => sessions.write(
-              pairId,
-              {
-                ...context,
-                state: '/?0/profile?0',
-              }
-            ))
-            .then(() => {
-              return Messenger.send(
-                pairId,
-                PersonalInformationFormatter.format(
-                  strings['@NOTIFY_PAIR_BROKEN'],
-                  { pairName: context.name }
-                )
-              );
-            })
           );
         }
         return Promise.all(promises);
@@ -395,6 +408,8 @@ export function addPairRequest({ sessionId, context }) {
     if (chosenPeer.searching) {
       chosenPeer.pairRequests = chosenPeer.pairRequests || [];
       chosenPeer.pairRequests.push(sessionId);
+      context.sentRequests = context.sentRequsts || [];
+      context.sentRequests.push(parseInt(peerId));
 
       return session.write(peerId, chosenPeer)
           .then(() => {
@@ -406,6 +421,9 @@ export function addPairRequest({ sessionId, context }) {
                 strings['@STOP_SEARCHING'],
               ])
             );
+          })
+          .then(() => {
+            return session.write(sessionId, context);
           })
           .then(() => {
             return {

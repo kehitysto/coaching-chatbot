@@ -534,6 +534,7 @@ describe('coaching-bot actions', function() {
             rejectedPeers: [],
             pairRequests: [],
             searching: false,
+            sentRequests: []
           },
         });
     });
@@ -775,6 +776,7 @@ describe('coaching-bot actions', function() {
             pairRequests: [],
             rejectedPeers: [],
             searching: false,
+            sentRequests: []
           }
         };
 
