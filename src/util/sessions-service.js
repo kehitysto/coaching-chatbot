@@ -32,7 +32,7 @@ module.exports = class Sessions {
     return this.db.write(id, context);
   }
 
-  getAvailablePairs(id, meetingFrequency) {
-    return this.db.getAvailablePairs(id, meetingFrequency);
+  getAvailablePairs(id) {
+    return this.db.getAvailablePairs(id);
   }
 };

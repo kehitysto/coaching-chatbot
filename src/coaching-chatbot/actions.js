@@ -125,15 +125,6 @@ export function reset() {
     context: {},
   });
 }
-export function addMeetingFrequency( { context, input } ) {
-  return Promise.resolve({
-    context: {
-      ...context,
-      meetingFrequency: PersonalInformationFormatter
-        .getMeetingFrequencyIdentifierByInput(input),
-    },
-  });
-}
 
 export function markUserAsSearching({ context }) {
   return Promise.resolve({
@@ -162,7 +153,7 @@ export function updateAvailablePeers({ sessionId, context }) {
 
     const rejectedPeers = context.rejectedPeers || [];
 
-    return sessions.getAvailablePairs(sessionId, context.meetingFrequency)
+    return sessions.getAvailablePairs(sessionId)
       .then((pairs) => {
         resolve({
           context: {

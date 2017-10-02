@@ -14,7 +14,6 @@ declare class Context {
     place: string;
     bio: string;
     communicationMethods: {};
-    meetingFrequency: string;
     searching: boolean;
     availablePeers: (number|string)[];
     pairRequests: (number|string)[];

@@ -24,8 +24,6 @@
   "@PROVIDE_OTHER_COMMUNICATION_METHODS": "Do you want to add another method of communication?",
   "@CONFIRM_COMMUNICATION_METHODS": "You have added these methods of communication: {communicationMethods}",
   "@NO_METHODS_ADDED": "You have not added any methods of communication, would you like to add one now",
-  "@REQUEST_MEETING_FREQUENCY": "How often would you like to meet with your peer?",
-  "@CHANGE_MEETING_FREQUENCY": "Thank you. If you like to change your meeting frequency, write 'muuta tapaamisväliä'.",
   "@NO_PAIRS_AVAILABLE": "Sorry but we could not find a peer for you. You can wait for someone to connect you or check available peers later by writing 'tarkista'.",
   "@PERMISSION_TO_RECEIVE_MESSAGES": "Can i show your profile to others and inform you if someone wants to connect with you?",
   "@TELL_HOW_TO_STOP_SEARCH": "If you like to exit peer search write 'lopeta haku'",

@@ -140,7 +140,7 @@ bot
       if (session.checkIntent('#YES')) {
         session.switchDialog('/add_communication_method');
       } else if (session.checkIntent('#NO')) {
-        session.switchDialog('/add_meeting_frequency');
+        session.switchDialog('/confirm_permission');
       } else {
         session.addResult('@UNCLEAR');
         session.prev();
@@ -149,45 +149,25 @@ bot
   ])
   .dialog(
     '/add_communication_method', [
-    (session) => {
-      session.addResult('@REQUEST_COMMUNICATION_METHOD',
-        CommunicationMethodsFormatter
-            .getCommunicationMethods({})
-      );
-    },
-    (session) => {
-      if (session.checkIntent('#COMMUNICATION_METHODS')) {
-        session.runActions(['addCommunicationMethod']);
-      } else {
-        session.addResult('@UNCLEAR');
-        session.resetDialog();
-      }
-    },
-    (session) => {
-      session.runActions(['addCommunicationInfo']);
-      session.switchDialog('/communication_methods');
-    },
-  ])
-  .dialog(
-    '/add_meeting_frequency', [
       (session) => {
-        session.addResult('@REQUEST_MEETING_FREQUENCY',
-          PersonalInformationFormatter.getMeetingFrequency(session.context));
+        session.addResult('@REQUEST_COMMUNICATION_METHOD',
+          CommunicationMethodsFormatter
+              .getCommunicationMethods({})
+        );
       },
       (session) => {
-        if (session.checkIntent('#MEETING_FREQUENCIES')) {
-          session.runActions([
-            'addMeetingFrequency',
-          ]);
-          session.addResult('@CHANGE_MEETING_FREQUENCY');
-          session.switchDialog('/confirm_permission');
+        if (session.checkIntent('#COMMUNICATION_METHODS')) {
+          session.runActions(['addCommunicationMethod']);
         } else {
           session.addResult('@UNCLEAR');
           session.resetDialog();
         }
       },
-    ]
-  )
+      (session) => {
+        session.runActions(['addCommunicationInfo']);
+        session.switchDialog('/communication_methods');
+      },
+  ])
   .dialog(
     '/confirm_permission', [
       (session) => {
@@ -277,8 +257,8 @@ bot
     '/find_pair', [
       (session) => {
         if (session.getCommunicationMethodsCount() === 0) {
-          session.addResult('@NO_METHODS_ADDED', [Builder.QuickReplies.create(
-              '@YES'),
+          session.addResult('@NO_METHODS_ADDED', [
+            Builder.QuickReplies.create('@YES'),
             Builder.QuickReplies.create('@NO'),
           ]);
         } else {
@@ -348,10 +328,6 @@ bot
         return session.prev();
       },
     ], [
-      ['#CHANGE_MEETING_FREQUENCY', (session) => {
-        session.resetDialog();
-        session.beginDialog('/add_meeting_frequency', true);
-      }],
       ['#STOP_SEARCHING', (session) => {
         session.resetDialog();
         session.beginDialog('/stop_searching', true);
