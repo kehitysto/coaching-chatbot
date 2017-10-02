@@ -157,22 +157,14 @@ export function markUserAsNotSearching({ context }) {
   });
 }
 
-export function removeSentRequests(id, requests){
+export function removeSentRequests(id, requests) {
   let sessions = new Sessions();
   for (let request of requests) {
-    console.log("sisällä?");
-    console.log(request);
     sessions.read(request)
       .then((peer) => {
-        console.log("SISEMÄÄÄ");
-        console.log("paskaaaaa " + peer.pairRequests);
         let index = peer.pairRequests.indexOf(parseInt(id));
-        console.log("index on " + index)
         if (index > -1) {
-          console.log("homo1" + peer.pairRequests);
           peer.pairRequests.splice(index, 1);
-          console.log("homo2" + peer.pairRequests);
-
           sessions.write(request, peer);
         }
       }
@@ -326,7 +318,6 @@ export function acceptRequest({ sessionId, context }) {
         });
       })
       .then(() => {
-        console.log("VITUN JUSSI" + context.sentRequests);
         removeSentRequests(sessionId, context.sentRequests || []);
         return markUserAsNotSearching({ context });
         }
