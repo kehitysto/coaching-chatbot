@@ -1,6 +1,6 @@
-import sinon from 'sinon';
+import * as sinon from 'sinon';
 
-import Session from '../../../src/chatbot/session.js';
+import * as Session from '../../../src/chatbot/session.js';
 
 describe('chatbot sessions', function() {
   beforeEach(function() {

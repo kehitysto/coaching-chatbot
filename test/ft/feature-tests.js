@@ -1,15 +1,15 @@
 // normally undefined, set to 'dev' for local client only
 process.env.RUN_ENV = 'dev';
 
-import Builder from '../../src/chatbot/builder';
-import Chatbot from '../../src/chatbot/chatbot-service';
+import * as Builder from '../../src/chatbot/builder';
+import * as Chatbot from '../../src/chatbot/chatbot-service';
 import dialog from '../../src/coaching-chatbot/dialog';
-import Strings from '../../src/coaching-chatbot/strings.json';
+import * as Strings from '../../src/coaching-chatbot/strings.json';
 import PersonalInformationFormatter
 from '../../src/lib/personal-information-formatter-service';
 import CommunicationMethodsFormatter
 from '../../src/lib/communication-methods-formatter';
-import Sessions from '../../src/util/sessions-service';
+import * as Sessions from '../../src/util/sessions-service';
 import PairFormatter
 from '../../src/lib/pair-formatter';
 
@@ -298,8 +298,7 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
                 CommunicationMethodsFormatter
-                .getCommunicationMethods(this.sessions.db.dump()[
-                  SESSION])),
+                .getCommunicationMethods({})),
             ]);
         }
       );
@@ -347,8 +346,7 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
                 CommunicationMethodsFormatter
-                .getCommunicationMethods(this.sessions.db.dump()[
-                  SESSION])),
+                .getCommunicationMethods({})),
             ]);
         }
       );
@@ -365,10 +363,41 @@ describe('User story', function() {
       );
 
       it(
-        'should go straight to pair searching after all methods are given',
+        'should not go straight to pair searching after all methods are given',
         function() {
           return expect(
               this.bot.receive(SESSION, '040-123123'))
+            .to.eventually.become([
+<<<<<<< Updated upstream
+              buildResponse('@PERMISSION_TO_RECEIVE_MESSAGES', [{
+=======
+              buildResponse(PersonalInformationFormatter.formatFromTemplate(
+                '@CONFIRM_COMMUNICATION_METHODS', {
+                  communicationMethods: {
+                    SKYPE: 'nickname',
+                    PHONE: '040-123123',
+                    CAFETERIA: '040-123123'
+                  }
+                })),
+              buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
+>>>>>>> Stashed changes
+                'title': 'Kyllä',
+                'payload': '@YES',
+              }, {
+                'title': 'Ei',
+                'payload': '@NO',
+<<<<<<< Updated upstream
+=======
+              }]),
+            ]);
+        }
+      );
+
+      it(
+        'should go to pair searching after refusing from giving any communication methods',
+        function() {
+          return expect(
+            this.bot.receive(SESSION, 'ei'))
             .to.eventually.become([
               buildResponse('@PERMISSION_TO_RECEIVE_MESSAGES', [{
                 'title': 'Kyllä',
@@ -376,6 +405,7 @@ describe('User story', function() {
               }, {
                 'title': 'Ei',
                 'payload': '@NO',
+>>>>>>> Stashed changes
               }])
             ]);
         }
@@ -564,10 +594,44 @@ describe('User story', function() {
         }
       );
       it(
-        'should go straight to pair searching after all methods are given',
+        'should go to communication methods even if all methods are given',
         function() {
           return expect(
               this.bot.receive(SESSION, 'etsi pari'))
+            .to.eventually.become([
+<<<<<<< Updated upstream
+              buildResponse('@PERMISSION_TO_RECEIVE_MESSAGES', [{
+=======
+              buildResponse(PersonalInformationFormatter.formatFromTemplate(
+                '@CONFIRM_COMMUNICATION_METHODS', {
+                  communicationMethods: {
+                    SKYPE: 'nickname',
+                    PHONE: '040-123123',
+                    CAFETERIA: '040-123123'
+                  }
+                })),
+              buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
+>>>>>>> Stashed changes
+                'title': 'Kyllä',
+                'payload': '@YES',
+              }, {
+                'title': 'Ei',
+                'payload': '@NO',
+<<<<<<< Updated upstream
+              }])
+=======
+              }]),
+>>>>>>> Stashed changes
+            ]);
+        }
+      );
+      it(
+        'should ask for a confirmation after replying no to provide communication methods',
+        function() {
+          return expect(
+              this.bot.receive(
+                SESSION,
+                'ei'))
             .to.eventually.become([
               buildResponse('@PERMISSION_TO_RECEIVE_MESSAGES', [{
                 'title': 'Kyllä',
@@ -575,10 +639,10 @@ describe('User story', function() {
               }, {
                 'title': 'Ei',
                 'payload': '@NO',
-              }])
+              }]),
             ]);
         }
-      );
+      )
     }
   );
 

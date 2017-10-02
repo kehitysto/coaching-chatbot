@@ -2,7 +2,7 @@ import PersonalInformationFormatter
 from '../../../src/lib/personal-information-formatter-service';
 import PairFormatter
 from '../../../src/lib/pair-formatter';
-import Strings from '../../../src/coaching-chatbot/strings.json';
+import * as Strings from '../../../src/coaching-chatbot/strings.json';
 
 var assert = require('assert');
 

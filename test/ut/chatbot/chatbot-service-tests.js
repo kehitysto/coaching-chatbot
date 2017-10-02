@@ -1,8 +1,8 @@
-import sinon from 'sinon';
+import * as sinon from 'sinon';
 
-import Bot from '../../../src/chatbot/chatbot-service';
+import * as Bot from '../../../src/chatbot/chatbot-service';
 import dialog from '../../../src/coaching-chatbot/dialog';
-import Sessions from '../../../src/util/sessions-service';
+import * as Sessions from '../../../src/util/sessions-service';
 
 describe('chatbot-service', function() {
   beforeEach(function() {

@@ -1,5 +1,5 @@
 import log from '../lib/logger-service';
-import DynamoDBTable from './dynamodb-table';
+import * as DynamoDBTable from './dynamodb-table';
 
 module.exports = class DynamoDBProvider {
   constructor() {

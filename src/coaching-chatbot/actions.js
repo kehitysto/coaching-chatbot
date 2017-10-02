@@ -1,20 +1,20 @@
 import log from '../lib/logger-service';
-import Builder from '../chatbot/builder';
-import Messenger from '../facebook-messenger/messenger-service';
+import * as Builder from '../chatbot/builder';
+import * as Messenger from '../facebook-messenger/messenger-service';
 
-import strings from './strings.json';
+import * as strings from './strings.json';
 import PersonalInformationFormatter
  from '../lib/personal-information-formatter-service';
 import CommunicationMethodsFormatter
  from '../lib/communication-methods-formatter';
 import PairFormatter from '../lib/pair-formatter';
-import Sessions from '../util/sessions-service';
-import Pairs from '../util/pairs-service';
+import * as Sessions from '../util/sessions-service';
+import * as Pairs from '../util/pairs-service';
 import AcceptedPairFormatter from '../lib/accepted-pair-formatter';
 import Feedback from '../util/feedback-service';
 
 
-import Chatbot from '../chatbot/chatbot-service';
+import * as Chatbot from '../chatbot/chatbot-service';
 import dialog from './dialog';
 
 export function setName({ context, input }) {
@@ -335,6 +335,7 @@ export function breakPair({ sessionId, userData, context }) {
 
 export function breakAllPairs({ sessionId }) {
   let pairs = new Pairs();
+  let sessions = new Sessions();
 
   return pairs.read(sessionId)
       .then((pairList) => {
@@ -342,6 +343,23 @@ export function breakAllPairs({ sessionId }) {
         for (let pairId of pairList) {
           promises.push(
             pairs.breakPair(sessionId, pairId)
+            .then(() => sessions.read(pairId))
+            .then((context) => sessions.write(
+              pairId,
+              {
+                ...context,
+                state: '/?0/profile?0',
+              }
+            ))
+            .then(() => {
+              return Messenger.send(
+                pairId,
+                PersonalInformationFormatter.format(
+                  strings['@NOTIFY_PAIR_BROKEN'],
+                  { pairName: context.name }
+                )
+              );
+            })
           );
         }
         return Promise.all(promises);

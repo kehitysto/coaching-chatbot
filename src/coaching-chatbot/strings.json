@@ -28,7 +28,7 @@
   "@REQUEST_COMMUNICATION_METHOD": "Valitse tapa jolla haluat olla yhteydessä:",
   "@REQUEST_SKYPE_NAME": "Anna Skype-tunnuksesi.",
   "@REQUEST_PHONE_NUMBER": "Anna puhelinnumerosi.",
-  "@PROVIDE_OTHER_COMMUNICATION_METHODS": "Haluatko lisätä muita tapoja olla yhteydessä?",
+  "@PROVIDE_OTHER_COMMUNICATION_METHODS": "Haluatko lisätä muita tapoja olla yhteydessä tai muokata aiemmin lisäämiäsi?",
   "@CONFIRM_COMMUNICATION_METHODS": "Olet lisännyt seuraavat tavat olla yhteydessä: {communicationMethods}",
   "@NO_METHODS_ADDED": "Et ole vielä lisännyt yhteydenottotapojasi, etsiäksesi parin sinun on lisättävä yhteydenottotapa. Haluatko lisätä niitä nyt?",
   "@REQUEST_MEETING_FREQUENCY": "Kuinka usein haluaisit tavata parisi kanssa?",

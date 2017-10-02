@@ -21,10 +21,13 @@ declare class Context {
     state: string;
 }
 
+<<<<<<< Updated upstream
 declare class Pairs {
     private db: InMemoryProvider | DynamoDBProvider;
 }
 
+=======
+>>>>>>> Stashed changes
 declare class Promise<T> {
     static all<T>(promises: Promise<T>[]): Promise<T>
 }
@@ -52,12 +55,21 @@ declare class Session {
     runActions(actions: string[]|string, input?: string): void;
     send(message: string, quickReplies: QuickReplies)
     switchDialog(dialogId: string): void;
+<<<<<<< Updated upstream
 }
 
 declare class Sessions {
     read(sessionId: string): Promise<Context>;
 }
 
+=======
+}
+
+declare class Sessions {
+    read(sessionId: string): Promise<Context>;
+}
+
+>>>>>>> Stashed changes
 type QuickReplies = Array<{title: string, payload: string}>;
 
 declare function dialogHandler(session: Session, match?: TemplateStringsArray): void

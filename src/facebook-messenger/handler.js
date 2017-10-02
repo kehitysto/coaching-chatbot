@@ -2,8 +2,8 @@ import 'source-map-support/register';
 
 require('../lib/env-vars').config();
 
-import Messenger from './messenger-service';
-import Sessions from '../util/sessions-service';
+import * as Messenger from './messenger-service';
+import * as Sessions from '../util/sessions-service';
 import Chatbot from '../chatbot/chatbot-service';
 
 import dialog from '../coaching-chatbot/dialog';

@@ -1,4 +1,4 @@
-import request from 'request-promise';
+import * as request from 'request-promise';
 
 import log from '../lib/logger-service';
 
