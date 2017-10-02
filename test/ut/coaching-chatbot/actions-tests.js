@@ -664,24 +664,6 @@ describe('coaching-bot actions', function() {
     });
   });
 
-  describe('#nextRequest', function() {
-    it('should switch the next item in the list to be the first',
-        function() {
-        const ret = actions.nextRequest({
-            context: {
-              pairRequests: [0, 1, 2],
-            },
-        });
-
-        return expect(ret)
-            .to.become({
-            context: {
-              pairRequests: [1, 2, 0],
-            },
-            });
-    });
-  });
-
   describe('#rejectRequest', function() {
     it('should drop the first item from the list', function() {
         const ret = actions.rejectRequest({
