@@ -317,8 +317,7 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
                 CommunicationMethodsFormatter
-                .getCommunicationMethods(this.sessions.db.dump()[
-                  SESSION])),
+                .getCommunicationMethods({})),
             ]);
         }
       );
@@ -366,8 +365,7 @@ describe('User story', function() {
             .to.eventually.become([
               buildResponse('@REQUEST_COMMUNICATION_METHOD',
                 CommunicationMethodsFormatter
-                .getCommunicationMethods(this.sessions.db.dump()[
-                  SESSION])),
+                .getCommunicationMethods({})),
             ]);
         }
       );
@@ -384,10 +382,35 @@ describe('User story', function() {
       );
 
       it(
-        'should go straight to pair searching after all methods are given',
+        'should not go straight to pair searching after all methods are given',
         function() {
           return expect(
               this.bot.receive(SESSION, '040-123123'))
+            .to.eventually.become([
+              buildResponse(PersonalInformationFormatter.formatFromTemplate(
+                '@CONFIRM_COMMUNICATION_METHODS', {
+                  communicationMethods: {
+                    SKYPE: 'nickname',
+                    PHONE: '040-123123',
+                    CAFETERIA: '040-123123'
+                  }
+                })),
+              buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
+                'title': 'Kyllä',
+                'payload': '@YES',
+              }, {
+                'title': 'Ei',
+                'payload': '@NO',
+              }]),
+            ]);
+        }
+      );
+
+      it(
+        'should go to pair searching after refusing from giving any communication methods',
+        function() {
+          return expect(
+            this.bot.receive(SESSION, 'ei'))
             .to.eventually.become([
               buildResponse('@REQUEST_MEETING_FREQUENCY',
                 PersonalInformationFormatter
@@ -693,18 +716,43 @@ describe('User story', function() {
         }
       );
       it(
-        'should go straight to pair searching after all methods are given',
+        'should go to communication methods even if all methods are given',
         function() {
           return expect(
               this.bot.receive(SESSION, 'etsi pari'))
             .to.eventually.become([
-              buildResponse('@REQUEST_MEETING_FREQUENCY',
-                PersonalInformationFormatter
-                .getMeetingFrequency(this.sessions.db.dump()[SESSION])
-              )
+              buildResponse(PersonalInformationFormatter.formatFromTemplate(
+                '@CONFIRM_COMMUNICATION_METHODS', {
+                  communicationMethods: {
+                    SKYPE: 'nickname',
+                    PHONE: '040-123123',
+                    CAFETERIA: '040-123123'
+                  }
+                })),
+              buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
+                'title': 'Kyllä',
+                'payload': '@YES',
+              }, {
+                'title': 'Ei',
+                'payload': '@NO',
+              }]),
             ]);
         }
       );
+      it(
+        'should ask for meeting frequency after replying no to provide communication methods',
+        function() {
+          return expect(
+            this.bot.receive(
+              SESSION,
+              'ei'))
+          .to.eventually.become([
+            buildResponse('@REQUEST_MEETING_FREQUENCY',
+            PersonalInformationFormatter
+            .getMeetingFrequency(this.sessions.db.dump()[SESSION])),
+          ]);
+        }
+      )
     }
   );
 
