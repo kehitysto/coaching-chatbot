@@ -23,7 +23,7 @@ export function setName({ context, input }) {
       return Promise.resolve({
         context: {
           ...context,
-          name: firstName + lastName,
+          name: (firstName + ' ' + lastName).trim(),
         },
       });
    });
