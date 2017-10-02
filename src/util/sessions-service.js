@@ -20,6 +20,10 @@ module.exports = class Sessions {
         new DynamoDBProvider();
   }
 
+  /**
+   * @param {string} id Session ID
+   * @return {Promise<Context>}
+   */
   read(id) {
     return this.db.read(id);
   }
