@@ -17,7 +17,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
-        loader: 'babel-loader',
+        loader: 'awesome-typescript-loader',
       },
       { test: /\.json/, loader: 'json-loader' },
     ],

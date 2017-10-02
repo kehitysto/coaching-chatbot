@@ -1,11 +1,11 @@
-import readline from 'readline';
-import minimist from 'minimist';
-import fs from 'fs';
-import path from 'path';
+import * as readline from 'readline';
+import * as minimist from 'minimist';
+import * as fs from 'fs';
+import * as path from 'path';
 
-import Sessions from '../src/util/sessions-service';
-import Pairs from '../src/util/pairs-service';
-import Chatbot from '../src/chatbot/chatbot-service';
+import * as Sessions from '../src/util/sessions-service';
+import * as Pairs from '../src/util/pairs-service';
+import * as Chatbot from '../src/chatbot/chatbot-service';
 import dialog from '../src/coaching-chatbot/dialog';
 
 require('../src/lib/env-vars')

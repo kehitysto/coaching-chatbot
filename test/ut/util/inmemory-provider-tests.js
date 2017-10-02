@@ -1,6 +1,6 @@
-import sinon from 'sinon';
+import * as sinon from 'sinon';
 
-import InMemoryDB from '../../../src/util/sessions-inmemory-provider';
+import * as InMemoryDB from '../../../src/util/sessions-inmemory-provider';
 
 describe('Inmemory database service', function() {
   before(function() {

@@ -1,5 +1,5 @@
-import DynamoDBProvider from './sessions-dynamodb-provider';
-import InMemoryProvider from './sessions-inmemory-provider';
+import * as DynamoDBProvider from './sessions-dynamodb-provider';
+import * as InMemoryProvider from './sessions-inmemory-provider';
 
 import log from '../lib/logger-service';
 

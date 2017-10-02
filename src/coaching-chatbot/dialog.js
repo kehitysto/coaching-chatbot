@@ -1,6 +1,6 @@
-import Builder from '../chatbot/builder';
+import * as Builder from '../chatbot/builder';
 
-import strings from './strings.json';
+import * as strings from './strings.json';
 import * as actions from './actions';
 import * as intents from './intents';
 import PersonalInformationFormatter

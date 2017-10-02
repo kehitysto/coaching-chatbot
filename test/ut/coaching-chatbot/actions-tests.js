@@ -1,8 +1,8 @@
-import sinon from 'sinon';
+import * as sinon from 'sinon';
 
 import * as actions from '../../../src/coaching-chatbot/actions.js';
-import Sessions from '../../../src/util/sessions-service';
-import Pairs from '../../../src/util/pairs-service';
+import * as Sessions from '../../../src/util/sessions-service';
+import * as Pairs from '../../../src/util/pairs-service';
 
 const TEST_SESSION = 'SESSION';
 

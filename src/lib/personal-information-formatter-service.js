@@ -1,6 +1,6 @@
 import log from '../lib/logger-service';
-import Strings from '../../src/coaching-chatbot/strings.json';
-import PersonalInformation
+import * as Strings from '../../src/coaching-chatbot/strings.json';
+import * as PersonalInformation
     from '../../src/coaching-chatbot/personal-information.json';
 import CommunicationMethodsFormatter
     from '../lib/communication-methods-formatter';
