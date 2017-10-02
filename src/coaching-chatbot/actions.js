@@ -159,17 +159,20 @@ export function markUserAsNotSearching({ context }) {
 
 export function removeSentRequests(id, requests) {
   let sessions = new Sessions();
+  const promises = [];
   for (let request of requests) {
-    sessions.read(request)
+    promises.push(sessions.read(request)
       .then((peer) => {
         let index = peer.pairRequests.indexOf(parseInt(id));
         if (index > -1) {
           peer.pairRequests.splice(index, 1);
-          sessions.write(request, peer);
+          return sessions.write(request, peer);
         }
       }
-      );
+      )
+    );
   }
+  return Promise.all(promises);
 }
 
 export function updateAvailablePeers({ sessionId, context }) {
@@ -286,14 +289,13 @@ export function acceptRequest({ sessionId, context }) {
   let sessions = new Sessions();
 
   const chosenPeerId = context.pairRequests[0];
-
+  let chosenPeerSentRequests;
   return pairs.createPair(sessionId, chosenPeerId)
       .then(() => {
         return sessions.read(chosenPeerId)
             .then((chosenPeer) => {
               const peer = { context: { ...chosenPeer } };
-              let chosenPeerSentRequests = peer.context.sentRequests || [];
-              removeSentRequests(chosenPeerId, chosenPeerSentRequests);
+              chosenPeerSentRequests = peer.context.sentRequests || [];
               return markUserAsNotSearching(peer);
             }
           )
@@ -301,6 +303,10 @@ export function acceptRequest({ sessionId, context }) {
               const peer = chosenPeer.context;
               peer.state = '/?0/profile?0/accepted_pair_information?0';
               return sessions.write(chosenPeerId, peer);
+            }
+          )
+            .then(() => {
+              removeSentRequests(chosenPeerId, chosenPeerSentRequests);
             });
         })
       .then(() => {
@@ -319,9 +325,11 @@ export function acceptRequest({ sessionId, context }) {
       })
       .then(() => {
         removeSentRequests(sessionId, context.sentRequests || []);
-        return markUserAsNotSearching({ context });
         }
-      );
+      )
+      .then(() => {
+        return markUserAsNotSearching({ context });
+      });
 }
 
 export function breakPair({ sessionId, userData, context }) {
