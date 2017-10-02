@@ -75,10 +75,10 @@ const Messenger = {
     return Promise.reject(new Error('400 Bad Token'));
   },
 
-  getUserProfile(id) {
+  getUserProfile(id, input) {
     if (process.env.RUN_ENV === 'dev') {
       return Promise
-        .resolve({ firstName: 'test', lastName: 'test', profilePic: 'http://test' });
+        .resolve({ firstName: input, lastName: '', profilePic: '' });
     }
 
     if (!process.env.FACEBOOK_PAGE_ACCESS_TOKEN) {
