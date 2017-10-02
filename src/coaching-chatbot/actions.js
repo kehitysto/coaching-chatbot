@@ -330,6 +330,7 @@ export function breakPair({ sessionId, userData, context }) {
 
 export function breakAllPairs({ sessionId }) {
   let pairs = new Pairs();
+  let sessions = new Sessions();
 
   return pairs.read(sessionId)
       .then((pairList) => {
@@ -337,6 +338,23 @@ export function breakAllPairs({ sessionId }) {
         for (let pairId of pairList) {
           promises.push(
             pairs.breakPair(sessionId, pairId)
+            .then(() => sessions.read(pairId))
+            .then((context) => sessions.write(
+              pairId,
+              {
+                ...context,
+                state: '/?0/profile?0',
+              }
+            ))
+            .then(() => {
+              return Messenger.send(
+                pairId,
+                PersonalInformationFormatter.format(
+                  strings['@NOTIFY_PAIR_BROKEN'],
+                  { pairName: context.name }
+                )
+              );
+            })
           );
         }
         return Promise.all(promises);
