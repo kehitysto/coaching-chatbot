@@ -384,18 +384,37 @@ bot
         },
       ])
   .dialog(
-      '/accepted_pair_information', [
-        (session) => {
-          session.addResult('@PAIR_CREATED');
-          session.runActions(['displayAcceptedPeer']);
-          session.addResult('@LINK_TO_HELP');
-        },
-      ], [
-        ['#BREAK_PAIR', (session) => {
-          session.runActions(['breakPair']);
-          session.endDialog();
-        }],
-      ])
+    '/accepted_pair_information', [
+      (session) => {
+        session.addResult('@PAIR_CREATED');
+        session.runActions(['displayAcceptedPeer']);
+        session.addResult('@LINK_TO_HELP');
+      },
+    ], [
+      ['#BREAK_PAIR', (session) => {
+        session.runActions(['breakPair']);
+        session.endDialog();
+      }],
+      ['#GIVE_FEEDBACK', (session) => {
+        session.resetDialog();
+        session.beginDialog('/give_feedback', true);
+      }],
+    ])
+.dialog(
+    '/give_feedback', [
+      (session) => {
+        // todo: check if feedback given for the meeting already exists
+        session.addResult('@FEEDBACK_ABOUT_MEETING');
+      },
+      (session) => {
+        session.runActions(['giveFeedback']);
+        session.next();
+      },
+      (session) => {
+        session.addResult('@THANKS_FOR_FEEDBACK');
+        session.endDialog();
+      },
+    ])
   .dialog(
       '/stop_searching', [
         (session) => {
