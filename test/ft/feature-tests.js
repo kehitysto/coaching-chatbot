@@ -611,17 +611,21 @@ describe('User story', function() {
         }
       );
       it(
-        'should ask for meeting frequency after replying no to provide communication methods',
+        'should ask for a confirmation after replying no to provide communication methods',
         function() {
           return expect(
-            this.bot.receive(
-              SESSION,
-              'ei'))
-          .to.eventually.become([
-            buildResponse('@REQUEST_MEETING_FREQUENCY',
-            PersonalInformationFormatter
-            .getMeetingFrequency(this.sessions.db.dump()[SESSION])),
-          ]);
+              this.bot.receive(
+                SESSION,
+                'ei'))
+            .to.eventually.become([
+              buildResponse('@PERMISSION_TO_RECEIVE_MESSAGES', [{
+                'title': 'Kyllä',
+                'payload': '@YES',
+              }, {
+                'title': 'Ei',
+                'payload': '@NO',
+              }]),
+            ]);
         }
       )
     }

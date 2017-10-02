@@ -140,7 +140,7 @@ bot
       if (session.checkIntent('#YES')) {
         session.switchDialog('/add_communication_method');
       } else if (session.checkIntent('#NO')) {
-        session.switchDialog('/add_meeting_frequency');
+        session.switchDialog('/confirm_permission');
       } else {
         session.addResult('@UNCLEAR');
         session.prev();
