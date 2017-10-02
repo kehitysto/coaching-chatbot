@@ -161,9 +161,10 @@ export function removeSentRequests(id, requests) {
   let sessions = new Sessions();
   const promises = [];
   for (let request of requests) {
-    promises.push(sessions.read(request)
-      .then((peer) => {
-        let index = peer.pairRequests.indexOf(parseInt(id));
+    promises.push(
+      sessions.read(request)
+        .then((peer) => {
+        let index = peer.pairRequests.indexOf(id);
         if (index > -1) {
           peer.pairRequests.splice(index, 1);
           return sessions.write(request, peer);
@@ -172,7 +173,8 @@ export function removeSentRequests(id, requests) {
       )
     );
   }
-  return Promise.all(promises);
+  return Promise.all(promises)
+  ;
 }
 
 export function updateAvailablePeers({ sessionId, context }) {
@@ -306,7 +308,7 @@ export function acceptRequest({ sessionId, context }) {
             }
           )
             .then(() => {
-              removeSentRequests(chosenPeerId, chosenPeerSentRequests);
+              return removeSentRequests(chosenPeerId, chosenPeerSentRequests);
             });
         })
       .then(() => {
@@ -324,7 +326,7 @@ export function acceptRequest({ sessionId, context }) {
         });
       })
       .then(() => {
-        removeSentRequests(sessionId, context.sentRequests || []);
+        return removeSentRequests(sessionId, context.sentRequests || []);
         }
       )
       .then(() => {
