@@ -309,13 +309,10 @@ bot
         session.addQuickReplies([
           Builder.QuickReplies.create('@YES'),
           Builder.QuickReplies.create('@NO'),
-          Builder.QuickReplies.create('@LATER'),
         ]);
       },
       (session) => {
-        if (session.checkIntent('#NEXT')) {
-          session.runActions(['nextAvailablePeer']);
-        } else if (session.checkIntent('#NO')) {
+        if (session.checkIntent('#NO')) {
           session.runActions(['rejectAvailablePeer']);
           session.runActions(['nextAvailablePeer']);
         } else if (session.checkIntent('#YES')) {
@@ -365,13 +362,10 @@ bot
           session.addQuickReplies([
             Builder.QuickReplies.create('@YES'),
             Builder.QuickReplies.create('@NO'),
-            Builder.QuickReplies.create('@LATER'),
           ]);
         },
         (session) => {
-          if (session.checkIntent('#NEXT')) {
-            session.runActions(['nextRequest']);
-          } else if (session.checkIntent('#NO')) {
+          if (session.checkIntent('#NO')) {
             session.runActions(['rejectRequest']);
           } else if (session.checkIntent('#YES')) {
             session.runActions(['acceptRequest']);

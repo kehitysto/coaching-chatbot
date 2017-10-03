@@ -13,7 +13,6 @@ import * as Pairs from '../util/pairs-service';
 import AcceptedPairFormatter from '../lib/accepted-pair-formatter';
 import Feedback from '../util/feedback-service';
 
-
 import * as Chatbot from '../chatbot/chatbot-service';
 import dialog from './dialog';
 
@@ -234,16 +233,6 @@ export function rejectAvailablePeer({ context }) {
     context: {
       ...context,
       rejectedPeers,
-    },
-  });
-}
-
-export function nextRequest({ context }) {
-  return Promise.resolve({
-    context: {
-      ...context,
-      pairRequests: context.pairRequests.slice(1).concat(
-          context.pairRequests.slice(0, 1)),
     },
   });
 }
