@@ -296,7 +296,9 @@ bot
         }
 
         if (session.context.availablePeers.length <= 0) {
-          return session.addResult('@NO_PAIRS_AVAILABLE');
+          return session.addResult('@NO_PAIRS_AVAILABLE', [
+            Builder.QuickReplies.create('@SHOW_REQUESTS'),
+          ]);
         }
 
         session.addResult('@INFORMATION_ABOUT_LIST');

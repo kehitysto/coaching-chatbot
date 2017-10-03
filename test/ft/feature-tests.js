@@ -203,7 +203,7 @@ describe('User story', function() {
           'after user has given his bio, it should confirm and ask for more information',
           function() {
             this.userInformation.bio = 'My long bio in long text';
-  
+
             return expect(
                 this.bot.receive(
                   SESSION,
@@ -218,7 +218,7 @@ describe('User story', function() {
               ]);
           });
       });
-  
+
 
   describe(
     'As a registered user I want to provide my acceptable methods of communication with quick replies',
@@ -496,7 +496,10 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'kyllä'))
             .to.eventually.become([
               buildResponse('@CONFIRM_NEW_PEER_ASK'),
-              buildResponse('@NO_PAIRS_AVAILABLE'),
+              buildResponse('@NO_PAIRS_AVAILABLE',  [{
+                'title': 'Näytä pyynnöt',
+                'payload': '@SHOW_REQUESTS',
+              }]),
             ])
             .then(() => expect(this.sessions.read('ID'))
                 .to.eventually.include.keys({ 'pairRequests': [SESSION] }));
