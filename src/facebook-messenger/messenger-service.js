@@ -78,7 +78,7 @@ const Messenger = {
   getUserProfile(id, input) {
     if (process.env.RUN_ENV === 'dev') {
       return Promise
-        .resolve({ firstName: input, lastName: '', profilePic: '' });
+        .resolve({ first_name: input, last_name: '', profilePic: '' });
     }
 
     if (!process.env.FACEBOOK_PAGE_ACCESS_TOKEN) {
