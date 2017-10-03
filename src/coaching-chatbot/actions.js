@@ -16,8 +16,8 @@ import * as Feedback from '../util/feedback-service';
 import * as Chatbot from '../chatbot/chatbot-service';
 import dialog from './dialog';
 
-export function setName({ context, input }) {
-  return Messenger.getUserProfile(context.sessionId, input)
+export function setName({ context, sessionId, input }) {
+  return Messenger.getUserProfile(sessionId, input)
     .then((profile) => {
       const {
         first_name: firstName,
