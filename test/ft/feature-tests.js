@@ -37,7 +37,7 @@ describe('User story', function() {
 
     this.bot = new Chatbot(dialog, this.sessions);
 
-    this.expectedName = 'Matti';
+    this.expectedName = 'Matti Luukkainen';
     this.expectedJob = 'Opiskelija';
     this.expectedAge = '22';
     this.expectedPlace = 'Helsinki';
@@ -82,46 +82,12 @@ describe('User story', function() {
                   'payload': '@NO',
                 }])
               );
-          });
+          })
+          .then(() => this.bot.receive(SESSION, 'kyllä'));
         }
       );
     }
   );
-
-  describe(
-    'As a non-registered user I want the bot to ask for my name, when I have confirmed that I want to start searching for a peer',
-    function() {
-      it(
-        'should ask user for a name when user has confirmed that they want to find a peer',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Kyllä')
-            )
-            .to.eventually.become([
-              buildResponse('@GREAT'),
-              buildResponse('@REQUEST_NAME'),
-            ]);
-        });
-    });
-
-  describe(
-    'As a registered user I want to provide my name to the bot',
-    function() {
-      it(
-        'should ask user their occupation when user has provided their name',
-        function() {
-          this.userInformation.name = this.expectedName;
-          return expect(
-              this.bot.receive(SESSION, this.userInformation.name)
-            )
-            .to.eventually.become([
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@CONFIRM_NAME', this.userInformation)),
-              buildResponse('@REQUEST_JOB'),
-            ]);
-        });
-    });
 
   describe(
     'As a registered user I want to provide my occupation to the bot',
@@ -129,6 +95,7 @@ describe('User story', function() {
       it(
         'after user has provided their occupation, it should show user their profile information and ask if the user want\'s to provide more info or start the search for a pair',
         function() {
+          this.userInformation.name = this.expectedName;
           this.userInformation.job = this.expectedJob;
           return expect(
               this.bot.receive(SESSION, this.userInformation.job)

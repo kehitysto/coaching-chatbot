@@ -16,8 +16,8 @@ import * as Feedback from '../util/feedback-service';
 import * as Chatbot from '../chatbot/chatbot-service';
 import dialog from './dialog';
 
-export function setName({ context, sessionId, input }) {
-  return Messenger.getUserProfile(sessionId, input)
+export function setName({ context, sessionId }) {
+  return Messenger.getUserProfile(sessionId)
     .then((profile) => {
       const {
         first_name: firstName,
@@ -27,7 +27,7 @@ export function setName({ context, sessionId, input }) {
       return Promise.resolve({
         context: {
           ...context,
-          name: (firstName + ' ' + lastName).trim(),
+          name: firstName + ' ' + lastName,
         },
       });
    });

@@ -11,7 +11,7 @@
   "@RESET_CONFIRMATION": "Haluatko varmasti nollata tiedot ja aloittaa alusta?",
   "@RESET_DONE": "Tiedot nollattu.",
   "@REQUEST_NAME": "Millä nimellä haluaisit esittäytyä mahdolliselle parillesi?",
-  "@CONFIRM_NAME": "Kiitos {name}. Voit vaihtaa nimeäsi myöhemmin.",
+  "@CONFIRM_NAME": "Terve {name}!",
   "@REQUEST_JOB": "Seuraavaksi haluaisin tietää ammattisi.",
   "@CONFIRM_JOB": "Kiitos, ammattisi on nyt {job}.",
   "@REQUEST_AGE": "Anna ikäsi.",

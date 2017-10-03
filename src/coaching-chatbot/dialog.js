@@ -62,9 +62,6 @@ bot
   .dialog(
     '/set_name', [
       (session) => {
-        session.addResult('@REQUEST_NAME');
-      },
-      (session) => {
         session.runActions(['setName']);
         session.addResult('@CONFIRM_NAME');
         session.endDialog();
