@@ -203,7 +203,7 @@ describe('User story', function() {
           'after user has given his bio, it should confirm and ask for more information',
           function() {
             this.userInformation.bio = 'My long bio in long text';
-  
+
             return expect(
                 this.bot.receive(
                   SESSION,
@@ -218,7 +218,7 @@ describe('User story', function() {
               ]);
           });
       });
-  
+
 
   describe(
     'As a registered user I want to provide my acceptable methods of communication with quick replies',

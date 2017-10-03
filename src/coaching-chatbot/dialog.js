@@ -290,7 +290,9 @@ bot
       (session) => {
         if (session.context.pairRequests &&
             session.context.pairRequests.length > 0) {
-          session.addResult('@TELL_USER_HAS_NEW_REQUEST');
+          session.addResult('@TELL_USER_HAS_NEW_REQUEST', [
+            Builder.QuickReplies.create('@SHOW_REQUESTS'),
+          ]);
         }
 
         if (session.context.availablePeers.length <= 0) {
