@@ -157,24 +157,26 @@ export function markUserAsNotSearching({ context }) {
   });
 }
 
-export function removeSentRequests(id, requests) {
+export function removeSentRequests({ sessionId,  context }) {
   let sessions = new Sessions();
   const promises = [];
-  for (let request of requests) {
-    promises.push(
-      sessions.read(request)
-        .then((peer) => {
-        let index = peer.pairRequests.indexOf(id);
-        if (index > -1) {
-          peer.pairRequests.splice(index, 1);
-          return sessions.write(request, peer);
-        }
-      }
-      )
-    );
+  if (context.sentRequests) {
+    for (let request of context.sentRequests) {
+      promises.push(
+        sessions.read(request)
+          .then((peer) => {
+            let index = peer.pairRequests.indexOf(sessionId);
+            if (index > -1) {
+              peer.pairRequests.splice(index, 1);
+              return sessions.write(request, peer);
+            }
+          }
+        )
+      );
+    }
   }
   return Promise.all(promises)
-  ;
+    .then(() => context);
 }
 
 export function updateAvailablePeers({ sessionId, context }) {
@@ -291,13 +293,14 @@ export function acceptRequest({ sessionId, context }) {
   let sessions = new Sessions();
 
   const chosenPeerId = context.pairRequests[0];
-  let chosenPeerSentRequests;
   return pairs.createPair(sessionId, chosenPeerId)
       .then(() => {
         return sessions.read(chosenPeerId)
             .then((chosenPeer) => {
+              return removeSentRequests({ sessionId: chosenPeerId, context: chosenPeer });
+            })
+            .then((chosenPeer) => {
               const peer = { context: { ...chosenPeer } };
-              chosenPeerSentRequests = peer.context.sentRequests || [];
               return markUserAsNotSearching(peer);
             }
           )
@@ -307,9 +310,6 @@ export function acceptRequest({ sessionId, context }) {
               return sessions.write(chosenPeerId, peer);
             }
           )
-            .then(() => {
-              return removeSentRequests(chosenPeerId, chosenPeerSentRequests);
-            });
         })
       .then(() => {
         const bot = new Chatbot(dialog, sessions);
@@ -325,13 +325,8 @@ export function acceptRequest({ sessionId, context }) {
           return Promise.all(promises);
         });
       })
-      .then(() => {
-        return removeSentRequests(sessionId, context.sentRequests || []);
-        }
-      )
-      .then(() => {
-        return markUserAsNotSearching({ context });
-      });
+      .then(() => removeSentRequests({ sessionId,  context }))
+      .then(() => markUserAsNotSearching({ context }));
 }
 
 export function breakPair({ sessionId, userData, context }) {
@@ -410,7 +405,7 @@ export function addPairRequest({ sessionId, context }) {
       chosenPeer.pairRequests = chosenPeer.pairRequests || [];
       chosenPeer.pairRequests.push(sessionId);
       context.sentRequests = context.sentRequsts || [];
-      context.sentRequests.push(parseInt(peerId));
+      context.sentRequests.push(peerId);
 
       return session.write(peerId, chosenPeer)
           .then(() => {
