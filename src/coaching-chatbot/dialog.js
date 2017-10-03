@@ -383,21 +383,28 @@ bot
         session.addResult('@PAIR_CREATED');
         session.runActions(['displayAcceptedPeer']);
         session.addResult('@LINK_TO_HELP');
+        session.addQuickReplies([
+          Builder.QuickReplies.create('@GIVE_FEEDBACK'),
+        ]);
+      },
+      (session) => {
+        if (session.checkIntent('#GIVE_FEEDBACK')) {
+          session.resetDialog();
+          session.beginDialog('/give_feedback', true);
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
+        }
       },
     ], [
       ['#BREAK_PAIR', (session) => {
         session.runActions(['breakPair']);
         session.endDialog();
       }],
-      ['#GIVE_FEEDBACK', (session) => {
-        session.resetDialog();
-        session.beginDialog('/give_feedback', true);
-      }],
     ])
-.dialog(
+  .dialog(
     '/give_feedback', [
       (session) => {
-        // todo: check if feedback given for the meeting already exists
         session.addResult('@FEEDBACK_ABOUT_MEETING');
       },
       (session) => {

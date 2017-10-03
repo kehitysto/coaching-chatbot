@@ -48,8 +48,11 @@
   "@NO_REQUESTS_AVAILABLE": "Valitettavasti sinulla ei juuri nyt ole avoimia parinhakupyyntöjä.\nSelataksesi vapaita parinhakijoita kirjoita 'seuraava'",
   "@SHOW_REQUESTS": "Näytä pyynnöt",
   "@PAIR_CREATED": "Vertaisohjausparisi on:",
-  "@ACCEPTED_REQUEST" : "Pyyntösi on hyväksytty. Sano 'vahvista' muodostaaksesi parin.",
+  "@ACCEPTED_REQUEST": "Pyyntösi on hyväksytty. Sano 'vahvista' muodostaaksesi parin.",
   "@LINK_TO_HELP": "Ohjeita: https://kehitysto.wordpress.com/vinkkeja-vertaisohjaukseen/",
   "@NOTIFY_PAIR_BROKEN": "{pairName} ei enää halua olla parisi. Voit sanoa 'etsi pari' siirtyäksesi uudelleen parinhakuun.",
-  "@PAIR_BROKEN": "Pari on nyt rikottu. Voit sanoa 'etsi pari' siirtyäksesi uudelleen parinhakuun."
+  "@PAIR_BROKEN": "Pari on nyt rikottu. Voit sanoa 'etsi pari' siirtyäksesi uudelleen parinhakuun.",
+  "@FEEDBACK_ABOUT_MEETING": "Anna vapaamuotoinen palaute edellisestä tapaamisesta. Palautetta ei näytetä parille.",
+  "@GIVE_FEEDBACK": "Anna palautetta",
+  "@THANKS_FOR_FEEDBACK": "Kiitos palautteesta!"
 }
