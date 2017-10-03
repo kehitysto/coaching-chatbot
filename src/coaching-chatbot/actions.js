@@ -136,15 +136,38 @@ export function markUserAsSearching({ context }) {
 }
 
 export function markUserAsNotSearching({ context }) {
-    return Promise.resolve({
-        context: {
+  return Promise.resolve({
+    context: {
             ...context,
             rejectedPeers: [],
             availablePeers: [],
             pairRequests: [],
+            sentRequests: [],
             searching: false,
         },
-    });
+  });
+}
+
+export function removeSentRequests({ sessionId, context }) {
+  let sessions = new Sessions();
+  const promises = [];
+  if (context.sentRequests) {
+    for (let requestRecipientId of context.sentRequests) {
+      promises.push(
+        sessions.read(requestRecipientId)
+          .then((requestRecipient) => {
+            let index = requestRecipient.pairRequests.indexOf(sessionId);
+            if (index > -1) {
+              requestRecipient.pairRequests.splice(index, 1);
+              return sessions.write(requestRecipientId, requestRecipient);
+            }
+          }
+        )
+      );
+    }
+  }
+  return Promise.all(promises)
+    .then(() => context);
 }
 
 export function updateAvailablePeers({ sessionId, context }) {
@@ -251,10 +274,13 @@ export function acceptRequest({ sessionId, context }) {
   let sessions = new Sessions();
 
   const chosenPeerId = context.pairRequests[0];
-
   return pairs.createPair(sessionId, chosenPeerId)
       .then(() => {
         return sessions.read(chosenPeerId)
+            .then((chosenPeer) => {
+              return removeSentRequests({
+                sessionId: chosenPeerId, context: chosenPeer });
+            })
             .then((chosenPeer) => {
               const peer = { context: { ...chosenPeer } };
               return markUserAsNotSearching(peer);
@@ -264,7 +290,8 @@ export function acceptRequest({ sessionId, context }) {
               const peer = chosenPeer.context;
               peer.state = '/?0/profile?0/accepted_pair_information?0';
               return sessions.write(chosenPeerId, peer);
-            });
+            }
+          );
         })
       .then(() => {
         const bot = new Chatbot(dialog, sessions);
@@ -280,6 +307,7 @@ export function acceptRequest({ sessionId, context }) {
           return Promise.all(promises);
         });
       })
+      .then(() => removeSentRequests({ sessionId, context }))
       .then(() => markUserAsNotSearching({ context }));
 }
 
@@ -323,11 +351,11 @@ export function breakAllPairs({ sessionId }) {
   let sessions = new Sessions();
 
   return pairs.read(sessionId)
-      .then((pairList) => {
-        const promises = [];
-        for (let pairId of pairList) {
-          promises.push(
-            pairs.breakPair(sessionId, pairId)
+    .then((pairList) => {
+      const promises = [];
+      for (let pairId of pairList) {
+        promises.push(
+          pairs.breakPair(sessionId, pairId)
             .then(() => sessions.read(pairId))
             .then((context) => sessions.write(
               pairId,
@@ -345,10 +373,10 @@ export function breakAllPairs({ sessionId }) {
                 )
               );
             })
-          );
-        }
-        return Promise.all(promises);
-      });
+        );
+      }
+      return Promise.all(promises);
+    });
 }
 
 export function displayRequest({ context }) {
@@ -376,6 +404,8 @@ export function addPairRequest({ sessionId, context }) {
     if (chosenPeer.searching) {
       chosenPeer.pairRequests = chosenPeer.pairRequests || [];
       chosenPeer.pairRequests.push(sessionId);
+      context.sentRequests = context.sentRequests || [];
+      context.sentRequests.push(peerId);
 
       return session.write(peerId, chosenPeer)
           .then(() => {
@@ -387,6 +417,9 @@ export function addPairRequest({ sessionId, context }) {
                 strings['@STOP_SEARCHING'],
               ])
             );
+          })
+          .then(() => {
+            return session.write(sessionId, context);
           })
           .then(() => {
             return {
