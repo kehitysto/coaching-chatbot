@@ -5,7 +5,7 @@ import log from '../lib/logger-service';
 
 let db = null;
 
-export default class Feedback {
+module.exports = class Feedback {
   constructor() {
     if (db != null) {
       this.db = db;

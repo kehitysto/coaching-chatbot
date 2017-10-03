@@ -1,6 +1,6 @@
 import log from '../lib/logger-service';
 
-export default class InMemoryProvider {
+module.exports = class InMemoryProvider {
   constructor() {
     this.db = [];
   }
