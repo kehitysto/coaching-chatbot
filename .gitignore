@@ -170,6 +170,9 @@ Temporary Items
 .env
 .serverless
 
+# Webpack
+.webpack
+
 # mocha-webpack
 .tmp
 

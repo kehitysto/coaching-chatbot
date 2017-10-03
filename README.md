@@ -46,7 +46,7 @@ To test multiple users use different session IDs
 $ npm run bot-client -- --session=<ID>
 ```
 
-Supported Node version 4.3.2
+Supported Node version 6.1.0
 
 ## Documentation
  - [Architecture](doc/architecture.md)
