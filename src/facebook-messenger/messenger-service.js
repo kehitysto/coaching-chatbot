@@ -78,7 +78,7 @@ const Messenger = {
   getUserProfile(id, input) {
     if (process.env.RUN_ENV === 'dev') {
       return Promise
-        .resolve({ first_name: input, last_name: '', profilePic: '' });
+        .resolve({ first_name: input, last_name: '', profile_pic: '' });
     }
 
     if (!process.env.FACEBOOK_PAGE_ACCESS_TOKEN) {
@@ -94,7 +94,7 @@ const Messenger = {
         fields: 'first_name,last_name,profile_pic',
         access_token: process.env.FACEBOOK_PAGE_ACCESS_TOKEN,
       },
-      method: 'GET',
+      json: true,
     });
   },
 };
