@@ -19,6 +19,9 @@ import dialog from './dialog';
 export function setName({ context, input }) {
   return Messenger.getUserProfile(context.sessionId, input)
     .then(({ firstName, lastName }) => {
+      if (!firstName) {
+        firstName = 'fuu';
+      }
       return Promise.resolve({
         context: {
           ...context,
