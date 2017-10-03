@@ -1,8 +1,8 @@
-import sinon from 'sinon';
+import * as sinon from 'sinon';
 
 import * as actions from '../../../src/coaching-chatbot/actions.js';
-import Sessions from '../../../src/util/sessions-service';
-import Pairs from '../../../src/util/pairs-service';
+import * as Sessions from '../../../src/util/sessions-service';
+import * as Pairs from '../../../src/util/pairs-service';
 
 const TEST_SESSION = 'SESSION';
 
@@ -449,50 +449,6 @@ describe('coaching-bot actions', function() {
       });
   });
 
-  describe('#MeetingFrequency', function() {
-    it('returns a Promise', function() {
-      const ret = actions.addMeetingFrequency({
-        context: {},
-        input: '',
-      });
-
-      expect(ret)
-        .to.be.a('Promise');
-    });
-
-    it('returns the name from entity meetingfrequency', function() {
-      const ret = actions.addMeetingFrequency({
-        context: {},
-        input: 'Kerran viikossa',
-      });
-
-      return expect(ret)
-        .to.become({
-          context: {
-            meetingFrequency: 'ONCE_A_WEEK',
-          },
-        });
-    });
-
-    it('preserves context', function() {
-      const ret = actions.addMeetingFrequency({
-        context: {
-          'foo': 'bar',
-        },
-        input: 'Kerran viikossa',
-      });
-
-      return expect(ret)
-        .to.eventually
-        .deep.equal({
-          context: {
-            'foo': 'bar',
-            'meetingFrequency': 'ONCE_A_WEEK',
-          },
-        });
-    });
-  });
-
   describe('#markUserAsSearching', function() {
     it('returns a Promise', function() {
       const ret = actions.markUserAsSearching({
@@ -753,24 +709,6 @@ describe('coaching-bot actions', function() {
             stubSessionsRead.restore();
             stubPairsRead.restore();
           });
-    });
-  });
-
-  describe('#nextRequest', function() {
-    it('should switch the next item in the list to be the first',
-        function() {
-        const ret = actions.nextRequest({
-            context: {
-              pairRequests: [0, 1, 2],
-            },
-        });
-
-        return expect(ret)
-            .to.become({
-            context: {
-              pairRequests: [1, 2, 0],
-            },
-            });
     });
   });
 

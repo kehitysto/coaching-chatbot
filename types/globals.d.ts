@@ -14,21 +14,12 @@ declare class Context {
     place: string;
     bio: string;
     communicationMethods: {};
-    meetingFrequency: string;
     searching: boolean;
     availablePeers: (number|string)[];
     pairRequests: (number|string)[];
     sentRequests: (number|string)[];
     rejectedPeers: (number|string)[];
     state: string;
-}
-
-declare class Pairs {
-    private db: InMemoryProvider | DynamoDBProvider;
-}
-
-declare class Promise<T> {
-    static all<T>(promises: Promise<T>[]): Promise<T>
 }
 
 declare class Session {

@@ -1,6 +1,6 @@
-import sinon from 'sinon';
+import * as sinon from 'sinon';
 
-import InMemoryDB from '../../../src/util/sessions-inmemory-provider';
+import * as InMemoryDB from '../../../src/util/sessions-inmemory-provider';
 
 describe('Inmemory database service', function() {
   before(function() {
@@ -75,7 +75,7 @@ describe('Inmemory database service', function() {
 
       it('should return a Promise', function() {
         const ret = this.db.getAvailablePairs(
-          'id', 'meetingFrequency'
+          'id',
         );
 
         expect(ret)
@@ -90,7 +90,6 @@ describe('Inmemory database service', function() {
           const context = {
             name: 'Pertti',
             searching: true,
-            meetingFrequency: 'ONCE_A_WEEK',
             communicationMethods: {
               SKYPE: 'pertti_42',
             },
@@ -98,7 +97,6 @@ describe('Inmemory database service', function() {
 
           return this.db.write(
               'SESSION_ID', {
-                meetingFrequency: 'ONCE_A_WEEK',
                 searching: true,
               }
             )
@@ -107,8 +105,7 @@ describe('Inmemory database service', function() {
                 'SESSION_IDD', context)
             )
             .then(() =>
-              expect(this.db.getAvailablePairs('SESSION_ID',
-                'ONCE_A_WEEK'))
+              expect(this.db.getAvailablePairs('SESSION_ID'))
               .to.become([{
                 id: 'SESSION_IDD',
               }])

@@ -1,15 +1,15 @@
 // normally undefined, set to 'dev' for local client only
 process.env.RUN_ENV = 'dev';
 
-import Builder from '../../src/chatbot/builder';
-import Chatbot from '../../src/chatbot/chatbot-service';
+import * as Builder from '../../src/chatbot/builder';
+import * as Chatbot from '../../src/chatbot/chatbot-service';
 import dialog from '../../src/coaching-chatbot/dialog';
-import Strings from '../../src/coaching-chatbot/strings.json';
+import * as Strings from '../../src/coaching-chatbot/strings.json';
 import PersonalInformationFormatter
 from '../../src/lib/personal-information-formatter-service';
 import CommunicationMethodsFormatter
 from '../../src/lib/communication-methods-formatter';
-import Sessions from '../../src/util/sessions-service';
+import * as Sessions from '../../src/util/sessions-service';
 import PairFormatter
 from '../../src/lib/pair-formatter';
 
@@ -147,25 +147,6 @@ describe('User story', function() {
                   this.context)),
             ]);
         });
-    });
-
-  describe(
-    'As a registered user I don\'t want to be able to change my preferred meeting frequency before I have added any info for my communication methods',
-    function() {
-      it(
-        'should show the user their profile information again when user tries to change the meeting frequency',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'muuta tapaamisväliä'))
-            .to.eventually.become([
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation),
-                PersonalInformationFormatter.getPersonalInformationbuttons(
-                  this.context))
-            ]);
-        }
-      );
     });
 
   describe(
@@ -412,76 +393,13 @@ describe('User story', function() {
           return expect(
             this.bot.receive(SESSION, 'ei'))
             .to.eventually.become([
-              buildResponse('@REQUEST_MEETING_FREQUENCY',
-                PersonalInformationFormatter
-                .getMeetingFrequency(this.sessions.db.dump()[SESSION])
-              )
-            ]);
-        }
-      );
-    }
-  );
-
-  describe(
-    'As a registered user I want to provide my preferred meeting frequency with quick replies',
-    function() {
-      it(
-        'after providing preferred meeting frequency as "every weekdays", it should ask to provide confirmation to use users data',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Arkipäivisin'))
-            .to.eventually.become([
-              buildResponse('@CHANGE_MEETING_FREQUENCY'),
               buildResponse('@PERMISSION_TO_RECEIVE_MESSAGES', [{
                 'title': 'Kyllä',
                 'payload': '@YES',
               }, {
                 'title': 'Ei',
                 'payload': '@NO',
-              }]),
-            ]);
-        }
-      );
-      it(
-        'after user confirmed, it should tell that no other users with the same preferred frequency are searching for a peer',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Joo'))
-            .to.eventually.become([
-              buildResponse('@TELL_HOW_TO_STOP_SEARCH'),
-              buildResponse('@NO_PAIRS_AVAILABLE'),
-            ]);
-        }
-      )
-    }
-  );
-
-  describe(
-    'As a registered user I want to be able to change my preferred meeting frequency',
-    function() {
-      it(
-        'should ask for my preferred meeting frequency after I ask to change my preferred meeting frequency',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'muuta tapaamisväliä'))
-            .to.eventually.become([
-              buildResponse('@REQUEST_MEETING_FREQUENCY',
-                PersonalInformationFormatter
-                .getMeetingFrequency(this.sessions.db.dump()[SESSION])
-              )
-            ]);
-        }
-      );
-
-      it(
-        'after providing preferred meeting frequency as "every second week", it should tell that no other users with the same preferred frequency are searching for a peer',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Joka toinen viikko'))
-            .to.eventually.become([
-              buildResponse('@CHANGE_MEETING_FREQUENCY'),
-              buildResponse('@TELL_HOW_TO_STOP_SEARCH'),
-              buildResponse('@NO_PAIRS_AVAILABLE'),
+              }])
             ]);
         }
       );
@@ -492,79 +410,35 @@ describe('User story', function() {
     'As a user searching for a pair I want to get a list of other users wanting to meet as often as I do',
     function() {
       it(
-        'should provide user with the list of users who has same meeting frequency',
+        'should provide user with the list of users',
         function() {
           const testUser = {
-            name: 'Matti',
+            name: 'Pekka',
             job: 'Ope',
             communicationMethods: {
-              SKYPE: 'Matti123',
+              SKYPE: 'Pekka123',
             },
-            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
             searching: true,
           };
 
-          this.sessions.write('ID', testUser);
+          this.sessions.write('ID2', testUser);
 
           const expected = buildResponse(
             PairFormatter.beautifyAvailablePairs(
               [{
-                id: 'ID',
+                id: 'ID2',
                 context: testUser,
               }]
             ),
-            Builder.QuickReplies.createArray(['@YES', '@NO', '@LATER'])
+            Builder.QuickReplies.createArray(['@YES', '@NO'])
           );
 
           return expect(
-              this.bot.receive(SESSION, ''))
+              this.bot.receive(SESSION, 'YES'))
             .to.eventually.become([
+              buildResponse('@TELL_HOW_TO_STOP_SEARCH'),
               buildResponse('@INFORMATION_ABOUT_LIST'),
               expected,
-            ]);
-        }
-      );
-
-      it(
-        'should provide user with the list of users who has same meeting frequency while there are other users with different frequency',
-        function() {
-          const testUser = {
-            name: 'Matti',
-            job: 'Ope',
-            communicationMethods: {
-              SKYPE: 'Matti123',
-            },
-            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
-            searching: true,
-          };
-
-          this.sessions.write('ID', testUser);
-
-          const testUser2 = {
-            name: 'Laura',
-            job: 'Student',
-            communicationMethods: {
-              SKYPE: 'Laura123',
-            },
-            meetingFrequency: 'EVERY_WEEKDAY',
-            searching: true,
-          };
-
-          this.sessions.write('ID1', testUser2);
-
-          return expect(
-              this.bot.receive(SESSION, 'seuraava'))
-            .to.eventually.become([
-              buildResponse('@INFORMATION_ABOUT_LIST'),
-              buildResponse(
-                PairFormatter.beautifyAvailablePairs(
-                  [{
-                    id: 'ID',
-                    context: testUser,
-                  }]
-                ),
-                Builder.QuickReplies.createArray(['@YES', '@NO', '@LATER'])
-              ),
             ]);
         }
       );
@@ -578,7 +452,6 @@ describe('User story', function() {
             communicationMethods: {
               SKYPE: 'Matti123',
             },
-            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
             searching: true,
           };
 
@@ -590,14 +463,13 @@ describe('User story', function() {
             communicationMethods: {
               SKYPE: 'Laura123',
             },
-            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
             searching: false,
           };
 
           this.sessions.write('ID1', testUser2);
 
           return expect(
-              this.bot.receive(SESSION, 'seuraava'))
+              this.bot.receive(SESSION, 'no'))
             .to.eventually.become([
               buildResponse('@INFORMATION_ABOUT_LIST'),
               buildResponse(
@@ -606,7 +478,7 @@ describe('User story', function() {
                     id: 'ID',
                     context: testUser,
                   }]),
-                Builder.QuickReplies.createArray(['@YES', '@NO', '@LATER'])
+                Builder.QuickReplies.createArray(['@YES', '@NO'])
               ),
             ]);
         }
@@ -662,7 +534,6 @@ describe('User story', function() {
             communicationMethods: {
               SKYPE: 'Matti123',
             },
-            meetingFrequency: 'ONCE_EVERY_TWO_WEEKS',
             searching: true,
           };
 
@@ -677,7 +548,7 @@ describe('User story', function() {
                   id: 'ID',
                   context: testUser,
                 }]),
-                Builder.QuickReplies.createArray(['@YES', '@NO', '@LATER'])
+                Builder.QuickReplies.createArray(['@YES', '@NO'])
               ),
             ]);
         }
@@ -740,17 +611,21 @@ describe('User story', function() {
         }
       );
       it(
-        'should ask for meeting frequency after replying no to provide communication methods',
+        'should ask for a confirmation after replying no to provide communication methods',
         function() {
           return expect(
-            this.bot.receive(
-              SESSION,
-              'ei'))
-          .to.eventually.become([
-            buildResponse('@REQUEST_MEETING_FREQUENCY',
-            PersonalInformationFormatter
-            .getMeetingFrequency(this.sessions.db.dump()[SESSION])),
-          ]);
+              this.bot.receive(
+                SESSION,
+                'ei'))
+            .to.eventually.become([
+              buildResponse('@PERMISSION_TO_RECEIVE_MESSAGES', [{
+                'title': 'Kyllä',
+                'payload': '@YES',
+              }, {
+                'title': 'Ei',
+                'payload': '@NO',
+              }]),
+            ]);
         }
       )
     }
@@ -786,9 +661,13 @@ describe('User story', function() {
                 SESSION,
                 'ei'))
             .to.eventually.become([
-              buildResponse('@REQUEST_MEETING_FREQUENCY',
-              PersonalInformationFormatter
-              .getMeetingFrequency(this.sessions.db.dump()[SESSION])),
+              buildResponse('@PERMISSION_TO_RECEIVE_MESSAGES', [{
+                'title': 'Kyllä',
+                'payload': '@YES',
+              }, {
+                'title': 'Ei',
+                'payload': '@NO',
+              }]),
             ]);
         });
 
