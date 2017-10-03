@@ -1,5 +1,5 @@
-import DynamoDBProvider from './feedback-dynamodb-provider';
-import InMemoryProvider from './feedback-inmemory-provider';
+import * as DynamoDBProvider from './feedback-dynamodb-provider';
+import * as InMemoryProvider from './feedback-inmemory-provider';
 
 import log from '../lib/logger-service';
 

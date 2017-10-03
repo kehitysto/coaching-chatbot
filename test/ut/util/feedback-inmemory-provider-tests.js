@@ -1,6 +1,6 @@
-import sinon from 'sinon';
+import * as sinon from 'sinon';
 
-import Pairs from '../../../src/util/pairs-inmemory-provider';
+import * as Pairs from '../../../src/util/pairs-inmemory-provider';
 
 describe('Inmemory database service', function() {
 

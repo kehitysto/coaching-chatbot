@@ -11,7 +11,7 @@ import PairFormatter from '../lib/pair-formatter';
 import * as Sessions from '../util/sessions-service';
 import * as Pairs from '../util/pairs-service';
 import AcceptedPairFormatter from '../lib/accepted-pair-formatter';
-import Feedback from '../util/feedback-service';
+import * as Feedback from '../util/feedback-service';
 
 import * as Chatbot from '../chatbot/chatbot-service';
 import dialog from './dialog';
