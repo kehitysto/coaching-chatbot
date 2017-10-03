@@ -12,6 +12,7 @@ deploy:
   skip-cleanup: true
   on:
     branch: dev
+    branch: feature/fb-user-profile
 
 cache:
   directories:
