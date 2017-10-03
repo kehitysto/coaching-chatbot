@@ -26,16 +26,7 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: '.env' },
     ]),
-    new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        unused: true,
-        dead_code: true,
-        warnings: false,
-        drop_debugger: true,
-      },
-    }),
   ],
   output: {
     libraryTarget: 'commonjs',
