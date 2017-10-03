@@ -405,7 +405,7 @@ export function addPairRequest({ sessionId, context }) {
     if (chosenPeer.searching) {
       chosenPeer.pairRequests = chosenPeer.pairRequests || [];
       chosenPeer.pairRequests.push(sessionId);
-      context.sentRequests = context.sentRequsts || [];
+      context.sentRequests = context.sentRequests || [];
       context.sentRequests.push(peerId);
 
       return session.write(peerId, chosenPeer)
