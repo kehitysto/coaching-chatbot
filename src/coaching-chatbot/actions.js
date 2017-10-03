@@ -348,17 +348,35 @@ export function breakPair({ sessionId, userData, context }) {
 
 export function breakAllPairs({ sessionId }) {
   let pairs = new Pairs();
+  let sessions = new Sessions();
 
   return pairs.read(sessionId)
-      .then((pairList) => {
-        const promises = [];
-        for (let pairId of pairList) {
-          promises.push(
-            pairs.breakPair(sessionId, pairId)
-          );
-        }
-        return Promise.all(promises);
-      });
+    .then((pairList) => {
+      const promises = [];
+      for (let pairId of pairList) {
+        promises.push(
+          pairs.breakPair(sessionId, pairId)
+            .then(() => sessions.read(pairId))
+            .then((context) => sessions.write(
+              pairId,
+              {
+                ...context,
+                state: '/?0/profile?0',
+              }
+            ))
+            .then(() => {
+              return Messenger.send(
+                pairId,
+                PersonalInformationFormatter.format(
+                  strings['@NOTIFY_PAIR_BROKEN'],
+                  { pairName: context.name }
+                )
+              );
+            })
+        );
+      }
+      return Promise.all(promises);
+    });
 }
 
 export function displayRequest({ context }) {
