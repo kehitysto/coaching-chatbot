@@ -21,14 +21,6 @@ declare class Context {
     state: string;
 }
 
-declare class Pairs {
-    private db: InMemoryProvider | DynamoDBProvider;
-}
-
-declare class Promise<T> {
-    static all<T>(promises: Promise<T>[]): Promise<T>
-}
-
 declare class Session {
     dialog: Builder;
     id: string;

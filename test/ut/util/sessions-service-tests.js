@@ -1,8 +1,8 @@
-import sinon from 'sinon';
+import * as sinon from 'sinon';
 
-import AWS from 'aws-sdk';
-import Sessions from '../../../src/util/sessions-service';
-import DynamoDBProvider from '../../../src/util/sessions-dynamodb-provider';
+import * as AWS from 'aws-sdk';
+import * as Sessions from '../../../src/util/sessions-service';
+import * as DynamoDBProvider from '../../../src/util/sessions-dynamodb-provider';
 
 describe('Sessions service', function() {
   before(function() {

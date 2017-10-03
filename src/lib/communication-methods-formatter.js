@@ -1,4 +1,4 @@
-import CommunicationMethods
+import * as CommunicationMethods
 from '../../src/coaching-chatbot/communication-methods.json';
 
 const CommunicationMethodsFormatter = {

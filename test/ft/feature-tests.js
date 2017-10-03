@@ -1,15 +1,15 @@
 // normally undefined, set to 'dev' for local client only
 process.env.RUN_ENV = 'dev';
 
-import Builder from '../../src/chatbot/builder';
-import Chatbot from '../../src/chatbot/chatbot-service';
+import * as Builder from '../../src/chatbot/builder';
+import * as Chatbot from '../../src/chatbot/chatbot-service';
 import dialog from '../../src/coaching-chatbot/dialog';
-import Strings from '../../src/coaching-chatbot/strings.json';
+import * as Strings from '../../src/coaching-chatbot/strings.json';
 import PersonalInformationFormatter
 from '../../src/lib/personal-information-formatter-service';
 import CommunicationMethodsFormatter
 from '../../src/lib/communication-methods-formatter';
-import Sessions from '../../src/util/sessions-service';
+import * as Sessions from '../../src/util/sessions-service';
 import PairFormatter
 from '../../src/lib/pair-formatter';
 
