@@ -6,7 +6,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
-    'facebook-messenger/handler': './src/facebook-messenger/handler.js',
+    'src/facebook-messenger/handler': './src/facebook-messenger/handler.js',
   },
   target: 'node',
   externals: [
