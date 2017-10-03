@@ -62,9 +62,6 @@ bot
   .dialog(
     '/set_name', [
       (session) => {
-        session.addResult('@REQUEST_NAME');
-      },
-      (session) => {
         session.runActions(['setName']);
         session.addResult('@CONFIRM_NAME');
         session.endDialog();
@@ -380,18 +377,44 @@ bot
         },
       ])
   .dialog(
-      '/accepted_pair_information', [
-        (session) => {
-          session.addResult('@PAIR_CREATED');
-          session.runActions(['displayAcceptedPeer']);
-          session.addResult('@LINK_TO_HELP');
-        },
-      ], [
-        ['#BREAK_PAIR', (session) => {
-          session.runActions(['breakPair']);
-          session.endDialog();
-        }],
-      ])
+    '/accepted_pair_information', [
+      (session) => {
+        session.addResult('@PAIR_CREATED');
+        session.runActions(['displayAcceptedPeer']);
+        session.addResult('@LINK_TO_HELP');
+        session.addQuickReplies([
+          Builder.QuickReplies.create('@GIVE_FEEDBACK'),
+        ]);
+      },
+      (session) => {
+        if (session.checkIntent('#GIVE_FEEDBACK')) {
+          session.resetDialog();
+          session.beginDialog('/give_feedback', true);
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
+        }
+      },
+    ], [
+      ['#BREAK_PAIR', (session) => {
+        session.runActions(['breakPair']);
+        session.endDialog();
+      }],
+    ])
+  .dialog(
+    '/give_feedback', [
+      (session) => {
+        session.addResult('@FEEDBACK_ABOUT_MEETING');
+      },
+      (session) => {
+        session.runActions(['giveFeedback']);
+        session.next();
+      },
+      (session) => {
+        session.addResult('@THANKS_FOR_FEEDBACK');
+        session.endDialog();
+      },
+    ])
   .dialog(
       '/stop_searching', [
         (session) => {

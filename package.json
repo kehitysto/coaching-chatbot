@@ -54,6 +54,7 @@
     "sinon": "^1.17.7",
     "sinon-chai": "^2.8.0",
     "source-map-support": "^0.4.11",
+    "ts-node": "^3.3.0",
     "typescript": "^2.4.1",
     "webpack": "^2.7.0",
     "webpack-node-externals": "^1.5.4"

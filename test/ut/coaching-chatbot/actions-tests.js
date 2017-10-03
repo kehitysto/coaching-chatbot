@@ -110,27 +110,12 @@ describe('coaching-bot actions', function() {
     it('returns the name from entity name', function() {
       const ret = actions.setName({
         context: {},
-        input: 'Pertti',
       });
 
       return expect(ret)
         .to.become({
           context: {
-            name: 'Pertti',
-          },
-        });
-    });
-
-    it('returns the name from entity contact', function() {
-      const ret = actions.setName({
-        context: {},
-        input: 'Jari',
-      });
-
-      return expect(ret)
-        .to.become({
-          context: {
-            name: 'Jari',
+            name: 'Matti Luukkainen',
           },
         });
     });
@@ -140,7 +125,6 @@ describe('coaching-bot actions', function() {
         context: {
           'foo': 'bar',
         },
-        input: 'Jari',
       });
 
       return expect(ret)
@@ -148,7 +132,7 @@ describe('coaching-bot actions', function() {
         .deep.equal({
           context: {
             'foo': 'bar',
-            'name': 'Jari',
+            'name': 'Matti Luukkainen',
           },
         });
     });

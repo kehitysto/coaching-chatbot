@@ -212,18 +212,16 @@ module.exports = {
         ],
     },
 
-    MEETING_FREQUENCIES: {
-        any: [
-          /^Arkipäivisin/i,
-          /^Kerran viikossa/i,
-          /^Joka toinen viikko/i,
-        ],
-    },
-
     BREAK_PAIR: {
         each: [
           '#STOP_OR_BREAK',
           /^pari/i,
+        ],
+    },
+
+    GIVE_FEEDBACK: {
+        any: [
+            /^Anna palautetta/i,
         ],
     },
 };

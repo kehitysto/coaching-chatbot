@@ -6,6 +6,9 @@ const dotenv = require('dotenv');
 
 
 function main() {
+    //read values from .env to process.env these will be final values if not already set
+    dotenv.config({ path: getDotenvPath() });
+
     const options = readOptionsFromExample();
     const values = readValuesFromEnv(options);
 
@@ -33,10 +36,9 @@ function readOptionsFromExample() {
 
 function readValuesFromEnv(options) {
     const ret = {};
+    
     for (let i = 0; i < options.length; ++i) {
-        if (process.env[options[i]]) {
-            ret[options[i]] = process.env[options[i]];
-        }
+        ret[options[i]] = process.env[options[i]];
     }
 
     return ret;
@@ -44,6 +46,7 @@ function readValuesFromEnv(options) {
 
 function writeValuesToDotenv(values) {
     const fpath = getDotenvPath();
+    fs.writeFileSync(fpath, '');
 
     for (let option in values) {
         fs.appendFileSync(fpath, `${option}=${values[option]}\n`);
