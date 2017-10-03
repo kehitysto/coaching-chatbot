@@ -496,10 +496,7 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'kyllä'))
             .to.eventually.become([
               buildResponse('@CONFIRM_NEW_PEER_ASK'),
-              buildResponse('@NO_PAIRS_AVAILABLE',  [{
-                'title': 'Näytä pyynnöt',
-                'payload': '@SHOW_REQUESTS',
-              }]),
+              buildResponse('@NO_PAIRS_AVAILABLE'),
             ])
             .then(() => expect(this.sessions.read('ID'))
                 .to.eventually.include.keys({ 'pairRequests': [SESSION] }));
