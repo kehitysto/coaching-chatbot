@@ -157,18 +157,18 @@ export function markUserAsNotSearching({ context }) {
   });
 }
 
-export function removeSentRequests({ sessionId,  context }) {
+export function removeSentRequests({ sessionId, context }) {
   let sessions = new Sessions();
   const promises = [];
   if (context.sentRequests) {
-    for (let request of context.sentRequests) {
+    for (let requestRecipientId of context.sentRequests) {
       promises.push(
-        sessions.read(request)
-          .then((peer) => {
-            let index = peer.pairRequests.indexOf(sessionId);
+        sessions.read(requestRecipientId)
+          .then((requestRecipient) => {
+            let index = requestRecipient.pairRequests.indexOf(sessionId);
             if (index > -1) {
-              peer.pairRequests.splice(index, 1);
-              return sessions.write(request, peer);
+              requestRecipient.pairRequests.splice(index, 1);
+              return sessions.write(requestRecipientId, requestRecipient);
             }
           }
         )
@@ -297,7 +297,8 @@ export function acceptRequest({ sessionId, context }) {
       .then(() => {
         return sessions.read(chosenPeerId)
             .then((chosenPeer) => {
-              return removeSentRequests({ sessionId: chosenPeerId, context: chosenPeer });
+              return removeSentRequests({
+                sessionId: chosenPeerId, context: chosenPeer });
             })
             .then((chosenPeer) => {
               const peer = { context: { ...chosenPeer } };
@@ -309,7 +310,7 @@ export function acceptRequest({ sessionId, context }) {
               peer.state = '/?0/profile?0/accepted_pair_information?0';
               return sessions.write(chosenPeerId, peer);
             }
-          )
+          );
         })
       .then(() => {
         const bot = new Chatbot(dialog, sessions);
@@ -325,7 +326,7 @@ export function acceptRequest({ sessionId, context }) {
           return Promise.all(promises);
         });
       })
-      .then(() => removeSentRequests({ sessionId,  context }))
+      .then(() => removeSentRequests({ sessionId, context }))
       .then(() => markUserAsNotSearching({ context }));
 }
 

@@ -540,6 +540,53 @@ describe('coaching-bot actions', function() {
     });
   });
 
+  describe('#removeSentRequests', function() {
+    it('should remove contexts peerRequests from the recipients', function() {
+      const sessions = new Sessions();
+      
+      const stubSessionsRead = sinon.stub(
+        sessions.db,
+        'read'
+      );
+
+      const spySessionsWrite = sinon.spy(
+        sessions.db,
+        'write'
+      );
+      
+      stubSessionsRead.returns(
+        Promise.resolve({
+          pairRequests: [
+            1,
+            3
+          ]
+        })
+      )
+
+      const ret = actions.removeSentRequests({
+        sessionId: 1,
+        context: {
+          sentRequests: [
+            2
+          ]
+        },
+      });
+
+      const expectedToWrite = {
+        pairRequests: [
+          3
+        ]
+      };
+
+      return ret.then((result) => {
+        expect(spySessionsWrite.calledWith(2, expectedToWrite)).to.equal(true);
+      }).then(() => {          
+        spySessionsWrite.restore();
+        stubSessionsRead.restore();
+      });
+    });
+  });
+
   describe('#updateAvailablePeers', function() {
     it('adds retrieved user ids to context', function() {
       const sessions = new Sessions();
