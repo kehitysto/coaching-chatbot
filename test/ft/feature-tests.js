@@ -413,24 +413,24 @@ describe('User story', function() {
         'should provide user with the list of users',
         function() {
           const testUser = {
-            name: 'Matti',
+            name: 'Pekka',
             job: 'Ope',
             communicationMethods: {
-              SKYPE: 'Matti123',
+              SKYPE: 'Pekka123',
             },
             searching: true,
           };
 
-          this.sessions.write('ID', testUser);
+          this.sessions.write('ID2', testUser);
 
           const expected = buildResponse(
             PairFormatter.beautifyAvailablePairs(
               [{
-                id: 'ID',
+                id: 'ID2',
                 context: testUser,
               }]
             ),
-            Builder.QuickReplies.createArray(['@YES', '@NO', '@LATER'])
+            Builder.QuickReplies.createArray(['@YES', '@NO'])
           );
 
           return expect(
@@ -469,7 +469,7 @@ describe('User story', function() {
           this.sessions.write('ID1', testUser2);
 
           return expect(
-              this.bot.receive(SESSION, 'seuraava'))
+              this.bot.receive(SESSION, 'no'))
             .to.eventually.become([
               buildResponse('@INFORMATION_ABOUT_LIST'),
               buildResponse(
@@ -478,7 +478,7 @@ describe('User story', function() {
                     id: 'ID',
                     context: testUser,
                   }]),
-                Builder.QuickReplies.createArray(['@YES', '@NO', '@LATER'])
+                Builder.QuickReplies.createArray(['@YES', '@NO'])
               ),
             ]);
         }
@@ -548,7 +548,7 @@ describe('User story', function() {
                   id: 'ID',
                   context: testUser,
                 }]),
-                Builder.QuickReplies.createArray(['@YES', '@NO', '@LATER'])
+                Builder.QuickReplies.createArray(['@YES', '@NO'])
               ),
             ]);
         }

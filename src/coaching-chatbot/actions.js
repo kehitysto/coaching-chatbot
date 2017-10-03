@@ -233,16 +233,6 @@ export function rejectAvailablePeer({ context }) {
   });
 }
 
-export function nextRequest({ context }) {
-  return Promise.resolve({
-    context: {
-      ...context,
-      pairRequests: context.pairRequests.slice(1).concat(
-          context.pairRequests.slice(0, 1)),
-    },
-  });
-}
-
 export function rejectRequest({ context }) {
   const rejectedPeers = context.rejectedPeers || [];
   rejectedPeers.push(context.pairRequests[0]);
