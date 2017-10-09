@@ -13,14 +13,14 @@ describe('Formatter service', function() {
 
   describe('#formatFromTemplate()', function() {
     it('should format a pre-defined template correctly', function() {
-      const templateName = '@CONFIRM_AGE';
+      const templateName = '@CONFIRM_NAME';
 
       const context = {
-        age: '45',
+        name: 'kaapo',
       };
 
-      const expected = Strings['@CONFIRM_AGE'].replace('{age}',
-        context.age);
+      const expected = Strings['@CONFIRM_NAME'].replace('{name}',
+        context.name);
 
       const formatted = PersonalInformationFormatter
         .formatFromTemplate(templateName, context);
@@ -191,23 +191,11 @@ describe('Formatter service', function() {
           payload: 'LOOK_FOR_PEER',
           },
           {
-            title: 'Aseta nimi',
+            title: 'Vaihda nimi',
             payload: 'CHANGE_NAME',
           },
           {
-            title: 'Aseta ammatti',
-            payload: 'CHANGE_JOB',
-          },
-          {
-            title: 'Aseta ikä',
-            payload: 'SET_AGE',
-          },
-          {
-            title: 'Aseta paikkakunta',
-            payload: 'SET_PLACE',
-          },
-          {
-            title: 'Aseta kuvaus',
+            title: 'Muokkaa kuvausta',
             payload: 'SET_BIO',
           }
         ];
