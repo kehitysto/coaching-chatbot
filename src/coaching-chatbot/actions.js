@@ -33,6 +33,16 @@ export function setName({ context, sessionId }) {
    });
 }
 
+export function setRating({ context, input }) {
+  return Promise.resolve({
+    context: {
+      ...context,
+      rating: Number(input) ? Number(input) : undefined,
+    },
+  });
+}
+
+
 export function setJob({ context, input }) {
   return Promise.resolve({
     context: {
@@ -443,17 +453,39 @@ export function addPairRequest({ sessionId, context }) {
   });
 }
 
-export function giveFeedback({ sessionId, input }) {
+export function giveFeedback({ context, sessionId, input }) {
   let pairs = new Pairs();
   let feedback = new Feedback();
+
+  log.debug('SILLLY');
+
+  const table = [
+    'Toivoisin useita merkittäviä muutoksia',
+    'Toivoisin yhtä merkittävää muutosta',
+    'Pientä parannettavaa löytyisi',
+    'Täysin ideaali',
+  ];
+
+  const answer = table[context.rating - 1 || 4];
+
+  if (Number(input)) {
+    input = '';
+  }
 
   return pairs.read(sessionId)
       .then((pairList) => {
         const pairId = pairList[0];
         if (pairId === undefined) return Promise.reject();
 
-        return feedback.createFeedback({
-          giver: sessionId, pair: pairId, feedback: input,
-        });
-      });
+        return Messenger.send(
+            pairId, strings['@TELL_USER_HAS_NEW_FEEDBACK']
+            + answer + '\n' + input)
+            .then(() => {
+              if (input.length) {
+                return feedback.createFeedback({
+                  giver: sessionId, pair: pairId, feedback: input,
+                });
+              }
+            });
+    });
 }

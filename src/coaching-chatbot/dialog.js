@@ -405,6 +405,23 @@ bot
     '/give_feedback', [
       (session) => {
         session.addResult('@FEEDBACK_ABOUT_MEETING');
+        session.addQuickReplies([
+          Builder.QuickReplies.create('1'),
+          Builder.QuickReplies.create('2'),
+          Builder.QuickReplies.create('3'),
+          Builder.QuickReplies.create('4'),
+        ]);
+      },
+      (session) => {
+        session.runActions(['setRating']);
+        session.next();
+      },
+      (session) => {
+        if (session.context.rating >= 3 || session.context.rating <= 0) {
+          session.next();
+        } else {
+          session.addResult('@GIVE_FEEDBACK');
+        }
       },
       (session) => {
         session.runActions(['giveFeedback']);
