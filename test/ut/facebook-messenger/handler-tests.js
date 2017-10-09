@@ -1,5 +1,5 @@
 import fs from 'fs';
-import sinon from 'sinon';
+import * as sinon from 'sinon';
 
 var assert = require('assert');
 

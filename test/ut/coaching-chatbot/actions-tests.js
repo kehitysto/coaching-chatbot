@@ -1,8 +1,8 @@
-import sinon from 'sinon';
+import * as sinon from 'sinon';
 
 import * as actions from '../../../src/coaching-chatbot/actions.js';
-import Sessions from '../../../src/util/sessions-service';
-import Pairs from '../../../src/util/pairs-service';
+import * as Sessions from '../../../src/util/sessions-service';
+import * as Pairs from '../../../src/util/pairs-service';
 
 const TEST_SESSION = 'SESSION';
 
@@ -110,27 +110,12 @@ describe('coaching-bot actions', function() {
     it('returns the name from entity name', function() {
       const ret = actions.setName({
         context: {},
-        input: 'Pertti',
       });
 
       return expect(ret)
         .to.become({
           context: {
-            name: 'Pertti',
-          },
-        });
-    });
-
-    it('returns the name from entity contact', function() {
-      const ret = actions.setName({
-        context: {},
-        input: 'Jari',
-      });
-
-      return expect(ret)
-        .to.become({
-          context: {
-            name: 'Jari',
+            name: 'Matti Luukkainen',
           },
         });
     });
@@ -140,7 +125,6 @@ describe('coaching-bot actions', function() {
         context: {
           'foo': 'bar',
         },
-        input: 'Jari',
       });
 
       return expect(ret)
@@ -148,7 +132,7 @@ describe('coaching-bot actions', function() {
         .deep.equal({
           context: {
             'foo': 'bar',
-            'name': 'Jari',
+            'name': 'Matti Luukkainen',
           },
         });
     });
@@ -449,50 +433,6 @@ describe('coaching-bot actions', function() {
       });
   });
 
-  describe('#MeetingFrequency', function() {
-    it('returns a Promise', function() {
-      const ret = actions.addMeetingFrequency({
-        context: {},
-        input: '',
-      });
-
-      expect(ret)
-        .to.be.a('Promise');
-    });
-
-    it('returns the name from entity meetingfrequency', function() {
-      const ret = actions.addMeetingFrequency({
-        context: {},
-        input: 'Kerran viikossa',
-      });
-
-      return expect(ret)
-        .to.become({
-          context: {
-            meetingFrequency: 'ONCE_A_WEEK',
-          },
-        });
-    });
-
-    it('preserves context', function() {
-      const ret = actions.addMeetingFrequency({
-        context: {
-          'foo': 'bar',
-        },
-        input: 'Kerran viikossa',
-      });
-
-      return expect(ret)
-        .to.eventually
-        .deep.equal({
-          context: {
-            'foo': 'bar',
-            'meetingFrequency': 'ONCE_A_WEEK',
-          },
-        });
-    });
-  });
-
   describe('#markUserAsSearching', function() {
     it('returns a Promise', function() {
       const ret = actions.markUserAsSearching({
@@ -534,8 +474,56 @@ describe('coaching-bot actions', function() {
             rejectedPeers: [],
             pairRequests: [],
             searching: false,
+            sentRequests: []
           },
         });
+    });
+  });
+
+  describe('#removeSentRequests', function() {
+    it('should remove contexts peerRequests from the recipients', function() {
+      const sessions = new Sessions();
+      
+      const stubSessionsRead = sinon.stub(
+        sessions.db,
+        'read'
+      );
+
+      const spySessionsWrite = sinon.spy(
+        sessions.db,
+        'write'
+      );
+      
+      stubSessionsRead.returns(
+        Promise.resolve({
+          pairRequests: [
+            1,
+            3
+          ]
+        })
+      )
+
+      const ret = actions.removeSentRequests({
+        sessionId: 1,
+        context: {
+          sentRequests: [
+            2
+          ]
+        },
+      });
+
+      const expectedToWrite = {
+        pairRequests: [
+          3
+        ]
+      };
+
+      return ret.then((result) => {
+        expect(spySessionsWrite.calledWith(2, expectedToWrite)).to.equal(true);
+      }).then(() => {          
+        spySessionsWrite.restore();
+        stubSessionsRead.restore();
+      });
     });
   });
 
@@ -708,24 +696,6 @@ describe('coaching-bot actions', function() {
     });
   });
 
-  describe('#nextRequest', function() {
-    it('should switch the next item in the list to be the first',
-        function() {
-        const ret = actions.nextRequest({
-            context: {
-              pairRequests: [0, 1, 2],
-            },
-        });
-
-        return expect(ret)
-            .to.become({
-            context: {
-              pairRequests: [1, 2, 0],
-            },
-            });
-    });
-  });
-
   describe('#rejectRequest', function() {
     it('should drop the first item from the list', function() {
         const ret = actions.rejectRequest({
@@ -775,6 +745,7 @@ describe('coaching-bot actions', function() {
             pairRequests: [],
             rejectedPeers: [],
             searching: false,
+            sentRequests: []
           }
         };
 
@@ -842,6 +813,26 @@ describe('coaching-bot actions', function() {
 });
 
 describe('#breakPair', function() {
+  it('should reject if there is no pairId', function() {
+      const pairs = new Pairs()
+      const stubPairsRead = sinon.stub(
+        pairs.db,
+        'read'
+      );
+
+      stubPairsRead.returns(Promise.resolve(
+        []
+      ));
+
+      const ret = actions.breakPair({
+        sessionId: 0,
+      });
+
+      return expect(ret).be.rejected.then(() => {
+        stubPairsRead.restore()
+      });
+  });
+
   it('should set pair state to profile and return pair broken', function() {
       const sessions = new Sessions();
       const stubSessionsRead = sinon.stub(
@@ -900,3 +891,121 @@ describe('#breakPair', function() {
       });
     });
 });
+
+describe('#breakAllPairs', function() {
+  it('should read pairs and call breakPair for them', function() {
+      const sessions = new Sessions();
+      const pairs = new Pairs();
+
+      const stubSessionsRead = sinon.stub(
+        sessions.db,
+        'read'
+      );
+
+      const stubPairsRead = sinon.stub(
+        pairs.db,
+        'read'
+      );
+
+      const spyPairsBreakPair = sinon.spy(
+        Pairs.prototype,
+        'breakPair'
+      );
+
+      const profile = {
+        name: 'Pertti',
+        communicationMethods: {
+          SKYPE: 'pertti_42',
+        },
+      };
+
+      stubSessionsRead.returns(Promise.resolve(
+        profile
+      ));
+
+      stubPairsRead.returns(Promise.resolve(
+        [1, 2, 3]
+      ));
+
+      const ret = actions.breakAllPairs({
+        sessionId: 0,
+      });
+
+      return ret.then((result) => {
+        expect(spyPairsBreakPair.args).to.deep.equal([[0, 1], [0, 2], [0, 3]]);
+      }).then(() => {
+        spyPairsBreakPair.restore();
+        stubPairsRead.restore();
+        stubSessionsRead.restore();
+      });
+    });
+});
+
+describe('#addPairRequest', function() {
+  it('should return peer no longer available if peer is not searching', function() {
+    const sessions = new Sessions();
+
+    const stubSessionsRead = sinon.stub(
+      sessions.db,
+      'read'
+    );
+
+    const profile = {
+      name: 'Pertti',
+      communicationMethods: {
+        SKYPE: 'pertti_42',
+      },
+      searching: false,
+    };
+
+    stubSessionsRead.returns(Promise.resolve(
+      profile
+    ));
+
+    const ret = actions.addPairRequest({
+      context: {
+        availablePeers: [1],
+      },
+    })
+
+    return ret.then((result) => {
+      expect(result.result).to.equal('@PEER_NO_LONGER_AVAILABLE');
+    }).then(() => {
+      stubSessionsRead.restore();
+    });
+  });
+
+  it('should confirm added request', function() {
+    const sessions = new Sessions();
+
+    const stubSessionsRead = sinon.stub(
+      sessions.db,
+      'read'
+    );
+
+    const profile = {
+      name: 'Pertti',
+      communicationMethods: {
+        SKYPE: 'pertti_42',
+      },
+      searching: true,
+    };
+
+    stubSessionsRead.returns(Promise.resolve(
+      profile
+    ));
+
+    const ret = actions.addPairRequest({
+      context: {
+        availablePeers: [1],
+      },
+    })
+
+    return ret.then((result) => {
+      expect(result.result).to.equal('@CONFIRM_NEW_PEER_ASK');
+    }).then(() => {
+      stubSessionsRead.restore();
+    });
+  });
+});
+

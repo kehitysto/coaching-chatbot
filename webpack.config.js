@@ -6,7 +6,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
-    'facebook-messenger/handler': './src/facebook-messenger/handler.js',
+    'src/facebook-messenger/handler': './src/facebook-messenger/handler.js',
   },
   target: 'node',
   externals: [
@@ -17,7 +17,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
-        loader: 'babel-loader',
+        loader: 'awesome-typescript-loader',
       },
       { test: /\.json/, loader: 'json-loader' },
     ],
@@ -26,16 +26,7 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: '.env' },
     ]),
-    new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        unused: true,
-        dead_code: true,
-        warnings: false,
-        drop_debugger: true,
-      },
-    }),
   ],
   output: {
     libraryTarget: 'commonjs',

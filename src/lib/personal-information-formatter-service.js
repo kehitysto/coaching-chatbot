@@ -1,8 +1,6 @@
 import log from '../lib/logger-service';
-import Strings from '../../src/coaching-chatbot/strings.json';
-import MeetingFrequency
-    from '../../src/coaching-chatbot/meeting-frequencies.json';
-import PersonalInformation
+import * as Strings from '../../src/coaching-chatbot/strings.json';
+import * as PersonalInformation
     from '../../src/coaching-chatbot/personal-information.json';
 import CommunicationMethodsFormatter
     from '../lib/communication-methods-formatter';
@@ -11,8 +9,6 @@ const Formatter = {
   format,
   formatFromTemplate,
   createProfile,
-  getMeetingFrequency,
-  getMeetingFrequencyIdentifierByInput,
   getPersonalInformationbuttons,
 };
 
@@ -54,20 +50,14 @@ function format(template, context) {
   return s;
 }
 
+/**
+ * @param {Context} context
+ * @return {string}
+ */
 function createProfile(context) {
   return [context.name, context.job, context.age, context.place, context.bio]
     .filter((val) => val)
     .join(', ');
-}
-
-function getMeetingFrequency(context) {
-  return MeetingFrequency.reduce((l, m) => {
-      l.push({
-        title: m.description,
-        payload: m.identifier,
-      });
-    return l;
-  }, []);
 }
 
 function getPersonalInformationbuttons(context) {
@@ -78,16 +68,4 @@ function getPersonalInformationbuttons(context) {
       });
     return l;
   }, []);
-}
-
-function getMeetingFrequencyIdentifierByInput(input) {
-  for (let i = 0; i < MeetingFrequency.length; i++) {
-    if (input.toLowerCase()
-      .includes(
-        MeetingFrequency[i].description.toLowerCase())) {
-      return MeetingFrequency[i].identifier;
-    }
-  }
-
-  return 'undefined';
 }

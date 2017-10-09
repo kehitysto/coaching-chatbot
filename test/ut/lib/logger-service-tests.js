@@ -1,4 +1,4 @@
-import sinon from 'sinon';
+import * as sinon from 'sinon';
 
 var assert = require('assert');
 import Logger from '../../../src/lib/logger-service';

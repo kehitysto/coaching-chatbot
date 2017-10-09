@@ -1,4 +1,4 @@
-import request from 'request-promise';
+import * as request from 'request-promise';
 
 import log from '../lib/logger-service';
 
@@ -73,6 +73,29 @@ const Messenger = {
     }
 
     return Promise.reject(new Error('400 Bad Token'));
+  },
+
+  getUserProfile(id) {
+    if (process.env.RUN_ENV === 'dev') {
+      return Promise
+        .resolve({ first_name: 'Matti', last_name: 'Luukkainen' });
+    }
+
+    if (!process.env.FACEBOOK_PAGE_ACCESS_TOKEN) {
+      return Promise
+        .reject(new Error('No FACEBOOK_PAGE_ACCESS_TOKEN defined'));
+    }
+
+    log.info('Getting Facebook User Profile');
+
+    return request({
+      url: 'https://graph.facebook.com/v2.6/' + id,
+      qs: {
+        fields: 'first_name,last_name,profile_pic',
+        access_token: process.env.FACEBOOK_PAGE_ACCESS_TOKEN,
+      },
+      json: true,
+    });
   },
 };
 

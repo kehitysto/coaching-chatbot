@@ -1,6 +1,6 @@
-import sinon from 'sinon';
+import * as sinon from 'sinon';
 
-import Builder from '../../../src/chatbot/builder.js';
+import * as Builder from '../../../src/chatbot/builder.js';
 import log from '../../../src/lib/logger-service';
 
 var assert = require('assert');

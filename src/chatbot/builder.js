@@ -1,6 +1,6 @@
 import log from '../lib/logger-service';
 
-import Session from './session';
+import * as Session from './session';
 
 class Builder {
   constructor(strings, maxSteps = 10) {

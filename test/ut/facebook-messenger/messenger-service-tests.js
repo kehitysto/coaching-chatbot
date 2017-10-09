@@ -1,5 +1,5 @@
-import fs from 'fs';
-import sinon from 'sinon';
+import * as fs from 'fs';
+import * as sinon from 'sinon';
 
 const mod = require('inject-loader!../../../src/facebook-messenger/messenger-service');
 

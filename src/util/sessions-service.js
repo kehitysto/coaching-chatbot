@@ -1,5 +1,5 @@
-import DynamoDBProvider from './sessions-dynamodb-provider';
-import InMemoryProvider from './sessions-inmemory-provider';
+import * as DynamoDBProvider from './sessions-dynamodb-provider';
+import * as InMemoryProvider from './sessions-inmemory-provider';
 
 import log from '../lib/logger-service';
 
@@ -20,6 +20,10 @@ module.exports = class Sessions {
         new DynamoDBProvider();
   }
 
+  /**
+   * @param {string} id Session ID
+   * @return {Promise<Context>}
+   */
   read(id) {
     return this.db.read(id);
   }
@@ -28,7 +32,7 @@ module.exports = class Sessions {
     return this.db.write(id, context);
   }
 
-  getAvailablePairs(id, meetingFrequency) {
-    return this.db.getAvailablePairs(id, meetingFrequency);
+  getAvailablePairs(id) {
+    return this.db.getAvailablePairs(id);
   }
 };
