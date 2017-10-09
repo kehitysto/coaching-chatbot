@@ -55,48 +55,6 @@ describe('Formatter service', function() {
       assert(formatted === expected);
     });
 
-    it('should format {job} correctly', function() {
-      const template = '{job}';
-
-      const context = {
-        job: 'Cook',
-      };
-
-      const expected = 'Cook';
-      const formatted = PersonalInformationFormatter.format(
-        template, context);
-
-      assert(formatted === expected);
-    });
-
-    it('should format {age} correctly', function() {
-      const template = '{age}';
-
-      const context = {
-        age: '45',
-      };
-
-      const expected = '45';
-      const formatted = PersonalInformationFormatter.format(
-        template, context);
-
-      assert(formatted === expected);
-    });
-
-    it('should format {place} correctly', function() {
-      const template = '{place}';
-
-      const context = {
-        place: 'Texas',
-      };
-
-      const expected = 'Texas';
-      const formatted = PersonalInformationFormatter.format(
-        template, context);
-
-      assert(formatted === expected);
-    });
-
     it('should format {profile} correctly (name)', function() {
       const template = '{profile}';
 
@@ -111,67 +69,17 @@ describe('Formatter service', function() {
       assert(formatted === expected);
     });
 
-    it('should format {profile} correctly (name, job)', function() {
+    it('should format {profile} correctly (name, bio)', function() {
       const template = '{profile}';
 
       const context = {
         name: 'Pertti',
-        job: 'Cook',
+        bio: 'Pesusieni',
       };
 
-      const expected = 'Pertti, Cook';
+      const expected = 'Pertti, Pesusieni';
       const formatted = PersonalInformationFormatter.format(
         template, context);
-
-      assert(formatted === expected);
-    });
-
-    it('should format {profile} correctly (name, job, age)', function() {
-      const template = '{profile}';
-
-      const context = {
-        name: 'Pertti',
-        job: 'Cook',
-        age: 45,
-      };
-
-      const expected = 'Pertti, Cook, 45';
-      const formatted = PersonalInformationFormatter.format(
-        template, context);
-
-      assert(formatted === expected);
-    });
-
-    it('should format {profile} correctly (name, job, age, place)',
-      function() {
-        const template = '{profile}';
-
-        const context = {
-          name: 'Pertti',
-          job: 'Cook',
-          age: 45,
-          place: 'Texas',
-        };
-
-        const expected = 'Pertti, Cook, 45, Texas';
-        const formatted = PersonalInformationFormatter
-          .format(template, context);
-
-        assert(formatted === expected);
-      });
-
-    it('should format {profile} correctly (name, job, place)', function() {
-      const template = '{profile}';
-
-      const context = {
-        name: 'Pertti',
-        job: 'Cook',
-        place: 'Texas',
-      };
-
-      const expected = 'Pertti, Cook, Texas';
-      const formatted = PersonalInformationFormatter
-        .format(template, context);
 
       assert(formatted === expected);
     });
@@ -219,9 +127,7 @@ describe('Formatter service', function() {
                 SKYPE: 'pertti_52',
               },
               state: '/?0/profile?0/',
-              job: 'muurari',
-              age: '58',
-              place: 'Kuopio',
+              bio: 'pellavainen',
             },
           },
           {
@@ -234,15 +140,13 @@ describe('Formatter service', function() {
                 CAFETERIA: 'Salainen',
               },
               state: '/?0/profile?0',
-              job: 'valastaja',
-              age: '62',
-              place: 'Oulu',
+              bio: 'seppäläinen'
             },
           },
         ];
 
         const expected =
-          'Pertti, muurari, 58, Kuopio\n  - Skype\n\nSeppo, valastaja, 62, Oulu\n  - Skype\n  - Kahvila';
+          'Pertti, pellavainen\n  - Skype\n\nSeppo, seppäläinen\n  - Skype\n  - Kahvila';
 
         const beautifulPairs = PairFormatter.beautifyAvailablePairs(
           dumps);

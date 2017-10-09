@@ -38,9 +38,6 @@ describe('User story', function() {
     this.bot = new Chatbot(dialog, this.sessions);
 
     this.expectedName = 'Matti Luukkainen';
-    this.expectedJob = 'Opiskelija';
-    this.expectedAge = '22';
-    this.expectedPlace = 'Helsinki';
     this.userInformation = {};
   });
 
@@ -306,7 +303,6 @@ describe('User story', function() {
         function() {
           const testUser = {
             name: 'Pekka',
-            job: 'Ope',
             communicationMethods: {
               SKYPE: 'Pekka123',
             },
@@ -340,7 +336,6 @@ describe('User story', function() {
         function() {
           const testUser = {
             name: 'Matti',
-            job: 'Ope',
             communicationMethods: {
               SKYPE: 'Matti123',
             },
@@ -351,7 +346,6 @@ describe('User story', function() {
 
           const testUser2 = {
             name: 'Laura',
-            job: 'Student',
             communicationMethods: {
               SKYPE: 'Laura123',
             },
@@ -422,7 +416,6 @@ describe('User story', function() {
         function() {
           const testUser = {
             name: 'Matti',
-            job: 'Ope',
             communicationMethods: {
               SKYPE: 'Matti123',
             },

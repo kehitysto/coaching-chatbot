@@ -123,30 +123,6 @@ module.exports = {
         ],
     },
 
-    CHANGE_JOB: {
-        each: [
-          '#CHANGE',
-          '#JOB',
-          '#OPTIONAL_VALUE',
-        ],
-    },
-
-    SET_AGE: {
-        each: [
-          '#SET_OR_CHANGE',
-          '#AGE',
-          '#OPTIONAL_VALUE',
-        ],
-    },
-
-    SET_PLACE: {
-        each: [
-          '#SET_OR_CHANGE',
-          '#PLACE',
-          '#OPTIONAL_VALUE',
-        ],
-    },
-
     SET_BIO: {
         each: [
           '#SET_OR_CHANGE',

@@ -104,66 +104,11 @@ describe('coaching-bot actions', function() {
         .to.be.a('Promise');
     });
 
-    it('Should return without age', function() {
-      const ret = actions.updateProfile({
-        context: {
-          'name': 'Matti',
-          'job': 'Opiskelija',
-          'place': 'Helsinki',
-        },
-        userData: '',
-      });
-
-      return expect(ret)
-        .to.eventually.deep.equal({
-          userData: {
-            profile: 'Matti, Opiskelija, Helsinki',
-          },
-        });
-    });
-
-    it('Should return without place', function() {
-      const ret = actions.updateProfile({
-        context: {
-          'name': 'Matti',
-          'job': 'Opiskelija',
-          'age': '23',
-        },
-        userData: '',
-      });
-
-      return expect(ret)
-        .to.eventually.deep.equal({
-          userData: {
-            profile: 'Matti, Opiskelija, 23',
-          },
-        });
-    });
-
-    it('Should return without age and place', function() {
-      const ret = actions.updateProfile({
-        context: {
-          'name': 'Matti',
-          'job': 'Opiskelija',
-        },
-        userData: '',
-      });
-
-      return expect(ret)
-        .to.eventually.deep.equal({
-          userData: {
-            profile: 'Matti, Opiskelija',
-          },
-        });
-    });
-
     it('Should return everything', function() {
       const ret = actions.updateProfile({
         context: {
           'name': 'Matti',
-          'job': 'Opiskelija',
-          'age': '23',
-          'place': 'Helsinki',
+          'bio': 'Kokenut koodari'
         },
         userData: '',
       });
@@ -171,7 +116,7 @@ describe('coaching-bot actions', function() {
       return expect(ret)
         .to.eventually.deep.equal({
           userData: {
-            profile: 'Matti, Opiskelija, 23, Helsinki',
+            profile: 'Matti, Kokenut koodari',
           },
         });
     });
