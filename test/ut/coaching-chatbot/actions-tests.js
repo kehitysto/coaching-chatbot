@@ -96,6 +96,19 @@ describe('coaching-bot actions', function() {
     });
   });
 
+  describe('#setRealName', function() {
+    it('returns the real name', function() {
+      const ret = actions.setRealName({
+        context: {}
+      });
+      expect(ret).to.become({
+        context: {
+          name:'Matti Luukkainen'
+        }
+      })
+    });
+  });
+
   describe('#setName', function() {
     it('returns a Promise', function() {
       const ret = actions.setName({
@@ -109,7 +122,8 @@ describe('coaching-bot actions', function() {
 
     it('returns the name from entity name', function() {
       const ret = actions.setName({
-        context: {},
+        context: {  },
+        input: 'Matti Luukkainen',
       });
 
       return expect(ret)
@@ -125,6 +139,7 @@ describe('coaching-bot actions', function() {
         context: {
           'foo': 'bar',
         },
+        input: 'Matti Luukkainen',
       });
 
       return expect(ret)
