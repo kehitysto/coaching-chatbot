@@ -382,17 +382,26 @@ bot
         session.addResult('@PAIR_CREATED');
         session.runActions(['displayAcceptedPeer']);
         session.addResult('@LINK_TO_HELP');
-        session.addQuickReplies([
-          Builder.QuickReplies.create('@GIVE_FEEDBACK'),
-        ]);
       },
       (session) => {
-        if (session.checkIntent('#GIVE_FEEDBACK')) {
-          session.resetDialog();
-          session.beginDialog('/give_feedback', true);
-        } else {
-          session.addResult('@UNCLEAR');
-          session.prev();
+        if (session.getFacilitation()) {
+          session.addResult('@ASK_FOR_FACILITATION');
+          session.addQuickReplies([
+            Builder.QuickReplies.create('@YES'),
+            Builder.QuickReplies.create('@NO'),
+          ]);
+        }
+      },
+      (session) => {
+        if (session.getFacilitation()) {
+          if (session.checkIntent('#NO')) {
+            session.resetDialog();
+          } else if (session.checkIntent('#YES')) {
+            session.switchDialog('/paivaraama_asetus');
+          } else {
+            session.addResult('@UNCLEAR');
+            session.prev();
+          }
         }
       },
     ], [
@@ -413,6 +422,55 @@ bot
       (session) => {
         session.addResult('@THANKS_FOR_FEEDBACK');
         session.endDialog();
+      },
+    ])
+  .dialog(
+    '/paivaraama_asetus', [
+      (session) => {
+        session.addResult('@ASK_FOR_DAY');
+        session.addQuickReplies([
+          Builder.QuickReplies.create('@MON'),
+          Builder.QuickReplies.create('@TUE'),
+          Builder.QuickReplies.create('@WED'),
+          Builder.QuickReplies.create('@THURS'),
+          Builder.QuickReplies.create('@FRI'),
+          Builder.QuickReplies.create('@SAT'),
+          Builder.QuickReplies.create('@SUN'),
+        ]);
+      },
+      (session) => {
+        if (session.checkIntent('#MON')) {
+          session.runActions(['setDay']);
+        } else if (session.checkIntent('#TUE')) {
+          session.runActions(['setDay']);
+        } else if (session.checkIntent('#WED')) {
+          session.runActions(['setDay']);
+        } else if (session.checkIntent('#THURS')) {
+          session.runActions(['setDay']);
+        } else if (session.checkIntent('#FRI')) {
+          session.runActions(['setDay']);
+        } else if (session.checkIntent('#SAT')) {
+          session.runActions(['setDay']);
+        } else if (session.checkIntent('#SUN')) {
+          session.runActions(['setDay']);
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
+        }
+        session.next();
+      },
+      (session) => {
+        session.addResult('@ASK_FOR_TIME');
+      },
+      (session) => {
+        if (session.checkIntent('#TIME')) {
+          session.runActions(['setTime']);
+          session.addResult('@CONFIRM_DATE');
+          session.endDialog();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
+        }
       },
     ])
   .dialog(

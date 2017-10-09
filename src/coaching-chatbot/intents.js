@@ -224,4 +224,59 @@ module.exports = {
             /^Anna palautetta/i,
         ],
     },
+
+    MON: {
+        any: [
+            /^MA/i,
+            /^ma/i,
+        ],
+    },
+
+    TUE: {
+        any: [
+            /^TI/i,
+            /^ti/i,
+        ],
+    },
+
+    WED: {
+        any: [
+            /^KE/i,
+            /^ke/i,
+        ],
+    },
+
+    THURS: {
+        any: [
+            /^TO/i,
+            /^to/i,
+        ],
+    },
+
+    FRI: {
+        any: [
+            /^PE/i,
+            /^pe/i,
+        ],
+    },
+
+    SAT: {
+        any: [
+            /^LA/i,
+            /^la/i,
+        ],
+    },
+
+    SUN: {
+        any: [
+            /^SU/i,
+            /^su/i,
+        ],
+    },
+
+    TIME: {
+        any: [
+            /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/i,
+        ],
+    },
 };

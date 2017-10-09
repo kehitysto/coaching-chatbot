@@ -319,4 +319,10 @@ module.exports = class Session {
     return CommunicationMethodsFormatter.getCommunicationMethods(this.context)
       .length === 0;
   }
+
+  getFacilitation() {
+    let d = this.context.day;
+    let t = this.context.time;
+    return (d === undefined || t === undefined);
+  }
 };
