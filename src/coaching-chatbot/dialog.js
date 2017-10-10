@@ -378,7 +378,7 @@ bot
       ])
   .dialog(
     '/accepted_pair_information', [
-      (session) => { 
+      (session) => {
         session.switchDialog('/accepted_pair_profile');
       },
     ], [
@@ -407,7 +407,6 @@ bot
     ], [
       ['#CHANGE_DATE', (session, match) => {
         if (match !== true) {
-          console.log("\n Match: " + match + "\n\n")
           session.runActions(['setTime'], match);
         } else {
           session.beginDialog('/set_date');
