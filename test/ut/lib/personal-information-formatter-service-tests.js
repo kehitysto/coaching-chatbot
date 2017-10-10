@@ -137,7 +137,6 @@ describe('Formatter service', function() {
               name: 'Seppo',
               communicationMethods: {
                 SKYPE: 'sala.seppo42',
-                CAFETERIA: 'Salainen',
               },
               state: '/?0/profile?0',
               bio: 'seppäläinen'
@@ -146,7 +145,7 @@ describe('Formatter service', function() {
         ];
 
         const expected =
-          'Pertti, pellavainen\n  - Skype\n\nSeppo, seppäläinen\n  - Skype\n  - Kahvila';
+          'Pertti, pellavainen\n  - Skype\n\nSeppo, seppäläinen\n  - Skype';
 
         const beautifulPairs = PairFormatter.beautifyAvailablePairs(
           dumps);

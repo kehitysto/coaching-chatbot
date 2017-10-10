@@ -306,6 +306,7 @@ bot
           session.addQuickReplies([
             Builder.QuickReplies.create('@YES'),
             Builder.QuickReplies.create('@NO'),
+            Builder.QuickReplies.create('@RETURN')
           ]);
         },
         (session) => {
@@ -314,6 +315,8 @@ bot
           } else if (session.checkIntent('#YES')) {
             session.runActions(['acceptRequest']);
             session.switchDialog('/accepted_pair_information');
+          } else if (session.checkIntent('#RETURN')) {
+            return session.endDialog();
           } else {
             session.addResult('@UNCLEAR');
           }

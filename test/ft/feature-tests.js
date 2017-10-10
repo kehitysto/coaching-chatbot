@@ -204,54 +204,6 @@ describe('User story', function() {
       );
 
       it(
-        'should ask if I want to add more communication methods after giving my phone number',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, '040-123123'))
-            .to.eventually.become(
-              [buildResponse(PersonalInformationFormatter.formatFromTemplate(
-                  '@CONFIRM_COMMUNICATION_METHODS', {
-                    communicationMethods: {
-                      SKYPE: 'nickname',
-                      PHONE: '040-123123'
-                    }
-                  })),
-                buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
-                  'title': 'Kyllä',
-                  'payload': '@YES',
-                }, {
-                  'title': 'Ei',
-                  'payload': '@NO',
-                }]),
-              ]);
-        }
-      );
-
-      it(
-        'if I answer yes to add more after giving my phone number, it should provide the list of communication methods again and it should show that I have already added Skype and Phone',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Kyllä'))
-            .to.eventually.become([
-              buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                CommunicationMethodsFormatter
-                .getCommunicationMethods({})),
-            ]);
-        }
-      );
-
-      it(
-        'should ask for my phone number when I choose cafeteria as a communication method',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Kahvila'))
-            .to.eventually.become([
-              buildResponse('@REQUEST_PHONE_NUMBER'),
-            ]);
-        }
-      );
-
-      it(
         'should not go straight to pair searching after all methods are given',
         function() {
           return expect(
@@ -261,8 +213,7 @@ describe('User story', function() {
                 '@CONFIRM_COMMUNICATION_METHODS', {
                   communicationMethods: {
                     SKYPE: 'nickname',
-                    PHONE: '040-123123',
-                    CAFETERIA: '040-123123'
+                    PHONE: '040-123123'
                   }
                 })),
               buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
@@ -482,7 +433,6 @@ describe('User story', function() {
                   communicationMethods: {
                     SKYPE: 'nickname',
                     PHONE: '040-123123',
-                    CAFETERIA: '040-123123'
                   }
                 })),
               buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{

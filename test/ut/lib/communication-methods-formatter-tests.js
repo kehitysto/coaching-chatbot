@@ -23,34 +23,7 @@ describe('Communication methods formatter', function() {
             title: 'Puhelin',
             payload: 'PHONE',
           },
-          {
-            title: 'Kahvila',
-            payload: 'CAFETERIA',
-          },
         ];
-
-        return expect(communicationMethods)
-          .to.deep
-          .equal(expected);
-      });
-
-    it(
-      'should only include cafeteria in communication methods if the others have been selected',
-      function() {
-        const context = {
-          communicationMethods: {
-            SKYPE: '',
-            PHONE: '',
-          },
-        };
-
-        const communicationMethods = CommunicationMethodsFormatter
-          .getCommunicationMethods(context);
-
-        const expected = [{
-          title: 'Kahvila',
-          payload: 'CAFETERIA',
-        }];
 
         return expect(communicationMethods)
           .to.deep
@@ -68,10 +41,6 @@ describe('Communication methods formatter', function() {
         {
           title: 'Puhelin',
           payload: 'PHONE',
-        },
-        {
-          title: 'Kahvila',
-          payload: 'CAFETERIA',
         },
       ];
 
@@ -120,22 +89,6 @@ describe('Communication methods formatter', function() {
 
     it(
       'should find right string to ask for right communication Method(Phonenumber)',
-      function() {
-        const input = 'Kahvila';
-        const expected = {
-          identifier: 'CAFETERIA',
-          name: 'Kahvila',
-          infoRequestText: '@REQUEST_PHONE_NUMBER',
-        };
-
-        return expect(CommunicationMethodsFormatter
-            .getCommunicationMethodByInput(input))
-          .to.deep
-          .equal(expected);
-      });
-
-    it(
-      'should find right string to ask for right communication Method(CAFETERIA)',
       function() {
         const input = 'Puhelin';
         const expected = {
