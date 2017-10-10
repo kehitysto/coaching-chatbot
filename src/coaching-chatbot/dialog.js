@@ -395,9 +395,25 @@ bot
     '/give_feedback', [
       (session) => {
         session.addResult('@FEEDBACK_ABOUT_MEETING');
+        session.addQuickReplies(
+          Builder.QuickReplies.createArray(['1', '2', '3', '4'])
+        );
       },
       (session) => {
-        session.runActions(['giveFeedback']);
+        session.runActions(['setRating']);
+        session.next();
+      },
+      (session) => {
+        if (session.isRatingGood()) {
+          session.runActions(['sendRating']);
+          session.next();
+          session.next();
+        } else {
+          session.addResult('@GIVE_FEEDBACK');
+        }
+      },
+      (session) => {
+        session.runActions(['sendRating', 'sendFeedback']);
         session.next();
       },
       (session) => {
