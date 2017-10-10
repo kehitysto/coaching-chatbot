@@ -42,6 +42,15 @@ export function setName({ context, input }) {
   });
 }
 
+export function setRating({ context, input }) {
+  return Promise.resolve({
+    context: {
+      ...context,
+      rating: [1, 2, 3, 4].includes(Number(input)) ? Number(input) : undefined,
+    },
+  });
+}
+
 export function setBio({ context, input }) {
   return Promise.resolve({
     context: {
@@ -425,17 +434,42 @@ export function addPairRequest({ sessionId, context }) {
   });
 }
 
-export function giveFeedback({ sessionId, input }) {
+export function sendRating({ context, sessionId }) {
   let pairs = new Pairs();
-  let feedback = new Feedback();
+
+  const answer = strings['@RATINGS'][context.rating - 1 || 3];
+
+  log.info('SendRating with answer ' + answer);
 
   return pairs.read(sessionId)
       .then((pairList) => {
         const pairId = pairList[0];
         if (pairId === undefined) return Promise.reject();
 
-        return feedback.createFeedback({
-          giver: sessionId, pair: pairId, feedback: input,
-        });
-      });
+        return Messenger.send(
+          pairId, strings['@TELL_USER_HAS_NEW_FEEDBACK'] + answer
+        );
+    }).then(() => {
+      return Promise.resolve({ result: '' });
+    });
+}
+
+export function sendFeedback({ context, sessionId, input }) {
+  let pairs = new Pairs();
+  let feedback = new Feedback();
+
+  log.info('SendFeedback with input ' + input);
+
+  return pairs.read(sessionId)
+    .then((pairList) => {
+        const pairId = pairList[0];
+        if (pairId === undefined) return Promise.reject();
+
+        return Messenger.send(pairId, input)
+            .then(() => {
+              return feedback.createFeedback({
+                giver: sessionId, pair: pairId, feedback: input,
+              });
+          });
+    });
 }

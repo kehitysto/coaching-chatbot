@@ -319,4 +319,8 @@ module.exports = class Session {
     return CommunicationMethodsFormatter.getCommunicationMethods(this.context)
       .length === 0;
   }
+
+  isRatingGood() {
+    return ![1, 2].includes(this.context.rating);
+  }
 };
