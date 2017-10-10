@@ -414,7 +414,7 @@ bot
         session.next();
       },
       (session) => {
-        if (![1, 2].includes(session.context.rating)) {
+        if (session.isRatingGood()) {
           session.runActions(['sendRating']);
           session.next();
           session.next();
