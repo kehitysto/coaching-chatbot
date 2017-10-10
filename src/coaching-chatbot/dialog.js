@@ -49,7 +49,7 @@ bot
     '/create_profile', [
       (session) => {
         session.addResult('@GREAT');
-        session.beginDialog('/set_name');
+        session.beginDialog('/set_real_name');
       },
       (session) => {
         session.beginDialog('/set_bio');
@@ -60,7 +60,18 @@ bot
       },
     ])
   .dialog(
+    '/set_real_name', [
+      (session) => {
+        session.runActions(['setRealName']);
+        session.addResult('@CONFIRM_NAME');
+        session.endDialog();
+      },
+    ])
+  .dialog(
     '/set_name', [
+      (session) => {
+        session.addResult('@REQUEST_NAME');
+      },
       (session) => {
         session.runActions(['setName']);
         session.addResult('@CONFIRM_NAME');
