@@ -38,7 +38,7 @@
   "@STOPPED_SEARCHING": "Parinhakusi on lopetettu.",
   "@CONFIRM_NEW_PEER_ASK": "Pyyntö on lähetetty, ilmoitan jos pyyntö hyväksytään",
   "@TELL_USER_HAS_NEW_REQUEST": "Olet saanut uuden parinhakupyynnön. Sano 'näytä pyynnöt' nähdäksesi saapuneet parinhakupyynnöt",
-  "@INFORMATION_ABOUT_LIST": "Tässä on lista henkilöistä, jotka haluavat tavata yhtä usein:",
+  "@INFORMATION_ABOUT_LIST": "Tässä on lista henkilöistä, jotka myös hakevat paria:",
   "@INFORMATION_ABOUT_REQUESTS": "Seuraava käyttäjä haluaisi lisätä sinut vertaisohjausparikseen:",
   "@NO_REQUESTS_AVAILABLE": "Valitettavasti sinulla ei juuri nyt ole avoimia parinhakupyyntöjä.\nSelataksesi vapaita parinhakijoita kirjoita 'seuraava'",
   "@SHOW_REQUESTS": "Näytä pyynnöt",
