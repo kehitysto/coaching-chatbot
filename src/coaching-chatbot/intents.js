@@ -279,4 +279,12 @@ module.exports = {
             /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/i,
         ],
     },
+
+    CHANGE_DATE: {
+        each: [
+            '#CHANGE',
+            /^tapaaminen/i,
+            '#OPTIONAL_VALUE',
+          ],
+    },
 };

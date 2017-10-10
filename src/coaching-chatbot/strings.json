@@ -55,7 +55,7 @@
   "@FEEDBACK_ABOUT_MEETING": "Anna vapaamuotoinen palaute edellisestä tapaamisesta. Palautetta ei näytetä parille.",
   "@GIVE_FEEDBACK": "Anna palautetta",
   "@THANKS_FOR_FEEDBACK": "Kiitos palautteesta!",
-  "@ASK_FOR_FACILITATION": "Haluatko saada muistutuksia tapaamisista ja antaa palautetta?",
+  "@ASK_FOR_FACILITATION": "Voit asettaa tapaamispäivän, jotta voit saada muistutuksia ja antaa palautetta.",
   "@ASK_FOR_DAY": "Minä viikonpäivänä tapaaminen on?",
   "@ASK_FOR_TIME": "Monelta tapaaminen on?",
   "@MON": "MA",
@@ -65,7 +65,8 @@
   "@FRI": "PE",
   "@SAT": "LA",
   "@SUN": "SU",
-  "@CONFIRM_DATE": "Tapaaminen on viikottain päivämääränä {day}, klo {time}"
+  "@CONFIRM_DATE": "Tapaaminen on viikottain päivämääränä {day}, klo {time}",
+  "@SET_DATE": "Aseta tapaaminen"
 
   
 }

@@ -378,31 +378,8 @@ bot
       ])
   .dialog(
     '/accepted_pair_information', [
-      (session) => {
-        session.addResult('@PAIR_CREATED');
-        session.runActions(['displayAcceptedPeer']);
-        session.addResult('@LINK_TO_HELP');
-      },
-      (session) => {
-        if (session.getFacilitation()) {
-          session.addResult('@ASK_FOR_FACILITATION');
-          session.addQuickReplies([
-            Builder.QuickReplies.create('@YES'),
-            Builder.QuickReplies.create('@NO'),
-          ]);
-        }
-      },
-      (session) => {
-        if (session.getFacilitation()) {
-          if (session.checkIntent('#NO')) {
-            session.resetDialog();
-          } else if (session.checkIntent('#YES')) {
-            session.switchDialog('/paivaraama_asetus');
-          } else {
-            session.addResult('@UNCLEAR');
-            session.prev();
-          }
-        }
+      (session) => { 
+        session.switchDialog('/accepted_pair_profile');
       },
     ], [
       ['#BREAK_PAIR', (session) => {
@@ -411,21 +388,34 @@ bot
       }],
     ])
   .dialog(
-    '/give_feedback', [
+    '/accepted_pair_profile', [
       (session) => {
-        session.addResult('@FEEDBACK_ABOUT_MEETING');
+        session.addResult('@PAIR_CREATED');
+        session.addResult('@LINK_TO_HELP');
+        session.runActions(['displayAcceptedPeer']);
+        if (session.getFacilitation()) {
+          session.addResult('@ASK_FOR_FACILITATION', [
+            Builder.QuickReplies.create('@SET_DATE'),
+          ]);
+        } else {
+          session.addResult('@CONFIRM_DATE');
+          session.addQuickReplies([
+            Builder.QuickReplies.create('@SET_DATE'),
+          ]);
+        }
       },
-      (session) => {
-        session.runActions(['giveFeedback']);
-        session.next();
-      },
-      (session) => {
-        session.addResult('@THANKS_FOR_FEEDBACK');
-        session.endDialog();
-      },
+    ], [
+      ['#CHANGE_DATE', (session, match) => {
+        if (match !== true) {
+          console.log("\n Match: " + match + "\n\n")
+          session.runActions(['setTime'], match);
+        } else {
+          session.beginDialog('/set_date');
+        }
+      }],
     ])
   .dialog(
-    '/paivaraama_asetus', [
+    '/set_date', [
       (session) => {
         session.addResult('@ASK_FOR_DAY');
         session.addQuickReplies([
@@ -465,12 +455,25 @@ bot
       (session) => {
         if (session.checkIntent('#TIME')) {
           session.runActions(['setTime']);
-          session.addResult('@CONFIRM_DATE');
           session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
           session.prev();
         }
+      },
+    ])
+  .dialog(
+    '/give_feedback', [
+      (session) => {
+        session.addResult('@FEEDBACK_ABOUT_MEETING');
+      },
+      (session) => {
+        session.runActions(['giveFeedback']);
+        session.next();
+      },
+      (session) => {
+        session.addResult('@THANKS_FOR_FEEDBACK');
+        session.endDialog();
       },
     ])
   .dialog(
