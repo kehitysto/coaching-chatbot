@@ -306,7 +306,7 @@ bot
           session.addQuickReplies([
             Builder.QuickReplies.create('@YES'),
             Builder.QuickReplies.create('@NO'),
-            Builder.QuickReplies.create('@RETURN')
+            Builder.QuickReplies.create('@RETURN'),
           ]);
         },
         (session) => {
