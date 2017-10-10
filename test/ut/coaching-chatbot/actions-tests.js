@@ -510,7 +510,6 @@ describe('coaching-bot actions', function() {
             name: 'Antti',
             communicationMethods: {
               PHONE: '044123123',
-              CAFETERIA: 'Fazer',
             },
           },
         ];
@@ -524,7 +523,7 @@ describe('coaching-bot actions', function() {
         const expected = {
           result: 'Pertti\n -  Skype (pertti_42)\n' +
                   'Masa\n -  Puhelin (040566123)\n' +
-                  'Antti\n -  Puhelin (044123123),\n -  Kahvila (Fazer)',
+                  'Antti\n -  Puhelin (044123123)',
         };
         
         const ret = actions.displayAcceptedPeer({

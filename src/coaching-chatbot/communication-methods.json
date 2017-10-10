@@ -8,10 +8,5 @@
     "identifier": "PHONE",
     "name": "Puhelin",
     "infoRequestText": "@REQUEST_PHONE_NUMBER"
-  },
-  {
-    "identifier": "CAFETERIA",
-    "name": "Kahvila",
-    "infoRequestText": "@REQUEST_PHONE_NUMBER"
   }
 ]
