@@ -33,7 +33,7 @@ export function setRealName({ context, sessionId }) {
    });
 }
 
-export function setName({ context, input }) {v
+export function setName({ context, input }) {
   return Promise.resolve({
     context: {
       ...context,
