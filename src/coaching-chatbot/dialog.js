@@ -357,6 +357,10 @@ bot
           session.beginDialog('/set_date');
         }
       }],
+      ['#BREAK_PAIR', (session) => {
+        session.runActions(['breakPair']);
+        session.endDialog();
+      }],
     ])
   .dialog(
     '/set_date', [
