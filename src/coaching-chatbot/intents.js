@@ -32,6 +32,10 @@ module.exports = {
         ],
     },
 
+    RETURN: {
+        any: /^(?:palaa|takaisin|taaksepäin)?/i,
+    },
+
     SET: {
         any: /^(?:lisää|aseta)\s*(?:mun|minun|mulle|minulle)?/i,
     },
@@ -169,7 +173,6 @@ module.exports = {
         any: [
           /^Skype/i,
           /^Puhelin/i,
-          /^Kahvila/i,
         ],
     },
 

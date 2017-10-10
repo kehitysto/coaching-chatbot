@@ -204,54 +204,6 @@ describe('User story', function() {
       );
 
       it(
-        'should ask if I want to add more communication methods after giving my phone number',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, '040-123123'))
-            .to.eventually.become(
-              [buildResponse(PersonalInformationFormatter.formatFromTemplate(
-                  '@CONFIRM_COMMUNICATION_METHODS', {
-                    communicationMethods: {
-                      SKYPE: 'nickname',
-                      PHONE: '040-123123'
-                    }
-                  })),
-                buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
-                  'title': 'Kyllä',
-                  'payload': '@YES',
-                }, {
-                  'title': 'Ei',
-                  'payload': '@NO',
-                }]),
-              ]);
-        }
-      );
-
-      it(
-        'if I answer yes to add more after giving my phone number, it should provide the list of communication methods again and it should show that I have already added Skype and Phone',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Kyllä'))
-            .to.eventually.become([
-              buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                CommunicationMethodsFormatter
-                .getCommunicationMethods({})),
-            ]);
-        }
-      );
-
-      it(
-        'should ask for my phone number when I choose cafeteria as a communication method',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Kahvila'))
-            .to.eventually.become([
-              buildResponse('@REQUEST_PHONE_NUMBER'),
-            ]);
-        }
-      );
-
-      it(
         'should not go straight to pair searching after all methods are given',
         function() {
           return expect(
@@ -261,8 +213,7 @@ describe('User story', function() {
                 '@CONFIRM_COMMUNICATION_METHODS', {
                   communicationMethods: {
                     SKYPE: 'nickname',
-                    PHONE: '040-123123',
-                    CAFETERIA: '040-123123'
+                    PHONE: '040-123123'
                   }
                 })),
               buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
@@ -318,13 +269,12 @@ describe('User story', function() {
                 context: testUser,
               }]
             ),
-            Builder.QuickReplies.createArray(['@YES', '@NO'])
+            Builder.QuickReplies.createArray(['@YES', '@NO', '@STOP_SEARCHING',])
           );
 
           return expect(
               this.bot.receive(SESSION, 'YES'))
             .to.eventually.become([
-              buildResponse('@TELL_HOW_TO_STOP_SEARCH'),
               buildResponse('@INFORMATION_ABOUT_LIST'),
               expected,
             ]);
@@ -364,7 +314,7 @@ describe('User story', function() {
                     id: 'ID',
                     context: testUser,
                   }]),
-                Builder.QuickReplies.createArray(['@YES', '@NO'])
+                Builder.QuickReplies.createArray(['@YES', '@NO', '@STOP_SEARCHING',])
               ),
             ]);
         }
@@ -382,7 +332,10 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'kyllä'))
             .to.eventually.become([
               buildResponse('@CONFIRM_NEW_PEER_ASK'),
-              buildResponse('@NO_PAIRS_AVAILABLE'),
+              buildResponse('@NO_PAIRS_AVAILABLE', [{
+                'title': 'Lopeta haku',
+                'payload': '@STOP_SEARCHING',
+              }]),              ,
             ])
             .then(() => expect(this.sessions.read('ID'))
                 .to.eventually.include.keys({ 'pairRequests': [SESSION] }));
@@ -433,7 +386,7 @@ describe('User story', function() {
                   id: 'ID',
                   context: testUser,
                 }]),
-                Builder.QuickReplies.createArray(['@YES', '@NO'])
+                Builder.QuickReplies.createArray(['@YES', '@NO', '@STOP_SEARCHING'])
               ),
             ]);
         }
@@ -482,7 +435,6 @@ describe('User story', function() {
                   communicationMethods: {
                     SKYPE: 'nickname',
                     PHONE: '040-123123',
-                    CAFETERIA: '040-123123'
                   }
                 })),
               buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
