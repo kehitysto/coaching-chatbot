@@ -269,13 +269,12 @@ describe('User story', function() {
                 context: testUser,
               }]
             ),
-            Builder.QuickReplies.createArray(['@YES', '@NO'])
+            Builder.QuickReplies.createArray(['@YES', '@NO', '@STOP_SEARCHING',])
           );
 
           return expect(
               this.bot.receive(SESSION, 'YES'))
             .to.eventually.become([
-              buildResponse('@TELL_HOW_TO_STOP_SEARCH'),
               buildResponse('@INFORMATION_ABOUT_LIST'),
               expected,
             ]);
@@ -315,7 +314,7 @@ describe('User story', function() {
                     id: 'ID',
                     context: testUser,
                   }]),
-                Builder.QuickReplies.createArray(['@YES', '@NO'])
+                Builder.QuickReplies.createArray(['@YES', '@NO', '@STOP_SEARCHING',])
               ),
             ]);
         }
@@ -333,7 +332,10 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'kyllä'))
             .to.eventually.become([
               buildResponse('@CONFIRM_NEW_PEER_ASK'),
-              buildResponse('@NO_PAIRS_AVAILABLE'),
+              buildResponse('@NO_PAIRS_AVAILABLE', [{
+                'title': 'Lopeta haku',
+                'payload': '@STOP_SEARCHING',
+              }]),              ,
             ])
             .then(() => expect(this.sessions.read('ID'))
                 .to.eventually.include.keys({ 'pairRequests': [SESSION] }));
@@ -384,7 +386,7 @@ describe('User story', function() {
                   id: 'ID',
                   context: testUser,
                 }]),
-                Builder.QuickReplies.createArray(['@YES', '@NO'])
+                Builder.QuickReplies.createArray(['@YES', '@NO', '@STOP_SEARCHING'])
               ),
             ]);
         }

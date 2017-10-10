@@ -151,7 +151,6 @@ bot
           session.runActions([
             'markUserAsSearching',
           ]);
-          session.addResult('@TELL_HOW_TO_STOP_SEARCH'),
           session.endDialog();
         } else if (session.checkIntent('#NO')) {
           session.endDialog();
@@ -236,9 +235,10 @@ bot
             Builder.QuickReplies.create('@SHOW_REQUESTS'),
           ]);
         }
-
         if (session.context.availablePeers.length <= 0) {
-          return session.addResult('@NO_PAIRS_AVAILABLE');
+          return session.addResult('@NO_PAIRS_AVAILABLE', [
+            Builder.QuickReplies.create('@STOP_SEARCHING'),
+          ]);
         }
 
         session.addResult('@INFORMATION_ABOUT_LIST');
@@ -253,6 +253,7 @@ bot
         session.addQuickReplies([
           Builder.QuickReplies.create('@YES'),
           Builder.QuickReplies.create('@NO'),
+          Builder.QuickReplies.create('@STOP_SEARCHING'),
         ]);
       },
       (session) => {
