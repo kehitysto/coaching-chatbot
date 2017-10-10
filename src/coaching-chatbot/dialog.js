@@ -338,7 +338,7 @@ bot
         session.addResult('@PAIR_CREATED');
         session.addResult('@LINK_TO_HELP');
         session.runActions(['displayAcceptedPeer']);
-        if (session.getFacilitation()) {
+        if (session.ifFacilitationSet()) {
           session.addResult('@ASK_FOR_FACILITATION', [
             Builder.QuickReplies.create('@SET_DATE'),
           ]);

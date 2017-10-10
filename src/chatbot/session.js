@@ -320,7 +320,7 @@ module.exports = class Session {
       .length === 0;
   }
 
-  getFacilitation() {
+  ifFacilitationSet() {
     let d = this.context.day;
     let t = this.context.time;
     return (d === undefined || t === undefined);

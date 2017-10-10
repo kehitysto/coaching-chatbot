@@ -444,7 +444,7 @@ export function setDay({ context, input }) {
   return Promise.resolve({
     context: {
       ...context,
-      day: input.toLowerCase(),
+      day: input.substring(0, 2),
     },
   });
 }
