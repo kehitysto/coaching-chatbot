@@ -16,7 +16,7 @@ import * as Feedback from '../util/feedback-service';
 import * as Chatbot from '../chatbot/chatbot-service';
 import dialog from './dialog';
 
-export function setName({ context, sessionId }) {
+export function setRealName({ context, sessionId }) {
   return Messenger.getUserProfile(sessionId)
     .then((profile) => {
       const {
@@ -31,6 +31,15 @@ export function setName({ context, sessionId }) {
         },
       });
    });
+}
+
+export function setName({ context, input }) {
+  return Promise.resolve({
+    context: {
+      ...context,
+      name: input,
+    },
+  });
 }
 
 export function setJob({ context, input }) {
