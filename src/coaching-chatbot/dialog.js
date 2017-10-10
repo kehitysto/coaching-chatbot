@@ -366,30 +366,11 @@ bot
     '/set_date', [
       (session) => {
         session.addResult('@ASK_FOR_DAY');
-        session.addQuickReplies([
-          Builder.QuickReplies.create('@MON'),
-          Builder.QuickReplies.create('@TUE'),
-          Builder.QuickReplies.create('@WED'),
-          Builder.QuickReplies.create('@THURS'),
-          Builder.QuickReplies.create('@FRI'),
-          Builder.QuickReplies.create('@SAT'),
-          Builder.QuickReplies.create('@SUN'),
-        ]);
+        session.addQuickReplies(
+          Builder.QuickReplies.createArray(strings['@DAYS']));
       },
       (session) => {
-        if (session.checkIntent('#MON')) {
-          session.runActions(['setDay']);
-        } else if (session.checkIntent('#TUE')) {
-          session.runActions(['setDay']);
-        } else if (session.checkIntent('#WED')) {
-          session.runActions(['setDay']);
-        } else if (session.checkIntent('#THURS')) {
-          session.runActions(['setDay']);
-        } else if (session.checkIntent('#FRI')) {
-          session.runActions(['setDay']);
-        } else if (session.checkIntent('#SAT')) {
-          session.runActions(['setDay']);
-        } else if (session.checkIntent('#SUN')) {
+        if (session.checkIntent('#DAY')) {
           session.runActions(['setDay']);
         } else {
           session.addResult('@UNCLEAR');

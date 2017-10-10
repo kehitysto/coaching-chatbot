@@ -52,15 +52,9 @@
   "@ASK_FOR_FACILITATION": "Voit asettaa tapaamispäivän, jotta voit saada muistutuksia ja antaa palautetta.",
   "@ASK_FOR_DAY": "Minä viikonpäivänä tapaaminen on?",
   "@ASK_FOR_TIME": "Monelta tapaaminen on?",
-  "@MON": "MA",
-  "@TUE": "TI",
-  "@WED": "KE",
-  "@THURS": "TO",
-  "@FRI": "PE",
-  "@SAT": "LA",
-  "@SUN": "SU",
+  "@DAYS": ["MA", "TI", "KE", "TO", "PE", "LA", "SU"],
   "@CONFIRM_DATE": "Tapaaminen on viikottain päivämääränä {day}, klo {time}",
   "@SET_DATE": "Aseta tapaaminen"
 
-  
+
 }
