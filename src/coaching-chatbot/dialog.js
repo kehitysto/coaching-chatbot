@@ -251,7 +251,7 @@ bot
 
         session.runActions(['displayAvailablePeer']);
         session.addQuickReplies(
-          Builder.QuickReplies.createArray(['@YES', '@NO', '@STOP_SEARCHING']),
+          Builder.QuickReplies.createArray(['@YES', '@NO', '@STOP_SEARCHING'])
         );
       },
       (session) => {
@@ -303,7 +303,7 @@ bot
           session.addResult('@INFORMATION_ABOUT_REQUESTS');
           session.runActions(['displayRequest']);
           session.addQuickReplies(
-            Builder.QuickReplies.createArray(['@YES', '@NO', '@RETURN']),
+            Builder.QuickReplies.createArray(['@YES', '@NO', '@RETURN'])
           );
         },
         (session) => {

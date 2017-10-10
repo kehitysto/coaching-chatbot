@@ -325,7 +325,7 @@ module.exports = class Session {
     let t = this.context.time;
     return (d === undefined || t === undefined);
   }
-    
+
   isRatingGood() {
     return ![1, 2].includes(this.context.rating);
   }
