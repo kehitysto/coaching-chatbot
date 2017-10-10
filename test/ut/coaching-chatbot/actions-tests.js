@@ -7,6 +7,37 @@ import * as Pairs from '../../../src/util/pairs-service';
 const TEST_SESSION = 'SESSION';
 
 describe('coaching-bot actions', function() {
+  describe('#setRating', function() {
+    it('returns the rating from entity rating', function() {
+      const ret = actions.setRating({
+        context: {},
+        input: '2',
+      });
+
+      return expect(ret).to.become({
+        context: {
+          rating: 2,
+        },
+      });
+    });
+
+    it('preserves the context', function() {
+      const ret = actions.setRating({
+        context: {
+          name: 'Matti Luukkainen',
+        },
+        input: '2',
+      });
+
+      return expect(ret).to.become({
+        context: {
+          name: 'Matti Luukkainen',
+          rating: 2,
+        },
+      });
+    });
+  });
+
   describe('#setRealName', function() {
     it('returns the real name', function() {
       const ret = actions.setRealName({

@@ -47,7 +47,14 @@
   "@LINK_TO_HELP": "Ohjeita: https://kehitysto.wordpress.com/vinkkeja-vertaisohjaukseen/",
   "@NOTIFY_PAIR_BROKEN": "{pairName} ei enää halua olla parisi. Voit sanoa 'etsi pari' siirtyäksesi uudelleen parinhakuun.",
   "@PAIR_BROKEN": "Pari on nyt rikottu. Voit sanoa 'etsi pari' siirtyäksesi uudelleen parinhakuun.",
-  "@FEEDBACK_ABOUT_MEETING": "Anna vapaamuotoinen palaute edellisestä tapaamisesta. Palautetta ei näytetä parille.",
+  "@FEEDBACK_ABOUT_MEETING": "Kuinka lähellä saamasi ohjaus oli ideaalia ohjaustilannettasi? Valitse arvosana, missä 4 tarkoittaa täysin ideaalia ja 1 toivoisin useita merkittäviä muutoksia.",
   "@GIVE_FEEDBACK": "Anna palautetta",
-  "@THANKS_FOR_FEEDBACK": "Kiitos palautteesta!"
+  "@THANKS_FOR_FEEDBACK": "Kiitos palautteesta!",
+  "@TELL_USER_HAS_NEW_FEEDBACK": "Olet saanut palautetta. Parisi vastasi kysymykseen \"Kuinka lähellä saamasi ohjaus oli ideaalia ohjaustilannettasi?\"\n",
+  "@RATINGS": [
+    "Toivoisin useita merkittäviä muutoksia",
+    "Toivoisin yhtä merkittävää muutosta",
+    "Pientä parannettavaa löytyisi",
+    "Täysin ideaali"
+  ]
 }
