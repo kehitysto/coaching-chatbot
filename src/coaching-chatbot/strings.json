@@ -50,6 +50,12 @@
   "@FEEDBACK_ABOUT_MEETING": "Kuinka lähellä saamasi ohjaus oli ideaalia ohjaustilannettasi? Valitse arvosana, missä 4 tarkoittaa täysin ideaalia ja 1 toivoisin useita merkittäviä muutoksia.",
   "@GIVE_FEEDBACK": "Anna palautetta",
   "@THANKS_FOR_FEEDBACK": "Kiitos palautteesta!",
+  "@ASK_FOR_FACILITATION": "Voit asettaa tapaamispäivän, jotta voit saada muistutuksia ja antaa palautetta.",
+  "@ASK_FOR_DAY": "Minä viikonpäivänä tapaaminen on?",
+  "@ASK_FOR_TIME": "Monelta tapaaminen on (hh:mm)?",
+  "@DAYS": ["MA", "TI", "KE", "TO", "PE", "LA", "SU"],
+  "@CONFIRM_DATE": "Tapaaminen on viikottain päivämääränä {day}, klo {time}",
+  "@SET_DATE": "Aseta tapaaminen",
   "@TELL_USER_HAS_NEW_FEEDBACK": "Olet saanut palautetta. Parisi vastasi kysymykseen \"Kuinka lähellä saamasi ohjaus oli ideaalia ohjaustilannettasi?\"\n",
   "@RATINGS": [
     "Toivoisin useita merkittäviä muutoksia",

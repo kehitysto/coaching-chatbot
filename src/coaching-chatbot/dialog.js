@@ -328,27 +328,72 @@ bot
   .dialog(
     '/accepted_pair_information', [
       (session) => {
-        session.addResult('@PAIR_CREATED');
-        session.runActions(['displayAcceptedPeer']);
-        session.addResult('@LINK_TO_HELP');
-        session.addQuickReplies([
-          Builder.QuickReplies.create('@GIVE_FEEDBACK'),
-        ]);
-      },
-      (session) => {
-        if (session.checkIntent('#GIVE_FEEDBACK')) {
-          session.resetDialog();
-          session.beginDialog('/give_feedback', true);
-        } else {
-          session.addResult('@UNCLEAR');
-          session.prev();
-        }
+        session.switchDialog('/accepted_pair_profile');
       },
     ], [
       ['#BREAK_PAIR', (session) => {
         session.runActions(['breakPair']);
         session.endDialog();
       }],
+    ])
+  .dialog(
+    '/accepted_pair_profile', [
+      (session) => {
+        session.addResult('@PAIR_CREATED');
+        session.addResult('@LINK_TO_HELP');
+        session.runActions(['displayAcceptedPeer']);
+        if (session.ifFacilitationSet()) {
+          session.addResult('@ASK_FOR_FACILITATION', [
+            Builder.QuickReplies.create('@SET_DATE'),
+          ]);
+        } else {
+          session.addResult('@CONFIRM_DATE');
+          session.addQuickReplies([
+            Builder.QuickReplies.create('@SET_DATE'),
+          ]);
+        }
+      },
+    ], [
+      ['#CHANGE_DATE', (session, match) => {
+        if (match !== true) {
+          session.runActions(['setTime'], match);
+        } else {
+          session.beginDialog('/set_date');
+        }
+      }],
+      ['#BREAK_PAIR', (session) => {
+        session.runActions(['breakPair']);
+        session.endDialog();
+      }],
+    ])
+  .dialog(
+    '/set_date', [
+      (session) => {
+        session.addResult('@ASK_FOR_DAY');
+        session.addQuickReplies(
+          Builder.QuickReplies.createArray(strings['@DAYS']));
+      },
+      (session) => {
+        if (session.checkIntent('#DAY')) {
+          session.runActions(['setDay']);
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
+        }
+        session.next();
+      },
+      (session) => {
+        session.addResult('@ASK_FOR_TIME');
+      },
+      (session) => {
+        if (session.checkIntent('#TIME')) {
+          session.runActions(['setTime']);
+          session.endDialog();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
+        }
+      },
     ])
   .dialog(
     '/give_feedback', [

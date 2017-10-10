@@ -473,3 +473,21 @@ export function sendFeedback({ context, sessionId, input }) {
           });
     });
 }
+
+export function setDay({ context, input }) {
+  return Promise.resolve({
+    context: {
+      ...context,
+      day: input.substring(0, 2),
+    },
+  });
+}
+
+export function setTime({ context, input }) {
+  return Promise.resolve({
+    context: {
+      ...context,
+      time: input,
+    },
+  });
+}
