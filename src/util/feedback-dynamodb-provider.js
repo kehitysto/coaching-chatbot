@@ -12,11 +12,11 @@ module.exports = class DynamoDBProvider {
             return reject(new Error('Missing feedback parameters!'));
         }
 
-        const id = '' + date.getDate() + date.getMonth()
+        const id = '' + date.getDate() + (date.getMonth() + 1)
           + date.getFullYear() + '-' + giver;
 
         return resolve(
-          this.table.put({ id }, { giver, pair, feedback, date })
+          this.table.put({ id }, { giver, pair, feedback, date: date.now() })
         );
     });
   }
