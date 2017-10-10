@@ -5,22 +5,10 @@
   },
   {
     "identifier": "CHANGE_NAME",
-    "description": "Aseta nimi"
-  },
-  {
-    "identifier": "CHANGE_JOB",
-    "description": "Aseta ammatti"
-  },
-  {
-    "identifier": "SET_AGE",
-    "description": "Aseta ikä"
-  },
-  {
-    "identifier": "SET_PLACE",
-    "description": "Aseta paikkakunta"
+    "description": "Vaihda nimi"
   },
   {
     "identifier": "SET_BIO",
-    "description": "Aseta kuvaus"
+    "description": "Muokkaa kuvausta"
   }
 ]

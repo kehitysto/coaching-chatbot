@@ -52,7 +52,7 @@ bot
         session.beginDialog('/set_real_name');
       },
       (session) => {
-        session.beginDialog('/set_job');
+        session.beginDialog('/set_bio');
       },
       (session) => {
         session.addResult('@INFORMATION_ABOUT_BUTTONS');
@@ -75,48 +75,6 @@ bot
       (session) => {
         session.runActions(['setName']);
         session.addResult('@CONFIRM_NAME');
-        session.endDialog();
-      },
-    ])
-  .dialog(
-    '/set_job', [
-      (session) => {
-        session.addResult('@REQUEST_JOB');
-      },
-      (session) => {
-        session.runActions(['setJob']);
-        session.addResult('@CONFIRM_JOB');
-        session.endDialog();
-      },
-    ], [
-      ['#CHANGE_NAME', (session, match) => {
-        if (match !== true) {
-          session.runActions(['setName'], match);
-          session.addResult('@CONFIRM_NAME');
-        } else {
-          session.beginDialog('/set_name');
-        }
-      }],
-    ])
-  .dialog(
-    '/set_age', [
-      (session) => {
-        session.addResult('@REQUEST_AGE');
-      },
-      (session) => {
-        session.runActions(['setAge']);
-        session.addResult('@CONFIRM_AGE');
-        session.endDialog();
-      },
-    ])
-  .dialog(
-    '/set_place', [
-      (session) => {
-        session.addResult('@REQUEST_PLACE');
-      },
-      (session) => {
-        session.runActions(['setPlace']);
-        session.addResult('@CONFIRM_PLACE');
         session.endDialog();
       },
     ])
@@ -223,30 +181,6 @@ bot
           session.addResult('@CONFIRM_NAME');
         } else {
           session.beginDialog('/set_name');
-        }
-      }],
-      ['#CHANGE_JOB', (session, match) => {
-        if (match !== true) {
-          session.runActions(['setJob'], match);
-          session.addResult('@CONFIRM_JOB');
-        } else {
-          session.beginDialog('/set_job');
-        }
-      }],
-      ['#SET_AGE', (session, match) => {
-        if (match !== true) {
-          session.runActions(['setAge'], match);
-          session.addResult('@CONFIRM_AGE');
-        } else {
-          session.beginDialog('/set_age');
-        }
-      }],
-      ['#SET_PLACE', (session, match) => {
-        if (match !== true) {
-          session.runActions(['setPlace'], match);
-          session.addResult('@CONFIRM_PLACE');
-        } else {
-          session.beginDialog('/set_place');
         }
       }],
       ['#SET_BIO', (session, match) => {
@@ -456,8 +390,8 @@ bot
   .dialog(
     '/reset', [
       (session) => {
-        session.addResult('@RESET_CONFIRMATION', [Builder.QuickReplies.create(
-            '@YES'),
+        session.addResult('@RESET_CONFIRMATION', [
+          Builder.QuickReplies.create('@YES'),
           Builder.QuickReplies.create('@NO'),
         ]);
       },

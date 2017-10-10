@@ -42,33 +42,6 @@ export function setName({ context, input }) {
   });
 }
 
-export function setJob({ context, input }) {
-  return Promise.resolve({
-    context: {
-      ...context,
-      job: input,
-    },
-  });
-}
-
-export function setAge({ context, input }) {
-  return Promise.resolve({
-    context: {
-      ...context,
-      age: input,
-    },
-  });
-}
-
-export function setPlace({ context, input }) {
-  return Promise.resolve({
-    context: {
-      ...context,
-      place: input,
-    },
-  });
-}
-
 export function setBio({ context, input }) {
   return Promise.resolve({
     context: {

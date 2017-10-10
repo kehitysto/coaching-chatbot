@@ -38,9 +38,6 @@ describe('User story', function() {
     this.bot = new Chatbot(dialog, this.sessions);
 
     this.expectedName = 'Matti Luukkainen';
-    this.expectedJob = 'Opiskelija';
-    this.expectedAge = '22';
-    this.expectedPlace = 'Helsinki';
     this.userInformation = {};
   });
 
@@ -89,80 +86,6 @@ describe('User story', function() {
     }
   );
 
-  describe(
-    'As a registered user I want to provide my occupation to the bot',
-    function() {
-      it(
-        'after user has provided their occupation, it should show user their profile information and ask if the user want\'s to provide more info or start the search for a pair',
-        function() {
-          this.userInformation.name = this.expectedName;
-          this.userInformation.job = this.expectedJob;
-          return expect(
-              this.bot.receive(SESSION, this.userInformation.job)
-            )
-            .to.eventually.become([
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@CONFIRM_JOB', this.userInformation)),
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@INFORMATION_ABOUT_BUTTONS')),
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation),
-                PersonalInformationFormatter.getPersonalInformationbuttons(
-                  this.context)),
-            ]);
-        });
-    });
-
-  describe(
-    'As a registered user I want to provide my age to the bot',
-    function() {
-      it(
-        'after the user has given their age, it should show the user their profile information and ask if the user want\'s to provide more info or start the search for a pair',
-        function() {
-          this.userInformation.age = this.expectedAge;
-          return expect(
-              this.bot.receive(
-                SESSION,
-                'Lisää ikä ' + this.userInformation.age))
-            .to.eventually.become([
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@CONFIRM_AGE', this.userInformation)),
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation),
-                PersonalInformationFormatter.getPersonalInformationbuttons(
-                  this.context)),
-            ]);
-        });
-    });
-
-  describe(
-    'As a registered user I want to provide my location to the bot',
-    function() {
-      it(
-        'after user has given his location, it should show the user their profile information and ask if the user want\'s to provide more info or start the search for a pair',
-        function() {
-          this.userInformation.place = this.expectedPlace;
-
-          return expect(
-              this.bot.receive(
-                SESSION,
-                'Lisää paikkakunta ' + this.userInformation.place))
-            .to.eventually.become([
-              buildResponse('@CONFIRM_PLACE'),
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation),
-                PersonalInformationFormatter.getPersonalInformationbuttons(
-                  this.context)),
-            ]);
-        });
-    });
-
     describe(
       'As a registered user I want to provide my bio to the bot',
       function() {
@@ -170,13 +93,12 @@ describe('User story', function() {
           'after user has given his bio, it should confirm and ask for more information',
           function() {
             this.userInformation.bio = 'My long bio in long text';
-
+            this.userInformation.name = this.expectedName;
             return expect(
-                this.bot.receive(
-                  SESSION,
-                  'Aseta kuvaus ' + this.userInformation.bio))
+                this.bot.receive(SESSION, this.userInformation.bio))
               .to.eventually.become([
                 buildResponse('@CONFIRM_BIO'),
+                buildResponse('@INFORMATION_ABOUT_BUTTONS'),
                 buildResponse(
                   PersonalInformationFormatter.formatFromTemplate(
                     '@DISPLAY_PROFILE', this.userInformation),
@@ -381,7 +303,6 @@ describe('User story', function() {
         function() {
           const testUser = {
             name: 'Pekka',
-            job: 'Ope',
             communicationMethods: {
               SKYPE: 'Pekka123',
             },
@@ -415,7 +336,6 @@ describe('User story', function() {
         function() {
           const testUser = {
             name: 'Matti',
-            job: 'Ope',
             communicationMethods: {
               SKYPE: 'Matti123',
             },
@@ -426,7 +346,6 @@ describe('User story', function() {
 
           const testUser2 = {
             name: 'Laura',
-            job: 'Student',
             communicationMethods: {
               SKYPE: 'Laura123',
             },
@@ -497,7 +416,6 @@ describe('User story', function() {
         function() {
           const testUser = {
             name: 'Matti',
-            job: 'Ope',
             communicationMethods: {
               SKYPE: 'Matti123',
             },
