@@ -37,7 +37,7 @@ module.exports = {
     },
 
     CHANGE: {
-        any: /^(?:vaihda|muuta|aseta)\s*(?:mun|minun|mulle|minulle)?/i,
+        any: /^(?:vaihda|muuta|aseta|muokkaa)\s*(?:mun|minun|mulle|minulle)?/i,
     },
 
     FIND: {
@@ -86,23 +86,8 @@ module.exports = {
         any: /^(?:nimi|nimeä|nimeksi|nimekseni|nimeni)/i,
     },
 
-    JOB: {
-        any: [
-          /^ammat(?:tia?|iksi|ikseni|tini)/i,
-          /^työ(?:tä|ksi|kseni|ni)/i,
-        ],
-    },
-
-    AGE: {
-        any: /^(?:ikää?|iäksi)/i,
-    },
-
-    PLACE: {
-        any: /^paikka(?:kunta)?a?/i,
-    },
-
     BIO: {
-        any: /^(?:kuvaus|kuvaukseksi)/i,
+        any: /^(?:kuvausta|kuvaukseksi|kuvaus)/i,
     },
 
     PAIR: {
@@ -134,30 +119,6 @@ module.exports = {
         each: [
           '#CHANGE',
           '#NAME',
-          '#OPTIONAL_VALUE',
-        ],
-    },
-
-    CHANGE_JOB: {
-        each: [
-          '#CHANGE',
-          '#JOB',
-          '#OPTIONAL_VALUE',
-        ],
-    },
-
-    SET_AGE: {
-        each: [
-          '#SET_OR_CHANGE',
-          '#AGE',
-          '#OPTIONAL_VALUE',
-        ],
-    },
-
-    SET_PLACE: {
-        each: [
-          '#SET_OR_CHANGE',
-          '#PLACE',
           '#OPTIONAL_VALUE',
         ],
     },

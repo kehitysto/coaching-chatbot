@@ -16,7 +16,7 @@ import * as Feedback from '../util/feedback-service';
 import * as Chatbot from '../chatbot/chatbot-service';
 import dialog from './dialog';
 
-export function setName({ context, sessionId }) {
+export function setRealName({ context, sessionId }) {
   return Messenger.getUserProfile(sessionId)
     .then((profile) => {
       const {
@@ -33,39 +33,20 @@ export function setName({ context, sessionId }) {
    });
 }
 
+export function setName({ context, input }) {v
+  return Promise.resolve({
+    context: {
+      ...context,
+      name: input,
+    },
+  });
+}
+
 export function setRating({ context, input }) {
   return Promise.resolve({
     context: {
       ...context,
       rating: [1, 2, 3, 4].includes(Number(input)) ? Number(input) : undefined,
-    },
-  });
-}
-
-
-export function setJob({ context, input }) {
-  return Promise.resolve({
-    context: {
-      ...context,
-      job: input,
-    },
-  });
-}
-
-export function setAge({ context, input }) {
-  return Promise.resolve({
-    context: {
-      ...context,
-      age: input,
-    },
-  });
-}
-
-export function setPlace({ context, input }) {
-  return Promise.resolve({
-    context: {
-      ...context,
-      place: input,
     },
   });
 }
