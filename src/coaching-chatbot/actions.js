@@ -466,8 +466,6 @@ export function setTime({ context, input }) {
 export function resetDayAndTime({ context }) {
   const { day, time, ...cleanedContext } = context;
 
-  log.silly('using day and time before adding eslint rules ' + day + time);
-
   return Promise.resolve(
     cleanedContext
   );

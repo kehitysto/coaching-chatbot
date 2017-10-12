@@ -21,7 +21,8 @@
             "ClassDeclaration": false,
             "ArrowFunctionExpression": false
         }
-    }]
+    }],
+    "no-unused-vars": [2, {"args": "none", "ignoreRestSiblings": true}],
   },
   "parserOptions": {
     "ecmaVersion": 2016,
