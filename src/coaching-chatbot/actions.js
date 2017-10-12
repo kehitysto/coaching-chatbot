@@ -311,17 +311,20 @@ export function acceptRequest({ sessionId, context }) {
       .then(() => markUserAsNotSearching({ context }));
 }
 
-export function breakPair({ sessionId, userData, context }) {
+export function breakPair({ sessionId, context }) {
   let pairs = new Pairs();
   let sessions = new Sessions();
 
   return pairs.read(sessionId)
       .then((pairList) => {
         const pairId = pairList[0];
-        if (pairId === undefined) return Promise.reject();
+        if (pairId == undefined) {
+          return Promise.reject(new Error('No pair to break!'));
+        }
 
         return pairs.breakPair(sessionId, pairId)
             .then(() => sessions.read(pairId))
+            .then((context) => resetDayAndTime({ context }))
             .then((context) => sessions.write(
               pairId,
               {
@@ -339,44 +342,12 @@ export function breakPair({ sessionId, userData, context }) {
               );
             });
       })
+      .then(() => resetDayAndTime({ context }))
       .then(() => {
-        return {
+        return Promise.resolve({
           result: '@PAIR_BROKEN',
-        };
+        });
       });
-}
-
-export function breakAllPairs({ sessionId }) {
-  let pairs = new Pairs();
-  let sessions = new Sessions();
-
-  return pairs.read(sessionId)
-    .then((pairList) => {
-      const promises = [];
-      for (let pairId of pairList) {
-        promises.push(
-          pairs.breakPair(sessionId, pairId)
-            .then(() => sessions.read(pairId))
-            .then((context) => sessions.write(
-              pairId,
-              {
-                ...context,
-                state: '/?0/profile?0',
-              }
-            ))
-            .then(() => {
-              return Messenger.send(
-                pairId,
-                PersonalInformationFormatter.format(
-                  strings['@NOTIFY_PAIR_BROKEN'],
-                  { pairName: context.name }
-                )
-              );
-            })
-        );
-      }
-      return Promise.all(promises);
-    });
 }
 
 export function displayRequest({ context }) {
@@ -491,3 +462,14 @@ export function setTime({ context, input }) {
     },
   });
 }
+
+export function resetDayAndTime({ context }) {
+  const { day, time, ...cleanedContext } = context;
+
+  log.silly('using day and time before adding eslint rules ' + day + time);
+
+  return Promise.resolve(
+    cleanedContext
+  );
+}
+
