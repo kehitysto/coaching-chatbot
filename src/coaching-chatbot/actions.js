@@ -415,7 +415,9 @@ export function sendRating({ context, sessionId }) {
   return pairs.read(sessionId)
       .then((pairList) => {
         const pairId = pairList[0];
-        if (pairId === undefined) return Promise.reject();
+        if (pairId == undefined) {
+          return Promise.reject(new Error('No pair found!'));
+        }
 
         return Messenger.send(
           pairId, strings['@TELL_USER_HAS_NEW_FEEDBACK'] + answer
@@ -434,7 +436,9 @@ export function sendFeedback({ context, sessionId, input }) {
   return pairs.read(sessionId)
     .then((pairList) => {
         const pairId = pairList[0];
-        if (pairId === undefined) return Promise.reject();
+        if (pairId == undefined) {
+          return Promise.reject(new Error('No pair found!'));
+        }
 
         return Messenger.send(pairId, input)
             .then(() => {
