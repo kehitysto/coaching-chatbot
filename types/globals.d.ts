@@ -20,7 +20,7 @@ declare class Context {
     sentRequests: (number|string)[];
     rejectedPeers: (number|string)[];
     state: string;
-    day: string;
+    weekDay: string;
     time: string;
 }
 

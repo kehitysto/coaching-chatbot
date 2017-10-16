@@ -1,5 +1,6 @@
 import log from '../lib/logger-service';
 import * as DynamoDBTable from './dynamodb-table';
+import * as strings from '../coaching-chatbot/strings.json';
 
 module.exports = class DynamoDBProvider {
   constructor() {
@@ -12,7 +13,28 @@ module.exports = class DynamoDBProvider {
   }
 
   readAll() {
-    return this.table.scan().then((items) => {
+    const params = {};
+
+    return this.table.scan(params).then((items) => {
+      log.debug('Getting all sessions. ' + JSON.stringify(items));
+      return items;
+    });
+  }
+
+  readAllWithReminders() {
+    let currentDay = strings['@DAYS'][new Date().getDay()].toUpperCase();
+    log.debug('Current day: ' + currentDay);
+
+    const params = {
+      Limit: 50,
+      FilterExpression: 'context.weekDay = :currentDay',
+      ExpressionAttributeValues: {
+        ':currentDay': currentDay,
+      },
+    };
+
+    return this.table.scan(params).then((items) => {
+      log.debug('Sessions with reminder: ', JSON.stringify(items));
       return items;
     });
   }

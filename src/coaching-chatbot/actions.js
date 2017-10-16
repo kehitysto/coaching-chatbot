@@ -478,7 +478,7 @@ export function setDay({ context, input }) {
   return Promise.resolve({
     context: {
       ...context,
-      day: input.substring(0, 2),
+      weekDay: input.substring(0, 2).toUpperCase(),
     },
   });
 }
@@ -493,31 +493,24 @@ export function setTime({ context, input }) {
 }
 
 export function testReminder({ context }) {
-  console.log('test reminder action started');
   const sessions = new Sessions();
-  let contexts = sessions.readAll();
-  let WeekDays = ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'];
-
-  const promises = [];
-
-  for (let id of contexts) {
-    const day = contexts[id].day;
-
-    if(day === undefined) continue;
-
-    let meetingDay = WeekDays.indexOf(day.toLowerCase());
-    let curDay = new Date().getDay();
-    let temp = curDay + 1;
-    if (temp == 7) temp = 0;
-    if (meetingDay == temp) {
-      console.log('pushing message promise');
-      promises.push(
-          Messenger.send(id,
-            strings['@REMINDER_MESSAGE'] + contexts[id].time,
-          [])
-      );
-      console.log('promise pushed');
-    }
-  }
-  return Promise.all(promises);
+  return sessions.readAllWithReminders()
+    .then((contexts) => {
+      const promises = [];
+      log.debug('Contexts length: ' + contexts.length);
+      for (let i=0; i<contexts.length; i++) {
+        log.debug('Context with index '
+        + i + ' : ' + contexts[i]);
+        log.debug('Context.context with index '
+        + i + ' : ' + contexts[i].context);
+        log.debug('Context stringify with index '
+        + i + ' : ' + JSON.stringify(contexts[i]));
+        promises.push(
+            Messenger.send(contexts[i].id,
+              strings['@REMINDER_MESSAGE'] + contexts[i].context.time,
+            [])
+        );
+      }
+      return Promise.all(promises);
+    });
 }

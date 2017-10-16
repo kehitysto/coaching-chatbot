@@ -32,6 +32,10 @@ module.exports = class Sessions {
     return this.db.readAll();
   }
 
+  readAllWithReminders() {
+    return this.db.readAllWithReminders();
+  }
+
   write(id, context) {
     return this.db.write(id, context);
   }

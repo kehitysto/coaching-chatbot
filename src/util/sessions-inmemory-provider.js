@@ -1,4 +1,5 @@
 import log from '../lib/logger-service';
+import * as strings from '../coaching-chatbot/strings.json';
 
 module.exports = class InMemoryProvider {
   constructor() {
@@ -19,6 +20,29 @@ module.exports = class InMemoryProvider {
   readAll() {
     log.silly('DB contents: {0}', JSON.stringify(this.db));
     return this.db;
+  }
+
+  readAllWithReminders() {
+    log.silly('Getting all sessions with reminders');
+    return new Promise((resolve, reject) => {
+      let sessions = [];
+
+      for (let sessionId in this.db) {
+        if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
+        log.silly('Evaluating session with id: ', sessionId);
+        let session = this.db[sessionId];
+
+        const day = session.weekDay;
+        if(day === undefined) continue;
+        let meetingDay = strings['@DAYS'].indexOf(day.toUpperCase());
+        if (meetingDay == new Date().getDay()) {
+          log.silly('Found session with id: ', sessionId);
+          sessions.push(session);
+        }
+      }
+
+      resolve(sessions);
+    });
   }
 
   write(sessionId, context) {

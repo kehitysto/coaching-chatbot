@@ -5,6 +5,7 @@ require('../lib/env-vars').config();
 import * as Messenger from './messenger-service';
 import * as Sessions from '../util/sessions-service';
 import * as Chatbot from '../chatbot/chatbot-service';
+import * as strings from '../coaching-chatbot/strings.json';
 
 import dialog from '../coaching-chatbot/dialog';
 
@@ -27,4 +28,27 @@ module.exports.handler = (event, context, cb) => {
   }
 
   return cb('Unknown event');
+};
+
+module.exports.meetingReminder = (event, context, cb) => {
+  const sessions = new Sessions();
+  return sessions.readAll()
+    .then((contexts) => {
+      const promises = [];
+
+      for (let i=0; i<contexts.length; i++) {
+        const day = contexts[i].context.weekDay;
+        if(day === undefined) continue;
+
+        let meetingDay = strings['@DAYS'].indexOf(day.toUpperCase());
+        if (meetingDay == new Date().getDay()) {
+          promises.push(
+              Messenger.send(contexts[i].id,
+                strings['@REMINDER_MESSAGE'] + contexts[i].context.time,
+              [])
+          );
+        }
+      }
+      return Promise.all(promises);
+    });
 };
