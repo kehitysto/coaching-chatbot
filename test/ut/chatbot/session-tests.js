@@ -192,4 +192,107 @@ describe('chatbot sessions', function() {
         .to.deep.equal('/?1/first?3/second?0');
     });
   });
+
+  describe('#getCommunicationMethodsCount', function() {
+    it('should return 0 if no methods are set', function() {
+      this.session.context = { };
+
+      const ret = this.session.getCommunicationMethodsCount();
+
+      return expect(ret)
+        .to.deep.equal(0);
+    });
+
+    it('should return 2 if such a number of methods are set', function() {
+      this.session.context = {
+        communicationMethods: {
+          "PHONE": "112",
+          SKYPE: "Nickname"
+        },
+      };
+
+      const ret = this.session.getCommunicationMethodsCount();
+
+      return expect(ret)
+        .to.deep.equal(2);
+    });
+  });
+
+  describe('#allCommunicationMethodsFilled', function() {
+    it('should return true if all methods are set', function() {
+      this.session.context = {
+        communicationMethods: {
+          PHONE: "112",
+          SKYPE: "Nickname",
+        },
+      };
+
+      const ret = this.session.allCommunicationMethodsFilled();
+
+      return expect(ret)
+        .to.deep.equal(true);
+    });
+
+    it('should return false if some communication method is missing', function() {
+      this.session.context = {
+        communicationMethods: {
+          PHONE: "112",
+        },
+      };
+
+      const ret = this.session.allCommunicationMethodsFilled();
+
+      return expect(ret)
+        .to.deep.equal(false);
+    });
+  });
+
+  describe('#ifFacilitationSet', function() {
+    it('should return true if day or time is not set', function() {
+      this.session.context = {
+        day: 'MON',
+      };
+
+      const ret = this.session.ifFacilitationSet();
+
+      return expect(ret)
+        .to.deep.equal(true);
+    });
+
+    it('should return false if day and time are both set', function() {
+      this.session.context = {
+        day: 'MON',
+        time: '06:00',
+      };
+
+      const ret = this.session.ifFacilitationSet();
+
+      return expect(ret)
+        .to.deep.equal(false);
+    });
+  });
+
+  describe('#isRatingGood', function() {
+    it('should return true if rating equals 3', function() {
+      this.session.context = {
+        rating: 3,
+      };
+
+      const ret = this.session.isRatingGood();
+
+      return expect(ret)
+        .to.deep.equal(true);
+    });
+
+    it('should return false if rating equals 2', function() {
+      this.session.context = {
+        rating: 2,
+      };
+
+      const ret = this.session.isRatingGood();
+
+      return expect(ret)
+        .to.deep.equal(false);
+    });
+  });
 });
