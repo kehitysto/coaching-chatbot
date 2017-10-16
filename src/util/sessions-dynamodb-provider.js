@@ -12,7 +12,9 @@ module.exports = class DynamoDBProvider {
   }
 
   readAll() {
-    return this.table;
+    return this.table.scan().then((items) => {
+      return items;
+    });
   }
 
   write(id, context) {
