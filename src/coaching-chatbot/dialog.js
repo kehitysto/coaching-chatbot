@@ -400,8 +400,13 @@ bot
         );
       },
       (session) => {
-        session.runActions(['setRating']);
-        session.next();
+        if (session.checkIntent('#NUMERIC_RATING')) {
+          session.runActions(['setRating']);
+          session.next();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
+        }
       },
       (session) => {
         if (session.isRatingGood()) {
