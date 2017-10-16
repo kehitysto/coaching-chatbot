@@ -235,7 +235,7 @@ describe('User story', function() {
         }
       );
     }
-  )
+  );
 
   describe(
     'As a user searching for a pair I want to get a list of other users searching for a pair',
