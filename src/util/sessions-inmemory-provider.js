@@ -16,6 +16,11 @@ module.exports = class InMemoryProvider {
     return Promise.resolve(this.db[sessionId]);
   }
 
+  readAll() {
+    log.silly('DB contents: {0}', JSON.stringify(this.db));
+    return this.db;
+  }
+
   write(sessionId, context) {
     this.db[sessionId] = context;
 

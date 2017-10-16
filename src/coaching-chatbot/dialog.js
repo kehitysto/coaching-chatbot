@@ -361,6 +361,13 @@ bot
           session.beginDialog('/set_date');
         }
       }],
+      ['#TEST', (session, match) => {
+        if (match !== true) {
+          session.runActions(['testReminder'], match);
+        } else {
+          session.runActions(['testReminder']);
+        }
+      }],
       ['#BREAK_PAIR', (session) => {
         session.runActions(['breakPair']);
         session.endDialog();

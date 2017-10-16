@@ -214,4 +214,10 @@ module.exports = {
             '#OPTIONAL_VALUE',
           ],
     },
+
+    TEST: {
+        each: [
+            /^test/i,
+          ],
+    },
 };

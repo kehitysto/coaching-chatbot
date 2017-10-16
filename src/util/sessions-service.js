@@ -28,6 +28,10 @@ module.exports = class Sessions {
     return this.db.read(id);
   }
 
+  readAll() {
+    return this.db.readAll();
+  }
+
   write(id, context) {
     return this.db.write(id, context);
   }
