@@ -381,6 +381,7 @@ bot
         } else {
           session.addResult('@UNCLEAR');
           session.prev();
+          session.prev();
         }
         session.next();
       },
