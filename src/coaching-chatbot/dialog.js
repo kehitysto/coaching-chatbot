@@ -464,7 +464,7 @@ bot
       },
       (session) => {
         if (session.checkIntent('#YES')) {
-          session.runActions(['breakAllPairs', 'removeSentRequests', 'reset']);
+          session.runActions(['breakPair', 'removeSentRequests', 'reset']);
           session.addResult('@RESET_DONE');
           session.clearState();
         } else if (session.checkIntent('#NO')) {
