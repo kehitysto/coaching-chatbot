@@ -359,8 +359,10 @@ bot
       }],
       ['#TEST', (session, match) => {
         if (match !== true) {
+          console.log('test intent matched 2');
           session.runActions(['testReminder'], match);
         } else {
+          console.log('test intent matched');
           session.runActions(['testReminder']);
         }
       }],

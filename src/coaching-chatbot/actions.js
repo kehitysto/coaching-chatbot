@@ -493,6 +493,7 @@ export function setTime({ context, input }) {
 }
 
 export function testReminder({ context }) {
+  console.log('test reminder action started');
   const sessions = new Sessions();
   let contexts = sessions.readAll();
   let WeekDays = ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'];
@@ -509,11 +510,13 @@ export function testReminder({ context }) {
     let temp = curDay + 1;
     if (temp == 7) temp = 0;
     if (meetingDay == temp) {
+      console.log('pushing message promise');
       promises.push(
           Messenger.send(id,
             strings['@REMINDER_MESSAGE'] + contexts[id].time,
           [])
       );
+      console.log('promise pushed');
     }
   }
   return Promise.all(promises);
