@@ -11,6 +11,10 @@ module.exports = class DynamoDBProvider {
         .then((result) => (result !== undefined) ? result.context : {});
   }
 
+  readAll() {
+    return this.table;
+  }
+
   write(id, context) {
     return new Promise((resolve, reject) => {
       if (!id) {
