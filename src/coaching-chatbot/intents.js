@@ -98,13 +98,6 @@ module.exports = {
         any: /^paria?/i,
     },
 
-    MEETING_FREQUENCY: {
-        any: [
-          /^tapaamisväliä?/i,
-          /^väliä?/i,
-        ],
-    },
-
     SEARCHING: {
         any: [
           /^(?:parin ?)?(?:haku|hakeminen)/i,
@@ -139,13 +132,6 @@ module.exports = {
         each: [
           '#FIND',
           '#PAIR',
-        ],
-    },
-
-    CHANGE_MEETING_FREQUENCY: {
-        each: [
-          '#CHANGE',
-          '#MEETING_FREQUENCY',
         ],
     },
 

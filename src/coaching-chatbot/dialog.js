@@ -250,11 +250,9 @@ bot
         }
 
         session.runActions(['displayAvailablePeer']);
-        session.addQuickReplies([
-          Builder.QuickReplies.create('@YES'),
-          Builder.QuickReplies.create('@NO'),
-          Builder.QuickReplies.create('@STOP_SEARCHING'),
-        ]);
+        session.addQuickReplies(
+          Builder.QuickReplies.createArray(['@YES', '@NO', '@STOP_SEARCHING'])
+        );
       },
       (session) => {
         if (session.checkIntent('#NO')) {
@@ -304,11 +302,9 @@ bot
 
           session.addResult('@INFORMATION_ABOUT_REQUESTS');
           session.runActions(['displayRequest']);
-          session.addQuickReplies([
-            Builder.QuickReplies.create('@YES'),
-            Builder.QuickReplies.create('@NO'),
-            Builder.QuickReplies.create('@RETURN'),
-          ]);
+          session.addQuickReplies(
+            Builder.QuickReplies.createArray(['@YES', '@NO', '@RETURN'])
+          );
         },
         (session) => {
           if (session.checkIntent('#NO')) {

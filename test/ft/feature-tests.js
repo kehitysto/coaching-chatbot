@@ -247,7 +247,7 @@ describe('User story', function() {
   );
 
   describe(
-    'As a user searching for a pair I want to get a list of other users wanting to meet as often as I do',
+    'As a user searching for a pair I want to get a list of other users searching for a pair',
     function() {
       it(
         'should provide user with the list of users',
