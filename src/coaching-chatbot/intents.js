@@ -175,6 +175,12 @@ module.exports = {
         ],
     },
 
+    NUMERIC_RATING: {
+        any: [
+            /^[0-4]$/i,
+        ],
+    },
+
     DAY: {
       any: [
           /^ma/i,
