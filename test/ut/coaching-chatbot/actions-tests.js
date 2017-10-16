@@ -327,7 +327,7 @@ describe('coaching-bot actions', function() {
   describe('#removeSentRequests', function() {
     it('should remove contexts peerRequests from the recipients', function() {
       const sessions = new Sessions();
-      
+
       const stubSessionsRead = sinon.stub(
         sessions.db,
         'read'
@@ -337,7 +337,7 @@ describe('coaching-bot actions', function() {
         sessions.db,
         'write'
       );
-      
+
       stubSessionsRead.returns(
         Promise.resolve({
           pairRequests: [
@@ -364,7 +364,7 @@ describe('coaching-bot actions', function() {
 
       return ret.then((result) => {
         expect(spySessionsWrite.calledWith(2, expectedToWrite)).to.equal(true);
-      }).then(() => {          
+      }).then(() => {
         spySessionsWrite.restore();
         stubSessionsRead.restore();
       });
@@ -525,7 +525,7 @@ describe('coaching-bot actions', function() {
                   'Masa\n -  Puhelin (040566123)\n' +
                   'Antti\n -  Puhelin (044123123)',
         };
-        
+
         const ret = actions.displayAcceptedPeer({
           sessionId: sessions.sessionId,
         });
@@ -601,13 +601,13 @@ describe('coaching-bot actions', function() {
         const ret = actions.acceptRequest({
           sessionId: 0,
           context: {
-            pairRequests: [1],  
+            pairRequests: [1],
           },
         });
 
         return ret.then((result) => {
           expect(result).to.deep.equal(expectedFromMarkUser);
-        }).then(() => {          
+        }).then(() => {
           expect(spySessionsWrite.calledWith(1, expectedToWrite)).to.equal(true);
         }).then(() => {
           spySessionsWrite.restore();
@@ -725,60 +725,11 @@ describe('#breakPair', function() {
 
       return ret.then((result) => {
         expect(result).to.deep.equal(expectedPairBroken);
-      }).then(() => {          
+      }).then(() => {
         expect(spySessionsWrite.calledWith(1, expectedToWrite)).to.equal(true);
       }).then(() => {
         stubPairsRead.restore();
         spySessionsWrite.restore();
-        stubSessionsRead.restore();
-      });
-    });
-});
-
-describe('#breakAllPairs', function() {
-  it('should read pairs and call breakPair for them', function() {
-      const sessions = new Sessions();
-      const pairs = new Pairs();
-
-      const stubSessionsRead = sinon.stub(
-        sessions.db,
-        'read'
-      );
-
-      const stubPairsRead = sinon.stub(
-        pairs.db,
-        'read'
-      );
-
-      const spyPairsBreakPair = sinon.spy(
-        Pairs.prototype,
-        'breakPair'
-      );
-
-      const profile = {
-        name: 'Pertti',
-        communicationMethods: {
-          SKYPE: 'pertti_42',
-        },
-      };
-
-      stubSessionsRead.returns(Promise.resolve(
-        profile
-      ));
-
-      stubPairsRead.returns(Promise.resolve(
-        [1, 2, 3]
-      ));
-
-      const ret = actions.breakAllPairs({
-        sessionId: 0,
-      });
-
-      return ret.then((result) => {
-        expect(spyPairsBreakPair.args).to.deep.equal([[0, 1], [0, 2], [0, 3]]);
-      }).then(() => {
-        spyPairsBreakPair.restore();
-        stubPairsRead.restore();
         stubSessionsRead.restore();
       });
     });
