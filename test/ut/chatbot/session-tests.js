@@ -87,6 +87,37 @@ describe('chatbot sessions', function() {
     });
   });
 
+  describe('#runActions', function() {
+    it('should call _queueFunction 3 times', function() {
+      const queueSpy = sinon.spy(this.session, '_queueFunction');
+      const actions = ['action1', 'action2', 'action3'];
+
+      this.session.runActions(actions);
+      queueSpy.restore();
+
+      return expect(queueSpy.callCount).to.equal(3);
+    });
+  });
+
+  describe('#prev', function() {
+    it('should go to correct state after calling prev', function() {
+      this.session._start('SESSION', {}, '');
+      const method = this.session.dialog.getSubStateCount;
+      this.session.dialog.getSubStateCount = () => 10;
+      this.session.beginDialog('dialog', true);
+      this.session.prev();
+
+      const expectation = [
+        ['', 0],
+        ['dialog', 9],
+      ];
+
+      this.session.dialog.getSubStateCount = method;
+
+      return expect(this.session._state).to.deep.equal(expectation);
+    });
+  });
+
   describe('#_start', function() {
     it('start returns the session object', function() {
       const ret = this.session._start('SESSION', {}, '');
