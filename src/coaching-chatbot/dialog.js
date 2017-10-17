@@ -345,8 +345,8 @@ bot
     '/accepted_pair_profile', [
       (session) => {
         session.addResult('@PAIR_CREATED');
-        session.addResult('@LINK_TO_HELP');
         session.runActions(['displayAcceptedPeer']);
+        session.addResult('@LINK_TO_HELP');
         if (session.ifFacilitationSet()) {
           session.addResult('@ASK_FOR_FACILITATION', [
             Builder.QuickReplies.create('@SET_DATE'),
