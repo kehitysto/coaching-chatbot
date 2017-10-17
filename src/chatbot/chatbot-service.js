@@ -23,7 +23,7 @@ module.exports = class Chatbot {
         return context;
       })
       .catch((err) => {
-        console.error(err.message.toString());
+        log.error(err.message.toString());
         return {};
       })
       .then((context) => {

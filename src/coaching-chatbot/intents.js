@@ -105,6 +105,12 @@ module.exports = {
         any: /^(?:pyyntö|pyynnöt|pyyntöjä)$/i,
     },
 
+    TEST: {
+        each: [
+            /^test/i,
+        ],
+    },
+
     OPTIONAL_VALUE: {
         any: /(\w.*)?/i,
         match: (match) => match[1] || true,
