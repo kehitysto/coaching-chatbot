@@ -487,10 +487,11 @@ export function testReminderAndFeedback({ context }) {
                 feedbackSessions[i].Id,
                 {
                   ...feedbackSessions[i].context,
-                  state: '/?0/profile?0/accepted_pair_profile?0/give_feedback?0',
+                  state:
+                  '/?0/profile?0/accepted_pair_profile?0/give_feedback?0',
                 }
               )
-            )
+            );
           }
           return Promise.all(promises);
         });

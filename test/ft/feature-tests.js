@@ -504,9 +504,27 @@ describe('User story', function() {
       });
 
       it(
-        'should ask for feedback and give rating buttons',
+        'should ask for if the user wants to give feedback',
         function() {
           let promise = this.bot.receive('FEEDBACK_TESTER', '_');
+
+          return expect(promise)
+            .to.eventually.become([
+              buildResponse('@FEEDBACK_MESSAGE', [{
+                'title': 'Kyllä',
+                'payload': '@YES',
+              }, {
+                'title': 'Ei',
+                'payload': '@NO',
+              }]),
+            ]);
+        }
+      );
+
+      it(
+        'should ask for feedback and give rating buttons',
+        function() {
+          let promise = this.bot.receive('FEEDBACK_TESTER', 'YES');
 
           return expect(promise)
             .to.eventually.become([

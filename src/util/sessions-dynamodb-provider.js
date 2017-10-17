@@ -39,8 +39,8 @@ module.exports = class DynamoDBProvider {
   }
 
   readAllWithFeedbacks() {
-    let currentDay = strings['@DAYS']
-      [(new Date().getDay() - 2) % 7].toUpperCase();
+    let currentDay =
+    strings['@DAYS'][(new Date().getDay() - 2) % 7].toUpperCase();
 
     const params = {
       Limit: 50,
