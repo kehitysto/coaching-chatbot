@@ -312,7 +312,7 @@ module.exports = class Session {
 
   getCommunicationMethodsCount() {
     let m = this.context.communicationMethods;
-    return m === undefined ? 0 : m.length;
+    return m === undefined ? 0 : Object.keys(m).length;
   }
 
   allCommunicationMethodsFilled() {
