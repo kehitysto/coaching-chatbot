@@ -10,5 +10,9 @@
   {
     "identifier": "SET_BIO",
     "description": "Muokkaa kuvausta"
+  },
+  {
+    "identifier": "EDIT_COMMUNICATION_METHODS",
+    "description": "Muokkaa yhteystietoja"
   }
 ]

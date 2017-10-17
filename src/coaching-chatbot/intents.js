@@ -206,4 +206,23 @@ module.exports = {
             '#OPTIONAL_VALUE',
           ],
     },
+
+    TEST: {
+        each: [
+            /^test/i,
+          ],
+    },
+    COMMUNICATIONS: {
+        any: [
+            /^yhteystie(?:toja|dot|to)/i,
+        ],
+    },
+
+    EDIT_COMMUNICATION_METHODS: {
+        each: [
+            '#CHANGE',
+            '#COMMUNICATIONS',
+            '#OPTIONAL_VALUE',
+        ],
+    },
 };
