@@ -424,7 +424,7 @@ export function testReminderAndFeedback({ context }) {
           for (let i=0; i<feedbackSessions.length; i++) {
             promises.push(
               sessions.write(
-                feedbackSessions[i].Id,
+                feedbackSessions[i].id,
                 {
                   ...feedbackSessions[i].context,
                   state:
