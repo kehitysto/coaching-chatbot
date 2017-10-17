@@ -359,12 +359,8 @@ bot
         }
       },
     ], [
-      ['#CHANGE_DATE', (session, match) => {
-        if (match !== true) {
-          session.runActions(['setTime'], match);
-        } else {
-          session.beginDialog('/set_date');
-        }
+      ['#CHANGE_DATE', (session) => {
+        session.beginDialog('/set_date');
       }],
       ['#BREAK_PAIR', (session) => {
         session.runActions(['breakPair']);
