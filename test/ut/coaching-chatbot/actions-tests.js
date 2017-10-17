@@ -156,7 +156,7 @@ describe('coaching-bot actions', function() {
           'name': 'Matti',
           'bio': 'Kokenut koodari'
         },
-        userData: '',
+        userData: {},
       });
 
       return expect(ret)
@@ -197,7 +197,9 @@ describe('coaching-bot actions', function() {
       'Should return a communication methods with undefined Communication Info',
       function() {
         const ret = actions.addCommunicationMethod({
-          context: {},
+          context: {
+            communicationMethods: {},
+          },
           input: 'Skype',
         });
 
@@ -258,23 +260,18 @@ describe('coaching-bot actions', function() {
         });
     });
 
-    it(
-      'Should return input if there is no undefined communication methods',
-      function() {
-        const ret = actions.addCommunicationInfo({
-          context: {},
-          input: 'nickname',
-        });
-
-        return expect(ret)
-          .to.eventually.deep.equal({
-            context: {
-              communicationMethods: {
-                input: 'nickname',
-              },
-            },
-          });
+    it('Should fail if there is no undefined communication info', function() {
+      const ret = actions.addCommunicationInfo({
+        context: {
+          communicationMethods: {
+            'Skype': 'skype_acc',
+          },
+        },
+        input: 'nickname',
       });
+
+      return expect(ret).be.rejected;
+    });
   });
 
   describe('#markUserAsSearching', function() {
