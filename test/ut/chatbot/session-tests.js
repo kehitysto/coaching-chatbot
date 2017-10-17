@@ -281,7 +281,7 @@ describe('chatbot sessions', function() {
   describe('#ifFacilitationSet', function() {
     it('should return true if day or time is not set', function() {
       this.session.context = {
-        day: 'MON',
+        weekDay: 'MON',
       };
 
       const ret = this.session.ifFacilitationSet();
@@ -292,7 +292,7 @@ describe('chatbot sessions', function() {
 
     it('should return false if day and time are both set', function() {
       this.session.context = {
-        day: 'MON',
+        weekDay: 'MON',
         time: '06:00',
       };
 
