@@ -30,7 +30,7 @@ module.exports.handler = (event, context, cb) => {
   return cb('Unknown event');
 };
 
-module.exports.meetingReminder = (event, context, cb) => {
+module.exports.meetingCheck = (event, context, cb) => {
   const sessions = new Sessions();
   return sessions.readAllWithReminders()
     .then((sessionsFromDb) => {
@@ -42,6 +42,29 @@ module.exports.meetingReminder = (event, context, cb) => {
             [])
         );
       }
-      return Promise.all(promises);
+      return sessions.readAllWithFeedbacks()
+        .then((feedbackSessions) => {
+          for (let i=0; i<feedbackSessions.length; i++) {
+            promises.push(
+              sessions.write(
+                feedbackSessions[i].id,
+                {
+                  ...feedbackSessions[i].context,
+                  state:
+                  '/?0/profile?0/accepted_pair_profile?0/give_feedback?0',
+                }
+              ).then(() => {
+                Messenger.send(feedbackSessions[i].id,
+                  strings['@FEEDBACK_MESSAGE'],
+                  Builder.QuickReplies.createArray([
+                    strings['@YES'],
+                    strings['@NO'],
+                  ])
+                );
+              })
+            );
+          }
+          return Promise.all(promises);
+        });
     });
 };

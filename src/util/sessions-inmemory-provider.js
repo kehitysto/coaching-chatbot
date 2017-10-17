@@ -61,7 +61,7 @@ module.exports = class InMemoryProvider {
 
         if (meetingDay == ((new Date().getDay() - 2) % 7)) {
           log.silly('Found context with id: ', sessionId);
-          sessions.push({'Id': sessionId, 'context': context});
+          sessions.push( { 'Id': sessionId, 'context': context } );
         }
       }
       resolve(sessions);
