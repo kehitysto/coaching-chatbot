@@ -357,11 +357,7 @@ bot
       },
     ], [
       ['#CHANGE_DATE', (session, match) => {
-        if (match !== true) {
-          session.runActions(['setTime'], match);
-        } else {
-          session.beginDialog('/set_date');
-        }
+        session.beginDialog('/set_date');
       }],
       ['#BREAK_PAIR', (session) => {
         session.runActions(['breakPair']);
@@ -373,10 +369,10 @@ bot
       (session) => {
         session.addResult('@ASK_FOR_DAY');
         session.addQuickReplies(
-          Builder.QuickReplies.createArray(strings['@DAYS']));
+          Builder.QuickReplies.createArray(strings['@WEEKDAYS']));
       },
       (session) => {
-        if (session.checkIntent('#DAY')) {
+        if (session.checkIntent('#WEEKDAY')) {
           session.runActions(['setDay']);
         } else {
           session.addResult('@UNCLEAR');
@@ -435,16 +431,11 @@ bot
   .dialog(
       '/stop_searching', [
         (session) => {
-          if (session.context.searching) {
-            session.addResult('@CONFIRM_STOP_SEARCHING', [Builder.QuickReplies
-              .create(
-                '@YES'),
-              Builder.QuickReplies.create('@NO'),
-            ]);
-          } else {
-            session.addResult('@NOT_CURRENTLY_SEARCHING');
-            session.endDialog();
-          }
+          session.addResult('@CONFIRM_STOP_SEARCHING', [Builder.QuickReplies
+            .create(
+            '@YES'),
+          Builder.QuickReplies.create('@NO'),
+          ]);
         },
         (session) => {
           if (session.checkIntent('#YES')) {

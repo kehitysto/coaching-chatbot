@@ -265,7 +265,7 @@ describe('User story', function() {
           );
 
           return expect(
-              this.bot.receive(SESSION, 'YES'))
+              this.bot.receive(SESSION, 'Kyllä'))
             .to.eventually.become([
               buildResponse('@INFORMATION_ABOUT_LIST'),
               expected,
@@ -297,7 +297,7 @@ describe('User story', function() {
           this.sessions.write('ID1', testUser2);
 
           return expect(
-              this.bot.receive(SESSION, 'no'))
+              this.bot.receive(SESSION, 'Ei'))
             .to.eventually.become([
               buildResponse('@INFORMATION_ABOUT_LIST'),
               buildResponse(
