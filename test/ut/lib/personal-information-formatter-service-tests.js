@@ -105,7 +105,11 @@ describe('Formatter service', function() {
           {
             title: 'Muokkaa kuvausta',
             payload: 'SET_BIO',
-          }
+          },
+          {
+          payload: "EDIT_COMMUNICATION_METHODS",
+          title: "Muokkaa yhteystietoja"
+          },
         ];
 
         return expect(personalInformationChangers)

@@ -327,6 +327,6 @@ module.exports = class Session {
   }
 
   isRatingGood() {
-    return ![1, 2].includes(this.context.rating);
+    return [3, 4].includes(this.context.rating);
   }
 };

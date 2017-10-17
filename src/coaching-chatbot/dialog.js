@@ -55,6 +55,9 @@ bot
         session.beginDialog('/set_bio');
       },
       (session) => {
+        session.beginDialog('communication_methods');
+      },
+      (session) => {
         session.addResult('@INFORMATION_ABOUT_BUTTONS');
         session.switchDialog('/profile');
       },
@@ -106,7 +109,7 @@ bot
       if (session.checkIntent('#YES')) {
         session.switchDialog('/add_communication_method');
       } else if (session.checkIntent('#NO')) {
-        session.switchDialog('/confirm_permission');
+        session.endDialog();
       } else {
         session.addResult('@UNCLEAR');
         session.prev();
@@ -193,6 +196,9 @@ bot
       ['#FIND_PAIR', (session) => {
         session.beginDialog('/find_pair');
       }],
+      ['#EDIT_COMMUNICATION_METHODS', (session) => {
+        session.beginDialog('/communication_methods');
+      }],
     ])
   .dialog(
     '/find_pair', [
@@ -203,7 +209,7 @@ bot
             Builder.QuickReplies.create('@NO'),
           ]);
         } else {
-          session.switchDialog('/communication_methods');
+          session.switchDialog('/confirm_permission');
         }
       },
       (session) => {
@@ -403,8 +409,13 @@ bot
         );
       },
       (session) => {
-        session.runActions(['setRating']);
-        session.next();
+        if (session.checkIntent('#NUMERIC_RATING')) {
+          session.runActions(['setRating']);
+          session.next();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
+        }
       },
       (session) => {
         if (session.isRatingGood()) {
@@ -461,7 +472,7 @@ bot
       },
       (session) => {
         if (session.checkIntent('#YES')) {
-          session.runActions(['breakAllPairs', 'removeSentRequests', 'reset']);
+          session.runActions(['breakPair', 'removeSentRequests', 'reset']);
           session.addResult('@RESET_DONE');
           session.clearState();
         } else if (session.checkIntent('#NO')) {

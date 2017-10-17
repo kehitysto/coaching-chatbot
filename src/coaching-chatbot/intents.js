@@ -175,6 +175,12 @@ module.exports = {
         ],
     },
 
+    NUMERIC_RATING: {
+        any: [
+            /^[0-4]$/i,
+        ],
+    },
+
     DAY: {
       any: [
           /^ma/i,
@@ -205,5 +211,18 @@ module.exports = {
         each: [
             /^test/i,
           ],
+    },
+    COMMUNICATIONS: {
+        any: [
+            /^yhteystie(?:toja|dot|to)/i,
+        ],
+    },
+
+    EDIT_COMMUNICATION_METHODS: {
+        each: [
+            '#CHANGE',
+            '#COMMUNICATIONS',
+            '#OPTIONAL_VALUE',
+        ],
     },
 };
