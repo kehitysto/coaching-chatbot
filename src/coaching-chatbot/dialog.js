@@ -199,6 +199,9 @@ bot
       ['#EDIT_COMMUNICATION_METHODS', (session) => {
         session.beginDialog('/communication_methods');
       }],
+      ['#OPTIONAL_VALUE', (session) => {
+        session.addResult('@UNCLEAR');
+      }],
     ])
   .dialog(
     '/find_pair', [
