@@ -45,6 +45,29 @@ module.exports = class InMemoryProvider {
     });
   }
 
+  readAllWithFeedbacks() {
+    log.silly('Getting all sessions with feedbacks');
+    return new Promise((resolve, reject) => {
+      let sessions = [];
+
+      for (let sessionId in this.db) {
+        if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
+        log.silly('Evaluating session with id: ', sessionId);
+        let context = this.db[sessionId];
+
+        const day = context.weekDay;
+        if(day === undefined) continue;
+        let meetingDay = strings['@DAYS'].indexOf(day.toUpperCase());
+
+        if (meetingDay == ((new Date().getDay() - 2) % 7)) {
+          log.silly('Found context with id: ', sessionId);
+          sessions.push({'Id': sessionId, 'context': context});
+        }
+      }
+      resolve(sessions);
+    });
+  }
+
   write(sessionId, context) {
     this.db[sessionId] = context;
 

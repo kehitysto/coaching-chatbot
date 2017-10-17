@@ -363,8 +363,9 @@ bot
           session.beginDialog('/set_date');
         }
       }],
-      ['#TEST', (session, match) => {
-          session.runActions(['testReminder']);
+      ['#TEST', (session) => {
+          session.runActions(['testReminderAndFeedback']);
+          session.resetDialog();
       }],
       ['#BREAK_PAIR', (session) => {
         session.runActions(['breakPair']);
@@ -402,6 +403,22 @@ bot
     ])
   .dialog(
     '/give_feedback', [
+      (session) => {
+        session.addResult('@FEEDBACK_MESSAGE', [
+          Builder.QuickReplies.create('@YES'),
+          Builder.QuickReplies.create('@NO'),
+        ]);
+      },
+      (session) => {
+        if (session.checkIntent('#YES')) {
+          session.next();
+        } else if (session.checkIntent('#NO')) {
+          session.endDialog();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
+        }
+      },
       (session) => {
         session.addResult('@FEEDBACK_ABOUT_MEETING');
         session.addQuickReplies(

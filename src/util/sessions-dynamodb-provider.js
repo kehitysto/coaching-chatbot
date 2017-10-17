@@ -38,6 +38,24 @@ module.exports = class DynamoDBProvider {
     });
   }
 
+  readAllWithFeedbacks() {
+    let currentDay = strings['@DAYS']
+      [(new Date().getDay() - 2) % 7].toUpperCase();
+
+    const params = {
+      Limit: 50,
+      FilterExpression: 'context.weekDay = :currentDay',
+      ExpressionAttributeValues: {
+        ':currentDay': currentDay,
+      },
+    };
+
+    return this.table.scan(params).then((items) => {
+      log.debug('Sessions with feedback: ' + JSON.stringify(items));
+      return items;
+    });
+  }
+
   write(id, context) {
     return new Promise((resolve, reject) => {
       if (!id) {

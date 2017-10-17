@@ -467,7 +467,7 @@ export function setTime({ context, input }) {
   });
 }
 
-export function testReminder({ context }) {
+export function testReminderAndFeedback({ context }) {
   const sessions = new Sessions();
   return sessions.readAllWithReminders()
     .then((sessionsFromDb) => {
@@ -479,7 +479,21 @@ export function testReminder({ context }) {
             [])
         );
       }
-      return Promise.all(promises);
+      return sessions.readAllWithFeedbacks()
+        .then((feedbackSessions) => {
+          for (let i=0; i<feedbackSessions.length; i++) {
+            promises.push(
+              sessions.write(
+                feedbackSessions[i].Id,
+                {
+                  ...feedbackSessions[i].context,
+                  state: '/?0/profile?0/accepted_pair_profile?0/give_feedback?0',
+                }
+              )
+            )
+          }
+          return Promise.all(promises);
+        });
     });
 }
 
