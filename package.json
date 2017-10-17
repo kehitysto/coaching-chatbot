@@ -26,7 +26,10 @@
     "sourceMap": false
   },
   "devDependencies": {
+    "@types/chai": "^4.0.4",
+    "@types/mocha": "^2.2.43",
     "@types/node": "^8.0.31",
+    "@types/sinon": "^2.3.6",
     "awesome-typescript-loader": "^3.2.3",
     "aws-sdk": "^2.9.0",
     "chai": "3.5.0",
