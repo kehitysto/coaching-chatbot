@@ -7,7 +7,7 @@ const SESSION = 'STOP_SEARCH_TESTER';
 
 describe('Stop searching', () => {
   describe(
-		'As a user searching for a pair I want to be able to stop my search for a pair', () => {
+    'As a user searching for a pair I want to be able to stop my search for a pair', () => {
       before(function () {
         setupChatbot(this);
         this.userInformation = {
