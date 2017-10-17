@@ -424,7 +424,7 @@ export function testReminder({ context }) {
 }
 
 export function resetDayAndTime({ context }) {
-  const { day, time, ...cleanedContext } = context;
+  const { weekDay, time, ...cleanedContext } = context;
 
   return Promise.resolve(
     cleanedContext
