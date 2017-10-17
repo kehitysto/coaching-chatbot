@@ -12,7 +12,7 @@ from '../../src/lib/communication-methods-formatter';
 import * as Sessions from '../../src/util/sessions-service';
 import PairFormatter
 from '../../src/lib/pair-formatter';
-import * as FeatureTestStates from './sessions.json';
+import * as FeatureTestStates from './states.json';
 
 const SESSION = 'SESSION';
 
@@ -488,84 +488,4 @@ describe('User story', function() {
         }
       );
     });
-
-  describe(
-    'As a user I want to be able to give feedback',
-    function() {
-      before(function() {
-        this.sessions = new Sessions();
-        this.sessions.db.read = (sessionId) => {
-          return Promise.resolve(FeatureTestStates['sessions'][sessionId]);
-        };
-        this.sessions.db.write = (sessionId, context) => {
-          FeatureTestStates['sessions'][sessionId] = context;
-        }
-        this.bot = new Chatbot(dialog, this.sessions);
-      });
-
-      it(
-        'should ask for if the user wants to give feedback',
-        function() {
-          let promise = this.bot.receive('FEEDBACK_TESTER', '_');
-
-          return expect(promise)
-            .to.eventually.become([
-              buildResponse('@FEEDBACK_MESSAGE', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
-            ]);
-        }
-      );
-
-      it(
-        'should ask for feedback and give rating buttons',
-        function() {
-          let promise = this.bot.receive('FEEDBACK_TESTER', 'YES');
-
-          return expect(promise)
-            .to.eventually.become([
-              buildResponse(
-                '@FEEDBACK_ABOUT_MEETING',
-                Builder.QuickReplies.createArray(['1', '2', '3', '4'])),
-            ]);
-        }
-      );
-
-      it(
-        'should ask for feedback again if unexisting button was pressed',
-        function() {
-          let promise = this.bot.receive('FEEDBACK_TESTER', '11');
-
-          return promise.then((output) => {
-            expect(Strings['@UNCLEAR'])
-              .to.include(output[0].message);
-            expect(output[1])
-              .to.deep.equal(
-                buildResponse(
-                  '@FEEDBACK_ABOUT_MEETING',
-                  Builder.QuickReplies.createArray(['1', '2', '3', '4'])),
-              );
-          });
-        }
-      );
-
-      it(
-        'should ask for feedback when a low rating is given',
-        function() {
-          let promise = this.bot.receive('FEEDBACK_TESTER', '1');
-
-          return expect(promise)
-            .to.eventually.become([
-              buildResponse(
-                '@GIVE_FEEDBACK',
-                [])
-            ]);
-        }
-      );
-    }
-  );
 });

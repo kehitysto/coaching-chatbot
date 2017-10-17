@@ -1,0 +1,12 @@
+{
+  "sessions": {
+    "FEEDBACK_TESTER": {
+      "name": "Kaapo",
+      "state": "/give_feedback?0"
+    },
+    "RESET_TESTER": {
+      "name": "Reset Tester",
+      "state": "/profile?0"
+    }
+  }
+}
