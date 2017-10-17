@@ -134,6 +134,16 @@ describe('Chatbot builder', function() {
         .to.equal(template);
     });
 
+    it('should return one template from an array', function() {
+      const templateId = '@TEST_TEMPLATE_ARRAY';
+      const template = ['Hello', 'Hi'];
+
+      this.builder._strings[templateId] = template;
+
+      return expect(template)
+        .to.include(this.builder.getStringTemplate(templateId));
+    });
+
     it('should return the template id if no template can be found',
       function() {
         const templateId = '@TEST_TEMPLATE';
