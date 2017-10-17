@@ -1,6 +1,8 @@
 import commonFeatures from './common';
 const { buildResponse, setupChatbot, QuickReplies, Strings } = commonFeatures;
 
+const SESSION = 'FEEDBACK_TESTER';
+
 describe('Feedback tests', function() {
   describe(
     'As a user I want to be able to give feedback',
@@ -12,7 +14,7 @@ describe('Feedback tests', function() {
       it(
         'should ask for feedback and give rating buttons',
         function() {
-          let promise = this.bot.receive('FEEDBACK_TESTER', '_');
+          let promise = this.bot.receive(SESSION, '_');
 
           return expect(promise)
             .to.eventually.become([
@@ -26,7 +28,7 @@ describe('Feedback tests', function() {
       it(
         'should ask for feedback again if unexisting button was pressed',
         function() {
-          let promise = this.bot.receive('FEEDBACK_TESTER', '11');
+          let promise = this.bot.receive(SESSION, '11');
 
           return promise.then((output) => {
             expect(Strings['@UNCLEAR'])
@@ -44,13 +46,11 @@ describe('Feedback tests', function() {
       it(
         'should ask for feedback when a low rating is given',
         function() {
-          let promise = this.bot.receive('FEEDBACK_TESTER', '1');
+          let promise = this.bot.receive(SESSION, '1');
 
           return expect(promise)
             .to.eventually.become([
-              buildResponse(
-                '@GIVE_FEEDBACK',
-                [])
+              buildResponse('@GIVE_FEEDBACK')
             ]);
         }
       );
