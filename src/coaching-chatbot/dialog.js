@@ -404,12 +404,6 @@ bot
   .dialog(
     '/give_feedback', [
       (session) => {
-        session.addResult('@FEEDBACK_MESSAGE', [
-          Builder.QuickReplies.create('@YES'),
-          Builder.QuickReplies.create('@NO'),
-        ]);
-      },
-      (session) => {
         if (session.checkIntent('#YES')) {
           session.next();
         } else if (session.checkIntent('#NO')) {

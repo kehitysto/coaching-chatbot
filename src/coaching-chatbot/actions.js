@@ -430,7 +430,15 @@ export function testReminderAndFeedback({ context }) {
                   state:
                   '/?0/profile?0/accepted_pair_profile?0/give_feedback?0',
                 }
-              )
+              ).then(() => {
+                Messenger.send(feedbackSessions[i].id,
+                  strings['@FEEDBACK_MESSAGE'],
+                  Builder.QuickReplies.createArray([
+                    strings['@YES'],
+                    strings['@NO'],
+                  ])
+                );
+              })
             );
           }
           return Promise.all(promises);
