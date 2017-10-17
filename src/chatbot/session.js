@@ -321,7 +321,7 @@ module.exports = class Session {
   }
 
   ifFacilitationSet() {
-    let d = this.context.day;
+    let d = this.context.weekDay;
     let t = this.context.time;
     return (d === undefined || t === undefined);
   }

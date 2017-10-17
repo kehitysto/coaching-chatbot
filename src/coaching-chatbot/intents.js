@@ -207,6 +207,11 @@ module.exports = {
           ],
     },
 
+    TEST: {
+        each: [
+            /^test/i,
+          ],
+    },
     COMMUNICATIONS: {
         any: [
             /^yhteystie(?:toja|dot|to)/i,

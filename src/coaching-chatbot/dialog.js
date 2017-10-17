@@ -363,6 +363,9 @@ bot
           session.beginDialog('/set_date');
         }
       }],
+      ['#TEST', (session, match) => {
+          session.runActions(['testReminder']);
+      }],
       ['#BREAK_PAIR', (session) => {
         session.runActions(['breakPair']);
         session.endDialog();

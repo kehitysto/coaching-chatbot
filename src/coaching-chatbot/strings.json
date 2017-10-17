@@ -50,7 +50,7 @@
   "@ASK_FOR_DAY": "Minä viikonpäivänä tapaaminen on?",
   "@ASK_FOR_TIME": "Monelta tapaaminen on (hh:mm)?",
   "@DAYS": ["MA", "TI", "KE", "TO", "PE", "LA", "SU"],
-  "@CONFIRM_DATE": "Tapaaminen on viikottain päivämääränä {day}, klo {time}",
+  "@CONFIRM_DATE": "Tapaaminen on viikottain {weekDay}, klo {time}",
   "@SET_DATE": "Aseta tapaaminen",
   "@TELL_USER_HAS_NEW_FEEDBACK": "Olet saanut palautetta. Parisi vastasi kysymykseen \"Kuinka lähellä saamasi ohjaus oli ideaalia ohjaustilannettasi?\"\n",
   "@RATINGS": [
@@ -58,5 +58,6 @@
     "Toivoisin yhtä merkittävää muutosta",
     "Pientä parannettavaa löytyisi",
     "Täysin ideaali"
-  ]
+  ],
+  "@REMINDER_MESSAGE": "Sinulla on huomenna tapaaminen klo "
 }

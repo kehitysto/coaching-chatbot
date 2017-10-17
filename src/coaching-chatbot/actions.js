@@ -397,7 +397,7 @@ export function sendFeedback({ context, sessionId, input }) {
 
 export function setDay({ context, input }) {
   return contextChanges(context)({
-      day: input.substring(0, 2),
+      weekDay: input.substring(0, 2).toUpperCase(),
   });
 }
 
@@ -407,11 +407,26 @@ export function setTime({ context, input }) {
   });
 }
 
+export function testReminder({ context }) {
+  const sessions = new Sessions();
+  return sessions.readAllWithReminders()
+    .then((sessionsFromDb) => {
+      const promises = [];
+      for (let i=0; i<sessionsFromDb.length; i++) {
+        promises.push(
+            Messenger.send(sessionsFromDb[i].id,
+              strings['@REMINDER_MESSAGE'] + sessionsFromDb[i].context.time,
+            [])
+        );
+      }
+      return Promise.all(promises);
+    });
+}
+
 export function resetDayAndTime({ context }) {
-  const { day, time, ...cleanedContext } = context;
+  const { weekDay, time, ...cleanedContext } = context;
 
   return Promise.resolve(
     cleanedContext
   );
 }
-

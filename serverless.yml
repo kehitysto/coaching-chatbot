@@ -32,6 +32,12 @@ functions:
           path: facebook-bot
           method: post
           integration: lambda
+  facebookReminder:
+    handler: src/facebook-messenger/handler.meetingReminder
+    memorySize: 128
+    timeout: 15
+    events:
+      - schedule: rate(7 days)
 
 resources:
   Resources:

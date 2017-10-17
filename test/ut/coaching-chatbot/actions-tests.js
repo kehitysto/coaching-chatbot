@@ -869,7 +869,7 @@ describe('coaching-bot actions', function() {
 
       const expected = {
         context: {
-          day: 'mA',
+          weekDay: 'MA',
         }
       };
 
@@ -900,7 +900,7 @@ describe('coaching-bot actions', function() {
       const ret = actions.resetDayAndTime({
         context: {
           asd: 3,
-          day: 'Ti',
+          weekDay: 'TI',
           as: 5,
           time: '10:23',
         }
