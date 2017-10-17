@@ -199,6 +199,9 @@ bot
       ['#EDIT_COMMUNICATION_METHODS', (session) => {
         session.beginDialog('/communication_methods');
       }],
+      ['#OPTIONAL_VALUE', (session) => {
+        session.addResult('@UNCLEAR');
+      }],
     ])
   .dialog(
     '/find_pair', [
@@ -342,8 +345,8 @@ bot
     '/accepted_pair_profile', [
       (session) => {
         session.addResult('@PAIR_CREATED');
-        session.addResult('@LINK_TO_HELP');
         session.runActions(['displayAcceptedPeer']);
+        session.addResult('@LINK_TO_HELP');
         if (session.ifFacilitationSet()) {
           session.addResult('@ASK_FOR_FACILITATION', [
             Builder.QuickReplies.create('@SET_DATE'),
@@ -356,12 +359,8 @@ bot
         }
       },
     ], [
-      ['#CHANGE_DATE', (session, match) => {
-        if (match !== true) {
-          session.runActions(['setTime'], match);
-        } else {
-          session.beginDialog('/set_date');
-        }
+      ['#CHANGE_DATE', (session) => {
+        session.beginDialog('/set_date');
       }],
       ['#TEST', (session, match) => {
           session.runActions(['testReminder']);
@@ -383,6 +382,7 @@ bot
           session.runActions(['setDay']);
         } else {
           session.addResult('@UNCLEAR');
+          session.prev();
           session.prev();
         }
         session.next();
