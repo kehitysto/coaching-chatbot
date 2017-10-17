@@ -409,8 +409,11 @@ bot
         } else if (session.checkIntent('#NO')) {
           session.endDialog();
         } else {
-          session.addResult('@UNCLEAR');
-          session.prev();
+          session.addResult('@UNCLEAR', [
+            Builder.QuickReplies.create('@YES'),
+            Builder.QuickReplies.create('@NO'),
+          ]);
+          session.resetDialog();
         }
       },
       (session) => {
