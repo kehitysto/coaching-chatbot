@@ -30,14 +30,14 @@ module.exports = class InMemoryProvider {
       for (let sessionId in this.db) {
         if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
         log.silly('Evaluating session with id: ', sessionId);
-        let session = this.db[sessionId];
+        let context = this.db[sessionId];
 
-        const day = session.weekDay;
+        const day = context.weekDay;
         if(day === undefined) continue;
         let meetingDay = strings['@DAYS'].indexOf(day.toUpperCase());
         if (meetingDay == new Date().getDay()) {
-          log.silly('Found session with id: ', sessionId);
-          sessions.push(session);
+          log.silly('Found context with id: ', sessionId);
+          sessions.push({'Id': sessionId, 'context': context});
         }
       }
 

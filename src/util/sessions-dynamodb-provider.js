@@ -23,7 +23,6 @@ module.exports = class DynamoDBProvider {
 
   readAllWithReminders() {
     let currentDay = strings['@DAYS'][new Date().getDay()].toUpperCase();
-    log.debug('Current day: ' + currentDay);
 
     const params = {
       Limit: 50,
@@ -34,7 +33,7 @@ module.exports = class DynamoDBProvider {
     };
 
     return this.table.scan(params).then((items) => {
-      log.debug('Sessions with reminder: ', JSON.stringify(items));
+      log.debug('Sessions with reminder: ' + JSON.stringify(items));
       return items;
     });
   }

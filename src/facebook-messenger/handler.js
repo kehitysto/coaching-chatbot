@@ -32,22 +32,15 @@ module.exports.handler = (event, context, cb) => {
 
 module.exports.meetingReminder = (event, context, cb) => {
   const sessions = new Sessions();
-  return sessions.readAll()
-    .then((contexts) => {
+  return sessions.readAllWithReminders()
+    .then((sessionsFromDb) => {
       const promises = [];
-
-      for (let i=0; i<contexts.length; i++) {
-        const day = contexts[i].context.weekDay;
-        if(day === undefined) continue;
-
-        let meetingDay = strings['@DAYS'].indexOf(day.toUpperCase());
-        if (meetingDay == new Date().getDay()) {
-          promises.push(
-              Messenger.send(contexts[i].id,
-                strings['@REMINDER_MESSAGE'] + contexts[i].context.time,
-              [])
-          );
-        }
+      for (let i=0; i<sessionsFromDb.length; i++) {
+        promises.push(
+            Messenger.send(sessionsFromDb[i].id,
+              strings['@REMINDER_MESSAGE'] + sessionsFromDb[i].context.time,
+            [])
+        );
       }
       return Promise.all(promises);
     });

@@ -495,19 +495,12 @@ export function setTime({ context, input }) {
 export function testReminder({ context }) {
   const sessions = new Sessions();
   return sessions.readAllWithReminders()
-    .then((contexts) => {
+    .then((sessionsFromDb) => {
       const promises = [];
-      log.debug('Contexts length: ' + contexts.length);
-      for (let i=0; i<contexts.length; i++) {
-        log.debug('Context with index '
-        + i + ' : ' + contexts[i]);
-        log.debug('Context.context with index '
-        + i + ' : ' + contexts[i].context);
-        log.debug('Context stringify with index '
-        + i + ' : ' + JSON.stringify(contexts[i]));
+      for (let i=0; i<sessionsFromDb.length; i++) {
         promises.push(
-            Messenger.send(contexts[i].id,
-              strings['@REMINDER_MESSAGE'] + contexts[i].context.time,
+            Messenger.send(sessionsFromDb[i].id,
+              strings['@REMINDER_MESSAGE'] + sessionsFromDb[i].context.time,
             [])
         );
       }
