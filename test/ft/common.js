@@ -25,12 +25,12 @@ export function buildResponse(templateId, quickReplies = []) {
 
 export function setupChatbot(target) {
   target.sessions = new Sessions();
-  target.sessions.db.read = (sessionId) => {
-    return Promise.resolve(FeatureTestStates['sessions'][sessionId]);
-  };
-  target.sessions.db.write = (sessionId, context) => {
-    FeatureTestStates['sessions'][sessionId] = context;
-  };
+  target.sessions.db.load({});
+
+  for (let id in FeatureTestStates['sessions']) {
+    target.sessions.write(id, FeatureTestStates['sessions'][id]);
+  }
+
   target.bot = new Chatbot(dialog, target.sessions);
 }
 
