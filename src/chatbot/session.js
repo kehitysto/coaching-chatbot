@@ -312,7 +312,7 @@ module.exports = class Session {
 
   getCommunicationMethodsCount() {
     let m = this.context.communicationMethods;
-    return m === undefined ? 0 : m.length;
+    return m === undefined ? 0 : Object.keys(m).length;
   }
 
   allCommunicationMethodsFilled() {
@@ -321,7 +321,7 @@ module.exports = class Session {
   }
 
   ifFacilitationSet() {
-    let d = this.context.day;
+    let d = this.context.weekDay;
     let t = this.context.time;
     return (d === undefined || t === undefined);
   }
