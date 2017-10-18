@@ -202,7 +202,6 @@ describe('User story', function() {
           return expect(
             this.bot.receive(SESSION, 'ei'))
             .to.eventually.become([
-              buildResponse('@INFORMATION_ABOUT_BUTTONS'),
               buildResponse(
                 PersonalInformationFormatter.formatFromTemplate(
                   '@DISPLAY_PROFILE', this.userInformation),

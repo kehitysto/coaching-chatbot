@@ -12,7 +12,7 @@ module.exports = {
     },
 
     RETURN: {
-        any: /^(?:palaa|takaisin|peru|kumoa)$/i,
+        any: /^(?:palaa|takaisin|peru|kumoa|poistu)$/i,
     },
 
     SET: {
@@ -32,7 +32,7 @@ module.exports = {
     },
 
     STOP: {
-        any: /^(?:lopeta|keskeytä)\s/i,
+        any: /^(?:lopeta|keskeytä|poistu)\s/i,
     },
 
     BREAK: {
@@ -111,6 +111,10 @@ module.exports = {
         ],
     },
 
+    INFO: {
+        any: /^(?:info|ohje(?:et))$/i,
+    },
+
     OPTIONAL_VALUE: {
         any: /(\w.*)?/i,
         match: (match) => match[1] || true,
@@ -167,7 +171,7 @@ module.exports = {
         ],
     },
 
-    CHANGE_DATE: {
+    SET_DATE: {
         each: [
             '#SET_OR_CHANGE',
             '#MEETING',

@@ -58,7 +58,6 @@ bot
         session.beginDialog('communication_methods');
       },
       (session) => {
-        session.addResult('@INFORMATION_ABOUT_BUTTONS');
         session.switchDialog('/profile');
       },
     ])
@@ -199,6 +198,9 @@ bot
       ['#EDIT_COMMUNICATION_METHODS', (session) => {
         session.beginDialog('/communication_methods');
       }],
+      ['#INFO', (session) => {
+        session.addResult('@INFO');
+      }],
       ['#OPTIONAL_VALUE', (session) => {
         session.addResult('@UNCLEAR');
       }],
@@ -285,6 +287,9 @@ bot
         session.resetDialog();
         session.beginDialog('/list_requests', true);
       }],
+      ['#INFO', (session) => {
+        session.addResult('@INFO');
+      }],
     ])
   .dialog(
       '/list_requests', [
@@ -340,6 +345,9 @@ bot
         session.runActions(['breakPair']);
         session.endDialog();
       }],
+      ['#INFO', (session) => {
+        session.addResult('@INFO');
+      }],
     ])
   .dialog(
     '/accepted_pair_profile', [
@@ -359,7 +367,7 @@ bot
         }
       },
     ], [
-      ['#CHANGE_DATE', (session) => {
+      ['#SET_DATE', (session) => {
         session.beginDialog('/set_date');
       }],
       ['#TEST', (session, match) => {
@@ -369,17 +377,20 @@ bot
         session.runActions(['breakPair']);
         session.endDialog();
       }],
+      ['#INFO', (session) => {
+        session.addResult('@INFO');
+      }],
     ])
   .dialog(
     '/set_date', [
       (session) => {
-        session.addResult('@ASK_FOR_DAY');
+        session.addResult('@ASK_FOR_WEEKDAY');
         session.addQuickReplies(
           Builder.QuickReplies.createArray(strings['@WEEKDAYS']));
       },
       (session) => {
         if (session.checkIntent('#WEEKDAY')) {
-          session.runActions(['setDay']);
+          session.runActions(['setWeekday']);
         } else {
           session.addResult('@UNCLEAR');
           session.prev();

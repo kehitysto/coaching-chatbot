@@ -395,7 +395,7 @@ export function sendFeedback({ context, sessionId, input }) {
     });
 }
 
-export function setDay({ context, input }) {
+export function setWeekday({ context, input }) {
   return contextChanges(context)({
       weekDay: input.substring(0, 2).toUpperCase(),
   });
