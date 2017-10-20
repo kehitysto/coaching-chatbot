@@ -354,7 +354,7 @@ export function addPairRequest({ sessionId, context }) {
 export function sendRating({ context, sessionId }) {
   let pairs = new Pairs();
 
-  const answer = strings['@RATINGS'][context.rating - 1 || 3];
+  const answer = strings['@RATINGS'][context.rating - 1];
 
   log.info('SendRating with answer ' + answer);
 
