@@ -12,7 +12,6 @@ deploy:
   skip-cleanup: true
   on:
     branch: dev
-    branch: feature/ask-for-feedback
 
 cache:
   directories:
