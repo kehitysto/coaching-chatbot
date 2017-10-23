@@ -39,8 +39,10 @@ module.exports = class DynamoDBProvider {
   }
 
   readAllWithFeedbacks() {
-    let currentDay =
-    strings['@DAYS'][(new Date().getDay() - 2) % 7].toUpperCase();
+    let enumForDay = (new Date().getDay() - 2) % 7;
+    log.debug('ENUMFORDAY: ' + enumForDay);
+    let currentDay = strings['@DAYS'][enumForDay].toUpperCase();
+    log.debug('CURRENTDAY: ' + currentDay);
 
     const params = {
       Limit: 50,
