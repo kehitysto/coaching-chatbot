@@ -22,7 +22,7 @@ module.exports = class DynamoDBProvider {
   }
 
   readAllWithReminders() {
-    let currentDay = strings['@DAYS'][new Date().getDay()].toUpperCase();
+    let currentDay = strings['@WEEKDAYS'][new Date().getDay()].toUpperCase();
 
     const params = {
       Limit: 50,
@@ -40,7 +40,7 @@ module.exports = class DynamoDBProvider {
 
   readAllWithFeedbacks() {
     let enumForDay = (new Date().getDay() + 5) % 7;
-    let currentDay = strings['@DAYS'][enumForDay].toUpperCase();
+    let currentDay = strings['@WEEKDAYS'][enumForDay].toUpperCase();
 
     const params = {
       Limit: 50,

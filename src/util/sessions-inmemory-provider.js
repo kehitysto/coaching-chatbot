@@ -34,7 +34,7 @@ module.exports = class InMemoryProvider {
 
         const day = context.weekDay;
         if(day === undefined) continue;
-        let meetingDay = strings['@DAYS'].indexOf(day.toUpperCase());
+        let meetingDay = strings['@WEEKDAYS'].indexOf(day.toUpperCase());
         if (meetingDay == new Date().getDay()) {
           log.silly('Found context with id: ', sessionId);
           sessions.push( { 'Id': sessionId, 'context': context } );
@@ -57,7 +57,7 @@ module.exports = class InMemoryProvider {
 
         const day = context.weekDay;
         if(day === undefined) continue;
-        let meetingDay = strings['@DAYS'].indexOf(day.toUpperCase());
+        let meetingDay = strings['@WEEKDAYS'].indexOf(day.toUpperCase());
 
         if (meetingDay == ((new Date().getDay() - 2) % 7)) {
           log.silly('Found context with id: ', sessionId);

@@ -354,7 +354,7 @@ export function addPairRequest({ sessionId, context }) {
 export function sendRating({ context, sessionId }) {
   let pairs = new Pairs();
 
-  const answer = strings['@RATINGS'][context.rating - 1 || 3];
+  const answer = strings['@RATINGS'][context.rating - 1];
 
   log.info('SendRating with answer ' + answer);
 
@@ -395,7 +395,7 @@ export function sendFeedback({ context, sessionId, input }) {
     });
 }
 
-export function setDay({ context, input }) {
+export function setWeekday({ context, input }) {
   return contextChanges(context)({
       weekDay: input.substring(0, 2).toUpperCase(),
   });
