@@ -12,7 +12,7 @@ deploy:
   skip-cleanup: true
   on:
     branch: dev
-    branch: ask-for-feedback
+    branch: feature/ask-for-feedback
 
 cache:
   directories:
