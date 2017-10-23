@@ -863,7 +863,7 @@ describe('coaching-bot actions', function() {
 
   describe('#setDay', () => {
     it('should return context with day', () => {
-      const ret = actions.setDay({
+      const ret = actions.setWeekday({
         context: {}, input: 'mAanantai',
       });
 
