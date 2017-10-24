@@ -424,14 +424,29 @@ bot
       (session) => {
         if (session.checkIntent('#YES')) {
           session.next();
+          session.next();
+          session.next();
         } else if (session.checkIntent('#NO')) {
           session.endDialog();
         } else {
-          session.addResult('@UNCLEAR', [
-            Builder.QuickReplies.create('@YES'),
-            Builder.QuickReplies.create('@NO'),
-          ]);
-          session.resetDialog();
+          session.addResult('@UNCLEAR');
+          session.next();
+        }
+      },
+      (session) => {
+        session.addResult('@FEEDBACK_MESSAGE', [
+          Builder.QuickReplies.create('@YES'),
+          Builder.QuickReplies.create('@NO'),
+        ]);
+      },
+      (session) => {
+        if (session.checkIntent('#YES')) {
+          session.next();
+        } else if (session.checkIntent('#NO')) {
+          session.endDialog();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
         }
       },
       (session) => {
