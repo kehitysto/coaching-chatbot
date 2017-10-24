@@ -12,7 +12,7 @@ from '../../src/lib/communication-methods-formatter';
 import * as Sessions from '../../src/util/sessions-service';
 import PairFormatter
 from '../../src/lib/pair-formatter';
-import * as FeatureTestStates from './sessions.json';
+import * as FeatureTestStates from './states.json';
 
 const SESSION = 'SESSION';
 

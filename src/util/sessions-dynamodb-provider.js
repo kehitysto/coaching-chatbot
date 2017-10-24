@@ -22,7 +22,7 @@ module.exports = class DynamoDBProvider {
   }
 
   readAllWithReminders() {
-    let currentDay = strings['@DAYS'][new Date().getDay()].toUpperCase();
+    let currentDay = strings['@WEEKDAYS'][new Date().getDay()].toUpperCase();
 
     const params = {
       Limit: 50,
@@ -34,6 +34,24 @@ module.exports = class DynamoDBProvider {
 
     return this.table.scan(params).then((items) => {
       log.debug('Sessions with reminder: ' + JSON.stringify(items));
+      return items;
+    });
+  }
+
+  readAllWithFeedbacks() {
+    let enumForDay = (new Date().getDay() + 5) % 7;
+    let currentDay = strings['@WEEKDAYS'][enumForDay].toUpperCase();
+
+    const params = {
+      Limit: 50,
+      FilterExpression: 'context.weekDay = :currentDay',
+      ExpressionAttributeValues: {
+        ':currentDay': currentDay,
+      },
+    };
+
+    return this.table.scan(params).then((items) => {
+      log.debug('Sessions with feedback: ' + JSON.stringify(items));
       return items;
     });
   }

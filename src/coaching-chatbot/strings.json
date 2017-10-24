@@ -55,6 +55,7 @@
     "Pientä parannettavaa löytyisi",
     "Täysin ideaali"
   ],
-  "@REMINDER_MESSAGE": "Sinulla on tapaaminen huomenna klo. ",
+  "@REMINDER_MESSAGE": "Sinulla on huomenna tapaaminen klo ",
+  "@FEEDBACK_MESSAGE": "Haluatko antaa palautetta eilisestä tapaamisesta?",
   "@INFO": "Profiilissasi pystyt muokkaamaan tietojasi (nimi, kuvaus, yhteystiedot) painamalla nappia tai kirjoittamalla esimerkiksi 'muokkaa' ja muokattava kohde.\nVoit siirtyä parinhakuun painamalla tai kirjoittamalla 'etsi pari' profiilissasi.\nJos muita vapaita parinhakijoita ei ole, voit joko odottaa, että sinuun otetaan yhteyttä, tai palata tarkistamaan tilanteen myöhemmin kirjoittamalla mitä vain.\nParinhaussa voit kirjoittaa 'näytä pyynnöt' nähdäksesi saapuneet parinhakupyynnöt.\nJos sinulla ei ole parinhakupyyntöjä, pääset selaamaan vapaita parinhakijoita kirjoittamalla mitä vain\nJos et halua vastata pyyntöön samantien, voit kirjoittaa 'palaa' palataksesi parinhakuun.\nParinhaussa voit kirjoittaa 'lopeta haku' lopettaaksesi haun ja palataksesi profiilisi.\nMuodostettuasi parin voit asettaa tapaamispäivän kirjoittamalla 'aseta tapaamispäivä'.\nMuodostettuasi parin voit rikkoa sen kirjoittamalla esimerkiksi 'riko pari'.\nJos parisi hajoaa, voit aloittaa uuden parinhaun kirjoittamalla 'etsi pari'\nJos haluat nollata tiedot ja aloittaa alusta kirjoita esimerkiksi 'aloita alusta'.\n"
 }

@@ -370,8 +370,9 @@ bot
       ['#SET_DATE', (session) => {
         session.beginDialog('/set_date');
       }],
-      ['#TEST', (session, match) => {
-          session.runActions(['testReminder']);
+      ['#TEST', (session) => {
+          session.runActions(['testReminderAndFeedback']);
+          session.resetDialog();
       }],
       ['#BREAK_PAIR', (session) => {
         session.runActions(['breakPair']);
@@ -413,6 +414,19 @@ bot
     ])
   .dialog(
     '/give_feedback', [
+      (session) => {
+        if (session.checkIntent('#YES')) {
+          session.next();
+        } else if (session.checkIntent('#NO')) {
+          session.endDialog();
+        } else {
+          session.addResult('@UNCLEAR', [
+            Builder.QuickReplies.create('@YES'),
+            Builder.QuickReplies.create('@NO'),
+          ]);
+          session.resetDialog();
+        }
+      },
       (session) => {
         session.addResult('@FEEDBACK_ABOUT_MEETING');
         session.addQuickReplies(

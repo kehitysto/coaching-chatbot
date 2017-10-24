@@ -33,7 +33,7 @@ functions:
           method: post
           integration: lambda
   facebookReminder:
-    handler: src/facebook-messenger/handler.meetingReminder
+    handler: src/facebook-messenger/handler.meetingCheck
     memorySize: 128
     timeout: 15
     events:

@@ -14,7 +14,7 @@ describe('Feedback tests', function() {
       it(
         'should ask for feedback and give rating buttons',
         function() {
-          let promise = this.bot.receive(SESSION, '_');
+          let promise = this.bot.receive('FEEDBACK_TESTER', 'k');
 
           return expect(promise)
             .to.eventually.become([
