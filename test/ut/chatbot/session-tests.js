@@ -87,6 +87,37 @@ describe('chatbot sessions', function() {
     });
   });
 
+  describe('#runActions', function() {
+    it('should call _queueFunction 3 times', function() {
+      const queueSpy = sinon.spy(this.session, '_queueFunction');
+      const actions = ['action1', 'action2', 'action3'];
+
+      this.session.runActions(actions);
+      queueSpy.restore();
+
+      return expect(queueSpy.callCount).to.equal(3);
+    });
+  });
+
+  describe('#prev', function() {
+    it('should go to correct state after calling prev', function() {
+      this.session._start('SESSION', {}, '');
+      const method = this.session.dialog.getSubStateCount;
+      this.session.dialog.getSubStateCount = () => 10;
+      this.session.beginDialog('dialog', true);
+      this.session.prev();
+
+      const expectation = [
+        ['', 0],
+        ['dialog', 9],
+      ];
+
+      this.session.dialog.getSubStateCount = method;
+
+      return expect(this.session._state).to.deep.equal(expectation);
+    });
+  });
+
   describe('#_start', function() {
     it('start returns the session object', function() {
       const ret = this.session._start('SESSION', {}, '');
@@ -190,6 +221,109 @@ describe('chatbot sessions', function() {
 
       return expect(ret)
         .to.deep.equal('/?1/first?3/second?0');
+    });
+  });
+
+  describe('#getCommunicationMethodsCount', function() {
+    it('should return 0 if no methods are set', function() {
+      this.session.context = { };
+
+      const ret = this.session.getCommunicationMethodsCount();
+
+      return expect(ret)
+        .to.deep.equal(0);
+    });
+
+    it('should return 2 if such a number of methods are set', function() {
+      this.session.context = {
+        communicationMethods: {
+          "PHONE": "112",
+          SKYPE: "Nickname"
+        },
+      };
+
+      const ret = this.session.getCommunicationMethodsCount();
+
+      return expect(ret)
+        .to.deep.equal(2);
+    });
+  });
+
+  describe('#allCommunicationMethodsFilled', function() {
+    it('should return true if all methods are set', function() {
+      this.session.context = {
+        communicationMethods: {
+          PHONE: "112",
+          SKYPE: "Nickname",
+        },
+      };
+
+      const ret = this.session.allCommunicationMethodsFilled();
+
+      return expect(ret)
+        .to.deep.equal(true);
+    });
+
+    it('should return false if some communication method is missing', function() {
+      this.session.context = {
+        communicationMethods: {
+          PHONE: "112",
+        },
+      };
+
+      const ret = this.session.allCommunicationMethodsFilled();
+
+      return expect(ret)
+        .to.deep.equal(false);
+    });
+  });
+
+  describe('#ifFacilitationSet', function() {
+    it('should return true if day or time is not set', function() {
+      this.session.context = {
+        weekDay: 'MON',
+      };
+
+      const ret = this.session.ifFacilitationSet();
+
+      return expect(ret)
+        .to.deep.equal(true);
+    });
+
+    it('should return false if day and time are both set', function() {
+      this.session.context = {
+        weekDay: 'MON',
+        time: '06:00',
+      };
+
+      const ret = this.session.ifFacilitationSet();
+
+      return expect(ret)
+        .to.deep.equal(false);
+    });
+  });
+
+  describe('#isRatingGood', function() {
+    it('should return true if rating equals 3', function() {
+      this.session.context = {
+        rating: 3,
+      };
+
+      const ret = this.session.isRatingGood();
+
+      return expect(ret)
+        .to.deep.equal(true);
+    });
+
+    it('should return false if rating equals 2', function() {
+      this.session.context = {
+        rating: 2,
+      };
+
+      const ret = this.session.isRatingGood();
+
+      return expect(ret)
+        .to.deep.equal(false);
     });
   });
 });

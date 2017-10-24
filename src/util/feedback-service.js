@@ -21,6 +21,6 @@ module.exports = class Feedback {
   }
 
   createFeedback({ giver, pair, feedback }) {
-    return this.db.write({ date: Date.now(), giver, pair, feedback });
+    return this.db.write({ date: new Date(), giver, pair, feedback });
   }
 };

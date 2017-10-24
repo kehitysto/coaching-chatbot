@@ -12,6 +12,7 @@ from '../../src/lib/communication-methods-formatter';
 import * as Sessions from '../../src/util/sessions-service';
 import PairFormatter
 from '../../src/lib/pair-formatter';
+import * as FeatureTestStates from './states.json';
 
 const SESSION = 'SESSION';
 
@@ -38,9 +39,6 @@ describe('User story', function() {
     this.bot = new Chatbot(dialog, this.sessions);
 
     this.expectedName = 'Matti Luukkainen';
-    this.expectedJob = 'Opiskelija';
-    this.expectedAge = '22';
-    this.expectedPlace = 'Helsinki';
     this.userInformation = {};
   });
 
@@ -89,99 +87,25 @@ describe('User story', function() {
     }
   );
 
-  describe(
-    'As a registered user I want to provide my occupation to the bot',
-    function() {
-      it(
-        'after user has provided their occupation, it should show user their profile information and ask if the user want\'s to provide more info or start the search for a pair',
-        function() {
-          this.userInformation.name = this.expectedName;
-          this.userInformation.job = this.expectedJob;
-          return expect(
-              this.bot.receive(SESSION, this.userInformation.job)
-            )
-            .to.eventually.become([
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@CONFIRM_JOB', this.userInformation)),
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@INFORMATION_ABOUT_BUTTONS')),
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation),
-                PersonalInformationFormatter.getPersonalInformationbuttons(
-                  this.context)),
-            ]);
-        });
-    });
-
-  describe(
-    'As a registered user I want to provide my age to the bot',
-    function() {
-      it(
-        'after the user has given their age, it should show the user their profile information and ask if the user want\'s to provide more info or start the search for a pair',
-        function() {
-          this.userInformation.age = this.expectedAge;
-          return expect(
-              this.bot.receive(
-                SESSION,
-                'Lisää ikä ' + this.userInformation.age))
-            .to.eventually.become([
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@CONFIRM_AGE', this.userInformation)),
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation),
-                PersonalInformationFormatter.getPersonalInformationbuttons(
-                  this.context)),
-            ]);
-        });
-    });
-
-  describe(
-    'As a registered user I want to provide my location to the bot',
-    function() {
-      it(
-        'after user has given his location, it should show the user their profile information and ask if the user want\'s to provide more info or start the search for a pair',
-        function() {
-          this.userInformation.place = this.expectedPlace;
-
-          return expect(
-              this.bot.receive(
-                SESSION,
-                'Lisää paikkakunta ' + this.userInformation.place))
-            .to.eventually.become([
-              buildResponse('@CONFIRM_PLACE'),
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation),
-                PersonalInformationFormatter.getPersonalInformationbuttons(
-                  this.context)),
-            ]);
-        });
-    });
-
     describe(
       'As a registered user I want to provide my bio to the bot',
       function() {
         it(
-          'after user has given his bio, it should confirm and ask for more information',
+          'after user has given his bio, it should ask for communication methods',
           function() {
             this.userInformation.bio = 'My long bio in long text';
-
+            this.userInformation.name = this.expectedName;
             return expect(
-                this.bot.receive(
-                  SESSION,
-                  'Aseta kuvaus ' + this.userInformation.bio))
+                this.bot.receive(SESSION, this.userInformation.bio))
               .to.eventually.become([
                 buildResponse('@CONFIRM_BIO'),
-                buildResponse(
-                  PersonalInformationFormatter.formatFromTemplate(
-                    '@DISPLAY_PROFILE', this.userInformation),
-                  PersonalInformationFormatter.getPersonalInformationbuttons(
-                    this.context)),
+                buildResponse('@REQUEST_COMMUNICATION_METHOD', [{
+                  'payload': 'SKYPE',
+                  'title': 'Skype',
+                }, {
+                  'payload': 'PHONE',
+                  'title': 'Puhelin',
+                }]),
               ]);
           });
       });
@@ -190,39 +114,6 @@ describe('User story', function() {
   describe(
     'As a registered user I want to provide my acceptable methods of communication with quick replies',
     function() {
-      it(
-        'after user requests to start the search for a pair, it should tell the user there are no communication methods added yet',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Etsi pari'))
-            .to.eventually.become(
-              [
-                buildResponse('@NO_METHODS_ADDED', [{
-                  'title': 'Kyllä',
-                  'payload': '@YES',
-                }, {
-                  'title': 'Ei',
-                  'payload': '@NO',
-                }]),
-              ]
-            );
-        }
-      );
-
-      it(
-        'after agreeing should provide a list of communication methods from which the user can choose one',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'kyllä'))
-            .to.eventually.become([
-              buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                CommunicationMethodsFormatter
-                .getCommunicationMethods(this.sessions.db.dump()[
-                  SESSION])),
-            ]);
-        }
-      );
-
       it(
         'should ask for my Skype username when I choose Skype as a communication method',
         function() {
@@ -282,55 +173,7 @@ describe('User story', function() {
       );
 
       it(
-        'should ask if I want to add more communication methods after giving my phone number',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, '040-123123'))
-            .to.eventually.become(
-              [buildResponse(PersonalInformationFormatter.formatFromTemplate(
-                  '@CONFIRM_COMMUNICATION_METHODS', {
-                    communicationMethods: {
-                      SKYPE: 'nickname',
-                      PHONE: '040-123123'
-                    }
-                  })),
-                buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
-                  'title': 'Kyllä',
-                  'payload': '@YES',
-                }, {
-                  'title': 'Ei',
-                  'payload': '@NO',
-                }]),
-              ]);
-        }
-      );
-
-      it(
-        'if I answer yes to add more after giving my phone number, it should provide the list of communication methods again and it should show that I have already added Skype and Phone',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Kyllä'))
-            .to.eventually.become([
-              buildResponse('@REQUEST_COMMUNICATION_METHOD',
-                CommunicationMethodsFormatter
-                .getCommunicationMethods({})),
-            ]);
-        }
-      );
-
-      it(
-        'should ask for my phone number when I choose cafeteria as a communication method',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Kahvila'))
-            .to.eventually.become([
-              buildResponse('@REQUEST_PHONE_NUMBER'),
-            ]);
-        }
-      );
-
-      it(
-        'should not go straight to pair searching after all methods are given',
+        'should not go straight to profile after all methods are given',
         function() {
           return expect(
               this.bot.receive(SESSION, '040-123123'))
@@ -339,8 +182,7 @@ describe('User story', function() {
                 '@CONFIRM_COMMUNICATION_METHODS', {
                   communicationMethods: {
                     SKYPE: 'nickname',
-                    PHONE: '040-123123',
-                    CAFETERIA: '040-123123'
+                    PHONE: '040-123123'
                   }
                 })),
               buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
@@ -355,18 +197,16 @@ describe('User story', function() {
       );
 
       it(
-        'should go to pair searching after refusing from giving any communication methods',
+        'should go to profile after refusing from giving any communication methods',
         function() {
           return expect(
             this.bot.receive(SESSION, 'ei'))
             .to.eventually.become([
-              buildResponse('@PERMISSION_TO_RECEIVE_MESSAGES', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }])
+              buildResponse(
+                PersonalInformationFormatter.formatFromTemplate(
+                  '@DISPLAY_PROFILE', this.userInformation),
+                PersonalInformationFormatter.getPersonalInformationbuttons(
+                  this.context)),
             ]);
         }
       );
@@ -374,14 +214,37 @@ describe('User story', function() {
   );
 
   describe(
-    'As a user searching for a pair I want to get a list of other users wanting to meet as often as I do',
+    'As a registered I want to find a pair',
+    function() {
+      it(
+        'should ask for my permission',
+        function () {
+          return expect(
+            this.bot.receive(SESSION, 'Etsi pari'))
+            .to.eventually.become(
+            [
+              buildResponse('@PERMISSION_TO_RECEIVE_MESSAGES', [{
+                'title': 'Kyllä',
+                'payload': '@YES',
+              }, {
+                'title': 'Ei',
+                'payload': '@NO',
+              }]),
+            ]
+            );
+        }
+      );
+    }
+  );
+
+  describe(
+    'As a user searching for a pair I want to get a list of other users searching for a pair',
     function() {
       it(
         'should provide user with the list of users',
         function() {
           const testUser = {
             name: 'Pekka',
-            job: 'Ope',
             communicationMethods: {
               SKYPE: 'Pekka123',
             },
@@ -397,13 +260,12 @@ describe('User story', function() {
                 context: testUser,
               }]
             ),
-            Builder.QuickReplies.createArray(['@YES', '@NO'])
+            Builder.QuickReplies.createArray(['@YES', '@NO', '@STOP_SEARCHING',])
           );
 
           return expect(
-              this.bot.receive(SESSION, 'YES'))
+              this.bot.receive(SESSION, 'Kyllä'))
             .to.eventually.become([
-              buildResponse('@TELL_HOW_TO_STOP_SEARCH'),
               buildResponse('@INFORMATION_ABOUT_LIST'),
               expected,
             ]);
@@ -415,7 +277,6 @@ describe('User story', function() {
         function() {
           const testUser = {
             name: 'Matti',
-            job: 'Ope',
             communicationMethods: {
               SKYPE: 'Matti123',
             },
@@ -426,7 +287,6 @@ describe('User story', function() {
 
           const testUser2 = {
             name: 'Laura',
-            job: 'Student',
             communicationMethods: {
               SKYPE: 'Laura123',
             },
@@ -436,7 +296,7 @@ describe('User story', function() {
           this.sessions.write('ID1', testUser2);
 
           return expect(
-              this.bot.receive(SESSION, 'no'))
+              this.bot.receive(SESSION, 'Ei'))
             .to.eventually.become([
               buildResponse('@INFORMATION_ABOUT_LIST'),
               buildResponse(
@@ -445,7 +305,7 @@ describe('User story', function() {
                     id: 'ID',
                     context: testUser,
                   }]),
-                Builder.QuickReplies.createArray(['@YES', '@NO'])
+                Builder.QuickReplies.createArray(['@YES', '@NO', '@STOP_SEARCHING',])
               ),
             ]);
         }
@@ -463,7 +323,10 @@ describe('User story', function() {
               this.bot.receive(SESSION, 'kyllä'))
             .to.eventually.become([
               buildResponse('@CONFIRM_NEW_PEER_ASK'),
-              buildResponse('@NO_PAIRS_AVAILABLE'),
+              buildResponse('@NO_PAIRS_AVAILABLE', [{
+                'title': 'Lopeta haku',
+                'payload': '@STOP_SEARCHING',
+              }]),              ,
             ])
             .then(() => expect(this.sessions.read('ID'))
                 .to.eventually.include.keys({ 'pairRequests': [SESSION] }));
@@ -471,202 +334,4 @@ describe('User story', function() {
       );
     }
   );
-
-  describe(
-    'As a user searching for a pair I want to be able to stop my search for a pair',
-    function() {
-      it(
-        'should request for confirmation from me, when I request to stop the search',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Lopeta haku'))
-            .to.eventually.become([
-              buildResponse('@CONFIRM_STOP_SEARCHING', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
-            ]);
-        }
-      );
-
-      it(
-        'should go back to showing the situation of pair searching if I decline',
-        function() {
-          const testUser = {
-            name: 'Matti',
-            job: 'Ope',
-            communicationMethods: {
-              SKYPE: 'Matti123',
-            },
-            searching: true,
-          };
-
-          this.sessions.write('ID', testUser);
-
-          return expect(
-              this.bot.receive(SESSION, 'ei'))
-            .to.eventually.become([
-              buildResponse('@INFORMATION_ABOUT_LIST'),
-              buildResponse(PairFormatter.beautifyAvailablePairs(
-                [{
-                  id: 'ID',
-                  context: testUser,
-                }]),
-                Builder.QuickReplies.createArray(['@YES', '@NO'])
-              ),
-            ]);
-        }
-      );
-
-      it(
-        'should request for confirmation from me again, when I request to stop the search again',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Lopeta haku'))
-            .to.eventually.become([
-              buildResponse('@CONFIRM_STOP_SEARCHING', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
-            ]);
-        }
-      );
-
-      it(
-        'should confirm me that the search has ended and show me the info of my profile and the quick reply buttons for modifying it',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'Kyllä'))
-            .to.eventually.become([
-              buildResponse('@STOPPED_SEARCHING'),
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', this.userInformation),
-                PersonalInformationFormatter.getPersonalInformationbuttons(
-                  this.context)),
-            ]);
-        }
-      );
-      it(
-        'should go to communication methods even if all methods are given',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'etsi pari'))
-            .to.eventually.become([
-              buildResponse(PersonalInformationFormatter.formatFromTemplate(
-                '@CONFIRM_COMMUNICATION_METHODS', {
-                  communicationMethods: {
-                    SKYPE: 'nickname',
-                    PHONE: '040-123123',
-                    CAFETERIA: '040-123123'
-                  }
-                })),
-              buildResponse('@PROVIDE_OTHER_COMMUNICATION_METHODS', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
-            ]);
-        }
-      );
-      it(
-        'should ask for a confirmation after replying no to provide communication methods',
-        function() {
-          return expect(
-              this.bot.receive(
-                SESSION,
-                'ei'))
-            .to.eventually.become([
-              buildResponse('@PERMISSION_TO_RECEIVE_MESSAGES', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
-            ]);
-        }
-      )
-    }
-  );
-
-  describe(
-    'As a registered user I want to be able to restart the process and remove my data',
-    function() {
-
-      it(
-        'should ask user for a confirmation when user has requested a reset',
-        function() {
-          return expect(
-              this.bot.receive(
-                SESSION,
-                'aloita alusta'))
-            .to.eventually.become([
-              buildResponse('@RESET_CONFIRMATION', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
-            ]);
-        });
-
-      it(
-        'should repeat the last question if the user declines to reset',
-        function() {
-          return expect(
-              this.bot.receive(
-                SESSION,
-                'ei'))
-            .to.eventually.become([
-              buildResponse('@PERMISSION_TO_RECEIVE_MESSAGES', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
-            ]);
-        });
-
-      it(
-        'should reset the context and go to the start if the user agrees to reset',
-        function() {
-          let backupContext = this.sessions.db.dump();
-
-          let g = this.bot.receive(
-            SESSION,
-            'aloita alusta');
-
-          return g.then(_ => {
-            let response = this.bot.receive(
-              SESSION,
-              'kyllä');
-
-            response.then(_ => this.sessions.db.load(backupContext));
-
-            return expect(response)
-              .to.eventually.become([
-                buildResponse('@RESET_DONE', []),
-                buildResponse('@GREETING', [{
-                  'title': 'Kyllä',
-                  'payload': '@YES',
-                }, {
-                  'title': 'Ei',
-                  'payload': '@NO',
-                }]),
-              ]);
-          });
-        }
-      );
-    });
 });

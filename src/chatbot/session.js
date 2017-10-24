@@ -312,11 +312,21 @@ module.exports = class Session {
 
   getCommunicationMethodsCount() {
     let m = this.context.communicationMethods;
-    return m === undefined ? 0 : m.length;
+    return m === undefined ? 0 : Object.keys(m).length;
   }
 
   allCommunicationMethodsFilled() {
     return CommunicationMethodsFormatter.getCommunicationMethods(this.context)
       .length === 0;
+  }
+
+  ifFacilitationSet() {
+    let d = this.context.weekDay;
+    let t = this.context.time;
+    return (d === undefined || t === undefined);
+  }
+
+  isRatingGood() {
+    return [3, 4].includes(this.context.rating);
   }
 };

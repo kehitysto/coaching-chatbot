@@ -20,6 +20,9 @@ declare class Context {
     sentRequests: (number|string)[];
     rejectedPeers: (number|string)[];
     state: string;
+    weekDay: string;
+    time: string;
+    skipMeeting: boolean;
 }
 
 declare class Session {

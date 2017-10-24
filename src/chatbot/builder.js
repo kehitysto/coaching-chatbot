@@ -105,7 +105,7 @@ class Builder {
 
     try {
       promise = Promise.resolve(this._actions[actionId](actionData));
-    } catch(err) {
+    } catch (err) {
       promise = Promise.reject(err);
     }
 
