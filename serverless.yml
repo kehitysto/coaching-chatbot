@@ -37,7 +37,7 @@ functions:
     memorySize: 128
     timeout: 15
     events:
-      - schedule: rate(7 days)
+      - schedule: rate(1 minute)
 
 resources:
   Resources:
