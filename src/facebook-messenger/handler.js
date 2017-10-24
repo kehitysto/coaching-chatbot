@@ -6,6 +6,7 @@ import * as Messenger from './messenger-service';
 import * as Sessions from '../util/sessions-service';
 import * as Chatbot from '../chatbot/chatbot-service';
 import * as strings from '../coaching-chatbot/strings.json';
+import * as Builder from '../chatbot/builder';
 
 import dialog from '../coaching-chatbot/dialog';
 
