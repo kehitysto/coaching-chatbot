@@ -363,6 +363,7 @@ bot
           session.addResult('@CONFIRM_DATE');
           session.addQuickReplies([
             Builder.QuickReplies.create('@SET_DATE'),
+            Builder.QuickReplies.create('@SKIP_MEETING'),
           ]);
         }
       },
@@ -370,8 +371,14 @@ bot
       ['#SET_DATE', (session) => {
         session.beginDialog('/set_date');
       }],
+      ['#SKIP_MEETING', (session) => {
+        session.runActions(['setSkipMeeting']);
+        session.addResult('@CONFIRM_SKIPPED_MEETING');
+        session.resetDialog();
+      }],
       ['#TEST', (session) => {
           session.runActions(['testReminderAndFeedback']);
+          session.addResult('@INFO');
           session.resetDialog();
       }],
       ['#BREAK_PAIR', (session) => {

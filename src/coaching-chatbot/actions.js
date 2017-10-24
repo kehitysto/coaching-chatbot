@@ -413,6 +413,9 @@ export function testReminderAndFeedback({ context }) {
     .then((sessionsFromDb) => {
       const promises = [];
       for (let i=0; i<sessionsFromDb.length; i++) {
+        if (sessionsFromDb[i].context.skipMeeting) {
+          continue;
+        }
         promises.push(
             Messenger.send(sessionsFromDb[i].id,
               strings['@REMINDER_MESSAGE'] + sessionsFromDb[i].context.time,
@@ -422,6 +425,18 @@ export function testReminderAndFeedback({ context }) {
       return sessions.readAllWithFeedbacks()
         .then((feedbackSessions) => {
           for (let i=0; i<feedbackSessions.length; i++) {
+            if (feedbackSessions[i].context.skipMeeting) {
+              promises.push(
+                sessions.write(
+                  feedbackSessions[i].id,
+                  {
+                    ...feedbackSessions[i].context,
+                    skipMeeting: false,
+                  }
+                )
+              );
+              continue;
+            }
             promises.push(
               sessions.write(
                 feedbackSessions[i].id,
@@ -452,4 +467,25 @@ export function resetDayAndTime({ context }) {
   return Promise.resolve(
     cleanedContext
   );
+}
+
+export function setSkipMeeting({ context, sessionId }) {
+  let pairs = new Pairs();
+  return pairs.read(sessionId)
+    .then((pairList) => {
+        const promises = [];
+        const pairId = pairList[0];
+        if (pairId == undefined) {
+          return Promise.reject(new Error('No pair found!'));
+        }
+        promises.push(
+          Messenger.send(pairId, strings['@SKIPPED_MEETING_MESSAGE'], [])
+        );
+        promises.push(
+          contextChanges(context)({
+            skipMeeting: true,
+          })
+        );
+        return Promise.all(promises);
+    });
 }
