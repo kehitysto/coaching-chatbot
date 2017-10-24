@@ -366,7 +366,10 @@ export function sendRating({ context, sessionId }) {
         }
 
         return Messenger.send(
-          pairId, strings['@TELL_USER_HAS_NEW_FEEDBACK'] + answer
+          pairId, strings['@TELL_USER_HAS_NEW_FEEDBACK'] + answer,
+          Builder.QuickReplies.createArray([
+            'OK',
+          ])
         );
     }).then(() => {
       return Promise.resolve({ result: '' });
@@ -386,8 +389,12 @@ export function sendFeedback({ context, sessionId, input }) {
           return Promise.reject(new Error('No pair found!'));
         }
 
-        return Messenger.send(pairId, input)
-            .then(() => {
+        return Messenger.send(
+          pairId,
+          input,
+          Builder.QuickReplies.createArray([
+          'OK',
+        ])).then(() => {
               return feedback.createFeedback({
                 giver: sessionId, pair: pairId, feedback: input,
               });
@@ -419,7 +426,9 @@ export function testReminderAndFeedback({ context }) {
         promises.push(
             Messenger.send(sessionsFromDb[i].id,
               strings['@REMINDER_MESSAGE'] + sessionsFromDb[i].context.time,
-            [])
+              Builder.QuickReplies.createArray([
+                'OK',
+              ]))
         );
       }
       return sessions.readAllWithFeedbacks()
