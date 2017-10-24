@@ -43,7 +43,9 @@ module.exports.meetingCheck = (event, context, cb) => {
         promises.push(
             Messenger.send(sessionsFromDb[i].id,
               strings['@REMINDER_MESSAGE'] + sessionsFromDb[i].context.time,
-            [])
+              Builder.QuickReplies.createArray([
+                'OK',
+              ]))
         );
       }
       return sessions.readAllWithFeedbacks()

@@ -488,7 +488,10 @@ export function setSkipMeeting({ context, sessionId }) {
           return Promise.reject(new Error('No pair found!'));
         }
         promises.push(
-          Messenger.send(pairId, strings['@SKIPPED_MEETING_MESSAGE'], [])
+          Messenger.send(pairId, strings['@SKIPPED_MEETING_MESSAGE'],
+          Builder.QuickReplies.createArray([
+            'OK',
+          ]))
         );
         promises.push(
           contextChanges(context)({
@@ -497,4 +500,10 @@ export function setSkipMeeting({ context, sessionId }) {
         );
         return Promise.all(promises);
     });
+}
+
+export function resetSkipMeeting({ context }) {
+  return contextChanges(context)({
+      skipMeeting: false,
+  });
 }

@@ -411,7 +411,7 @@ bot
       },
       (session) => {
         if (session.checkIntent('#TIME')) {
-          session.runActions(['setTime']);
+          session.runActions(['setTime', 'resetSkipMeeting']);
           session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
