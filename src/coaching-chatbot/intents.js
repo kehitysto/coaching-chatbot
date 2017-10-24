@@ -187,7 +187,7 @@ module.exports = {
 
     SKIP_MEETING: {
         each: [
-            /^Skip$/i,
+            /^En pääse tapaamiseen$/i,
           ],
     },
 };
