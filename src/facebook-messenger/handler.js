@@ -6,6 +6,7 @@ import * as Messenger from './messenger-service';
 import * as Sessions from '../util/sessions-service';
 import * as Chatbot from '../chatbot/chatbot-service';
 import * as strings from '../coaching-chatbot/strings.json';
+import * as Builder from '../chatbot/builder';
 
 import dialog from '../coaching-chatbot/dialog';
 
@@ -36,15 +37,32 @@ module.exports.meetingCheck = (event, context, cb) => {
     .then((sessionsFromDb) => {
       const promises = [];
       for (let i=0; i<sessionsFromDb.length; i++) {
+        if (sessionsFromDb[i].context.skipMeeting) {
+          continue;
+        }
         promises.push(
             Messenger.send(sessionsFromDb[i].id,
               strings['@REMINDER_MESSAGE'] + sessionsFromDb[i].context.time,
-            [])
+              Builder.QuickReplies.createArray([
+                'OK',
+              ]))
         );
       }
       return sessions.readAllWithFeedbacks()
         .then((feedbackSessions) => {
           for (let i=0; i<feedbackSessions.length; i++) {
+            if (feedbackSessions[i].context.skipMeeting) {
+              promises.push(
+                sessions.write(
+                  feedbackSessions[i].id,
+                  {
+                    ...feedbackSessions[i].context,
+                    skipMeeting: false,
+                  }
+                )
+              );
+              continue;
+            }
             promises.push(
               sessions.write(
                 feedbackSessions[i].id,

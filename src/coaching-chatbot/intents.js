@@ -184,4 +184,10 @@ module.exports = {
             '#COMMUNICATION',
         ],
     },
+
+    SKIP_MEETING: {
+        each: [
+            /^En pääse tapaamiseen$/i,
+          ],
+    },
 };

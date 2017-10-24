@@ -22,6 +22,7 @@ declare class Context {
     state: string;
     weekDay: string;
     time: string;
+    skipMeeting: boolean;
 }
 
 declare class Session {

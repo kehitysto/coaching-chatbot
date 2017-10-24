@@ -363,6 +363,7 @@ bot
           session.addResult('@CONFIRM_DATE');
           session.addQuickReplies([
             Builder.QuickReplies.create('@SET_DATE'),
+            Builder.QuickReplies.create('@SKIP_MEETING'),
           ]);
         }
       },
@@ -370,8 +371,14 @@ bot
       ['#SET_DATE', (session) => {
         session.beginDialog('/set_date');
       }],
+      ['#SKIP_MEETING', (session) => {
+        session.runActions(['setSkipMeeting']);
+        session.addResult('@CONFIRM_SKIPPED_MEETING');
+        session.resetDialog();
+      }],
       ['#TEST', (session) => {
           session.runActions(['testReminderAndFeedback']);
+          session.addResult('@INFO');
           session.resetDialog();
       }],
       ['#BREAK_PAIR', (session) => {
@@ -404,7 +411,7 @@ bot
       },
       (session) => {
         if (session.checkIntent('#TIME')) {
-          session.runActions(['setTime']);
+          session.runActions(['setTime', 'resetSkipMeeting']);
           session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
@@ -417,14 +424,29 @@ bot
       (session) => {
         if (session.checkIntent('#YES')) {
           session.next();
+          session.next();
+          session.next();
         } else if (session.checkIntent('#NO')) {
           session.endDialog();
         } else {
-          session.addResult('@UNCLEAR', [
-            Builder.QuickReplies.create('@YES'),
-            Builder.QuickReplies.create('@NO'),
-          ]);
-          session.resetDialog();
+          session.addResult('@UNCLEAR');
+          session.next();
+        }
+      },
+      (session) => {
+        session.addResult('@FEEDBACK_MESSAGE', [
+          Builder.QuickReplies.create('@YES'),
+          Builder.QuickReplies.create('@NO'),
+        ]);
+      },
+      (session) => {
+        if (session.checkIntent('#YES')) {
+          session.next();
+        } else if (session.checkIntent('#NO')) {
+          session.endDialog();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
         }
       },
       (session) => {
