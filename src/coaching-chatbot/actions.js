@@ -289,7 +289,7 @@ export function breakPair({ sessionId, context }) {
             });
       })
       .then(() => resetMeeting({ context }))
-      .then((context) => sessions.write(sessionId, context)) //other lambda loads from disk
+      .then((context) => sessions.write(sessionId, context))
       .then(() => {
         return Promise.resolve({
           result: '@PAIR_BROKEN',
