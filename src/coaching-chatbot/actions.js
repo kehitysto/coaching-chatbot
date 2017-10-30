@@ -270,7 +270,7 @@ export function breakPair({ sessionId, context }) {
 
         return pairs.breakPair(sessionId, pairId)
             .then(() => sessions.read(pairId))
-            .then((context) => resetDayAndTime({ context }))
+            .then((context) => resetMeeting({ context }))
             .then((context) => sessions.write(
               pairId,
               {
@@ -288,7 +288,8 @@ export function breakPair({ sessionId, context }) {
               );
             });
       })
-      .then(() => resetDayAndTime({ context }))
+      .then(() => resetMeeting({ context }))
+      .then((context) => sessions.write(sessionId, context)) //other lambda loads from disk
       .then(() => {
         return Promise.resolve({
           result: '@PAIR_BROKEN',
@@ -470,7 +471,7 @@ export function testReminderAndFeedback({ context }) {
     });
 }
 
-export function resetDayAndTime({ context }) {
+export function resetMeeting({ context }) {
   const { weekDay, time, ...cleanedContext } = context;
 
   return Promise.resolve(
