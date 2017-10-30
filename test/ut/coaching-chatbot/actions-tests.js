@@ -673,6 +673,39 @@ describe('coaching-bot actions', function() {
         });
     });
 
+    it('should save reset context to disk', function() {
+      const sessions = new Sessions();
+      const stubSessionsRead = sinon.stub(
+        sessions.db,
+        'read'
+      );
+
+      const profile = {
+        name: 'Pertti',
+        communicationMethods: {
+          SKYPE: 'pertti_42',
+        },
+      };
+
+      stubSessionsRead.returns(Promise.resolve({
+        ...profile,
+        weekDay: 'MA',
+        time: '12:22',
+      }));
+
+      const ret = actions.breakPair({
+        sessionId: 0,
+        context: { ...profile, weekDay: 'MA', time: '12:22', },
+      });
+
+      return ret.then((result) => {
+        stubSessionsRead.restore();
+        sessions.read(0).then((context) => {
+          return expect(context).to.deep.equal(profile);
+        });
+      });
+    });
+
     it('should set pair state to profile and return pair broken', function() {
         const sessions = new Sessions();
         const stubSessionsRead = sinon.stub(
@@ -895,9 +928,9 @@ describe('coaching-bot actions', function() {
     });
   });
 
-  describe('#resetDayAndTime', () => {
+  describe('#resetMeeting', () => {
     it('should remove day and time from context', () => {
-      const ret = actions.resetDayAndTime({
+      const ret = actions.resetMeeting({
         context: {
           asd: 3,
           weekDay: 'TI',
