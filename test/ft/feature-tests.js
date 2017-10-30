@@ -312,26 +312,4 @@ describe('User story', function() {
       );
     }
   );
-
-  describe(
-    'As a user searching for a pair I want to send a request to an available pair',
-    function() {
-      it(
-        'should send the request when choosing a potential pair',
-        function() {
-          return expect(
-              this.bot.receive(SESSION, 'kyllä'))
-            .to.eventually.become([
-              buildResponse('@CONFIRM_NEW_PEER_ASK'),
-              buildResponse('@NO_PAIRS_AVAILABLE', [{
-                'title': 'Lopeta haku',
-                'payload': '@STOP_SEARCHING',
-              }]),              ,
-            ])
-            .then(() => expect(this.sessions.read('ID'))
-                .to.eventually.include.keys({ 'pairRequests': [SESSION] }));
-        }
-      );
-    }
-  );
 });
