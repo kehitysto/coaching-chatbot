@@ -269,7 +269,7 @@ class Builder {
       }
 
       const states = session._state;
-      const state = states[states.length-1];
+      const state = states[states.length - 1];
 
       log.silly('Running intents for state /{0}', state[0]);
 
@@ -347,7 +347,7 @@ Builder.QuickReplies = {
     };
   },
 
-  createArray(titles, payloads=[]) {
+  createArray(titles, payloads = []) {
     const quickReplies = [];
 
     for (let i = 0; i < titles.length; ++i) {
