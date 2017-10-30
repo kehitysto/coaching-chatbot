@@ -8,7 +8,7 @@
     "description": "Vaihda nimi"
   },
   {
-    "identifier": "SET_BIO",
+    "identifier": "CHANGE_BIO",
     "description": "Muokkaa kuvausta"
   },
   {
