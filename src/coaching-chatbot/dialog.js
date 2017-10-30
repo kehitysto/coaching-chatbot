@@ -184,7 +184,7 @@ bot
           session.beginDialog('/set_name');
         }
       }],
-      ['#SET_BIO', (session, match) => {
+      ['#CHANGE_BIO', (session, match) => {
         if (match !== true) {
           session.runActions(['setBio'], match);
           session.addResult('@CONFIRM_BIO');
