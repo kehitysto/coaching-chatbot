@@ -86,27 +86,4 @@ describe('User story', function() {
       );
     }
   );
-
-    describe(
-      'As a registered user I want to provide my bio to the bot',
-      function() {
-        it(
-          'after user has given his bio, it should ask for communication methods',
-          function() {
-            this.userInformation.bio = 'My long bio in long text';
-            this.userInformation.name = this.expectedName;
-            return expect(
-                this.bot.receive(SESSION, this.userInformation.bio))
-              .to.eventually.become([
-                buildResponse('@CONFIRM_BIO'),
-                buildResponse('@REQUEST_COMMUNICATION_METHOD', [{
-                  'payload': 'SKYPE',
-                  'title': 'Skype',
-                }, {
-                  'payload': 'PHONE',
-                  'title': 'Puhelin',
-                }]),
-              ]);
-          });
-      });
 });

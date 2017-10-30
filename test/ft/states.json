@@ -11,6 +11,13 @@
       }
     }
   },
+  "BIO_TESTS": {
+    "sessions": {
+      "BIO_TESTER": {
+        "state": "/?0/create_profile?2/set_bio?1"
+      }
+    }
+  },
   "COMMUNICATION_METHODS_TESTS": {
     "sessions": {
       "COMMUNICATION_METHODS_TESTER": {
