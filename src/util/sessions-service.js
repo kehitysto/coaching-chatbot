@@ -28,6 +28,18 @@ module.exports = class Sessions {
     return this.db.read(id);
   }
 
+  readAll() {
+    return this.db.readAll();
+  }
+
+  readAllWithReminders() {
+    return this.db.readAllWithReminders();
+  }
+
+  readAllWithFeedbacks() {
+    return this.db.readAllWithFeedbacks();
+  }
+
   write(id, context) {
     return this.db.write(id, context);
   }

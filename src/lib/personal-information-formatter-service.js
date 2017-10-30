@@ -55,7 +55,7 @@ function format(template, context) {
  * @return {string}
  */
 function createProfile(context) {
-  return [context.name, context.job, context.age, context.place, context.bio]
+  return [context.name, context.bio]
     .filter((val) => val)
     .join(', ');
 }

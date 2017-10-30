@@ -32,6 +32,12 @@ functions:
           path: facebook-bot
           method: post
           integration: lambda
+  facebookReminder:
+    handler: src/facebook-messenger/handler.meetingCheck
+    memorySize: 128
+    timeout: 15
+    events:
+      - schedule: rate(7 days)
 
 resources:
   Resources:
@@ -63,6 +69,20 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:service}-pairs-${opt:stage, self:provider.stage}
+    FeedbackTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Delete
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:service}-feedback-${opt:stage, self:provider.stage}
 
 plugins:
   - serverless-webpack

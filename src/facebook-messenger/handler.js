@@ -5,6 +5,8 @@ require('../lib/env-vars').config();
 import * as Messenger from './messenger-service';
 import * as Sessions from '../util/sessions-service';
 import * as Chatbot from '../chatbot/chatbot-service';
+import * as strings from '../coaching-chatbot/strings.json';
+import * as Builder from '../chatbot/builder';
 
 import dialog from '../coaching-chatbot/dialog';
 
@@ -27,4 +29,60 @@ module.exports.handler = (event, context, cb) => {
   }
 
   return cb('Unknown event');
+};
+
+module.exports.meetingCheck = (event, context, cb) => {
+  const sessions = new Sessions();
+  return sessions.readAllWithReminders()
+    .then((sessionsFromDb) => {
+      const promises = [];
+      for (let i=0; i<sessionsFromDb.length; i++) {
+        if (sessionsFromDb[i].context.skipMeeting) {
+          continue;
+        }
+        promises.push(
+            Messenger.send(sessionsFromDb[i].id,
+              strings['@REMINDER_MESSAGE'] + sessionsFromDb[i].context.time,
+              Builder.QuickReplies.createArray([
+                'OK',
+              ]))
+        );
+      }
+      return sessions.readAllWithFeedbacks()
+        .then((feedbackSessions) => {
+          for (let i=0; i<feedbackSessions.length; i++) {
+            if (feedbackSessions[i].context.skipMeeting) {
+              promises.push(
+                sessions.write(
+                  feedbackSessions[i].id,
+                  {
+                    ...feedbackSessions[i].context,
+                    skipMeeting: false,
+                  }
+                )
+              );
+              continue;
+            }
+            promises.push(
+              sessions.write(
+                feedbackSessions[i].id,
+                {
+                  ...feedbackSessions[i].context,
+                  state:
+                  '/?0/profile?0/accepted_pair_profile?0/give_feedback?0',
+                }
+              ).then(() => {
+                Messenger.send(feedbackSessions[i].id,
+                  strings['@FEEDBACK_MESSAGE'],
+                  Builder.QuickReplies.createArray([
+                    strings['@YES'],
+                    strings['@NO'],
+                  ])
+                );
+              })
+            );
+          }
+          return Promise.all(promises);
+        });
+    });
 };

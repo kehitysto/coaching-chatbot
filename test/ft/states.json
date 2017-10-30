@@ -1,0 +1,24 @@
+{
+  "sessions": {
+    "FEEDBACK_TESTER": {
+      "name": "Kaapo",
+      "state": "/give_feedback?0"
+    },
+    "RESET_TESTER": {
+      "name": "Reset Tester",
+      "state": "/profile?0"
+    },
+    "STOP_SEARCH_TESTER": {
+      "name": "Liisa Hakija",
+      "searching": true,
+      "availablePeers": [],
+      "pairRequests": [],
+      "rejectedPeers": [],
+      "sentRequests": [],
+      "communicationMethods": {
+        "PHONE": "3242323"
+      },
+      "state": "/?0/profile?0/searching?2"
+    }
+  }
+}

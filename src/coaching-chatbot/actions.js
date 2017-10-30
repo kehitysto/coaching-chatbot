@@ -12,11 +12,16 @@ import * as Sessions from '../util/sessions-service';
 import * as Pairs from '../util/pairs-service';
 import AcceptedPairFormatter from '../lib/accepted-pair-formatter';
 import * as Feedback from '../util/feedback-service';
-
 import * as Chatbot from '../chatbot/chatbot-service';
 import dialog from './dialog';
 
-export function setName({ context, sessionId }) {
+import { resolveDataChanges } from '../util/resolve-data-changes';
+
+const contextChanges = resolveDataChanges('context');
+const userDataChanges = resolveDataChanges('userData');
+const communicationChanges = resolveDataChanges('communicationMethods');
+
+export function setRealName({ context, sessionId }) {
   return Messenger.getUserProfile(sessionId)
     .then((profile) => {
       const {
@@ -24,59 +29,35 @@ export function setName({ context, sessionId }) {
         last_name: lastName,
       } = profile;
 
-      return Promise.resolve({
-        context: {
-          ...context,
-          name: firstName + ' ' + lastName,
-        },
+      return contextChanges(context)({
+        name: firstName + ' ' + lastName,
       });
-   });
+    });
 }
 
-export function setJob({ context, input }) {
-  return Promise.resolve({
-    context: {
-      ...context,
-      job: input,
-    },
+export function setName({ context, input }) {
+  return contextChanges(context)({
+    name: input,
   });
 }
 
-export function setAge({ context, input }) {
-  return Promise.resolve({
-    context: {
-      ...context,
-      age: input,
-    },
-  });
-}
-
-export function setPlace({ context, input }) {
-  return Promise.resolve({
-    context: {
-      ...context,
-      place: input,
-    },
+export function setRating({ context, input }) {
+  return contextChanges(context)({
+    rating: [1, 2, 3, 4].includes(Number(input)) ? Number(input) : undefined,
   });
 }
 
 export function setBio({ context, input }) {
-  return Promise.resolve({
-    context: {
-      ...context,
-      bio: input,
-    },
+  return contextChanges(context)({
+    bio: input,
   });
 }
 
 export function updateProfile({ context, userData }) {
-  let profile = PersonalInformationFormatter.createProfile(context);
+  const profile = PersonalInformationFormatter.createProfile(context);
 
-  return Promise.resolve({
-    userData: {
-      ...userData,
-      profile,
-    },
+  return userDataChanges(userData)({
+    profile,
   });
 }
 
@@ -84,123 +65,88 @@ export function addCommunicationMethod({ context, input }) {
   let undefinedCommunicationInfo = 'UNDEFINED_COMMUNICATION_INFO';
   let method = CommunicationMethodsFormatter
     .getCommunicationMethodByInput(input);
-  return Promise.resolve({
-    context: {
-      ...context,
-      communicationMethods: {
-        ...context.communicationMethods,
-        [method.identifier]: undefinedCommunicationInfo,
-      },
-    },
-    result: method.infoRequestText,
-  });
+
+  return contextChanges(context)(
+    communicationChanges(context.communicationMethods)({
+      [method.identifier]: undefinedCommunicationInfo,
+    }), {
+      result: method.infoRequestText,
+    });
 }
 
 export function addCommunicationInfo({ context, input }) {
-  return new Promise((resolve, reject) => {
-    let communicationMethods = context.communicationMethods;
+  let communicationMethods = context.communicationMethods;
 
-    let undefinedCommunicationInfo = 'UNDEFINED_COMMUNICATION_INFO';
+  let undefinedCommunicationInfo = 'UNDEFINED_COMMUNICATION_INFO';
 
-    for (let method in communicationMethods) {
-      if (communicationMethods[method] !== undefinedCommunicationInfo) {
-        continue;
-      }
+  for (let method in communicationMethods) {
+    if (communicationMethods[method] === undefinedCommunicationInfo) {
+      return contextChanges(context)(
+        communicationChanges(communicationMethods)({
+          [method]: input,
+        })
+      );
+    };
+  }
 
-      return resolve({
-        context: {
-          ...context,
-          communicationMethods: {
-            ...communicationMethods,
-            [method]: input,
-          },
-        },
-      });
-    }
-
-    return resolve({
-      context: {
-        ...context,
-        communicationMethods: {
-          input,
-        },
-      },
-    });
-  });
+  return Promise.reject(new Error('AddCommunicationInfo failed'));
 }
 
 export function reset() {
-  return Promise.resolve({
-    context: {},
-  });
+  return contextChanges()();
 }
 
 export function markUserAsSearching({ context }) {
-  return Promise.resolve({
-    context: {
-      ...context,
+  return contextChanges(context)({
       searching: true,
-    },
   });
 }
 
 export function markUserAsNotSearching({ context }) {
-  return Promise.resolve({
-    context: {
-            ...context,
+  return contextChanges(context)({
             rejectedPeers: [],
             availablePeers: [],
             pairRequests: [],
             sentRequests: [],
             searching: false,
-        },
   });
 }
 
 export function removeSentRequests({ sessionId, context }) {
-  let sessions = new Sessions();
-  const promises = [];
-  if (context.sentRequests) {
-    for (let requestRecipientId of context.sentRequests) {
-      promises.push(
-        sessions.read(requestRecipientId)
-          .then((requestRecipient) => {
-            let index = requestRecipient.pairRequests.indexOf(sessionId);
-            if (index > -1) {
-              requestRecipient.pairRequests.splice(index, 1);
-              return sessions.write(requestRecipientId, requestRecipient);
-            }
-          }
-        )
-      );
-    }
-  }
-  return Promise.all(promises)
-    .then(() => context);
+  const sessions = new Sessions();
+  context.sentRequests = context.sentRequests || [];
+
+  return Promise.all(
+    context.sentRequests.map((recipientId) => {
+      return sessions.read(recipientId)
+        .then((recipient) => {
+          return sessions.write(recipientId, {
+              pairRequests: recipient.pairRequests
+                .filter((senderId) => senderId != sessionId),
+          });
+        });
+    }))
+  .then(() => {
+    return { context };
+  });
 }
 
 export function updateAvailablePeers({ sessionId, context }) {
-  return new Promise((resolve, reject) => {
-    let sessions = new Sessions();
+  const sessions = new Sessions();
+  const rejectedPeers = context.rejectedPeers || [];
 
-    const rejectedPeers = context.rejectedPeers || [];
-
-    return sessions.getAvailablePairs(sessionId)
-      .then((pairs) => {
-        resolve({
-          context: {
-            ...context,
-            availablePeers: pairs
-                .map((entry) => entry.id)
-                .filter((entry) => rejectedPeers.indexOf(entry) < 0),
-          },
-        });
-      })
-      .catch((err) => {
-        log.error('err: {0}', err);
-        reject(err);
+  return sessions.getAvailablePairs(sessionId)
+    .then((pairs) => {
+      return contextChanges(context)({
+        availablePeers: pairs
+          .map((entry) => entry.id)
+          .filter((entry) => rejectedPeers.indexOf(entry) < 0),
       });
-  });
+    })
+    .catch((err) => {
+      log.error('err: {0}', err);
+      return Promise.reject(err);
+    });
 }
 
 export function displayAvailablePeer({ context }) {
@@ -219,6 +165,7 @@ export function displayAvailablePeer({ context }) {
       });
   });
 }
+
 export function displayAcceptedPeer({ sessionId, context }) {
   let pairs = new Pairs();
   let sessions = new Sessions();
@@ -245,11 +192,8 @@ export function displayAcceptedPeer({ sessionId, context }) {
 }
 
 export function nextAvailablePeer({ context }) {
-  return Promise.resolve({
-    context: {
-      ...context,
+  return contextChanges(context)({
       availablePeers: context.availablePeers.slice(1),
-    },
   });
 }
 
@@ -257,11 +201,8 @@ export function rejectAvailablePeer({ context }) {
   const rejectedPeers = context.rejectedPeers || [];
   rejectedPeers.push(context.availablePeers[0]);
 
-  return Promise.resolve({
-    context: {
-      ...context,
+  return contextChanges(context)({
       rejectedPeers,
-    },
   });
 }
 
@@ -269,12 +210,9 @@ export function rejectRequest({ context }) {
   const rejectedPeers = context.rejectedPeers || [];
   rejectedPeers.push(context.pairRequests[0]);
 
-  return Promise.resolve({
-    context: {
-      ...context,
-      rejectedPeers,
-      pairRequests: context.pairRequests.slice(1),
-    },
+  return contextChanges(context)({
+    rejectedPeers,
+    pairRequests: context.pairRequests.slice(1),
   });
 }
 
@@ -291,8 +229,7 @@ export function acceptRequest({ sessionId, context }) {
                 sessionId: chosenPeerId, context: chosenPeer });
             })
             .then((chosenPeer) => {
-              const peer = { context: { ...chosenPeer } };
-              return markUserAsNotSearching(peer);
+              return markUserAsNotSearching(chosenPeer);
             }
           )
             .then((chosenPeer) => {
@@ -320,17 +257,20 @@ export function acceptRequest({ sessionId, context }) {
       .then(() => markUserAsNotSearching({ context }));
 }
 
-export function breakPair({ sessionId, userData, context }) {
+export function breakPair({ sessionId, context }) {
   let pairs = new Pairs();
   let sessions = new Sessions();
 
   return pairs.read(sessionId)
       .then((pairList) => {
         const pairId = pairList[0];
-        if (pairId === undefined) return Promise.reject();
+        if (pairId == undefined) {
+          return Promise.reject(new Error('No pair to break!'));
+        }
 
         return pairs.breakPair(sessionId, pairId)
             .then(() => sessions.read(pairId))
+            .then((context) => resetMeeting({ context }))
             .then((context) => sessions.write(
               pairId,
               {
@@ -348,44 +288,13 @@ export function breakPair({ sessionId, userData, context }) {
               );
             });
       })
+      .then(() => resetMeeting({ context }))
+      .then((context) => sessions.write(sessionId, context))
       .then(() => {
-        return {
+        return Promise.resolve({
           result: '@PAIR_BROKEN',
-        };
+        });
       });
-}
-
-export function breakAllPairs({ sessionId }) {
-  let pairs = new Pairs();
-  let sessions = new Sessions();
-
-  return pairs.read(sessionId)
-    .then((pairList) => {
-      const promises = [];
-      for (let pairId of pairList) {
-        promises.push(
-          pairs.breakPair(sessionId, pairId)
-            .then(() => sessions.read(pairId))
-            .then((context) => sessions.write(
-              pairId,
-              {
-                ...context,
-                state: '/?0/profile?0',
-              }
-            ))
-            .then(() => {
-              return Messenger.send(
-                pairId,
-                PersonalInformationFormatter.format(
-                  strings['@NOTIFY_PAIR_BROKEN'],
-                  { pairName: context.name }
-                )
-              );
-            })
-        );
-      }
-      return Promise.all(promises);
-    });
 }
 
 export function displayRequest({ context }) {
@@ -443,17 +352,159 @@ export function addPairRequest({ sessionId, context }) {
   });
 }
 
-export function giveFeedback({ sessionId, input }) {
+export function sendRating({ context, sessionId }) {
   let pairs = new Pairs();
-  let feedback = new Feedback();
+
+  const answer = strings['@RATINGS'][context.rating - 1];
+
+  log.info('SendRating with answer ' + answer);
 
   return pairs.read(sessionId)
       .then((pairList) => {
         const pairId = pairList[0];
-        if (pairId === undefined) return Promise.reject();
+        if (pairId == undefined) {
+          return Promise.reject(new Error('No pair found!'));
+        }
 
-        return feedback.createFeedback({
-          giver: sessionId, pair: pairId, feedback: input,
+        return Messenger.send(
+          pairId, strings['@TELL_USER_HAS_NEW_FEEDBACK'] + answer,
+          Builder.QuickReplies.createArray([
+            'OK',
+          ])
+        );
+    }).then(() => {
+      return Promise.resolve({ result: '' });
+    });
+}
+
+export function sendFeedback({ context, sessionId, input }) {
+  let pairs = new Pairs();
+  let feedback = new Feedback();
+
+  log.info('SendFeedback with input ' + input);
+
+  return pairs.read(sessionId)
+    .then((pairList) => {
+        const pairId = pairList[0];
+        if (pairId == undefined) {
+          return Promise.reject(new Error('No pair found!'));
+        }
+
+        return Messenger.send(
+          pairId,
+          input,
+          Builder.QuickReplies.createArray([
+          'OK',
+        ])).then(() => {
+              return feedback.createFeedback({
+                giver: sessionId, pair: pairId, feedback: input,
+              });
+          });
+    });
+}
+
+export function setWeekday({ context, input }) {
+  return contextChanges(context)({
+      weekDay: input.substring(0, 2).toUpperCase(),
+  });
+}
+
+export function setTime({ context, input }) {
+  return contextChanges(context)({
+      time: input,
+  });
+}
+
+export function testReminderAndFeedback({ context }) {
+  const sessions = new Sessions();
+  return sessions.readAllWithReminders()
+    .then((sessionsFromDb) => {
+      const promises = [];
+      for (let i=0; i<sessionsFromDb.length; i++) {
+        if (sessionsFromDb[i].context.skipMeeting) {
+          continue;
+        }
+        promises.push(
+            Messenger.send(sessionsFromDb[i].id,
+              strings['@REMINDER_MESSAGE'] + sessionsFromDb[i].context.time,
+              Builder.QuickReplies.createArray([
+                'OK',
+              ]))
+        );
+      }
+      return sessions.readAllWithFeedbacks()
+        .then((feedbackSessions) => {
+          for (let i=0; i<feedbackSessions.length; i++) {
+            if (feedbackSessions[i].context.skipMeeting) {
+              promises.push(
+                sessions.write(
+                  feedbackSessions[i].id,
+                  {
+                    ...feedbackSessions[i].context,
+                    skipMeeting: false,
+                  }
+                )
+              );
+              continue;
+            }
+            promises.push(
+              sessions.write(
+                feedbackSessions[i].id,
+                {
+                  ...feedbackSessions[i].context,
+                  state:
+                  '/?0/profile?0/accepted_pair_profile?0/give_feedback?0',
+                }
+              ).then(() => {
+                Messenger.send(feedbackSessions[i].id,
+                  strings['@FEEDBACK_MESSAGE'],
+                  Builder.QuickReplies.createArray([
+                    strings['@YES'],
+                    strings['@NO'],
+                  ])
+                );
+              })
+            );
+          }
+          return Promise.all(promises);
         });
-      });
+    });
+}
+
+export function resetMeeting({ context }) {
+  const { weekDay, time, ...cleanedContext } = context;
+
+  return Promise.resolve(
+    cleanedContext
+  );
+}
+
+export function setSkipMeeting({ context, sessionId }) {
+  let pairs = new Pairs();
+  return pairs.read(sessionId)
+    .then((pairList) => {
+        const promises = [];
+        const pairId = pairList[0];
+        if (pairId == undefined) {
+          return Promise.reject(new Error('No pair found!'));
+        }
+        promises.push(
+          Messenger.send(pairId, strings['@SKIPPED_MEETING_MESSAGE'],
+          Builder.QuickReplies.createArray([
+            'OK',
+          ]))
+        );
+        promises.push(
+          contextChanges(context)({
+            skipMeeting: true,
+          })
+        );
+        return Promise.all(promises);
+    });
+}
+
+export function resetSkipMeeting({ context }) {
+  return contextChanges(context)({
+      skipMeeting: false,
+  });
 }

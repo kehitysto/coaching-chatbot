@@ -67,13 +67,6 @@ describe('Chatbot builder', function() {
   });
 
   describe('#runAction', function() {
-    it('should return a Promise', function() {
-      const ret = this.builder.runAction({}, {}, {});
-
-      expect(ret)
-        .to.be.a('Promise');
-    });
-
     it('should return an Error when there is no such actionId',
       function() {
         const action = 'UNDEFINED_ACTION';
@@ -83,23 +76,18 @@ describe('Chatbot builder', function() {
           .to.be.rejectedWith('No such action: ' + action);
       });
 
-    it('should return a Promise if actionId is found', function() {
-      this.builder.action('setInterest', () => ({}, {}, {}));
-      const action = 'setInterest';
-      const ret = this.builder.runAction(action, this.session, {});
+    it('should return a fulfilled Promise if actionId is found', function() {
+      this.builder.action('setInterest', () => Promise.resolve({}));
+      const ret = this.builder.runAction('setInterest', this.session);
 
-      return expect(ret)
-        .to.be.a('Promise');
+      return expect(ret).to.be.fulfilled;
     });
 
     it('should succeed even if the action throws', function() {
-      const action = 'setInterest';
-      const actionFn = sinon.stub()
-        .throws(new Error());
-      this.builder.action(action, actionFn);
+      this.builder.action('setInterest', () => { throw new Error(''); });
+      const ret = this.builder.runAction('setInterest', this.session);
 
-      return expect(this.builder.runAction(action, this.session))
-        .to.be.fulfilled;
+      return expect(ret).to.be.fulfilled;
     });
   });
 
@@ -132,6 +120,16 @@ describe('Chatbot builder', function() {
 
       return expect(this.builder.getStringTemplate(templateId))
         .to.equal(template);
+    });
+
+    it('should return one template from an array', function() {
+      const templateId = '@TEST_TEMPLATE_ARRAY';
+      const template = ['Hello', 'Hi'];
+
+      this.builder._strings[templateId] = template;
+
+      return expect(template)
+        .to.include(this.builder.getStringTemplate(templateId));
     });
 
     it('should return the template id if no template can be found',
