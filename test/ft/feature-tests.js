@@ -212,28 +212,4 @@ describe('User story', function() {
       );
     }
   );
-
-  describe(
-    'As a registered I want to find a pair',
-    function() {
-      it(
-        'should ask for my permission',
-        function () {
-          return expect(
-            this.bot.receive(SESSION, 'Etsi pari'))
-            .to.eventually.become(
-            [
-              buildResponse('@PERMISSION_TO_RECEIVE_MESSAGES', [{
-                'title': 'Kyllä',
-                'payload': '@YES',
-              }, {
-                'title': 'Ei',
-                'payload': '@NO',
-              }]),
-            ]
-            );
-        }
-      );
-    }
-  );
 });

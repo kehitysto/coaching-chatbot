@@ -11,6 +11,17 @@
       }
     }
   },
+  "CONFIRM_PERMISSION_TESTS": {
+    "sessions": {
+      "CONFIRM_PERMISSION_TESTER": {
+        "searching": false,
+        "communicationMethods": {
+          "SKYPE": "NICK"
+        },
+        "state": "/?0/profile?0"
+      }
+    }
+  },
   "STOP_SEARCH_TESTS": {
     "sessions": {
       "STOP_SEARCH_TESTER": {
