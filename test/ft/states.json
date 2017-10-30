@@ -1,6 +1,9 @@
 {
   "DEFAULT": {
     "sessions": {
+      "DEFAULT": {
+        "state": "/?0"
+      },
       "FEEDBACK_TESTER": {
         "name": "Kaapo",
         "state": "/give_feedback?0"
@@ -8,6 +11,13 @@
       "RESET_TESTER": {
         "name": "Reset Tester",
         "state": "/profile?0"
+      }
+    }
+  },
+  "INVALID_INPUT_TESTS": {
+    "sessions": {
+      "INVALID_INPUT_TESTER": {
+        "state": "/?1"
       }
     }
   },
