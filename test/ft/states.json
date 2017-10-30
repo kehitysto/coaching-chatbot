@@ -27,6 +27,39 @@
       }
     }
   },
+  "PAIR_SEARCH_LISTING_TESTS": {
+    "sessions": {
+      "PAIR_SEARCH_LISTING_TESTER": {
+        "name": "Tester",
+        "bio": "My bio",
+        "communicationMethods": {
+          "SKYPE": "NICKNAME"
+        },
+        "state": "/?0/profile?0/confirm_permission?1"
+      },
+      "SEARCHING#1": {
+        "name": "Pekka",
+        "communicationMethods": {
+          "SKYPE": "Pekka123"
+        },
+        "searching": true
+      },
+      "SEARCHING#2": {
+        "name": "Matti",
+        "communicationMethods": {
+          "SKYPE": "Matti123"
+        },
+        "searching": true
+      },
+      "NOT_SEARCHING": {
+        "name": "Laura",
+        "communicationMethods": {
+          "SKYPE": "Laura123"
+        },
+        "searching": false
+      }
+    }
+  },
   "PAIR_REQUEST_TESTS": {
     "sessions": {
       "PAIR_REQUEST_TESTER": {
