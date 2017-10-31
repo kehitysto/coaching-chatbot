@@ -1,0 +1,44 @@
+{
+  "Kaapo syöttää tietonsa ja alkaa etsiä paria": {
+    "player": "Kaapo",
+    "session": "Session1",
+    "messages": [
+      "Hei!",
+      "Kyllä",
+      "En tiedä itsestäni mitään.",
+      "Puhelin",
+      "1234",
+      "Ei",
+      "Vaihda nimi",
+      "Kaapo",
+      "Etsi pari",
+      "Kyllä"
+    ]
+  },
+  "Katariina syöttää tietonsa ja lähettää Kaapolle pyynnön": {
+    "player": "Katariina",
+    "session": "Session2",
+    "messages": [
+      "Hei!",
+      "Kyllä",
+      "Kuvaukseni ei sovi herkille.",
+      "Puhelin",
+      "1235",
+      "Ei",
+      "Vaihda nimi",
+      "Katariina",
+      "Etsi pari",
+      "Kyllä",
+      "Kyllä"
+    ]
+  },
+  "Kaapo hyväksyy pyynnön": {
+    "player": "Kaapo",
+    "session": "Session1",
+    "messages": [
+      "Tarkista",
+      "Näytä pyynnöt",
+      "Kyllä"
+    ]
+  }
+}

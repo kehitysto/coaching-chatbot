@@ -437,7 +437,7 @@ export function testReminderAndFeedback({ context }) {
   return sessions.readAllWithReminders()
     .then((sessionsFromDb) => {
       const promises = [];
-      for (let i=0; i<sessionsFromDb.length; i++) {
+      for (let i = 0; i < sessionsFromDb.length; i++) {
         if (sessionsFromDb[i].context.skipMeeting) {
           continue;
         }
@@ -451,7 +451,7 @@ export function testReminderAndFeedback({ context }) {
       }
       return sessions.readAllWithFeedbacks()
         .then((feedbackSessions) => {
-          for (let i=0; i<feedbackSessions.length; i++) {
+          for (let i = 0; i < feedbackSessions.length; i++) {
             if (feedbackSessions[i].context.skipMeeting) {
               promises.push(
                 sessions.write(

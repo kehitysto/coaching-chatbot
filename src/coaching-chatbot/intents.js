@@ -11,6 +11,10 @@ module.exports = {
         any: /^e[in]?$/i,
     },
 
+    NEXT: {
+        any: /^(?:seuraavat|seuraava|seur)$/i,
+    },
+
     RETURN: {
         any: /^(?:palaa|takaisin|peru|kumoa|poistu)$/i,
     },
@@ -28,7 +32,7 @@ module.exports = {
     },
 
     SHOW: {
-        any: /^näytä\s/i,
+        each: /^näytä\s/i,
     },
 
     STOP: {
@@ -80,7 +84,7 @@ module.exports = {
     },
 
     PAIR: {
-        any: /^paria?$/i,
+        each: /^paria?$/i,
     },
 
     MEETING: {
@@ -106,13 +110,15 @@ module.exports = {
     },
 
     TEST: {
-        each: [
-            /^test/i,
-        ],
+        each: /^test$/i,
     },
 
     INFO: {
         any: /^(?:info|ohje(?:et))$/i,
+    },
+
+    SKIP_MEETING: {
+        each: /^En pääse tapaamiseen$/i,
     },
 
     OPTIONAL_VALUE: {
@@ -185,13 +191,4 @@ module.exports = {
         ],
     },
 
-    SKIP_MEETING: {
-        each: [
-            /^En pääse tapaamiseen$/i,
-          ],
-    },
-
-    NEXT: {
-        any: /^(?:seuraavat|seuraava|seur)$/i,
-    },
 };

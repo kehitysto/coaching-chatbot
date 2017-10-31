@@ -50,7 +50,7 @@ module.exports = class DynamoDBTable {
    * @param {Object} data The data fields of the object to write
    * @return {Promise}
    */
-  put(key, data={}) {
+  put(key, data = {}) {
     return new Promise((resolve, reject) => {
       const params = {
         TableName: this.TABLE,

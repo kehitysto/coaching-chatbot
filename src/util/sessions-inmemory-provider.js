@@ -59,7 +59,7 @@ module.exports = class InMemoryProvider {
         if(day === undefined) continue;
         let meetingDay = strings['@WEEKDAYS'].indexOf(day.toUpperCase());
 
-        if (meetingDay == ((new Date().getDay() - 2) % 7)) {
+        if (meetingDay == ((new Date().getDay() + 5) % 7)) {
           log.silly('Found context with id: ', sessionId);
           sessions.push( { 'Id': sessionId, 'context': context } );
         }
@@ -88,10 +88,14 @@ module.exports = class InMemoryProvider {
         log.silly('Evaluating possible pair {0}', sessionId);
         if (sessionId == id) continue;
         let session = this.db[sessionId];
+        let context = this.db[id];
 
         if (session.searching === true &&
             (!session.pairRequests || !session.pairRequests.includes(id)) &&
-            (!session.rejectedPeers || !session.rejectedPeers.includes(id))) {
+            (!session.rejectedPeers || !session.rejectedPeers.includes(id)) &&
+            (session.communicationMethods && context.communicationMethods &&
+              Object.keys(session.communicationMethods).some((method) =>
+              Object.keys(context.communicationMethods).includes(method)))) {
           log.silly('Found a valid pair!');
           pairs.push({ id: sessionId });
         }
