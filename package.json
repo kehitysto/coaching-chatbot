@@ -72,6 +72,7 @@
     "lint": "eslint src",
     "bot-client": "ts-node ./scripts/bot-client.js",
     "bot-client:watch": "nodemon ./scripts/bot-client.js --exec ts-node",
+    "visualize": "ts-node ./scripts/visualize.js",
     "write-env": "node ./scripts/write-env.js",
     "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run test",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
