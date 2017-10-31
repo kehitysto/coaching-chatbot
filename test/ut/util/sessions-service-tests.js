@@ -169,11 +169,7 @@ describe('Sessions service', function() {
 
       const readStub = sinon.stub(
         this.sessions.db, 'read'
-      ).returns(Promise.resolve({
-          communicationMethods: {
-            SKYPE: 'skype'
-          }
-      }));
+      ).returns(Promise.resolve({ ...skypeContext.context }));
 
       return this.sessions.getAvailablePairs('SESSION_ID').then((items) => {
         expect(items).to.deep.equal([
