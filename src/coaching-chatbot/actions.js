@@ -122,8 +122,8 @@ export function removeSentRequests({ sessionId, context }) {
         .then((recipient) => {
           return sessions.write(recipientId, {
             ...recipient,
-              pairRequests: recipient.pairRequests
-                .filter((senderId) => senderId != sessionId),
+            pairRequests: recipient.pairRequests
+              .filter((senderId) => senderId != sessionId),
           });
         });
     }))

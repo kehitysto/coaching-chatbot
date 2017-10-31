@@ -338,6 +338,7 @@ describe('coaching-bot actions', function() {
 
       stubSessionsRead.returns(
         Promise.resolve({
+          name: "test",
           pairRequests: [
             1,
             3
@@ -355,6 +356,7 @@ describe('coaching-bot actions', function() {
       });
 
       const expectedToWrite = {
+        name: "test",
         pairRequests: [
           3
         ]
