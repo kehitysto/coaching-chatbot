@@ -363,17 +363,15 @@ bot
         } else {
           session.addResult('@CONFIRM_DATE');
           if (session.areRemindersEnabled()) {
-            session.addQuickReplies([
-              Builder.QuickReplies.create('@SET_DATE'),
-              Builder.QuickReplies.create('@SKIP_MEETING'),
-              Builder.QuickReplies.create('@DISABLE_REMINDERS'),
-            ]);
+            session.addQuickReplies(
+              Builder.QuickReplies.createArray([
+                '@SET_DATE', '@SKIP_MEETING', '@DISABLE_REMINDERS'])
+            );
           } else {
-            session.addQuickReplies([
-              Builder.QuickReplies.create('@SET_DATE'),
-              Builder.QuickReplies.create('@SKIP_MEETING'),
-              Builder.QuickReplies.create('@ENABLE_REMINDERS'),
-            ]);
+            session.addQuickReplies(
+              Builder.QuickReplies.createArray([
+                '@SET_DATE', '@SKIP_MEETING', '@ENABLE_REMINDERS'])
+            );
           }
         }
       },
