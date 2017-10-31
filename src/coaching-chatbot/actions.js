@@ -121,8 +121,9 @@ export function removeSentRequests({ sessionId, context }) {
       return sessions.read(recipientId)
         .then((recipient) => {
           return sessions.write(recipientId, {
-              pairRequests: recipient.pairRequests
-                .filter((senderId) => senderId != sessionId),
+            ...recipient,
+            pairRequests: recipient.pairRequests
+              .filter((senderId) => senderId != sessionId),
           });
         });
     }))
@@ -134,6 +135,7 @@ export function removeSentRequests({ sessionId, context }) {
 export function updateAvailablePeers({ sessionId, context }) {
   const sessions = new Sessions();
   const rejectedPeers = context.rejectedPeers || [];
+  const availablePeersIndex = 1;
 
   return sessions.getAvailablePairs(sessionId)
     .then((pairs) => {
@@ -141,6 +143,7 @@ export function updateAvailablePeers({ sessionId, context }) {
         availablePeers: pairs
           .map((entry) => entry.id)
           .filter((entry) => rejectedPeers.indexOf(entry) < 0),
+        availablePeersIndex: availablePeersIndex,
       });
     })
     .catch((err) => {
@@ -192,17 +195,31 @@ export function displayAcceptedPeer({ sessionId, context }) {
 }
 
 export function nextAvailablePeer({ context }) {
+  const availablePeers = context.availablePeers;
+  let availablePeersIndex = context.availablePeersIndex + 1;
+  availablePeers.push(availablePeers.shift());
   return contextChanges(context)({
-      availablePeers: context.availablePeers.slice(1),
+      availablePeers: availablePeers,
+      availablePeersIndex: availablePeersIndex,
   });
 }
 
 export function rejectAvailablePeer({ context }) {
   const rejectedPeers = context.rejectedPeers || [];
   rejectedPeers.push(context.availablePeers[0]);
-
   return contextChanges(context)({
       rejectedPeers,
+      availablePeers: context.availablePeers.slice(1),
+  });
+}
+
+export function checkAvailablePeersIndex({ context }) {
+  let availablePeersIndex = context.availablePeersIndex;
+  if (availablePeersIndex > context.availablePeers.length) {
+    availablePeersIndex = 1;
+  }
+  return contextChanges(context)({
+    availablePeersIndex,
   });
 }
 
@@ -324,7 +341,7 @@ export function addPairRequest({ sessionId, context }) {
       chosenPeer.pairRequests.push(sessionId);
       context.sentRequests = context.sentRequests || [];
       context.sentRequests.push(peerId);
-
+      context.availablePeers = context.availablePeers.slice(1);
       return session.write(peerId, chosenPeer)
           .then(() => {
             return Messenger.send(
