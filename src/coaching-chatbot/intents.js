@@ -28,7 +28,7 @@ module.exports = {
     },
 
     SHOW: {
-        any: /^näytä\s/i,
+        each: /^näytä\s/i,
     },
 
     STOP: {
@@ -80,7 +80,7 @@ module.exports = {
     },
 
     PAIR: {
-        any: /^paria?$/i,
+        each: /^paria?$/i,
     },
 
     MEETING: {
@@ -106,13 +106,15 @@ module.exports = {
     },
 
     TEST: {
-        each: [
-            /^test/i,
-        ],
+        each: /^test$/i,
     },
 
     INFO: {
         any: /^(?:info|ohje(?:et))$/i,
+    },
+
+    SKIP_MEETING: {
+        each: /^En pääse tapaamiseen$/i,
     },
 
     OPTIONAL_VALUE: {
@@ -183,11 +185,5 @@ module.exports = {
             '#SET_OR_CHANGE',
             '#COMMUNICATION',
         ],
-    },
-
-    SKIP_MEETING: {
-        each: [
-            /^En pääse tapaamiseen$/i,
-          ],
     },
 };
