@@ -1,24 +1,112 @@
 {
-  "sessions": {
-    "FEEDBACK_TESTER": {
-      "name": "Kaapo",
-      "state": "/give_feedback?0"
-    },
-    "RESET_TESTER": {
-      "name": "Reset Tester",
-      "state": "/profile?0"
-    },
-    "STOP_SEARCH_TESTER": {
-      "name": "Liisa Hakija",
-      "searching": true,
-      "availablePeers": [],
-      "pairRequests": [],
-      "rejectedPeers": [],
-      "sentRequests": [],
-      "communicationMethods": {
-        "PHONE": "3242323"
+  "DEFAULT": {
+    "sessions": {
+      "DEFAULT": {
+        "state": "/?0"
       },
-      "state": "/?0/profile?0/searching?2"
+      "FEEDBACK_TESTER": {
+        "name": "Kaapo",
+        "state": "/give_feedback?0"
+      },
+      "RESET_TESTER": {
+        "name": "Reset Tester",
+        "state": "/profile?0"
+      }
+    }
+  },
+  "INVALID_INPUT_TESTS": {
+    "sessions": {
+      "INVALID_INPUT_TESTER": {
+        "state": "/?1"
+      }
+    }
+  },
+  "BIO_TESTS": {
+    "sessions": {
+      "BIO_TESTER": {
+        "state": "/?0/create_profile?2/set_bio?1"
+      }
+    }
+  },
+  "COMMUNICATION_METHODS_TESTS": {
+    "sessions": {
+      "COMMUNICATION_METHODS_TESTER": {
+        "state": "/?0/create_profile?3/add_communication_method?1"
+      }
+    }
+  },
+  "CONFIRM_PERMISSION_TESTS": {
+    "sessions": {
+      "CONFIRM_PERMISSION_TESTER": {
+        "searching": false,
+        "communicationMethods": {
+          "SKYPE": "NICK"
+        },
+        "state": "/?0/profile?0"
+      }
+    }
+  },
+  "STOP_SEARCH_TESTS": {
+    "sessions": {
+      "STOP_SEARCH_TESTER": {
+        "name": "Liisa Hakija",
+        "searching": true,
+        "availablePeers": [],
+        "pairRequests": [],
+        "rejectedPeers": [],
+        "sentRequests": [],
+        "communicationMethods": {
+          "PHONE": "3242323"
+        },
+        "state": "/?0/profile?0/searching?2"
+      }
+    }
+  },
+  "PAIR_SEARCH_LISTING_TESTS": {
+    "sessions": {
+      "PAIR_SEARCH_LISTING_TESTER": {
+        "name": "Tester",
+        "bio": "My bio",
+        "communicationMethods": {
+          "SKYPE": "NICKNAME"
+        },
+        "state": "/?0/profile?0/confirm_permission?1"
+      },
+      "SEARCHING#1": {
+        "name": "Pekka",
+        "communicationMethods": {
+          "SKYPE": "Pekka123"
+        },
+        "searching": true
+      },
+      "SEARCHING#2": {
+        "name": "Matti",
+        "communicationMethods": {
+          "SKYPE": "Matti123"
+        },
+        "searching": true
+      },
+      "NOT_SEARCHING": {
+        "name": "Laura",
+        "communicationMethods": {
+          "SKYPE": "Laura123"
+        },
+        "searching": false
+      }
+    }
+  },
+  "PAIR_REQUEST_TESTS": {
+    "sessions": {
+      "PAIR_REQUEST_TESTER": {
+        "name": "Pair Request Tester",
+        "searching": true,
+        "availablePeers": ["PAIR_REQUEST_TESTER_PAIR"],
+        "state": "/?0/searching?3"
+      },
+      "PAIR_REQUEST_TESTER_PAIR": {
+        "name": "Some Pair",
+        "searching": true
+      }
     }
   }
 }
