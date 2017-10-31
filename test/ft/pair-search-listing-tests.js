@@ -19,13 +19,14 @@ describe('Pair search listing tests', function() {
               this.bot.receive(SESSION, 'Kyllä'))
             .to.eventually.become([
               buildResponse('@INFORMATION_ABOUT_LIST'),
+              buildResponse('Parinhakija: 1/2'),
               buildResponse(
                 PairFormatter.beautifyAvailablePairs(
                   [{
                     id: 'SEARCHING#1',
                     context: FeatureTestStates['PAIR_SEARCH_LISTING_TESTS']['sessions']['SEARCHING#1'],
                   }]),
-                QuickReplies.createArray(['@YES', '@NO', '@STOP_SEARCHING',])
+                QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@STOP_SEARCHING',])
               ),
             ]);
         }
@@ -37,13 +38,14 @@ describe('Pair search listing tests', function() {
           return expect(
               this.bot.receive(SESSION, 'Ei'))
             .to.eventually.become([
+              buildResponse('Parinhakija: 1/1'),
               buildResponse(
                 PairFormatter.beautifyAvailablePairs(
                   [{
                     id: 'SEARCHING#2',
                     context: FeatureTestStates['PAIR_SEARCH_LISTING_TESTS']['sessions']['SEARCHING#2'],
                   }]),
-                QuickReplies.createArray(['@YES', '@NO', '@STOP_SEARCHING',])
+                QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@STOP_SEARCHING',])
               ),
             ]);
         }
