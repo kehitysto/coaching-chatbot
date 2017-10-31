@@ -104,7 +104,7 @@ describe('Formatter service', function() {
           },
           {
             title: 'Muokkaa kuvausta',
-            payload: 'SET_BIO',
+            payload: 'CHANGE_BIO',
           },
           {
           payload: "EDIT_COMMUNICATION_METHODS",

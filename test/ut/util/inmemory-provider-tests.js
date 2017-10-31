@@ -67,50 +67,70 @@ describe('Inmemory database service', function() {
           key: 'value',
         });
     });
+  });
 
-    describe('#getAvailablePairs()', function() {
-      after(function() {
-        this.db.load({});
-      });
+  describe('#getAvailablePairs()', function () {
+    after(function () {
+      this.db.load({});
+    });
 
-      it('should return a Promise', function() {
-        const ret = this.db.getAvailablePairs(
-          'id',
-        );
+    it('should return a Promise', function () {
+      const ret = this.db.getAvailablePairs(
+        'id',
+      );
 
-        expect(ret)
-          .to.be.a('Promise');
+      expect(ret)
+        .to.be.a('Promise');
 
-        return expect(ret)
-          .to.eventually.be.fulfilled;
-      });
+      return expect(ret)
+        .to.eventually.be.fulfilled;
+    });
 
-      it('should return pairs when there are some',
-        function() {
-          const context = {
-            name: 'Pertti',
+    it('should return pairs when there are some',
+      function () {
+        const context = {
+          name: 'Pertti',
+          searching: true,
+          communicationMethods: {
+            SKYPE: 'pertti_42',
+          },
+        };
+
+        return this.db.write(
+          'SESSION_ID', {
             searching: true,
             communicationMethods: {
-              SKYPE: 'pertti_42',
+              SKYPE: 'skype_id',
             },
-          };
-
-          return this.db.write(
-              'SESSION_ID', {
-                searching: true,
-              }
-            )
-            .then(
-              () => this.db.write(
-                'SESSION_IDD', context)
-            )
-            .then(() =>
-              expect(this.db.getAvailablePairs('SESSION_ID'))
+          })
+          .then(() => this.db.write(
+              'SESSION_IDD', context
+          ))
+          .then(() =>
+            expect(this.db.getAvailablePairs('SESSION_ID'))
               .to.become([{
                 id: 'SESSION_IDD',
               }])
-            );
-        });
+          );
+      });
+  });
+
+  it('should return filtered pairs', function () {
+    const phoneContext = { communicationMethods: { PHONE: '03030', }};
+    const skypeContext = { communicationMethods: { SKYPE: 'skype', }};
+
+    this.db.load({
+      ID: { ...skypeContext, searching: true },
+      PHONE1: { ...phoneContext, searching: true },
+      SKYPE1: { ...skypeContext, searching: true },
+      PHONE2: { ...phoneContext, searching: true },
+      SKYPE2: { ...skypeContext, searching: true },
+    });
+
+    return this.db.getAvailablePairs('ID').then((items) => {
+      expect(items).to.deep.equal([
+        { id: 'SKYPE1' },
+        { id: 'SKYPE2' }])
     });
   });
 });

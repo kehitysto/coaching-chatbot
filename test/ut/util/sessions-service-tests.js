@@ -133,8 +133,8 @@ describe('Sessions service', function() {
     });
   });
 
-  describe('#getAvailablePairs()', function() {
-    it('should scan DynamoDB for available pairs', function() {
+  describe('#getAvailablePairs()', function () {
+    it('should scan DynamoDB for available pairs', function () {
       const scanStub = sinon.stub();
       scanStub.callsArgWith(
         1,
@@ -144,8 +144,38 @@ describe('Sessions service', function() {
 
       this.sessions.db.table.db.scan = scanStub;
 
-      return this.sessions.getAvailablePairs('SESSION_ID', 'EVERY_WEEKDAY')
-          .then(() => expect(scanStub).to.have.been.calledOnce);
+      return this.sessions.getAvailablePairs('SESSION_ID').then(() => {
+        expect(scanStub).to.have.been.calledOnce;
+      });
+    });
+  });
+
+  describe('#getAvailablePairs()', function () {
+    it('should return filtered pairs', function () {
+      const phoneContext = { context: { communicationMethods: {
+            PHONE: '03030', }}};
+
+      const skypeContext = { context: { communicationMethods: {
+            SKYPE: 'skype', }}};
+
+      const scanStub = sinon.stub(
+        this.sessions.db.table, 'scan'
+      ).returns(Promise.resolve([
+        { id: 'PHONE1', ...phoneContext },
+        { id: 'SKYPE1', ...skypeContext },
+        { id: 'PHONE2', ...phoneContext },
+        { id: 'SKYPE2', ...skypeContext }]
+      ));
+
+      const readStub = sinon.stub(
+        this.sessions.db, 'read'
+      ).returns(Promise.resolve({ ...skypeContext.context }));
+
+      return this.sessions.getAvailablePairs('SESSION_ID').then((items) => {
+        expect(items).to.deep.equal([
+          { id: 'SKYPE1', ...skypeContext },
+          { id: 'SKYPE2', ...skypeContext }])
+      });
     });
   });
 });
