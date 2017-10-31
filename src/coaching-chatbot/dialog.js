@@ -271,13 +271,12 @@ bot
           session.runActions(['rejectAvailablePeer']);
         } else if (session.checkIntent('#YES')) {
           session.runActions(['addPairRequest']);
-          session.runActions(['nextAvailablePeer']);
         } else if (session.checkIntent('#NEXT')) {
           session.runActions(['nextAvailablePeer']);
         } else {
           session.addResult('@UNCLEAR');
         }
-
+        session.runActions(['checkAvailablePeersIndex']);
         return session.prev();
       },
     ], [

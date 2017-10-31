@@ -121,6 +121,7 @@ export function removeSentRequests({ sessionId, context }) {
       return sessions.read(recipientId)
         .then((recipient) => {
           return sessions.write(recipientId, {
+              ...recipient,
               pairRequests: recipient.pairRequests
                 .filter((senderId) => senderId != sessionId),
           });
@@ -196,9 +197,6 @@ export function displayAcceptedPeer({ sessionId, context }) {
 export function nextAvailablePeer({ context }) {
   const availablePeers = context.availablePeers;
   let availablePeersIndex = context.availablePeersIndex + 1;
-  if (availablePeersIndex > availablePeers.length) {
-      availablePeersIndex = 1;
-  }
   availablePeers.push(availablePeers.shift());
   return contextChanges(context)({
       availablePeers: availablePeers,
@@ -208,15 +206,20 @@ export function nextAvailablePeer({ context }) {
 
 export function rejectAvailablePeer({ context }) {
   const rejectedPeers = context.rejectedPeers || [];
-  let availablePeersIndex = context.availablePeersIndex;
   rejectedPeers.push(context.availablePeers[0]);
-  if (availablePeersIndex >= context.availablePeers.length) {
-    availablePeersIndex = 1;
-  }
   return contextChanges(context)({
       rejectedPeers,
       availablePeers: context.availablePeers.slice(1),
-      availablePeersIndex: availablePeersIndex,
+  });
+}
+
+export function checkAvailablePeersIndex({ context }) {
+  let availablePeersIndex = context.availablePeersIndex;
+  if (availablePeersIndex > context.availablePeers.length) {
+    availablePeersIndex = 1;
+  }
+  return contextChanges(context)({
+    availablePeersIndex,
   });
 }
 
@@ -338,7 +341,7 @@ export function addPairRequest({ sessionId, context }) {
       chosenPeer.pairRequests.push(sessionId);
       context.sentRequests = context.sentRequests || [];
       context.sentRequests.push(peerId);
-
+      context.availablePeers = context.availablePeers.slice(1);
       return session.write(peerId, chosenPeer)
           .then(() => {
             return Messenger.send(

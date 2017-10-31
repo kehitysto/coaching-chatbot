@@ -419,7 +419,6 @@ describe('coaching-bot actions', function() {
         context: {
           rejectedPeers: ['TEST1', 'TEST2'],
           availablePeers: [],
-          availablePeersIndex: undefined,
         },
       });
     });
@@ -435,7 +434,6 @@ describe('coaching-bot actions', function() {
         context: {
           rejectedPeers: ['TEST2'],
           availablePeers: [],
-          availablePeersIndex: undefined,
         },
       });
     });
