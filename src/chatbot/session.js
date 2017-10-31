@@ -26,7 +26,7 @@ module.exports = class Session {
    * @param {string} dialogId ID of the new dialog to start
    * @param {boolean} inPlace do not progress dialog on returning
    */
-  beginDialog(dialogId, inPlace=false) {
+  beginDialog(dialogId, inPlace = false) {
     if (dialogId.startsWith('/')) {
       dialogId = dialogId.substr(1);
     }
@@ -122,7 +122,7 @@ module.exports = class Session {
       }
     }
 
-    this._results[this._results.length-1].quickReplies = quickReplies;
+    this._results[this._results.length - 1].quickReplies = quickReplies;
   }
 
   /**
