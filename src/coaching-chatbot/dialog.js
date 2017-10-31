@@ -259,23 +259,24 @@ bot
         if (session.context.availablePeers.length <= 0) {
           return session.resetDialog();
         }
-
+        session.addResult('@LIST_LENGTH');
         session.runActions(['displayAvailablePeer']);
         session.addQuickReplies(
-          Builder.QuickReplies.createArray(['@YES', '@NO', '@STOP_SEARCHING'])
+          Builder.QuickReplies.createArray([
+            '@YES', '@NO', '@NEXT', '@STOP_SEARCHING'])
         );
       },
       (session) => {
         if (session.checkIntent('#NO')) {
           session.runActions(['rejectAvailablePeer']);
-          session.runActions(['nextAvailablePeer']);
         } else if (session.checkIntent('#YES')) {
           session.runActions(['addPairRequest']);
+        } else if (session.checkIntent('#NEXT')) {
           session.runActions(['nextAvailablePeer']);
         } else {
           session.addResult('@UNCLEAR');
         }
-
+        session.runActions(['checkAvailablePeersIndex']);
         return session.prev();
       },
     ], [

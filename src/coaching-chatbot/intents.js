@@ -11,6 +11,10 @@ module.exports = {
         any: /^e[in]?$/i,
     },
 
+    NEXT: {
+        any: /^(?:seuraavat|seuraava|seur)$/i,
+    },
+
     RETURN: {
         any: /^(?:palaa|takaisin|peru|kumoa|poistu)$/i,
     },
@@ -186,4 +190,5 @@ module.exports = {
             '#COMMUNICATION',
         ],
     },
+
 };

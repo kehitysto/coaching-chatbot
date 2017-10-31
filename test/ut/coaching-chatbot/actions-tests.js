@@ -391,19 +391,19 @@ describe('coaching-bot actions', function() {
       });
 
       return expect(ret).to.become({
-        context: { availablePeers: ['TEST1', 'TEST2'] },
+        context: { availablePeers: ['TEST1', 'TEST2'], availablePeersIndex: 1 },
       }).then(() => stubGetAvailablePairs.restore());
     });
   });
 
   describe('#nextAvailablePeer', function() {
-    it('drops the current peer from availablePeers array', function() {
+    it('moves the current peer to the end of nextAvailablePeer array', function() {
       const ret = actions.nextAvailablePeer({
         context: { availablePeers: ['TEST1', 'TEST2'] },
       });
 
       return expect(ret).to.become({
-        context: { availablePeers: ['TEST2'] },
+        context: { availablePeers: ['TEST2', 'TEST1'], availablePeersIndex: NaN },
       });
     });
   });
@@ -420,7 +420,7 @@ describe('coaching-bot actions', function() {
       return expect(ret).to.become({
         context: {
           rejectedPeers: ['TEST1', 'TEST2'],
-          availablePeers: ['TEST2'],
+          availablePeers: [],
         },
       });
     });
@@ -435,7 +435,7 @@ describe('coaching-bot actions', function() {
       return expect(ret).to.become({
         context: {
           rejectedPeers: ['TEST2'],
-          availablePeers: ['TEST2'],
+          availablePeers: [],
         },
       });
     });
