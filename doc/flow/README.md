@@ -22,7 +22,7 @@ Discussions are located in `discussions.json` which has the following syntax:
         ]
     },
     "Another unique scenario description": {
-        ...
+        "...": "Fill as above"
     }
 }
 ```
