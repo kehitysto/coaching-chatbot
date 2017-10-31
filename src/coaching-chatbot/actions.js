@@ -134,6 +134,7 @@ export function removeSentRequests({ sessionId, context }) {
 export function updateAvailablePeers({ sessionId, context }) {
   const sessions = new Sessions();
   const rejectedPeers = context.rejectedPeers || [];
+  const availablePeersIndex = 1;
 
   return sessions.getAvailablePairs(sessionId)
     .then((pairs) => {
@@ -141,6 +142,7 @@ export function updateAvailablePeers({ sessionId, context }) {
         availablePeers: pairs
           .map((entry) => entry.id)
           .filter((entry) => rejectedPeers.indexOf(entry) < 0),
+        availablePeersIndex: availablePeersIndex,
       });
     })
     .catch((err) => {
@@ -192,17 +194,29 @@ export function displayAcceptedPeer({ sessionId, context }) {
 }
 
 export function nextAvailablePeer({ context }) {
+  const availablePeers = context.availablePeers;
+  let availablePeersIndex = context.availablePeersIndex + 1;
+  if (availablePeersIndex > availablePeers.length) {
+      availablePeersIndex = 1;
+  }
+  availablePeers.push(availablePeers.shift());
   return contextChanges(context)({
-      availablePeers: context.availablePeers.slice(1),
+      availablePeers: availablePeers,
+      availablePeersIndex: availablePeersIndex,
   });
 }
 
 export function rejectAvailablePeer({ context }) {
   const rejectedPeers = context.rejectedPeers || [];
+  let availablePeersIndex = context.availablePeersIndex;
   rejectedPeers.push(context.availablePeers[0]);
-
+  if (availablePeersIndex >= context.availablePeers.length) {
+    availablePeersIndex = 1;
+  }
   return contextChanges(context)({
       rejectedPeers,
+      availablePeers: context.availablePeers.slice(1),
+      availablePeersIndex: availablePeersIndex,
   });
 }
 

@@ -17,6 +17,8 @@
   "@YES": "Kyllä",
   "@NO": "Ei",
   "@RETURN": "Palaa",
+  "@NEXT": "Seuraava",
+  "@LIST_LENGTH": "Parinhakija: {availablePeersIndex}/{availablePeers}",
   "@REQUEST_COMMUNICATION_METHOD": "Valitse tapa jolla haluat olla yhteydessä:",
   "@REQUEST_SKYPE_NAME": "Anna Skype-tunnuksesi.",
   "@REQUEST_PHONE_NUMBER": "Anna puhelinnumerosi.",

@@ -41,6 +41,8 @@ function format(template, context) {
       } else if (name === 'communicationMethods') {
         return CommunicationMethodsFormatter
           .createCommunicationMethodslist(context).join('\n');
+      } else if (name === 'availablePeers') {
+        return context.availablePeers.length;
       }
 
       return context[name] != undefined ? context[name] : match;

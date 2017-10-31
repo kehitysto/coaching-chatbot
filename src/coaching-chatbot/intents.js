@@ -190,4 +190,8 @@ module.exports = {
             /^En pääse tapaamiseen$/i,
           ],
     },
+
+    NEXT: {
+        any: /^(?:seuraavat|seuraava|seur)$/i,
+    },
 };
