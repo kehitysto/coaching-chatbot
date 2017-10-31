@@ -9,7 +9,7 @@ describe('Stop searching', () => {
   describe(
     'As a user searching for a pair I want to be able to stop my search for a pair', () => {
       before(function () {
-        setupChatbot(this);
+        setupChatbot(this, 'STOP_SEARCH_TESTS');
         this.userInformation = {
           name: 'Liisa Hakija',
         };
