@@ -59,8 +59,8 @@ function getCommunicationMethods(context) {
 
 function getFilledCommunicationMethods(context) {
   return CommunicationMethods.reduce((list, method) => {
-    return (Object.keys(context.communicationMethods).
-      includes(method.identifier) ?
+    return (Object.keys(context.communicationMethods)
+      .includes(method.identifier) ?
         [...list, { title: method.name, payload: method.identifier }] : list);
   }, []);
 }
