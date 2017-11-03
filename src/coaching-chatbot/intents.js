@@ -47,6 +47,18 @@ module.exports = {
         any: /^(?:aloita alusta|nollaa|resetoi)$/i,
     },
 
+    EDIT: {
+        any: /^lisää$/i,
+    },
+
+    DELETE: {
+        each: /^poista$/i,
+    },
+
+    TO_PROFILE: {
+        each: /^profiiliin$/i,
+    },
+
     GIVE_FEEDBACK: {
         any: /^(?:Anna palautetta|kommentoi|arvostele)$/i,
     },
@@ -71,7 +83,7 @@ module.exports = {
         any: /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/i,
     },
 
-    COMMUNICATION: {
+    EDIT_COMMUNICATION_METHODS: {
         any: /^yhteystie(?:toja|dot|to)$/i,
     },
 
@@ -183,12 +195,4 @@ module.exports = {
             '#MEETING',
           ],
     },
-
-    EDIT_COMMUNICATION_METHODS: {
-        each: [
-            '#SET_OR_CHANGE',
-            '#COMMUNICATION',
-        ],
-    },
-
 };

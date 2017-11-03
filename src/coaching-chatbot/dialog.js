@@ -55,7 +55,7 @@ bot
         session.beginDialog('/set_bio');
       },
       (session) => {
-        session.beginDialog('communication_methods');
+        session.beginDialog('/communication_methods');
       },
       (session) => {
         session.switchDialog('/profile');
@@ -98,17 +98,18 @@ bot
         session.switchDialog('/add_communication_method');
       } else {
         session.addResult('@CONFIRM_COMMUNICATION_METHODS');
-        session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS', [
-          Builder.QuickReplies.create('@YES'),
-          Builder.QuickReplies.create('@NO'),
-        ]);
+        session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS',
+          Builder.QuickReplies.createArray([
+            '@EDIT', '@DELETE', '@TO_PROFILE']));
       }
     },
     (session) => {
-      if (session.checkIntent('#YES')) {
+      if (session.checkIntent('#EDIT')) {
         session.switchDialog('/add_communication_method');
-      } else if (session.checkIntent('#NO')) {
-        session.endDialog();
+      } else if (session.checkIntent('#DELETE')) {
+        session.switchDialog('/delete_communication_method');
+      } else if (session.checkIntent('#TO_PROFILE')) {
+        session.switchDialog('/profile');
       } else {
         session.addResult('@UNCLEAR');
         session.prev();
@@ -120,7 +121,7 @@ bot
       (session) => {
         session.addResult('@REQUEST_COMMUNICATION_METHOD',
           CommunicationMethodsFormatter
-              .getCommunicationMethods({})
+            .getCommunicationMethods({})
         );
       },
       (session) => {
@@ -134,6 +135,28 @@ bot
       (session) => {
         session.runActions(['addCommunicationInfo']);
         session.switchDialog('/communication_methods');
+      },
+  ])
+  .dialog(
+    '/delete_communication_method', [
+      (session) => {
+        session.addResult('@REQUEST_COMMUNICATION_METHOD_DELETE', [
+            ...CommunicationMethodsFormatter
+              .getFilledCommunicationMethods(session.context),
+            Builder.QuickReplies.create('@RETURN'),
+          ]
+        );
+      },
+      (session) => {
+        if (session.checkIntent('#COMMUNICATION_METHODS')) {
+          session.runActions(['deleteCommunicationMethod']);
+          session.switchDialog('/communication_methods');
+        } else if (session.checkIntent('#RETURN')) {
+          session.switchDialog('/communication_methods');
+        } else {
+          session.addResult('@UNCLEAR');
+          session.resetDialog();
+        }
       },
   ])
   .dialog(

@@ -5,6 +5,7 @@ const CommunicationMethodsFormatter = {
   getCommunicationMethods,
   getCommunicationMethodByInput,
   getCommunicationMethodByIdentifier,
+  getFilledCommunicationMethods,
   createCommunicationMethodslist,
 };
 
@@ -53,5 +54,13 @@ function getCommunicationMethods(context) {
       });
     }
     return l;
+  }, []);
+}
+
+function getFilledCommunicationMethods(context) {
+  return CommunicationMethods.reduce((list, method) => {
+    return (Object.keys(context.communicationMethods).
+      includes(method.identifier) ?
+        [...list, { title: method.name, payload: method.identifier }] : list);
   }, []);
 }
