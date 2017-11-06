@@ -12,10 +12,8 @@ deploy:
   skip-cleanup: true
   on:
     branch: dev
-
-deploy:
   provider: script
-  script: ./scripts/deploy.sh staging
+  script: ./scripts/deploy.sh production
   skip-cleanup: true
   on:
     branch: master
