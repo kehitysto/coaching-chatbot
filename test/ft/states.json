@@ -108,5 +108,12 @@
         "searching": true
       }
     }
+  },
+  "MEETING_TESTS": {
+    "sessions": {
+      "MEETING_TESTER": {
+        "state": "/?0/accepted_pair_profile?0"
+      }
+    }
   }
 }
