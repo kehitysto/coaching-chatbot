@@ -1,12 +1,13 @@
 #!/bin/bash
 STAGE=$1
 
+if [ $TRAVIS_BRANCH = "master" ]
+then
+  STAGE=production
+  export FACEBOOK_PAGE_ACCESS_TOKEN=$PRODUCTION_PAGE_ACCESS_TOKEN
+fi
+
 npm run write-env
 npm i -g serverless
 
-if [ $TRAVIS_BRANCH = "feature/add-production-deployment" ]
-then
-  echo 'JEEEEEI'
-  if [ -z ${PRODUCTION_PAGE_ACCESS_TOKEN+x} ]; then echo "var is unset"; else echo "var is set to '$PRODUCTION_PAGE_ACCESS_TOKEN'"; fi
-fi
 serverless deploy --stage=$STAGE
