@@ -23,6 +23,7 @@ declare class Context {
     weekDay: string;
     time: string;
     skipMeeting: boolean;
+    remindersEnabled: boolean;
 }
 
 declare class Session {

@@ -329,4 +329,8 @@ module.exports = class Session {
   isRatingGood() {
     return [3, 4].includes(this.context.rating);
   }
+
+  areRemindersEnabled() {
+    return this.context.remindersEnabled;
+  }
 };
