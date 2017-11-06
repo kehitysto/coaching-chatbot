@@ -195,4 +195,18 @@ module.exports = {
             '#MEETING',
           ],
     },
+
+    EDIT_COMMUNICATION_METHODS: {
+        each: [
+            '#SET_OR_CHANGE',
+            '#COMMUNICATION',
+        ],
+    },
+
+    TOGGLE_REMINDERS: {
+        any: [
+            /^Estä muistutukset$/i,
+            /^Salli muistutukset$/i,
+        ],
+    },
 };

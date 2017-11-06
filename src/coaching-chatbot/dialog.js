@@ -385,10 +385,17 @@ bot
           ]);
         } else {
           session.addResult('@CONFIRM_DATE');
-          session.addQuickReplies([
-            Builder.QuickReplies.create('@SET_DATE'),
-            Builder.QuickReplies.create('@SKIP_MEETING'),
-          ]);
+          if (session.areRemindersEnabled()) {
+            session.addQuickReplies(
+              Builder.QuickReplies.createArray([
+                '@SET_DATE', '@SKIP_MEETING', '@DISABLE_REMINDERS'])
+            );
+          } else {
+            session.addQuickReplies(
+              Builder.QuickReplies.createArray([
+                '@SET_DATE', '@SKIP_MEETING', '@ENABLE_REMINDERS'])
+            );
+          }
         }
       },
     ], [
@@ -399,6 +406,9 @@ bot
         session.runActions(['setSkipMeeting']);
         session.addResult('@CONFIRM_SKIPPED_MEETING');
         session.resetDialog();
+      }],
+      ['#TOGGLE_REMINDERS', (session) => {
+        session.beginDialog('/toggle_reminders');
       }],
       ['#TEST', (session) => {
           session.runActions(['testReminderAndFeedback']);
@@ -412,6 +422,19 @@ bot
       ['#INFO', (session) => {
         session.addResult('@INFO');
       }],
+    ])
+  .dialog(
+    '/toggle_reminders', [
+      (session) => {
+        if (session.areRemindersEnabled()) {
+          session.runActions(['toggleReminders']);
+          session.addResult('@CONFIRM_REMINDERS_DISABLED');
+        } else {
+          session.runActions(['toggleReminders']);
+          session.addResult('@CONFIRM_REMINDERS_ENABLED');
+        }
+        session.endDialog();
+      },
     ])
   .dialog(
     '/set_date', [
