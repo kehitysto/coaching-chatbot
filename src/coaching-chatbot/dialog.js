@@ -306,10 +306,6 @@ bot
         session.resetDialog();
         session.switchDialog('/profile');
       }],
-      ['#RETURN', (session) => {
-        session.resetDialog();
-        session.switchDialog('/profile');
-      }],
     ])
   .dialog(
       '/list_requests', [
