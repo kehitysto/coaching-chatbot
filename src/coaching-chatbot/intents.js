@@ -19,6 +19,14 @@ module.exports = {
         any: /^(?:palaa|takaisin|peru|kumoa|poistu)$/i,
     },
 
+    LIST_AS_SEARCHING: {
+        any: /^(?:listaudu|listaa)$/i,
+    },
+
+    PROFILE: {
+        any: /^(?:profiiliin|profiili|prof)$/i,
+    },
+
     SET: {
         any: /^(?:lisää|aseta)\s/i,
     },
@@ -193,13 +201,6 @@ module.exports = {
         each: [
             '#SET_OR_CHANGE',
             '#MEETING',
-          ],
-    },
-
-    EDIT_COMMUNICATION_METHODS: {
-        each: [
-            '#SET_OR_CHANGE',
-            '#COMMUNICATION',
         ],
     },
 
