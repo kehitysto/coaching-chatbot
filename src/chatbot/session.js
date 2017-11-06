@@ -310,9 +310,17 @@ module.exports = class Session {
     return state;
   }
 
+  getAvailablePeersCount() {
+    return this.context.availablePeers.length;
+  }
+
   getCommunicationMethodsCount() {
     let m = this.context.communicationMethods;
     return m === undefined ? 0 : Object.keys(m).length;
+  }
+
+  getPairRequestCount() {
+    return this.context.pairRequests ? this.context.pairRequests.length : 0;
   }
 
   allCommunicationMethodsFilled() {
@@ -328,6 +336,10 @@ module.exports = class Session {
 
   isRatingGood() {
     return [3, 4].includes(this.context.rating);
+  }
+
+  isSearching() {
+    return this.context.searching;
   }
 
   areRemindersEnabled() {
