@@ -132,7 +132,7 @@ export function removeSentRequests({ sessionId, context }) {
           return sessions.write(recipientId, {
             ...recipient,
             pairRequests: recipient.pairRequests
-              .filter((senderId) => senderId != sessionId),
+              .filter((senderId) => senderId !== sessionId),
           });
         });
     }))
@@ -245,47 +245,63 @@ export function rejectRequest({ context }) {
 export function acceptRequest({ sessionId, context }) {
   let pairs = new Pairs();
   let sessions = new Sessions();
+  context.pairRequests = context.pairRequests || [];
 
   const chosenPeerId = context.pairRequests[0];
-  return pairs.createPair(sessionId, chosenPeerId)
-      .then(() => {
-        return sessions.read(chosenPeerId)
-            .then((chosenPeer) => {
-              return removeSentRequests({
-                sessionId: chosenPeerId, context: chosenPeer });
-            })
-            .then((chosenPeer) => {
-              return markUserAsNotSearching(chosenPeer);
-            }
-          )
-            .then((chosenPeer) => {
-              const peer = chosenPeer.context;
-              peer.state = '/?0/profile?0/accepted_pair_information?0';
-              return sessions.write(chosenPeerId, peer);
-            }
-          );
-        })
-      .then(() => {
-        const bot = new Chatbot(dialog, sessions);
 
-        return bot.receive(chosenPeerId, '').then((out) => {
-          // run the chatbot for the chosen peer
-          let promises = [];
-          for (let r of out) {
-            promises.push(
-              Messenger.send(chosenPeerId, r.message, r.quickReplies)
+  return sessions.read(sessionId).then((session) => {
+    if (!session.pairRequests || !session.pairRequests.includes(chosenPeerId)) {
+      return Promise.resolve({
+        result: '@PEER_NO_LONGER_AVAILABLE',
+      });
+    }
+
+    return pairs.createPair(sessionId, chosenPeerId)
+        .then(() => {
+          return sessions.read(chosenPeerId)
+              .then((chosenPeer) => {
+                return removeSentRequests({
+                  sessionId: chosenPeerId, context: chosenPeer });
+              })
+              .then((chosenPeer) => {
+                return markUserAsNotSearching(chosenPeer);
+              }
+            )
+              .then((chosenPeer) => {
+                const peer = chosenPeer.context;
+                peer.state = '/?0/profile?0/accepted_pair_information?0';
+                peer.hasPair = true;
+                return sessions.write(chosenPeerId, peer);
+              }
             );
-          }
-          return Promise.all(promises);
-        });
-      })
-      .then(() => removeSentRequests({ sessionId, context }))
-      .then(() => markUserAsNotSearching({ context }));
+        })
+        .then(() => {
+          const bot = new Chatbot(dialog, sessions);
+
+          return bot.receive(chosenPeerId, '').then((out) => {
+            // run the chatbot for the chosen peer
+            let promises = [];
+            for (let r of out) {
+              promises.push(
+                Messenger.send(chosenPeerId, r.message, r.quickReplies)
+              );
+            }
+            return Promise.all(promises);
+          });
+        })
+        .then(() => removeSentRequests({ sessionId, context }))
+        .then(() => markUserAsNotSearching({ context }))
+        .then(({ context }) => contextChanges(context)({ hasPair: true }));
+  });
 }
 
 export function breakPair({ sessionId, context }) {
   let pairs = new Pairs();
   let sessions = new Sessions();
+
+  if (context) {
+    delete context.hasPair;
+  }
 
   return pairs.read(sessionId)
       .then((pairList) => {
@@ -297,6 +313,10 @@ export function breakPair({ sessionId, context }) {
         return pairs.breakPair(sessionId, pairId)
             .then(() => sessions.read(pairId))
             .then((context) => resetMeeting({ context }))
+            .then((context) => {
+              delete context.hasPair;
+              return context;
+            })
             .then((context) => sessions.write(
               pairId,
               {
@@ -367,6 +387,7 @@ export function addPairRequest({ sessionId, context }) {
           })
           .then(() => {
             return {
+              context,
               result: '@CONFIRM_NEW_PEER_ASK',
             };
           });
