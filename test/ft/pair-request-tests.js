@@ -19,9 +19,14 @@ describe('Pair request tests', function() {
             .to.eventually.become([
               buildResponse('@CONFIRM_NEW_PEER_ASK'),
               buildResponse('@NO_PAIRS_AVAILABLE', [{
+                  'title': 'Profiiliin',
+                  'payload': '@TO_PROFILE',
+                },
+                {
                 'title': 'Lopeta haku',
                 'payload': '@STOP_SEARCHING',
-              }]),
+              }
+            ]),
             ])
             .then(() => expect(this.sessions.read('PAIR_REQUEST_TESTER_PAIR'))
                 .to.eventually.include.keys({ 'pairRequests': [SESSION] }));

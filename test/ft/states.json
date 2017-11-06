@@ -70,7 +70,7 @@
         "communicationMethods": {
           "SKYPE": "NICKNAME"
         },
-        "state": "/?0/profile?0/confirm_permission?1"
+        "state": "/?0/profile?0"
       },
       "SEARCHING#1": {
         "name": "Pekka",
@@ -106,6 +106,13 @@
       "PAIR_REQUEST_TESTER_PAIR": {
         "name": "Some Pair",
         "searching": true
+      }
+    }
+  },
+  "MEETING_TESTS": {
+    "sessions": {
+      "MEETING_TESTER": {
+        "state": "/?0/accepted_pair_profile?0"
       }
     }
   }
