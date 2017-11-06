@@ -12,6 +12,7 @@ deploy:
   skip-cleanup: true
   on:
     branch: dev
+    branch: master
 
 cache:
   directories:
