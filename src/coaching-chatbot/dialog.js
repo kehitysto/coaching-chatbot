@@ -197,6 +197,14 @@ bot
       ['#INFO', (session) => {
         session.addResult('@INFO');
       }],
+      ['#STOP_SEARCHING', (session) => {
+        session.resetDialog();
+        session.beginDialog('/stop_searching', true);
+      }],
+      ['#SHOW_PAIR_REQUESTS', (session) => {
+        session.resetDialog();
+        session.beginDialog('/list_requests', true);
+      }],
       ['#OPTIONAL_VALUE', (session) => {
         session.addResult('@UNCLEAR');
       }],
