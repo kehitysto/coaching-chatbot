@@ -191,4 +191,11 @@ module.exports = {
         ],
     },
 
+    TOGGLE_REMINDERS: {
+        any: [
+            /^Estä muistutukset$/i,
+            /^Salli muistutukset$/i,
+        ],
+    },
+
 };
