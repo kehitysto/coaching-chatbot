@@ -193,13 +193,6 @@ module.exports = {
         each: [
             '#SET_OR_CHANGE',
             '#MEETING',
-          ],
-    },
-
-    EDIT_COMMUNICATION_METHODS: {
-        each: [
-            '#SET_OR_CHANGE',
-            '#COMMUNICATION',
         ],
     },
 
