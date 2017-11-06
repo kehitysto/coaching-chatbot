@@ -333,4 +333,8 @@ module.exports = class Session {
   areRemindersEnabled() {
     return this.context.remindersEnabled;
   }
+
+  hasPair() {
+    return this.context.hasPair;
+  }
 };

@@ -349,7 +349,11 @@ bot
             session.runActions(['rejectRequest']);
           } else if (session.checkIntent('#YES')) {
             session.runActions(['acceptRequest']);
-            session.switchDialog('/accepted_pair_information');
+            if (session.hasPair()) {
+              session.switchDialog('/accepted_pair_information');
+            } else {
+              return session.endDialog();
+            }
           } else if (session.checkIntent('#RETURN')) {
             return session.endDialog();
           } else {
@@ -514,15 +518,15 @@ bot
   .dialog(
       '/stop_searching', [
         (session) => {
-          session.addResult('@CONFIRM_STOP_SEARCHING', [Builder.QuickReplies
-            .create(
-            '@YES'),
-          Builder.QuickReplies.create('@NO'),
+          session.addResult('@CONFIRM_STOP_SEARCHING', [
+            Builder.QuickReplies.create('@YES'),
+            Builder.QuickReplies.create('@NO'),
           ]);
         },
         (session) => {
           if (session.checkIntent('#YES')) {
-            session.runActions(['markUserAsNotSearching']);
+            session.runActions(['removeSentRequests',
+              'markUserAsNotSearching']);
             session.addResult('@STOPPED_SEARCHING');
             session.endDialog();
           } else if (session.checkIntent('#NO')) {

@@ -576,6 +576,7 @@ describe('coaching-bot actions', function() {
           communicationMethods: {
             SKYPE: 'pertti_42',
           },
+          pairRequests: [1],
         };
 
         stubSessionsRead.returns(Promise.resolve(
@@ -588,7 +589,8 @@ describe('coaching-bot actions', function() {
             pairRequests: [],
             rejectedPeers: [],
             searching: false,
-            sentRequests: []
+            sentRequests: [],
+            hasPair: true,
           }
         };
 
