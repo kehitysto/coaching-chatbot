@@ -207,7 +207,7 @@ bot
       }],
       ['#OPTIONAL_VALUE', (session) => {
         session.addResult('@UNCLEAR');
-      }]
+      }],
     ])
   .dialog(
     '/find_pair', [
