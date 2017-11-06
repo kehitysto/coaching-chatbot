@@ -438,6 +438,7 @@ export function setWeekday({ context, input }) {
 export function setTime({ context, input }) {
   return contextChanges(context)({
       time: input,
+      remindersEnabled: true,
   });
 }
 
@@ -447,7 +448,8 @@ export function testReminderAndFeedback({ context }) {
     .then((sessionsFromDb) => {
       const promises = [];
       for (let i = 0; i < sessionsFromDb.length; i++) {
-        if (sessionsFromDb[i].context.skipMeeting) {
+        if (sessionsFromDb[i].context.skipMeeting ||
+          !sessionsFromDb[i].context.remindersEnabled) {
           continue;
         }
         promises.push(
@@ -532,5 +534,11 @@ export function setSkipMeeting({ context, sessionId }) {
 export function resetSkipMeeting({ context }) {
   return contextChanges(context)({
       skipMeeting: false,
+  });
+}
+
+export function toggleReminders({ context }) {
+  return contextChanges(context)({
+      remindersEnabled: !context.remindersEnabled,
   });
 }

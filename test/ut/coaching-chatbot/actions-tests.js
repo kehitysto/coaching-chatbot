@@ -921,6 +921,7 @@ describe('coaching-bot actions', function() {
 
       const expected = {
         context: {
+          remindersEnabled: true,
           time: '10:23',
         }
       }
