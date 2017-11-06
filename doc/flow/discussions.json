@@ -32,13 +32,36 @@
       "Kyllä"
     ]
   },
-  "Kaapo hyväksyy pyynnön": {
+  "Kaapo hyväksyy pyynnön ja asettaa tapaamisen ajankohdan": {
     "player": "Kaapo",
     "session": "Session1",
     "messages": [
-      "Tarkista",
       "Näytä pyynnöt",
-      "Kyllä"
+      "Kyllä",
+      "Aseta tapaaminen",
+      "KE",
+      "13:55"
+    ]
+  },
+  "Katariina saa tietää Kaapon hyväksyneen pyynnön": {
+    "player": "Katariina",
+    "session": "Session2",
+    "messages": [
+      "Aseta tapaaminen"
+    ]
+  },
+  "Kaapo ei halua enää olla Katariinan pari": {
+    "player": "Kaapo",
+    "session": "Session1",
+    "messages": [
+      "Riko pari"
+    ]
+  },
+  "Katariina saa tietää Kaapon rikkoneen parin": {
+    "player": "Katariina",
+    "session": "Session2",
+    "messages": [
+      "Mitä nyt?"
     ]
   }
 }

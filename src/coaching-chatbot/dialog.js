@@ -55,7 +55,7 @@ bot
         session.beginDialog('/set_bio');
       },
       (session) => {
-        session.beginDialog('communication_methods');
+        session.beginDialog('/communication_methods');
       },
       (session) => {
         session.switchDialog('/profile');
@@ -98,17 +98,18 @@ bot
         session.switchDialog('/add_communication_method');
       } else {
         session.addResult('@CONFIRM_COMMUNICATION_METHODS');
-        session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS', [
-          Builder.QuickReplies.create('@YES'),
-          Builder.QuickReplies.create('@NO'),
-        ]);
+        session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS',
+          Builder.QuickReplies.createArray([
+            '@EDIT', '@DELETE', '@TO_PROFILE']));
       }
     },
     (session) => {
-      if (session.checkIntent('#YES')) {
+      if (session.checkIntent('#EDIT')) {
         session.switchDialog('/add_communication_method');
-      } else if (session.checkIntent('#NO')) {
-        session.endDialog();
+      } else if (session.checkIntent('#DELETE')) {
+        session.switchDialog('/delete_communication_method');
+      } else if (session.checkIntent('#TO_PROFILE')) {
+        session.switchDialog('/profile');
       } else {
         session.addResult('@UNCLEAR');
         session.prev();
@@ -120,7 +121,7 @@ bot
       (session) => {
         session.addResult('@REQUEST_COMMUNICATION_METHOD',
           CommunicationMethodsFormatter
-              .getCommunicationMethods({})
+            .getCommunicationMethods({})
         );
       },
       (session) => {
@@ -134,6 +135,28 @@ bot
       (session) => {
         session.runActions(['addCommunicationInfo']);
         session.switchDialog('/communication_methods');
+      },
+  ])
+  .dialog(
+    '/delete_communication_method', [
+      (session) => {
+        session.addResult('@REQUEST_COMMUNICATION_METHOD_DELETE', [
+            ...CommunicationMethodsFormatter
+              .getFilledCommunicationMethods(session.context),
+            Builder.QuickReplies.create('@RETURN'),
+          ]
+        );
+      },
+      (session) => {
+        if (session.checkIntent('#COMMUNICATION_METHODS')) {
+          session.runActions(['deleteCommunicationMethod']);
+          session.switchDialog('/communication_methods');
+        } else if (session.checkIntent('#RETURN')) {
+          session.switchDialog('/communication_methods');
+        } else {
+          session.addResult('@UNCLEAR');
+          session.resetDialog();
+        }
       },
   ])
   .dialog(
@@ -222,13 +245,13 @@ bot
           session.context.availablePeers.length <= 0) {
           if (session.context.searching) {
             return session.addResult('@NO_PAIRS_AVAILABLE', [
-              Builder.QuickReplies.create('@PROFILE'),
+              Builder.QuickReplies.create('@TO_PROFILE'),
               Builder.QuickReplies.create('@STOP_SEARCHING'),
             ]);
           } else {
             return session.addResult('@NO_PAIRS_AVAILABLE', [
               Builder.QuickReplies.create('@LIST_AS_SEARCHING'),
-              Builder.QuickReplies.create('@PROFILE'),
+              Builder.QuickReplies.create('@TO_PROFILE'),
             ]);
           }
         }
@@ -358,10 +381,17 @@ bot
           ]);
         } else {
           session.addResult('@CONFIRM_DATE');
-          session.addQuickReplies([
-            Builder.QuickReplies.create('@SET_DATE'),
-            Builder.QuickReplies.create('@SKIP_MEETING'),
-          ]);
+          if (session.areRemindersEnabled()) {
+            session.addQuickReplies(
+              Builder.QuickReplies.createArray([
+                '@SET_DATE', '@SKIP_MEETING', '@DISABLE_REMINDERS'])
+            );
+          } else {
+            session.addQuickReplies(
+              Builder.QuickReplies.createArray([
+                '@SET_DATE', '@SKIP_MEETING', '@ENABLE_REMINDERS'])
+            );
+          }
         }
       },
     ], [
@@ -372,6 +402,9 @@ bot
         session.runActions(['setSkipMeeting']);
         session.addResult('@CONFIRM_SKIPPED_MEETING');
         session.resetDialog();
+      }],
+      ['#TOGGLE_REMINDERS', (session) => {
+        session.beginDialog('/toggle_reminders');
       }],
       ['#TEST', (session) => {
           session.runActions(['testReminderAndFeedback']);
@@ -385,6 +418,19 @@ bot
       ['#INFO', (session) => {
         session.addResult('@INFO');
       }],
+    ])
+  .dialog(
+    '/toggle_reminders', [
+      (session) => {
+        if (session.areRemindersEnabled()) {
+          session.runActions(['toggleReminders']);
+          session.addResult('@CONFIRM_REMINDERS_DISABLED');
+        } else {
+          session.runActions(['toggleReminders']);
+          session.addResult('@CONFIRM_REMINDERS_ENABLED');
+        }
+        session.endDialog();
+      },
     ])
   .dialog(
     '/set_date', [

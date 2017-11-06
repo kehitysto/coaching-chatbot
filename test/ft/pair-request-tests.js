@@ -19,8 +19,8 @@ describe('Pair request tests', function() {
             .to.eventually.become([
               buildResponse('@CONFIRM_NEW_PEER_ASK'),
               buildResponse('@NO_PAIRS_AVAILABLE', [{
-                  'title': 'Profiili',
-                  'payload': '@PROFILE',
+                  'title': 'Profiiliin',
+                  'payload': '@TO_PROFILE',
                 },
                 {
                 'title': 'Lopeta haku',
