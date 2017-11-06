@@ -70,8 +70,8 @@
   "@SKIP_MEETING": "En pääse tapaamiseen",
   "@SKIPPED_MEETING_MESSAGE": "Parisi on ilmoittanut, että ei pääse seuraavaan tapaamiseen.",
   "@CONFIRM_SKIPPED_MEETING": "Parille on lähetetty ilmoitus, että et pääse tapaamiseen.",
-  "@DISABLE_REMINDERS": "Estä muistukset",
-  "@ENABLE_REMINDERS": "Salli muistukset",
+  "@DISABLE_REMINDERS": "Estä muistutukset",
+  "@ENABLE_REMINDERS": "Salli muistutukset",
   "@CONFIRM_REMINDERS_ENABLED": "Muistutukset on sallittu.",
   "@CONFIRM_REMINDERS_DISABLED": "Muistutukset on estetty."
 }

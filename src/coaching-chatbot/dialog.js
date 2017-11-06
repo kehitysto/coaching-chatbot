@@ -29,10 +29,8 @@ bot
   .dialog(
     '/', [
       (session) => {
-        session.addResult('@GREETING', [
-          Builder.QuickReplies.create('@YES'),
-          Builder.QuickReplies.create('@NO'),
-        ]);
+        session.addResult('@GREETING',
+          Builder.QuickReplies.createArray(['@YES', '@NO']));
       },
       (session) => {
         if (session.checkIntent('#YES')) {
@@ -163,7 +161,7 @@ bot
     '/profile', [
       (session) => {
         session.runActions(['updateProfile']);
-        if (session.context.searching) {
+        if (session.isSearching()) {
           session.addResult('@DISPLAY_PROFILE_SEARCHING',
             PersonalInformationFormatter
               .getPersonalInformationbuttons(session.context));
@@ -207,10 +205,8 @@ bot
     '/find_pair', [
       (session) => {
         if (session.getCommunicationMethodsCount() === 0) {
-          session.addResult('@NO_METHODS_ADDED', [
-            Builder.QuickReplies.create('@YES'),
-            Builder.QuickReplies.create('@NO'),
-          ]);
+          session.addResult('@NO_METHODS_ADDED',
+            Builder.QuickReplies.createArray(['@YES', '@NO']));
         } else {
           session.switchDialog('/confirm_permission');
         }
@@ -234,15 +230,14 @@ bot
         session.next();
       },
       (session) => {
-        if (session.context.pairRequests &&
-            session.context.pairRequests.length > 0) {
+        if (session.getPairRequestCount() > 0) {
           session.addResult('@TELL_USER_HAS_NEW_REQUEST', [
             Builder.QuickReplies.create('@SHOW_REQUESTS'),
           ]);
         }
         if (!session.context.availablePeers ||
           session.context.availablePeers.length <= 0) {
-          if (session.context.searching) {
+          if (session.isSearching()) {
             return session.addResult('@NO_PAIRS_AVAILABLE', [
               Builder.QuickReplies.create('@TO_PROFILE'),
               Builder.QuickReplies.create('@STOP_SEARCHING'),
@@ -259,7 +254,7 @@ bot
         session.next();
       },
       (session) => {
-        if (session.context.availablePeers.length <= 0) {
+        if (session.getAvailablePeersCount() <= 0) {
           return session.resetDialog();
         }
         session.addResult('@LIST_LENGTH');
@@ -310,22 +305,20 @@ bot
   .dialog(
       '/list_requests', [
         (session) => {
-          if (!session.context.searching) {
+          if (!session.isSearching()) {
             return session.endDialog();
           }
           session.next();
         },
         (session) => {
-          if (!session.context.pairRequests ||
-              session.context.pairRequests.length <= 0) {
+          if (session.getPairRequestCount() <= 0) {
             return session.addResult('@NO_REQUESTS_AVAILABLE');
           }
 
           session.next();
         },
         (session) => {
-          if (!session.context.pairRequests ||
-              session.context.pairRequests.length <= 0) {
+          if (session.getPairRequestCount() <= 0) {
             return session.endDialog();
           }
 
@@ -528,10 +521,8 @@ bot
   .dialog(
     '/reset', [
       (session) => {
-        session.addResult('@RESET_CONFIRMATION', [
-          Builder.QuickReplies.create('@YES'),
-          Builder.QuickReplies.create('@NO'),
-        ]);
+        session.addResult('@RESET_CONFIRMATION',
+          Builder.QuickReplies.createArray(['@YES', '@NO']));
       },
       (session) => {
         if (session.checkIntent('#YES')) {
