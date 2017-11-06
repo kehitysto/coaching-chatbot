@@ -11,9 +11,14 @@ deploy:
   script: ./scripts/deploy.sh staging
   skip-cleanup: true
   on:
-    branches:
-      - dev
-      - master
+    branch: dev
+
+deploy:
+  provider: script
+  script: ./scripts/deploy.sh staging
+  skip-cleanup: true
+  on:
+    branch: master
 
 cache:
   directories:
