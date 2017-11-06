@@ -191,7 +191,6 @@ bot
         }
       }],
       ['#FIND_PAIR', (session) => {
-        session.prev();
         session.switchDialog('/searching');
       }],
       ['#EDIT_COMMUNICATION_METHODS', (session) => {
