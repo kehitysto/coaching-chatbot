@@ -92,6 +92,15 @@ export function addCommunicationInfo({ context, input }) {
   return Promise.reject(new Error('AddCommunicationInfo failed'));
 }
 
+export function deleteCommunicationMethod({ context, input }) {
+  const method = CommunicationMethodsFormatter
+    .getCommunicationMethodByInput(input).identifier;
+
+  delete context.communicationMethods[method];
+
+  return contextChanges(context)();
+}
+
 export function reset() {
   return contextChanges()();
 }

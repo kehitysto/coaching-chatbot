@@ -108,7 +108,7 @@ describe('Formatter service', function() {
           },
           {
           payload: "EDIT_COMMUNICATION_METHODS",
-          title: "Muokkaa yhteystietoja"
+          title: "Yhteystiedot"
           },
         ];
 
