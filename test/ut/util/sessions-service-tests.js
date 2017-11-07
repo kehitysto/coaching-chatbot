@@ -1,6 +1,7 @@
 import * as sinon from 'sinon';
 
 import * as AWS from 'aws-sdk';
+import * as strings from '../../../src/coaching-chatbot/strings.json';
 import * as Sessions from '../../../src/util/sessions-service';
 import * as DynamoDBProvider from '../../../src/util/sessions-dynamodb-provider';
 import * as InMemoryProvider from '../../../src/util/sessions-inmemory-provider';
@@ -196,6 +197,29 @@ describe('Sessions service', function() {
             'id1': context1,
             'id2': context2,
           });
+        });
+      });
+    });
+  });
+
+  describe('#readAllWithReminders', function() {
+    it('should return users with reminders', function() {
+      const context1 = {
+        name: 'Kaapo',
+        remindersEnabled: true,
+        weekDay: strings['@WEEKDAYS'][new Date().getDay() % 7].substr(0, 2)
+      };
+      const context2 = {
+        name: 'Katriina'
+      }
+      const sessions = new Sessions();
+      sessions.db = new InMemoryProvider();
+      return sessions.write('id1', context1).then(function() {
+        return sessions.write('id2', context2).then(function() {
+          return expect(sessions.readAllWithReminders()).to.eventually.become([{
+            'Id': 'id1',
+            'context': context1,
+          }]);
         });
       });
     });
