@@ -357,6 +357,7 @@ bot
           if (session.hasPair()) {
             session.switchDialog('/accepted_pair_information');
           } else {
+            session.runActions(['updateAvailablePeers']);
             session.endDialog();
           }
         },
