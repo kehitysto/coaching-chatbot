@@ -385,7 +385,7 @@ describe('coaching-bot actions', function() {
         ])
       );
 
-      const ret = actions.updateAvailablePeers({
+      const ret = actions.getAvailablePeers({
         sessionId: TEST_SESSION,
         context: {},
       });
