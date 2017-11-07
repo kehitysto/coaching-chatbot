@@ -390,13 +390,13 @@ bot
           if (session.areRemindersEnabled()) {
             session.addQuickReplies(
               Builder.QuickReplies.createArray([
-                '@SET_DATE', '@SKIP_MEETING',
+                '@CHANGE_DATE', '@SKIP_MEETING',
                 '@DISABLE_REMINDERS', '@SHOW_PAIR'])
             );
           } else {
             session.addQuickReplies(
               Builder.QuickReplies.createArray([
-                '@SET_DATE', '@SKIP_MEETING',
+                '@CHANGE_DATE', '@SKIP_MEETING',
                 '@ENABLE_REMINDERS', '@SHOW_PAIR'])
             );
           }

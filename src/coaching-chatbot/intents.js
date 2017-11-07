@@ -36,7 +36,7 @@ module.exports = {
     },
 
     FIND: {
-        any: /^(?:etsi|hae)\s/i,
+        any: /^(?:etsi|hae|selaa)\s/i,
     },
 
     SHOW: {
@@ -104,13 +104,17 @@ module.exports = {
     },
 
     PAIR: {
-        each: /^paria?$/i,
+        any: [
+            /^(?:paria?)$/i,
+            /^(parin)?hakijoita$/i,
+        ],
     },
 
     MEETING: {
         any: [
             /^tapaami(?:nen|sta)$/i,
             /^aika(?:a)$/i,
+            /^päivä(?:ä)$/i,
         ],
     },
 
@@ -138,7 +142,7 @@ module.exports = {
     },
 
     SKIP_MEETING: {
-        each: /^En pääse tapaamiseen$/i,
+        each: /^Ohita tämä viikko$/i,
     },
 
     OPTIONAL_VALUE: {
