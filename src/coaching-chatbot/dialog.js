@@ -316,12 +316,6 @@ bot
   .dialog(
       '/list_requests', [
         (session) => {
-          if (!session.isSearching()) {
-            return session.endDialog();
-          }
-          session.next();
-        },
-        (session) => {
           if (session.getPairRequestCount() <= 0) {
             return session.addResult('@NO_REQUESTS_AVAILABLE');
           }
