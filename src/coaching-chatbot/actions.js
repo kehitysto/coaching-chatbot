@@ -321,7 +321,10 @@ export function breakPair({ sessionId, context }) {
 
         return pairs.breakPair(sessionId, pairId)
             .then(() => sessions.read(pairId))
-            .then((context) => resetMeeting({ context }))
+            .then((context) => {
+              resetMeeting({ context });
+              return context;
+            })
             .then((context) => {
               delete context.hasPair;
               return context;
@@ -533,10 +536,13 @@ export function testReminderAndFeedback({ context }) {
 }
 
 export function resetMeeting({ context }) {
-  const { weekDay, time, ...cleanedContext } = context;
+  delete context.weekDay;
+  delete context.time;
+  delete context.skipMeeting;
+  delete context.remindersEnabled;
 
   return Promise.resolve(
-    cleanedContext
+    context
   );
 }
 
