@@ -35,6 +35,13 @@
       }
     }
   },
+  "COMMUNICATION_METHODS_REMOVAL_TESTS": {
+    "sessions": {
+      "COMMUNICATION_METHODS_TESTER": {
+        "state": "/?0/create_profile?3/add_communication_method?1"
+      }
+    }
+  },
   "CONFIRM_PERMISSION_TESTS": {
     "sessions": {
       "CONFIRM_PERMISSION_TESTER": {
