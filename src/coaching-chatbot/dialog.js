@@ -237,7 +237,7 @@ bot
   .dialog(
     '/searching', [
       (session) => {
-        session.runActions(['updateAvailablePeers']);
+        session.runActions(['getAvailablePeers']);
         session.next();
       },
       (session) => {
@@ -287,7 +287,9 @@ bot
         } else {
           session.addResult('@UNCLEAR');
         }
-        session.runActions(['checkAvailablePeersIndex']);
+        session.runActions([
+          'updateAvailablePeers',
+          'checkAvailablePeersIndex']);
         return session.prev();
       },
     ], [
@@ -357,7 +359,6 @@ bot
           if (session.hasPair()) {
             session.switchDialog('/accepted_pair_information');
           } else {
-            session.runActions(['updateAvailablePeers']);
             session.endDialog();
           }
         },
