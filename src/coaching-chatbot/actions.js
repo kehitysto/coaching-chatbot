@@ -542,6 +542,7 @@ export function setSkipMeeting({ context, sessionId }) {
           return Promise.reject(new Error('No pair found!'));
         }
         return sessions.read(pairId).then((pairContext) => {
+          let meetingAlreadySkipped = pairContext.skipMeeting;
           promises.push(
             sessions.write(
               pairId,
@@ -550,10 +551,16 @@ export function setSkipMeeting({ context, sessionId }) {
                 skipMeeting: true,
               }
             ).then(() => {
-              Messenger.send(pairId, strings['@SKIPPED_MEETING_MESSAGE'],
-              Builder.QuickReplies.createArray([
-                'OK',
-              ]));
+              if(
+                meetingAlreadySkipped == undefined ||
+                meetingAlreadySkipped == null ||
+                meetingAlreadySkipped == false
+              ) {
+                Messenger.send(pairId, strings['@SKIPPED_MEETING_MESSAGE'],
+                Builder.QuickReplies.createArray([
+                  'OK',
+                ]));
+              }
             })
           );
           promises.push(
