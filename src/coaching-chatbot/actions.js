@@ -141,7 +141,7 @@ export function removeSentRequests({ sessionId, context }) {
   });
 }
 
-export function updateAvailablePeers({ sessionId, context }) {
+export function getAvailablePeers({ sessionId, context }) {
   const sessions = new Sessions();
   const rejectedPeers = context.rejectedPeers || [];
   const availablePeersIndex = 1;
@@ -159,6 +159,15 @@ export function updateAvailablePeers({ sessionId, context }) {
       log.error('err: {0}', err);
       return Promise.reject(err);
     });
+}
+
+export function updateAvailablePeers({ sessionId, context }) {
+  return getAvailablePeers({ sessionId, context }).then((peers) => {
+    return contextChanges(context)({
+        availablePeers: context.availablePeers
+          .filter((peer) => peers.includes(peer)),
+    });
+  });
 }
 
 export function displayAvailablePeer({ context }) {
@@ -542,6 +551,7 @@ export function setSkipMeeting({ context, sessionId }) {
           return Promise.reject(new Error('No pair found!'));
         }
         return sessions.read(pairId).then((pairContext) => {
+          let meetingAlreadySkipped = pairContext.skipMeeting;
           promises.push(
             sessions.write(
               pairId,
@@ -550,10 +560,16 @@ export function setSkipMeeting({ context, sessionId }) {
                 skipMeeting: true,
               }
             ).then(() => {
-              Messenger.send(pairId, strings['@SKIPPED_MEETING_MESSAGE'],
-              Builder.QuickReplies.createArray([
-                'OK',
-              ]));
+              if(
+                meetingAlreadySkipped == undefined ||
+                meetingAlreadySkipped == null ||
+                meetingAlreadySkipped == false
+              ) {
+                Messenger.send(pairId, strings['@SKIPPED_MEETING_MESSAGE'],
+                Builder.QuickReplies.createArray([
+                  'OK',
+                ]));
+              }
             })
           );
           promises.push(
