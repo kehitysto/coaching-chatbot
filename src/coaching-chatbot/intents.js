@@ -217,4 +217,8 @@ module.exports = {
             /^Salli muistutukset$/i,
         ],
     },
+
+    OK: {
+        any: /^ok$/i,
+    },
 };

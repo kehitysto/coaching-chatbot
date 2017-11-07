@@ -330,7 +330,10 @@ export function breakPair({ sessionId, context }) {
                 PersonalInformationFormatter.format(
                   strings['@NOTIFY_PAIR_BROKEN'],
                   { pairName: context.name }
-                )
+                ),
+                Builder.QuickReplies.createArray([
+                  'OK',
+                ])
               );
             });
       })

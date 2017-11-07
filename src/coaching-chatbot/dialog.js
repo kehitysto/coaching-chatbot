@@ -205,6 +205,9 @@ bot
         session.resetDialog();
         session.beginDialog('/list_requests', true);
       }],
+      ['#OK', (session) => {
+        session.resetDialog();
+      }],
       ['#OPTIONAL_VALUE', (session) => {
         session.addResult('@UNCLEAR');
       }],
