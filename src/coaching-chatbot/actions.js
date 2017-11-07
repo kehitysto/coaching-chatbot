@@ -529,6 +529,7 @@ export function resetMeeting({ context }) {
 }
 
 export function setSkipMeeting({ context, sessionId }) {
+  const sessions = new Sessions();
   let pairs = new Pairs();
   return pairs.read(sessionId)
     .then((pairList) => {
@@ -537,18 +538,28 @@ export function setSkipMeeting({ context, sessionId }) {
         if (pairId == undefined) {
           return Promise.reject(new Error('No pair found!'));
         }
-        promises.push(
-          Messenger.send(pairId, strings['@SKIPPED_MEETING_MESSAGE'],
-          Builder.QuickReplies.createArray([
-            'OK',
-          ]))
-        );
-        promises.push(
-          contextChanges(context)({
-            skipMeeting: true,
-          })
-        );
-        return Promise.all(promises);
+        return sessions.read(pairId).then((pairContext) => {
+          promises.push(
+            sessions.write(
+              pairId,
+              {
+                ...pairContext,
+                skipMeeting: true,
+              }
+            ).then(() => {
+              Messenger.send(pairId, strings['@SKIPPED_MEETING_MESSAGE'],
+              Builder.QuickReplies.createArray([
+                'OK',
+              ]));
+            })
+          );
+          promises.push(
+            contextChanges(context)({
+              skipMeeting: true,
+            })
+          );
+          return Promise.all(promises);
+        });
     });
 }
 
