@@ -197,6 +197,13 @@ module.exports = {
         ],
     },
 
+    SHOW_PAIR: {
+        each: [
+            '#SHOW',
+            '#PAIR',
+        ],
+    },
+
     SET_DATE: {
         each: [
             '#SET_OR_CHANGE',
