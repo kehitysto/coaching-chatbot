@@ -95,7 +95,7 @@ describe('Formatter service', function() {
           .getPersonalInformationbuttons(context);
 
         const expected = [{
-          title: 'Etsi pari',
+          title: 'Selaa hakijoita',
           payload: 'LOOK_FOR_PEER',
           },
           {
