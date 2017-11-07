@@ -48,6 +48,7 @@
   "@LINK_TO_HELP": "Komennolla 'info' saat botin ohjeita. \nOhjeita vertaisohjaukseen: https://kehitysto.wordpress.com/vinkkeja-vertaisohjaukseen/",
   "@NOTIFY_PAIR_BROKEN": "{pairName} ei enää halua olla parisi.",
   "@PAIR_BROKEN": "Pari on nyt rikottu.",
+  "@SHOW_PAIR": "Näytä pari",
   "@FEEDBACK_ABOUT_MEETING": "Kuinka lähellä saamasi ohjaus oli ideaalia ohjaustilannettasi? Valitse arvosana, missä 4 tarkoittaa täysin ideaalia ja 1, että toivoisit useita merkittäviä muutoksia.",
   "@GIVE_FEEDBACK": "Anna palautetta",
   "@THANKS_FOR_FEEDBACK": "Kiitos palautteesta!",
