@@ -358,6 +358,9 @@ bot
   .dialog(
     '/accepted_pair_information', [
       (session) => {
+        session.addResult('@PAIR_CREATED');
+        session.runActions(['displayAcceptedPeer']);
+        session.addResult('@LINK_TO_HELP');
         session.switchDialog('/accepted_pair_profile');
       },
     ], [
@@ -372,9 +375,6 @@ bot
   .dialog(
     '/accepted_pair_profile', [
       (session) => {
-        session.addResult('@PAIR_CREATED');
-        session.runActions(['displayAcceptedPeer']);
-        session.addResult('@LINK_TO_HELP');
         if (session.ifFacilitationSet()) {
           session.addResult('@ASK_FOR_FACILITATION', [
             Builder.QuickReplies.create('@SET_DATE'),
@@ -384,17 +384,22 @@ bot
           if (session.areRemindersEnabled()) {
             session.addQuickReplies(
               Builder.QuickReplies.createArray([
-                '@SET_DATE', '@SKIP_MEETING', '@DISABLE_REMINDERS'])
+                '@SET_DATE', '@SKIP_MEETING',
+                '@DISABLE_REMINDERS', '@SHOW_PAIR'])
             );
           } else {
             session.addQuickReplies(
               Builder.QuickReplies.createArray([
-                '@SET_DATE', '@SKIP_MEETING', '@ENABLE_REMINDERS'])
+                '@SET_DATE', '@SKIP_MEETING',
+                '@ENABLE_REMINDERS', '@SHOW_PAIR'])
             );
           }
         }
       },
     ], [
+      ['#SHOW_PAIR', (session) => {
+        session.switchDialog('/accepted_pair_information');
+      }],
       ['#SET_DATE', (session) => {
         session.beginDialog('/set_date');
       }],
