@@ -341,11 +341,7 @@ bot
             session.runActions(['rejectRequest']);
           } else if (session.checkIntent('#YES')) {
             session.runActions(['acceptRequest']);
-            if (session.hasPair()) {
-              session.switchDialog('/accepted_pair_information');
-            } else {
-              return session.endDialog();
-            }
+            return session.next();
           } else if (session.checkIntent('#RETURN')) {
             return session.endDialog();
           } else {
@@ -353,6 +349,13 @@ bot
           }
 
           return session.prev();
+        },
+        (session) => {
+          if (session.hasPair()) {
+            session.switchDialog('/accepted_pair_information');
+          } else {
+            session.endDialog();
+          }
         },
       ])
   .dialog(
