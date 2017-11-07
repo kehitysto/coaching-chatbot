@@ -113,8 +113,8 @@ module.exports = {
     MEETING: {
         any: [
             /^tapaami(?:nen|sta)$/i,
-            /^aika(?:a)$/i,
-            /^päivä(?:ä)$/i,
+            /^aikaa?$/i,
+            /^päivää?$/i,
         ],
     },
 
