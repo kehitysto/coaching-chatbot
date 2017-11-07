@@ -384,12 +384,12 @@ bot
           if (session.areRemindersEnabled()) {
             session.addQuickReplies(
               Builder.QuickReplies.createArray([
-                '@SET_DATE', '@SKIP_MEETING', '@DISABLE_REMINDERS'])
+                '@CHANGE_DATE', '@SKIP_MEETING', '@DISABLE_REMINDERS'])
             );
           } else {
             session.addQuickReplies(
               Builder.QuickReplies.createArray([
-                '@SET_DATE', '@SKIP_MEETING', '@ENABLE_REMINDERS'])
+                '@CHANGE_DATE', '@SKIP_MEETING', '@ENABLE_REMINDERS'])
             );
           }
         }
