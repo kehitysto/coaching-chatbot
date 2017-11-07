@@ -1,7 +1,7 @@
 [
   {
     "identifier": "LOOK_FOR_PEER",
-    "description": "Etsi pari"
+    "description": "Selaa hakijoita"
   },
   {
     "identifier": "CHANGE_NAME",
