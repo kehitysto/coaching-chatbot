@@ -237,7 +237,7 @@ bot
   .dialog(
     '/searching', [
       (session) => {
-        session.runActions(['updateAvailablePeers']);
+        session.runActions(['getAvailablePeers']);
         session.next();
       },
       (session) => {
@@ -287,7 +287,9 @@ bot
         } else {
           session.addResult('@UNCLEAR');
         }
-        session.runActions(['checkAvailablePeersIndex']);
+        session.runActions([
+          'updateAvailablePeers',
+          'checkAvailablePeersIndex']);
         return session.prev();
       },
     ], [
@@ -315,12 +317,6 @@ bot
     ])
   .dialog(
       '/list_requests', [
-        (session) => {
-          if (!session.isSearching()) {
-            return session.endDialog();
-          }
-          session.next();
-        },
         (session) => {
           if (session.getPairRequestCount() <= 0) {
             return session.addResult('@NO_REQUESTS_AVAILABLE');
