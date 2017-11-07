@@ -77,12 +77,12 @@ describe('Meeting tests', function() {
         function() {
           let promise = this.bot.receive(SESSION, '11:11');
           return promise.then((output) => {
-            expect(output[2])
+            expect(output[0])
               .to.deep.equal(
                 buildResponse(
                     'Tapaaminen on viikoittain MA, klo 11:11',
                     QuickReplies.createArray([
-                        '@SET_DATE', '@SKIP_MEETING', '@DISABLE_REMINDERS']),
+                        '@CHANGE_DATE', '@SKIP_MEETING', '@DISABLE_REMINDERS', '@SHOW_PAIR']),
                 ));
           });
         }
