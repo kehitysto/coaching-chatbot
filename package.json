@@ -74,9 +74,9 @@
     "bot-client:watch": "nodemon ./scripts/bot-client.js --exec ts-node",
     "visualize": "ts-node ./scripts/visualize.js",
     "write-env": "node ./scripts/write-env.js",
-    "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run test",
+    "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm-run-all test ft",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
-    "ci": "npm run cover && npm run ft",
+    "ci": "npm run cover",
     "validate": "npm ls",
     "doc": "npm run doc:framework",
     "doc:framework": "jsdox --output ./doc/apidoc ./src/chatbot"
