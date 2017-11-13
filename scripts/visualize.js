@@ -7,6 +7,7 @@ import * as Pairs from '../src/util/pairs-service';
 import * as path from 'path';
 import * as Sessions from '../src/util/sessions-service';
 import * as sinon from 'sinon';
+import * as states from '../doc/flow/states.json';
 
 const messengerSpy = sinon.spy(Messenger, "send");
 
@@ -17,7 +18,7 @@ require('../src/lib/env-vars').config();
 const sessions = new Sessions();
 const bot = new Chatbot(dialog, sessions);
 
-sessions.db.load({});
+sessions.db.load(states);
 
 let lines = [];
 let promise = bot.receive('', '');
