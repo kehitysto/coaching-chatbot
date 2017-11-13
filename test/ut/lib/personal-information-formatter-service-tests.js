@@ -95,7 +95,7 @@ describe('Formatter service', function() {
           .getPersonalInformationbuttons(context);
 
         const expected = [{
-          title: 'Etsi pari',
+          title: 'Selaa hakijoita',
           payload: 'LOOK_FOR_PEER',
           },
           {
@@ -104,11 +104,11 @@ describe('Formatter service', function() {
           },
           {
             title: 'Muokkaa kuvausta',
-            payload: 'SET_BIO',
+            payload: 'CHANGE_BIO',
           },
           {
           payload: "EDIT_COMMUNICATION_METHODS",
-          title: "Muokkaa yhteystietoja"
+          title: "Yhteystiedot"
           },
         ];
 

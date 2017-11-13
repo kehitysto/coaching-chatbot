@@ -11,8 +11,20 @@ module.exports = {
         any: /^e[in]?$/i,
     },
 
+    NEXT: {
+        any: /^(?:seuraavat|seuraava|seur)$/i,
+    },
+
     RETURN: {
         any: /^(?:palaa|takaisin|peru|kumoa|poistu)$/i,
+    },
+
+    LIST_AS_SEARCHING: {
+        any: /^(?:listaudu|listaa)$/i,
+    },
+
+    PROFILE: {
+        any: /^(?:profiiliin|profiili|prof)$/i,
     },
 
     SET: {
@@ -24,11 +36,11 @@ module.exports = {
     },
 
     FIND: {
-        any: /^(?:etsi|hae)\s/i,
+        any: /^(?:etsi|hae|selaa)\s/i,
     },
 
     SHOW: {
-        any: /^näytä\s/i,
+        each: /^näytä\s/i,
     },
 
     STOP: {
@@ -41,6 +53,18 @@ module.exports = {
 
     RESET: {
         any: /^(?:aloita alusta|nollaa|resetoi)$/i,
+    },
+
+    EDIT: {
+        any: /^lisää$/i,
+    },
+
+    DELETE: {
+        each: /^poista$/i,
+    },
+
+    TO_PROFILE: {
+        each: /^profiiliin$/i,
     },
 
     GIVE_FEEDBACK: {
@@ -67,7 +91,7 @@ module.exports = {
         any: /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/i,
     },
 
-    COMMUNICATION: {
+    EDIT_COMMUNICATION_METHODS: {
         any: /^yhteystie(?:toja|dot|to)$/i,
     },
 
@@ -80,13 +104,17 @@ module.exports = {
     },
 
     PAIR: {
-        any: /^paria?$/i,
+        any: [
+            /^(?:paria?)$/i,
+            /^(parin)?hakijoita$/i,
+        ],
     },
 
     MEETING: {
         any: [
             /^tapaami(?:nen|sta)$/i,
-            /^aika(?:a)$/i,
+            /^aikaa?$/i,
+            /^päivää?$/i,
         ],
     },
 
@@ -106,13 +134,15 @@ module.exports = {
     },
 
     TEST: {
-        each: [
-            /^test/i,
-        ],
+        each: /^test$/i,
     },
 
     INFO: {
         any: /^(?:info|ohje(?:et))$/i,
+    },
+
+    SKIP_MEETING: {
+        each: /^Ohita tämä viikko$/i,
     },
 
     OPTIONAL_VALUE: {
@@ -171,23 +201,28 @@ module.exports = {
         ],
     },
 
+    SHOW_PAIR: {
+        each: [
+            '#SHOW',
+            '#PAIR',
+        ],
+    },
+
     SET_DATE: {
         each: [
             '#SET_OR_CHANGE',
             '#MEETING',
-          ],
-    },
-
-    EDIT_COMMUNICATION_METHODS: {
-        each: [
-            '#SET_OR_CHANGE',
-            '#COMMUNICATION',
         ],
     },
 
-    SKIP_MEETING: {
-        each: [
-            /^En pääse tapaamiseen$/i,
-          ],
+    TOGGLE_REMINDERS: {
+        any: [
+            /^Estä muistutukset$/i,
+            /^Salli muistutukset$/i,
+        ],
+    },
+
+    OK: {
+        any: /^ok$/i,
     },
 };

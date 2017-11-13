@@ -26,7 +26,7 @@ module.exports = class Session {
    * @param {string} dialogId ID of the new dialog to start
    * @param {boolean} inPlace do not progress dialog on returning
    */
-  beginDialog(dialogId, inPlace=false) {
+  beginDialog(dialogId, inPlace = false) {
     if (dialogId.startsWith('/')) {
       dialogId = dialogId.substr(1);
     }
@@ -122,7 +122,7 @@ module.exports = class Session {
       }
     }
 
-    this._results[this._results.length-1].quickReplies = quickReplies;
+    this._results[this._results.length - 1].quickReplies = quickReplies;
   }
 
   /**
@@ -310,9 +310,17 @@ module.exports = class Session {
     return state;
   }
 
+  getAvailablePeersCount() {
+    return this.context.availablePeers.length;
+  }
+
   getCommunicationMethodsCount() {
     let m = this.context.communicationMethods;
     return m === undefined ? 0 : Object.keys(m).length;
+  }
+
+  getPairRequestCount() {
+    return this.context.pairRequests ? this.context.pairRequests.length : 0;
   }
 
   allCommunicationMethodsFilled() {
@@ -328,5 +336,17 @@ module.exports = class Session {
 
   isRatingGood() {
     return [3, 4].includes(this.context.rating);
+  }
+
+  isSearching() {
+    return this.context.searching;
+  }
+
+  areRemindersEnabled() {
+    return this.context.remindersEnabled;
+  }
+
+  hasPair() {
+    return this.context.hasPair;
   }
 };

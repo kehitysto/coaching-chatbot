@@ -24,48 +24,44 @@ module.exports = class InMemoryProvider {
 
   readAllWithReminders() {
     log.silly('Getting all sessions with reminders');
-    return new Promise((resolve, reject) => {
-      let sessions = [];
+    let sessions = [];
 
-      for (let sessionId in this.db) {
-        if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
-        log.silly('Evaluating session with id: ', sessionId);
-        let context = this.db[sessionId];
+    for (let sessionId in this.db) {
+      if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
+      log.silly('Evaluating session with id: ', sessionId);
+      let context = this.db[sessionId];
 
-        const day = context.weekDay;
-        if(day === undefined) continue;
-        let meetingDay = strings['@WEEKDAYS'].indexOf(day.toUpperCase());
-        if (meetingDay == new Date().getDay()) {
-          log.silly('Found context with id: ', sessionId);
-          sessions.push( { 'Id': sessionId, 'context': context } );
-        }
+      const day = context.weekDay;
+      if(day === undefined) continue;
+      let meetingDay = strings['@WEEKDAYS'].indexOf(day.toUpperCase());
+      if (meetingDay == new Date().getDay()) {
+        log.silly('Found context with id: ', sessionId);
+        sessions.push( { 'Id': sessionId, 'context': context } );
       }
+    }
 
-      resolve(sessions);
-    });
+    return Promise.resolve(sessions);
   }
 
   readAllWithFeedbacks() {
     log.silly('Getting all sessions with feedbacks');
-    return new Promise((resolve, reject) => {
-      let sessions = [];
+    let sessions = [];
 
-      for (let sessionId in this.db) {
-        if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
-        log.silly('Evaluating session with id: ', sessionId);
-        let context = this.db[sessionId];
+    for (let sessionId in this.db) {
+      if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
+      log.silly('Evaluating session with id: ', sessionId);
+      let context = this.db[sessionId];
 
-        const day = context.weekDay;
-        if(day === undefined) continue;
-        let meetingDay = strings['@WEEKDAYS'].indexOf(day.toUpperCase());
+      const day = context.weekDay;
+      if(day === undefined) continue;
+      let meetingDay = strings['@WEEKDAYS'].indexOf(day.toUpperCase());
 
-        if (meetingDay == ((new Date().getDay() - 2) % 7)) {
-          log.silly('Found context with id: ', sessionId);
-          sessions.push( { 'Id': sessionId, 'context': context } );
-        }
+      if (meetingDay == ((new Date().getDay() + 5) % 7)) {
+        log.silly('Found context with id: ', sessionId);
+        sessions.push( { 'Id': sessionId, 'context': context } );
       }
-      resolve(sessions);
-    });
+    }
+    return Promise.resolve(sessions);
   }
 
   write(sessionId, context) {
@@ -88,10 +84,14 @@ module.exports = class InMemoryProvider {
         log.silly('Evaluating possible pair {0}', sessionId);
         if (sessionId == id) continue;
         let session = this.db[sessionId];
+        let context = this.db[id];
 
         if (session.searching === true &&
             (!session.pairRequests || !session.pairRequests.includes(id)) &&
-            (!session.rejectedPeers || !session.rejectedPeers.includes(id))) {
+            (!session.rejectedPeers || !session.rejectedPeers.includes(id)) &&
+            (session.communicationMethods && context.communicationMethods &&
+              Object.keys(session.communicationMethods).some((method) =>
+              Object.keys(context.communicationMethods).includes(method)))) {
           log.silly('Found a valid pair!');
           pairs.push({ id: sessionId });
         }

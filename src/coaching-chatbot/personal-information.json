@@ -1,18 +1,18 @@
 [
   {
     "identifier": "LOOK_FOR_PEER",
-    "description": "Etsi pari"
+    "description": "Selaa hakijoita"
   },
   {
     "identifier": "CHANGE_NAME",
     "description": "Vaihda nimi"
   },
   {
-    "identifier": "SET_BIO",
+    "identifier": "CHANGE_BIO",
     "description": "Muokkaa kuvausta"
   },
   {
     "identifier": "EDIT_COMMUNICATION_METHODS",
-    "description": "Muokkaa yhteystietoja"
+    "description": "Yhteystiedot"
   }
 ]

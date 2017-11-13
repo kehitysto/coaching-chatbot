@@ -1,6 +1,9 @@
 import log from '../lib/logger-service';
 import * as DynamoDBTable from './dynamodb-table';
 import * as strings from '../coaching-chatbot/strings.json';
+import * as CommunicationMethods
+from '../../src/coaching-chatbot/communication-methods.json';
+
 
 module.exports = class DynamoDBProvider {
   constructor() {
@@ -79,14 +82,33 @@ module.exports = class DynamoDBProvider {
                         '(NOT id = :id) AND ' +
                         '(NOT contains(context.pairRequests, :id)) AND ' +
                         '(NOT contains(context.rejectedPeers, :id))',
-      ExpressionAttributeValues: { ':true': true,
-                                   ':id': id },
-      ProjectionExpression: 'id',
+      ExpressionAttributeValues: { ':true': true, ':id': id },
+      ProjectionExpression: 'id, context.communicationMethods',
     };
 
     return this.table.scan(params).then((items) => {
-      log.debug('Users searching for pair: {0}', JSON.stringify(items));
-      return items;
+      if (items == null) {
+        return items;
+      }
+
+      return this.read(id).then((context) => {
+        const contextMethods = Object.keys(context.communicationMethods);
+        const hasAllMethods =
+          contextMethods.length === Object.keys(CommunicationMethods).length;
+
+        if (!hasAllMethods) {
+          const filtered = items.filter((pair) =>
+            Object.keys(pair.context.communicationMethods).some(
+              (method) => contextMethods.includes(method))
+            );
+
+          log.debug('Users searching for pair: {0}', JSON.stringify(filtered));
+          return filtered;
+        }
+
+        log.debug('Users searching for pair: {0}', JSON.stringify(items));
+        return items;
+      });
     });
   }
 };

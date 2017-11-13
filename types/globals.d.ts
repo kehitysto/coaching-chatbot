@@ -23,6 +23,7 @@ declare class Context {
     weekDay: string;
     time: string;
     skipMeeting: boolean;
+    remindersEnabled: boolean;
 }
 
 declare class Session {
@@ -48,6 +49,12 @@ declare class Session {
     runActions(actions: string[]|string, input?: string): void;
     send(message: string, quickReplies: QuickReplies)
     switchDialog(dialogId: string): void;
+    ifFacilitationSet(): boolean;
+    isRatingGood(): boolean;
+    isSearching(): boolean;
+    areRemindersEnabled(): boolean;
+    getPairRequestCount(): number;
+    getAvailablePeersCount(): number;
 }
 
 declare class Sessions {

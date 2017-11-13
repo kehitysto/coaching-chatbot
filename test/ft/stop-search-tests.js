@@ -9,7 +9,7 @@ describe('Stop searching', () => {
   describe(
     'As a user searching for a pair I want to be able to stop my search for a pair', () => {
       before(function () {
-        setupChatbot(this);
+        setupChatbot(this, 'STOP_SEARCH_TESTS');
         this.userInformation = {
           name: 'Liisa Hakija',
         };
@@ -49,12 +49,13 @@ describe('Stop searching', () => {
             this.bot.receive(SESSION, 'ei'))
             .to.eventually.become([
               buildResponse('@INFORMATION_ABOUT_LIST'),
+              buildResponse('Parinhakija: 1/1'),
               buildResponse(PairFormatter.beautifyAvailablePairs(
                 [{
                   id: 'ID',
                   context: testUser,
                 }]),
-                QuickReplies.createArray(['@YES', '@NO', '@STOP_SEARCHING'])
+                QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT'])
               ),
             ]);
         }

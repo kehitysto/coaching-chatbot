@@ -1,5 +1,9 @@
 import commonFeatures from './common';
+import * as Session from '../../src/chatbot/session';
+import * as sinon from 'sinon';
 const { buildResponse, setupChatbot, QuickReplies, Strings } = commonFeatures;
+
+const sessionSpy = sinon.spy(Session.prototype, 'runActions');
 
 const SESSION = 'FEEDBACK_TESTER';
 
@@ -56,4 +60,25 @@ describe('Feedback tests', function() {
       );
     }
   );
+
+  describe(
+    'As a user I want to activate reminder and feedback sending system',
+    function() {
+      before(function() {
+        setupChatbot(this);
+      });
+
+      it(
+        'should allow me to send test command',
+        function() {
+
+          let promise = this.bot.receive('FEEDBACK_AND_REMINDER_TESTER', 'test');
+
+          return promise.then(() => {
+            return expect(sessionSpy.lastCall.args[0])
+              .to.include('testReminderAndFeedback');
+          });
+        }
+      );
+  });
 });

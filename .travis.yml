@@ -7,11 +7,17 @@ script: 'npm run ci'
 after_success: 'npm run coveralls'
 
 deploy:
-  provider: script
+- provider: script
   script: ./scripts/deploy.sh staging
   skip-cleanup: true
   on:
     branch: dev
+
+- provider: script
+  script: ./scripts/deploy.sh production
+  skip-cleanup: true
+  on:
+    branch: master
 
 cache:
   directories:

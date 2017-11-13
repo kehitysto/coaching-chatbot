@@ -65,6 +65,7 @@
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --config ./webpack.config.js",
+    "tests": "npm run test && npm run ft",
     "test": "cross-env RUN_ENV=dev mocha-webpack src test/ut",
     "test:watch": "cross-env RUN_ENV=dev npm run test -- --watch",
     "ft": "cross-env RUN_ENV=dev mocha-webpack test/ft",
@@ -72,10 +73,11 @@
     "lint": "eslint src",
     "bot-client": "ts-node ./scripts/bot-client.js",
     "bot-client:watch": "nodemon ./scripts/bot-client.js --exec ts-node",
+    "visualize": "ts-node ./scripts/visualize.js",
     "write-env": "node ./scripts/write-env.js",
-    "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run test",
+    "cover": "cross-env NODE_ENV=coverage nyc --reporter=lcov --reporter=text npm run tests",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
-    "ci": "npm run cover && npm run ft",
+    "ci": "npm run cover",
     "validate": "npm ls",
     "doc": "npm run doc:framework",
     "doc:framework": "jsdox --output ./doc/apidoc ./src/chatbot"

@@ -29,10 +29,8 @@ bot
   .dialog(
     '/', [
       (session) => {
-        session.addResult('@GREETING', [
-          Builder.QuickReplies.create('@YES'),
-          Builder.QuickReplies.create('@NO'),
-        ]);
+        session.addResult('@GREETING',
+          Builder.QuickReplies.createArray(['@YES', '@NO']));
       },
       (session) => {
         if (session.checkIntent('#YES')) {
@@ -55,7 +53,7 @@ bot
         session.beginDialog('/set_bio');
       },
       (session) => {
-        session.beginDialog('communication_methods');
+        session.beginDialog('/communication_methods');
       },
       (session) => {
         session.switchDialog('/profile');
@@ -98,17 +96,18 @@ bot
         session.switchDialog('/add_communication_method');
       } else {
         session.addResult('@CONFIRM_COMMUNICATION_METHODS');
-        session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS', [
-          Builder.QuickReplies.create('@YES'),
-          Builder.QuickReplies.create('@NO'),
-        ]);
+        session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS',
+          Builder.QuickReplies.createArray([
+            '@EDIT', '@DELETE', '@TO_PROFILE']));
       }
     },
     (session) => {
-      if (session.checkIntent('#YES')) {
+      if (session.checkIntent('#EDIT')) {
         session.switchDialog('/add_communication_method');
-      } else if (session.checkIntent('#NO')) {
-        session.endDialog();
+      } else if (session.checkIntent('#DELETE')) {
+        session.switchDialog('/delete_communication_method');
+      } else if (session.checkIntent('#TO_PROFILE')) {
+        session.switchDialog('/profile');
       } else {
         session.addResult('@UNCLEAR');
         session.prev();
@@ -120,7 +119,7 @@ bot
       (session) => {
         session.addResult('@REQUEST_COMMUNICATION_METHOD',
           CommunicationMethodsFormatter
-              .getCommunicationMethods({})
+            .getCommunicationMethods({})
         );
       },
       (session) => {
@@ -137,42 +136,39 @@ bot
       },
   ])
   .dialog(
-    '/confirm_permission', [
+    '/delete_communication_method', [
       (session) => {
-        if (session.context.searching) {
-          session.next();
-        } else {
-          session.addResult('@PERMISSION_TO_RECEIVE_MESSAGES', [
-            Builder.QuickReplies.create('@YES'),
-            Builder.QuickReplies.create('@NO'),
-          ]);
-        }
+        session.addResult('@REQUEST_COMMUNICATION_METHOD_DELETE', [
+            ...CommunicationMethodsFormatter
+              .getFilledCommunicationMethods(session.context),
+            Builder.QuickReplies.create('@RETURN'),
+          ]
+        );
       },
       (session) => {
-        if (session.context.searching || session.checkIntent('#YES')) {
-          session.runActions([
-            'markUserAsSearching',
-          ]);
-          session.endDialog();
-        } else if (session.checkIntent('#NO')) {
-          session.endDialog();
+        if (session.checkIntent('#COMMUNICATION_METHODS')) {
+          session.runActions(['deleteCommunicationMethod']);
+          session.switchDialog('/communication_methods');
+        } else if (session.checkIntent('#RETURN')) {
+          session.switchDialog('/communication_methods');
         } else {
           session.addResult('@UNCLEAR');
-          session.prev();
+          session.resetDialog();
         }
       },
-    ]
-  )
+  ])
   .dialog(
     '/profile', [
       (session) => {
         session.runActions(['updateProfile']);
-        if (!session.context.searching) {
+        if (session.isSearching()) {
+          session.addResult('@DISPLAY_PROFILE_SEARCHING',
+            PersonalInformationFormatter
+              .getPersonalInformationbuttons(session.context));
+        } else {
           session.addResult('@DISPLAY_PROFILE',
             PersonalInformationFormatter
-            .getPersonalInformationbuttons(session.context));
-        } else {
-          session.beginDialog('/searching');
+              .getPersonalInformationbuttons(session.context));
         }
       },
     ], [
@@ -193,13 +189,24 @@ bot
         }
       }],
       ['#FIND_PAIR', (session) => {
-        session.beginDialog('/find_pair');
+        session.switchDialog('/searching');
       }],
       ['#EDIT_COMMUNICATION_METHODS', (session) => {
         session.beginDialog('/communication_methods');
       }],
       ['#INFO', (session) => {
         session.addResult('@INFO');
+      }],
+      ['#STOP_SEARCHING', (session) => {
+        session.resetDialog();
+        session.beginDialog('/stop_searching', true);
+      }],
+      ['#SHOW_PAIR_REQUESTS', (session) => {
+        session.resetDialog();
+        session.beginDialog('/list_requests', true);
+      }],
+      ['#OK', (session) => {
+        session.resetDialog();
       }],
       ['#OPTIONAL_VALUE', (session) => {
         session.addResult('@UNCLEAR');
@@ -209,10 +216,8 @@ bot
     '/find_pair', [
       (session) => {
         if (session.getCommunicationMethodsCount() === 0) {
-          session.addResult('@NO_METHODS_ADDED', [
-            Builder.QuickReplies.create('@YES'),
-            Builder.QuickReplies.create('@NO'),
-          ]);
+          session.addResult('@NO_METHODS_ADDED',
+            Builder.QuickReplies.createArray(['@YES', '@NO']));
         } else {
           session.switchDialog('/confirm_permission');
         }
@@ -232,50 +237,59 @@ bot
   .dialog(
     '/searching', [
       (session) => {
-        if (!session.context.searching) {
-          return session.endDialog();
-        }
-
-        session.runActions(['updateAvailablePeers']);
+        session.runActions(['getAvailablePeers']);
         session.next();
       },
       (session) => {
-        if (session.context.pairRequests &&
-            session.context.pairRequests.length > 0) {
+        if (session.getPairRequestCount() > 0) {
           session.addResult('@TELL_USER_HAS_NEW_REQUEST', [
             Builder.QuickReplies.create('@SHOW_REQUESTS'),
           ]);
         }
-        if (session.context.availablePeers.length <= 0) {
-          return session.addResult('@NO_PAIRS_AVAILABLE', [
-            Builder.QuickReplies.create('@STOP_SEARCHING'),
-          ]);
+        if (!session.context.availablePeers ||
+          session.context.availablePeers.length <= 0) {
+          if (session.isSearching()) {
+            return session.addResult('@NO_PAIRS_AVAILABLE', [
+              Builder.QuickReplies.create('@TO_PROFILE'),
+              Builder.QuickReplies.create('@STOP_SEARCHING'),
+            ]);
+          } else {
+            return session.addResult('@NO_PAIRS_AVAILABLE', [
+              Builder.QuickReplies.create('@LIST_AS_SEARCHING'),
+              Builder.QuickReplies.create('@TO_PROFILE'),
+            ]);
+          }
         }
 
         session.addResult('@INFORMATION_ABOUT_LIST');
         session.next();
       },
       (session) => {
-        if (session.context.availablePeers.length <= 0) {
+        if (session.getAvailablePeersCount() <= 0) {
           return session.resetDialog();
         }
-
+        session.addResult('@LIST_LENGTH');
         session.runActions(['displayAvailablePeer']);
         session.addQuickReplies(
-          Builder.QuickReplies.createArray(['@YES', '@NO', '@STOP_SEARCHING'])
+          Builder.QuickReplies.createArray([
+            '@YES', '@NO', '@NEXT', '@EXIT'])
         );
       },
       (session) => {
         if (session.checkIntent('#NO')) {
           session.runActions(['rejectAvailablePeer']);
-          session.runActions(['nextAvailablePeer']);
         } else if (session.checkIntent('#YES')) {
           session.runActions(['addPairRequest']);
+        } else if (session.checkIntent('#NEXT')) {
           session.runActions(['nextAvailablePeer']);
+        } else if (session.checkIntent('#RETURN')) {
+          session.switchDialog('/profile');
         } else {
           session.addResult('@UNCLEAR');
         }
-
+        session.runActions([
+          'updateAvailablePeers',
+          'checkAvailablePeersIndex']);
         return session.prev();
       },
     ], [
@@ -290,27 +304,28 @@ bot
       ['#INFO', (session) => {
         session.addResult('@INFO');
       }],
+      ['#LIST_AS_SEARCHING', (session) => {
+        session.context.searching = true; // markUserAsSearching is too slow
+        session.runActions(['markUserAsSearching']);
+        session.resetDialog();
+        session.switchDialog('/profile');
+      }],
+      ['#PROFILE', (session) => {
+        session.resetDialog();
+        session.switchDialog('/profile');
+      }],
     ])
   .dialog(
       '/list_requests', [
         (session) => {
-          if (!session.context.searching) {
-            return session.endDialog();
-          }
-
-          session.next();
-        },
-        (session) => {
-          if (!session.context.pairRequests ||
-              session.context.pairRequests.length <= 0) {
+          if (session.getPairRequestCount() <= 0) {
             return session.addResult('@NO_REQUESTS_AVAILABLE');
           }
 
           session.next();
         },
         (session) => {
-          if (!session.context.pairRequests ||
-              session.context.pairRequests.length <= 0) {
+          if (session.getPairRequestCount() <= 0) {
             return session.endDialog();
           }
 
@@ -325,7 +340,7 @@ bot
             session.runActions(['rejectRequest']);
           } else if (session.checkIntent('#YES')) {
             session.runActions(['acceptRequest']);
-            session.switchDialog('/accepted_pair_information');
+            return session.next();
           } else if (session.checkIntent('#RETURN')) {
             return session.endDialog();
           } else {
@@ -334,10 +349,20 @@ bot
 
           return session.prev();
         },
+        (session) => {
+          if (session.hasPair()) {
+            session.switchDialog('/accepted_pair_information');
+          } else {
+            session.endDialog();
+          }
+        },
       ])
   .dialog(
     '/accepted_pair_information', [
       (session) => {
+        session.addResult('@PAIR_CREATED');
+        session.runActions(['displayAcceptedPeer']);
+        session.addResult('@LINK_TO_HELP');
         session.switchDialog('/accepted_pair_profile');
       },
     ], [
@@ -352,22 +377,31 @@ bot
   .dialog(
     '/accepted_pair_profile', [
       (session) => {
-        session.addResult('@PAIR_CREATED');
-        session.runActions(['displayAcceptedPeer']);
-        session.addResult('@LINK_TO_HELP');
         if (session.ifFacilitationSet()) {
           session.addResult('@ASK_FOR_FACILITATION', [
             Builder.QuickReplies.create('@SET_DATE'),
           ]);
         } else {
           session.addResult('@CONFIRM_DATE');
-          session.addQuickReplies([
-            Builder.QuickReplies.create('@SET_DATE'),
-            Builder.QuickReplies.create('@SKIP_MEETING'),
-          ]);
+          if (session.areRemindersEnabled()) {
+            session.addQuickReplies(
+              Builder.QuickReplies.createArray([
+                '@CHANGE_DATE', '@SKIP_MEETING',
+                '@DISABLE_REMINDERS', '@SHOW_PAIR'])
+            );
+          } else {
+            session.addQuickReplies(
+              Builder.QuickReplies.createArray([
+                '@CHANGE_DATE', '@SKIP_MEETING',
+                '@ENABLE_REMINDERS', '@SHOW_PAIR'])
+            );
+          }
         }
       },
     ], [
+      ['#SHOW_PAIR', (session) => {
+        session.switchDialog('/accepted_pair_information');
+      }],
       ['#SET_DATE', (session) => {
         session.beginDialog('/set_date');
       }],
@@ -375,6 +409,9 @@ bot
         session.runActions(['setSkipMeeting']);
         session.addResult('@CONFIRM_SKIPPED_MEETING');
         session.resetDialog();
+      }],
+      ['#TOGGLE_REMINDERS', (session) => {
+        session.beginDialog('/toggle_reminders');
       }],
       ['#TEST', (session) => {
           session.runActions(['testReminderAndFeedback']);
@@ -388,6 +425,19 @@ bot
       ['#INFO', (session) => {
         session.addResult('@INFO');
       }],
+    ])
+  .dialog(
+    '/toggle_reminders', [
+      (session) => {
+        if (session.areRemindersEnabled()) {
+          session.runActions(['toggleReminders']);
+          session.addResult('@CONFIRM_REMINDERS_DISABLED');
+        } else {
+          session.runActions(['toggleReminders']);
+          session.addResult('@CONFIRM_REMINDERS_ENABLED');
+        }
+        session.endDialog();
+      },
     ])
   .dialog(
     '/set_date', [
@@ -424,29 +474,11 @@ bot
       (session) => {
         if (session.checkIntent('#YES')) {
           session.next();
-          session.next();
-          session.next();
         } else if (session.checkIntent('#NO')) {
           session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
-          session.next();
-        }
-      },
-      (session) => {
-        session.addResult('@FEEDBACK_MESSAGE', [
-          Builder.QuickReplies.create('@YES'),
-          Builder.QuickReplies.create('@NO'),
-        ]);
-      },
-      (session) => {
-        if (session.checkIntent('#YES')) {
-          session.next();
-        } else if (session.checkIntent('#NO')) {
-          session.endDialog();
-        } else {
-          session.addResult('@UNCLEAR');
-          session.prev();
+          session.resetDialog();
         }
       },
       (session) => {
@@ -485,19 +517,21 @@ bot
   .dialog(
       '/stop_searching', [
         (session) => {
-          session.addResult('@CONFIRM_STOP_SEARCHING', [Builder.QuickReplies
-            .create(
-            '@YES'),
-          Builder.QuickReplies.create('@NO'),
+          session.addResult('@CONFIRM_STOP_SEARCHING', [
+            Builder.QuickReplies.create('@YES'),
+            Builder.QuickReplies.create('@NO'),
           ]);
         },
         (session) => {
           if (session.checkIntent('#YES')) {
-            session.runActions(['markUserAsNotSearching']);
+            session.runActions(['removeSentRequests',
+              'markUserAsNotSearching']);
             session.addResult('@STOPPED_SEARCHING');
-            session.endDialog();
+            session.resetDialog();
+            session.switchDialog('/profile');
           } else if (session.checkIntent('#NO')) {
-            session.endDialog();
+            session.resetDialog();
+            session.switchDialog('/searching');
           } else {
             session.addResult('@UNCLEAR');
             session.next();
@@ -507,10 +541,8 @@ bot
   .dialog(
     '/reset', [
       (session) => {
-        session.addResult('@RESET_CONFIRMATION', [
-          Builder.QuickReplies.create('@YES'),
-          Builder.QuickReplies.create('@NO'),
-        ]);
+        session.addResult('@RESET_CONFIRMATION',
+          Builder.QuickReplies.createArray(['@YES', '@NO']));
       },
       (session) => {
         if (session.checkIntent('#YES')) {

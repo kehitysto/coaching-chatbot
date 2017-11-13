@@ -92,6 +92,15 @@ export function addCommunicationInfo({ context, input }) {
   return Promise.reject(new Error('AddCommunicationInfo failed'));
 }
 
+export function deleteCommunicationMethod({ context, input }) {
+  const method = CommunicationMethodsFormatter
+    .getCommunicationMethodByInput(input).identifier;
+
+  delete context.communicationMethods[method];
+
+  return contextChanges(context)();
+}
+
 export function reset() {
   return contextChanges()();
 }
@@ -121,8 +130,9 @@ export function removeSentRequests({ sessionId, context }) {
       return sessions.read(recipientId)
         .then((recipient) => {
           return sessions.write(recipientId, {
-              pairRequests: recipient.pairRequests
-                .filter((senderId) => senderId != sessionId),
+            ...recipient,
+            pairRequests: recipient.pairRequests
+              .filter((senderId) => senderId !== sessionId),
           });
         });
     }))
@@ -131,9 +141,10 @@ export function removeSentRequests({ sessionId, context }) {
   });
 }
 
-export function updateAvailablePeers({ sessionId, context }) {
+export function getAvailablePeers({ sessionId, context }) {
   const sessions = new Sessions();
   const rejectedPeers = context.rejectedPeers || [];
+  const availablePeersIndex = 1;
 
   return sessions.getAvailablePairs(sessionId)
     .then((pairs) => {
@@ -141,12 +152,22 @@ export function updateAvailablePeers({ sessionId, context }) {
         availablePeers: pairs
           .map((entry) => entry.id)
           .filter((entry) => rejectedPeers.indexOf(entry) < 0),
+        availablePeersIndex: availablePeersIndex,
       });
     })
     .catch((err) => {
       log.error('err: {0}', err);
       return Promise.reject(err);
     });
+}
+
+export function updateAvailablePeers({ sessionId, context }) {
+  return getAvailablePeers({ sessionId, context }).then((peers) => {
+    return contextChanges(context)({
+        availablePeers: context.availablePeers
+          .filter((peer) => peers.includes(peer)),
+    });
+  });
 }
 
 export function displayAvailablePeer({ context }) {
@@ -192,17 +213,31 @@ export function displayAcceptedPeer({ sessionId, context }) {
 }
 
 export function nextAvailablePeer({ context }) {
+  const availablePeers = context.availablePeers;
+  let availablePeersIndex = context.availablePeersIndex + 1;
+  availablePeers.push(availablePeers.shift());
   return contextChanges(context)({
-      availablePeers: context.availablePeers.slice(1),
+      availablePeers: availablePeers,
+      availablePeersIndex: availablePeersIndex,
   });
 }
 
 export function rejectAvailablePeer({ context }) {
   const rejectedPeers = context.rejectedPeers || [];
   rejectedPeers.push(context.availablePeers[0]);
-
   return contextChanges(context)({
       rejectedPeers,
+      availablePeers: context.availablePeers.slice(1),
+  });
+}
+
+export function checkAvailablePeersIndex({ context }) {
+  let availablePeersIndex = context.availablePeersIndex;
+  if (availablePeersIndex > context.availablePeers.length) {
+    availablePeersIndex = 1;
+  }
+  return contextChanges(context)({
+    availablePeersIndex,
   });
 }
 
@@ -219,47 +254,63 @@ export function rejectRequest({ context }) {
 export function acceptRequest({ sessionId, context }) {
   let pairs = new Pairs();
   let sessions = new Sessions();
+  context.pairRequests = context.pairRequests || [];
 
   const chosenPeerId = context.pairRequests[0];
-  return pairs.createPair(sessionId, chosenPeerId)
-      .then(() => {
-        return sessions.read(chosenPeerId)
-            .then((chosenPeer) => {
-              return removeSentRequests({
-                sessionId: chosenPeerId, context: chosenPeer });
-            })
-            .then((chosenPeer) => {
-              return markUserAsNotSearching(chosenPeer);
-            }
-          )
-            .then((chosenPeer) => {
-              const peer = chosenPeer.context;
-              peer.state = '/?0/profile?0/accepted_pair_information?0';
-              return sessions.write(chosenPeerId, peer);
-            }
-          );
-        })
-      .then(() => {
-        const bot = new Chatbot(dialog, sessions);
 
-        return bot.receive(chosenPeerId, '').then((out) => {
-          // run the chatbot for the chosen peer
-          let promises = [];
-          for (let r of out) {
-            promises.push(
-              Messenger.send(chosenPeerId, r.message, r.quickReplies)
+  return sessions.read(sessionId).then((session) => {
+    if (!session.pairRequests || !session.pairRequests.includes(chosenPeerId)) {
+      return Promise.resolve({
+        result: '@PEER_NO_LONGER_AVAILABLE',
+      });
+    }
+
+    return pairs.createPair(sessionId, chosenPeerId)
+        .then(() => {
+          return sessions.read(chosenPeerId)
+              .then((chosenPeer) => {
+                return removeSentRequests({
+                  sessionId: chosenPeerId, context: chosenPeer });
+              })
+              .then((chosenPeer) => {
+                return markUserAsNotSearching(chosenPeer);
+              }
+            )
+              .then((chosenPeer) => {
+                const peer = chosenPeer.context;
+                peer.state = '/?0/profile?0/accepted_pair_information?0';
+                peer.hasPair = true;
+                return sessions.write(chosenPeerId, peer);
+              }
             );
-          }
-          return Promise.all(promises);
-        });
-      })
-      .then(() => removeSentRequests({ sessionId, context }))
-      .then(() => markUserAsNotSearching({ context }));
+        })
+        .then(() => {
+          const bot = new Chatbot(dialog, sessions);
+
+          return bot.receive(chosenPeerId, '').then((out) => {
+            // run the chatbot for the chosen peer
+            let promises = [];
+            for (let r of out) {
+              promises.push(
+                Messenger.send(chosenPeerId, r.message, r.quickReplies)
+              );
+            }
+            return Promise.all(promises);
+          });
+        })
+        .then(() => removeSentRequests({ sessionId, context }))
+        .then(() => markUserAsNotSearching({ context }))
+        .then(({ context }) => contextChanges(context)({ hasPair: true }));
+  });
 }
 
 export function breakPair({ sessionId, context }) {
   let pairs = new Pairs();
   let sessions = new Sessions();
+
+  if (context) {
+    delete context.hasPair;
+  }
 
   return pairs.read(sessionId)
       .then((pairList) => {
@@ -270,7 +321,14 @@ export function breakPair({ sessionId, context }) {
 
         return pairs.breakPair(sessionId, pairId)
             .then(() => sessions.read(pairId))
-            .then((context) => resetMeeting({ context }))
+            .then((context) => {
+              resetMeeting({ context });
+              return context;
+            })
+            .then((context) => {
+              delete context.hasPair;
+              return context;
+            })
             .then((context) => sessions.write(
               pairId,
               {
@@ -284,7 +342,10 @@ export function breakPair({ sessionId, context }) {
                 PersonalInformationFormatter.format(
                   strings['@NOTIFY_PAIR_BROKEN'],
                   { pairName: context.name }
-                )
+                ),
+                Builder.QuickReplies.createArray([
+                  'OK',
+                ])
               );
             });
       })
@@ -324,7 +385,7 @@ export function addPairRequest({ sessionId, context }) {
       chosenPeer.pairRequests.push(sessionId);
       context.sentRequests = context.sentRequests || [];
       context.sentRequests.push(peerId);
-
+      context.availablePeers = context.availablePeers.slice(1);
       return session.write(peerId, chosenPeer)
           .then(() => {
             return Messenger.send(
@@ -341,6 +402,7 @@ export function addPairRequest({ sessionId, context }) {
           })
           .then(() => {
             return {
+              context,
               result: '@CONFIRM_NEW_PEER_ASK',
             };
           });
@@ -412,6 +474,7 @@ export function setWeekday({ context, input }) {
 export function setTime({ context, input }) {
   return contextChanges(context)({
       time: input,
+      remindersEnabled: true,
   });
 }
 
@@ -420,8 +483,9 @@ export function testReminderAndFeedback({ context }) {
   return sessions.readAllWithReminders()
     .then((sessionsFromDb) => {
       const promises = [];
-      for (let i=0; i<sessionsFromDb.length; i++) {
-        if (sessionsFromDb[i].context.skipMeeting) {
+      for (let i = 0; i < sessionsFromDb.length; i++) {
+        if (sessionsFromDb[i].context.skipMeeting ||
+          !sessionsFromDb[i].context.remindersEnabled) {
           continue;
         }
         promises.push(
@@ -434,7 +498,7 @@ export function testReminderAndFeedback({ context }) {
       }
       return sessions.readAllWithFeedbacks()
         .then((feedbackSessions) => {
-          for (let i=0; i<feedbackSessions.length; i++) {
+          for (let i = 0; i < feedbackSessions.length; i++) {
             if (feedbackSessions[i].context.skipMeeting) {
               promises.push(
                 sessions.write(
@@ -472,14 +536,18 @@ export function testReminderAndFeedback({ context }) {
 }
 
 export function resetMeeting({ context }) {
-  const { weekDay, time, ...cleanedContext } = context;
+  delete context.weekDay;
+  delete context.time;
+  delete context.skipMeeting;
+  delete context.remindersEnabled;
 
   return Promise.resolve(
-    cleanedContext
+    context
   );
 }
 
 export function setSkipMeeting({ context, sessionId }) {
+  const sessions = new Sessions();
   let pairs = new Pairs();
   return pairs.read(sessionId)
     .then((pairList) => {
@@ -488,23 +556,46 @@ export function setSkipMeeting({ context, sessionId }) {
         if (pairId == undefined) {
           return Promise.reject(new Error('No pair found!'));
         }
-        promises.push(
-          Messenger.send(pairId, strings['@SKIPPED_MEETING_MESSAGE'],
-          Builder.QuickReplies.createArray([
-            'OK',
-          ]))
-        );
-        promises.push(
-          contextChanges(context)({
-            skipMeeting: true,
-          })
-        );
-        return Promise.all(promises);
+        return sessions.read(pairId).then((pairContext) => {
+          let meetingAlreadySkipped = pairContext.skipMeeting;
+          promises.push(
+            sessions.write(
+              pairId,
+              {
+                ...pairContext,
+                skipMeeting: true,
+              }
+            ).then(() => {
+              if(
+                meetingAlreadySkipped == undefined ||
+                meetingAlreadySkipped == null ||
+                meetingAlreadySkipped == false
+              ) {
+                Messenger.send(pairId, strings['@SKIPPED_MEETING_MESSAGE'],
+                Builder.QuickReplies.createArray([
+                  'OK',
+                ]));
+              }
+            })
+          );
+          promises.push(
+            contextChanges(context)({
+              skipMeeting: true,
+            })
+          );
+          return Promise.all(promises);
+        });
     });
 }
 
 export function resetSkipMeeting({ context }) {
   return contextChanges(context)({
       skipMeeting: false,
+  });
+}
+
+export function toggleReminders({ context }) {
+  return contextChanges(context)({
+      remindersEnabled: !context.remindersEnabled,
   });
 }
