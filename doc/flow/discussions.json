@@ -15,18 +15,10 @@
       "Listaudu"
     ]
   },
-  "Katariina syöttää tietonsa ja lähettää Kaapolle pyynnön": {
+  "Katariina on syöttänyt tietonsa ja haluaa nyt etsiä paria.": {
     "player": "Katariina",
     "session": "Session2",
     "messages": [
-      "Hei!",
-      "Kyllä",
-      "Kuvaukseni ei sovi herkille.",
-      "Puhelin",
-      "1235",
-      "Profiiliin",
-      "Vaihda nimi",
-      "Katariina",
       "Etsi pari",
       "Kyllä",
       "Kyllä"

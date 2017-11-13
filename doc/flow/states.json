@@ -1,0 +1,15 @@
+{
+  "Session2": {
+    "name": "Katariina",
+    "bio": "Kuvaukseni ei sovi herkille",
+    "searching": true,
+    "availablePeers": [],
+    "pairRequests": [],
+    "rejectedPeers": [],
+    "sentRequests": [],
+    "communicationMethods": {
+      "PHONE": "1235"
+    },
+    "state": "/?0/profile?0"
+  }
+}
