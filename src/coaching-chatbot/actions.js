@@ -214,21 +214,16 @@ export function displayAcceptedPeer({ sessionId, context }) {
 }
 
 export function nextAvailablePeer({ context }) {
-  const availablePeers = context.availablePeers;
-  let availablePeersIndex = context.availablePeersIndex + 1;
-  availablePeers.push(availablePeers.shift());
   return contextChanges(context)({
-      availablePeers: availablePeers,
-      availablePeersIndex: availablePeersIndex,
+      availablePeersIndex: context.availablePeersIndex + 1,
   });
 }
 
 export function rejectAvailablePeer({ context }) {
   const rejectedPeers = context.rejectedPeers || [];
-  rejectedPeers.push(context.availablePeers[0]);
+  rejectedPeers.push(context.availablePeers[context.availablePeersIndex - 1]);
   return contextChanges(context)({
       rejectedPeers,
-      availablePeers: context.availablePeers.slice(1),
   });
 }
 
@@ -238,7 +233,7 @@ export function checkAvailablePeersIndex({ context }) {
     availablePeersIndex = 1;
   }
   return contextChanges(context)({
-    availablePeersIndex,
+      availablePeersIndex,
   });
 }
 
@@ -377,7 +372,7 @@ export function displayRequest({ context }) {
 }
 
 export function addPairRequest({ sessionId, context }) {
-  let peerId = context.availablePeers[0];
+  let peerId = context.availablePeers[context.availablePeersIndex - 1];
   let session = new Sessions();
 
   return session.read(peerId).then((chosenPeer) => {
