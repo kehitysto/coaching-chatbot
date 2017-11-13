@@ -11,25 +11,27 @@
       "Profiiliin",
       "Vaihda nimi",
       "Kaapo",
-      "Etsi pari",
+      "Selaa hakijoita",
       "Listaudu"
     ]
   },
-  "Katariina syöttää tietonsa ja lähettää Kaapolle pyynnön": {
+  "Katariina on syöttänyt tietonsa ja haluaa nyt etsiä paria. Katariina muuttaa tietojansa.": {
     "player": "Katariina",
     "session": "Session2",
     "messages": [
-      "Hei!",
+      "Selaa hakijoita",
+      "Seuraava",
       "Kyllä",
-      "Kuvaukseni ei sovi herkille.",
-      "Puhelin",
-      "1235",
-      "Profiiliin",
+      "Ei",
+      "Listaudu",
       "Vaihda nimi",
-      "Katariina",
-      "Etsi pari",
-      "Kyllä",
-      "Kyllä"
+      "Katariina-Elli",
+      "Muokkaa kuvausta",
+      "Parempi kuvaus",
+      "Yhteystiedot",
+      "Lisää",
+      "Skype",
+      "Skype-acc"
     ]
   },
   "Kaapo hyväksyy pyynnön ja asettaa tapaamisen ajankohdan": {
