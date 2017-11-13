@@ -138,7 +138,7 @@ module.exports = {
     },
 
     INFO: {
-        any: /^(?:info|ohje(?:et))$/i,
+        any: /^(?:info|ohje(?:et)|help|faq)$/i,
     },
 
     SKIP_MEETING: {

@@ -399,11 +399,11 @@ describe('coaching-bot actions', function() {
   describe('#nextAvailablePeer', function() {
     it('moves the current peer to the end of nextAvailablePeer array', function() {
       const ret = actions.nextAvailablePeer({
-        context: { availablePeers: ['TEST1', 'TEST2'] },
+        context: { availablePeers: ['TEST1', 'TEST2'], availablePeersIndex: 1 },
       });
 
       return expect(ret).to.become({
-        context: { availablePeers: ['TEST2', 'TEST1'], availablePeersIndex: NaN },
+        context: { availablePeers: ['TEST1', 'TEST2'], availablePeersIndex: 2 },
       });
     });
   });
@@ -414,13 +414,15 @@ describe('coaching-bot actions', function() {
         context: {
           rejectedPeers: ['TEST1'],
           availablePeers: ['TEST2'],
+          availablePeersIndex: 1,
         },
       });
 
       return expect(ret).to.become({
         context: {
           rejectedPeers: ['TEST1', 'TEST2'],
-          availablePeers: [],
+          availablePeers: ['TEST2'],
+          availablePeersIndex: 1,
         },
       });
     });
@@ -429,13 +431,15 @@ describe('coaching-bot actions', function() {
       const ret = actions.rejectAvailablePeer({
         context: {
           availablePeers: ['TEST2'],
+          availablePeersIndex: 1
         },
       });
 
       return expect(ret).to.become({
         context: {
           rejectedPeers: ['TEST2'],
-          availablePeers: [],
+          availablePeers: ['TEST2'],
+          availablePeersIndex: 1
         },
       });
     });

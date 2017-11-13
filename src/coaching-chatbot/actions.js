@@ -144,7 +144,7 @@ export function removeSentRequests({ sessionId, context }) {
 export function getAvailablePeers({ sessionId, context }) {
   const sessions = new Sessions();
   const rejectedPeers = context.rejectedPeers || [];
-  const availablePeersIndex = 1;
+  const availablePeersIndex = context.availablePeersIndex || 1;
 
   return sessions.getAvailablePairs(sessionId)
     .then((pairs) => {
@@ -162,10 +162,10 @@ export function getAvailablePeers({ sessionId, context }) {
 }
 
 export function updateAvailablePeers({ sessionId, context }) {
-  return getAvailablePeers({ sessionId, context }).then((peers) => {
+  return getAvailablePeers({ sessionId, context }).then((session) => {
     return contextChanges(context)({
         availablePeers: context.availablePeers
-          .filter((peer) => peers.includes(peer)),
+          .filter((peer) => session.context.availablePeers.includes(peer)),
     });
   });
 }
@@ -174,7 +174,8 @@ export function displayAvailablePeer({ context }) {
   return new Promise((resolve, reject) => {
     let sessions = new Sessions();
 
-    return sessions.read(context.availablePeers[0])
+    return sessions.read(
+      context.availablePeers[context.availablePeersIndex - 1])
       .then((profile) => {
         resolve({
           result: PairFormatter.createPairString(profile),
@@ -213,21 +214,16 @@ export function displayAcceptedPeer({ sessionId, context }) {
 }
 
 export function nextAvailablePeer({ context }) {
-  const availablePeers = context.availablePeers;
-  let availablePeersIndex = context.availablePeersIndex + 1;
-  availablePeers.push(availablePeers.shift());
   return contextChanges(context)({
-      availablePeers: availablePeers,
-      availablePeersIndex: availablePeersIndex,
+      availablePeersIndex: context.availablePeersIndex + 1,
   });
 }
 
 export function rejectAvailablePeer({ context }) {
   const rejectedPeers = context.rejectedPeers || [];
-  rejectedPeers.push(context.availablePeers[0]);
+  rejectedPeers.push(context.availablePeers[context.availablePeersIndex - 1]);
   return contextChanges(context)({
       rejectedPeers,
-      availablePeers: context.availablePeers.slice(1),
   });
 }
 
@@ -237,7 +233,7 @@ export function checkAvailablePeersIndex({ context }) {
     availablePeersIndex = 1;
   }
   return contextChanges(context)({
-    availablePeersIndex,
+      availablePeersIndex,
   });
 }
 
@@ -289,13 +285,11 @@ export function acceptRequest({ sessionId, context }) {
 
           return bot.receive(chosenPeerId, '').then((out) => {
             // run the chatbot for the chosen peer
-            let promises = [];
-            for (let r of out) {
-              promises.push(
-                Messenger.send(chosenPeerId, r.message, r.quickReplies)
-              );
-            }
-            return Promise.all(promises);
+
+            return Messenger.send(
+              chosenPeerId,
+              out.map((m) => m.message).join('\n\n'),
+              out[out.length - 1].quickReplies);
           });
         })
         .then(() => removeSentRequests({ sessionId, context }))
@@ -376,7 +370,7 @@ export function displayRequest({ context }) {
 }
 
 export function addPairRequest({ sessionId, context }) {
-  let peerId = context.availablePeers[0];
+  let peerId = context.availablePeers[context.availablePeersIndex - 1];
   let session = new Sessions();
 
   return session.read(peerId).then((chosenPeer) => {
