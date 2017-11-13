@@ -290,13 +290,11 @@ export function acceptRequest({ sessionId, context }) {
 
           return bot.receive(chosenPeerId, '').then((out) => {
             // run the chatbot for the chosen peer
-            let promises = [];
-            for (let r of out) {
-              promises.push(
-                Messenger.send(chosenPeerId, r.message, r.quickReplies)
-              );
-            }
-            return Promise.all(promises);
+
+            return Messenger.send(
+              chosenPeerId,
+              out.map((m) => m.message).join('\n\n'),
+              out[out.length - 1].quickReplies);
           });
         })
         .then(() => removeSentRequests({ sessionId, context }))
