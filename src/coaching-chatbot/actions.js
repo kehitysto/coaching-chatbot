@@ -144,7 +144,7 @@ export function removeSentRequests({ sessionId, context }) {
 export function getAvailablePeers({ sessionId, context }) {
   const sessions = new Sessions();
   const rejectedPeers = context.rejectedPeers || [];
-  const availablePeersIndex = 1;
+  const availablePeersIndex = context.availablePeersIndex || 1;
 
   return sessions.getAvailablePairs(sessionId)
     .then((pairs) => {
@@ -162,10 +162,10 @@ export function getAvailablePeers({ sessionId, context }) {
 }
 
 export function updateAvailablePeers({ sessionId, context }) {
-  return getAvailablePeers({ sessionId, context }).then((peers) => {
+  return getAvailablePeers({ sessionId, context }).then((session) => {
     return contextChanges(context)({
         availablePeers: context.availablePeers
-          .filter((peer) => peers.includes(peer)),
+          .filter((peer) => session.context.availablePeers.includes(peer)),
     });
   });
 }
@@ -174,7 +174,8 @@ export function displayAvailablePeer({ context }) {
   return new Promise((resolve, reject) => {
     let sessions = new Sessions();
 
-    return sessions.read(context.availablePeers[0])
+    return sessions.read(
+      context.availablePeers[context.availablePeersIndex - 1])
       .then((profile) => {
         resolve({
           result: PairFormatter.createPairString(profile),
