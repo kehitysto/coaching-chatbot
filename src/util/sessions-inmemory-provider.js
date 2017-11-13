@@ -26,6 +26,15 @@ module.exports = class InMemoryProvider {
     log.silly('Getting all sessions with reminders');
     let sessions = [];
 
+    let currentDate = new Date();
+    let currentHourWithoutZero = currentDate.getHours();
+    let currentHourWithZero;
+    if (currentHourWithoutZero < 10) {
+      currentHourWithZero = '0' + currentHourWithoutZero;
+    } else {
+      currentHourWithZero = currentHourWithoutZero;
+    }
+
     for (let sessionId in this.db) {
       if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
       log.silly('Evaluating session with id: ', sessionId);
@@ -34,9 +43,18 @@ module.exports = class InMemoryProvider {
       const day = context.weekDay;
       if(day === undefined) continue;
       let meetingDay = strings['@WEEKDAYS'].indexOf(day.toUpperCase());
-      if (meetingDay == new Date().getDay()) {
-        log.silly('Found context with id: ', sessionId);
-        sessions.push( { 'Id': sessionId, 'context': context } );
+      if (meetingDay == currentDate.getDay()) {
+        if (context.time.length == 5) {
+          if (context.time.substring(0, 2) == currentHourWithZero) {
+            log.silly('Found context with id: ', sessionId);
+            sessions.push( { 'Id': sessionId, 'context': context } );
+          }
+        } else if (context.time.length == 4) {
+          if (context.time.substring(0, 1) == currentHourWithoutZero) {
+            log.silly('Found context with id: ', sessionId);
+            sessions.push( { 'Id': sessionId, 'context': context } );
+          }
+        }
       }
     }
 
@@ -47,6 +65,15 @@ module.exports = class InMemoryProvider {
     log.silly('Getting all sessions with feedbacks');
     let sessions = [];
 
+    let currentDate = new Date();
+    let currentHourWithoutZero = (currentDate.getHours() - 1) % 24;
+    let currentHourWithZero;
+    if ((currentHourWithoutZero) < 10) {
+      currentHourWithZero = '0' + currentHourWithoutZero;
+    } else {
+      currentHourWithZero = currentHourWithoutZero;
+    }
+
     for (let sessionId in this.db) {
       if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
       log.silly('Evaluating session with id: ', sessionId);
@@ -56,9 +83,18 @@ module.exports = class InMemoryProvider {
       if(day === undefined) continue;
       let meetingDay = strings['@WEEKDAYS'].indexOf(day.toUpperCase());
 
-      if (meetingDay == ((new Date().getDay() + 5) % 7)) {
-        log.silly('Found context with id: ', sessionId);
-        sessions.push( { 'Id': sessionId, 'context': context } );
+      if (meetingDay == ((currentDate.getDay() + 6) % 7)) {
+        if (context.time.length == 5) {
+          if (context.time.substring(0, 2) == currentHourWithZero) {
+            log.silly('Found context with id: ', sessionId);
+            sessions.push( { 'Id': sessionId, 'context': context } );
+          }
+        } else if (context.time.length == 4) {
+          if (context.time.substring(0, 1) == currentHourWithoutZero) {
+            log.silly('Found context with id: ', sessionId);
+            sessions.push( { 'Id': sessionId, 'context': context } );
+          }
+        }
       }
     }
     return Promise.resolve(sessions);

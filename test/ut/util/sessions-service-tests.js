@@ -204,10 +204,16 @@ describe('Sessions service', function() {
 
   describe('#readAllWithReminders', function() {
     it('should return users with reminders', function() {
+      let currentDate = new Date();
+      let currentMinutes = currentDate.getMinutes();
+      if (currentMinutes.length < 10) {
+        currentMinutes = '0' + currentMinutes;
+      }
       const context1 = {
         name: 'Kaapo',
         remindersEnabled: true,
-        weekDay: strings['@WEEKDAYS'][new Date().getDay() % 7].substr(0, 2)
+        weekDay: strings['@WEEKDAYS'][new Date().getDay() % 7].substr(0, 2),
+        time: currentDate.getHours() + ':' + currentMinutes
       };
       const context2 = {
         name: 'Katriina'
@@ -227,15 +233,22 @@ describe('Sessions service', function() {
 
   describe('#readAllWithFeedbacks', function() {
     it('should return users with reminders', function() {
+      let currentDate = new Date();
+      let currentMinutes = currentDate.getMinutes();
+      if (currentMinutes.length < 10) {
+        currentMinutes = '0' + currentMinutes;
+      }
       const context1 = {
         name: 'Katriina',
         remindersEnabled: true,
-        weekDay: strings['@WEEKDAYS'][(new Date().getDay() + 5) % 7].substr(0, 2)
+        weekDay: strings['@WEEKDAYS'][(new Date().getDay() + 6) % 7].substr(0, 2),
+        time: ((currentDate.getHours() - 1) % 24)  + ':' + currentMinutes
       };
       const context2 = {
         name: 'Kaapo',
         remindersEnabled: true,
-        weekDay: strings['@WEEKDAYS'][(new Date().getDay()) % 7].substr(0, 2)
+        weekDay: strings['@WEEKDAYS'][(new Date().getDay()) % 7].substr(0, 2),
+        time: ((currentDate.getHours() - 1) % 24) + ':' + currentMinutes
       }
       const sessions = new Sessions();
       sessions.db = new InMemoryProvider();

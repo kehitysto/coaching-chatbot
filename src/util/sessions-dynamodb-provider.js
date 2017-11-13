@@ -25,7 +25,15 @@ module.exports = class DynamoDBProvider {
   }
 
   readAllWithReminders() {
-    let currentDay = strings['@WEEKDAYS'][new Date().getDay()].toUpperCase();
+    let currentDate = new Date();
+    let currentDay = strings['@WEEKDAYS'][currentDate.getDay()].toUpperCase();
+    let currentHourWithoutZero = currentDate.getHours();
+    let currentHourWithZero;
+    if (currentHourWithoutZero < 10) {
+      currentHourWithZero = '0' + currentHourWithoutZero;
+    } else {
+      currentHourWithZero = currentHourWithoutZero;
+    }
 
     const params = {
       Limit: 50,
@@ -36,14 +44,36 @@ module.exports = class DynamoDBProvider {
     };
 
     return this.table.scan(params).then((items) => {
+      for (let i = items.length - 1; i >= 0; i--) {
+        let item = items[i];
+        if (item.context.time.length == 5) {
+          if (item.context.time.substring(0, 2) != currentHourWithZero) {
+            items.splice(i, 1);
+          }
+        } else if (item.context.time.length == 4) {
+          if (item.context.time.substring(0, 1) != currentHourWithoutZero) {
+            items.splice(i, 1);
+          }
+        }
+      }
+
       log.debug('Sessions with reminder: ' + JSON.stringify(items));
       return items;
     });
   }
 
   readAllWithFeedbacks() {
-    let enumForDay = (new Date().getDay() + 5) % 7;
-    let currentDay = strings['@WEEKDAYS'][enumForDay].toUpperCase();
+    let currentDate = new Date();
+    let currentDay = strings['@WEEKDAYS'][(currentDate.getDate() + 6)
+       % 7].toUpperCase();
+
+    let currentHourWithoutZero = (currentDate.getHours() - 1) % 24;
+    let currentHourWithZero;
+    if (currentHourWithoutZero < 10) {
+      currentHourWithZero = '0' + currentHourWithoutZero;
+    } else {
+      currentHourWithZero = currentHourWithoutZero;
+    }
 
     const params = {
       Limit: 50,
@@ -54,6 +84,19 @@ module.exports = class DynamoDBProvider {
     };
 
     return this.table.scan(params).then((items) => {
+      for (let i = items.length - 1; i >= 0; i--) {
+        let item = items[i];
+        if (item.context.time.length == 5) {
+          if (item.context.time.substring(0, 2) != currentHourWithZero) {
+            items.splice(i, 1);
+          }
+        } else if (item.context.time.length == 4) {
+          if (item.context.time.substring(0, 1) != currentHourWithoutZero) {
+            items.splice(i, 1);
+          }
+        }
+      }
+
       log.debug('Sessions with feedback: ' + JSON.stringify(items));
       return items;
     });
