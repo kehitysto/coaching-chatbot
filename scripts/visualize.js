@@ -27,7 +27,9 @@ let messageQueue = {};
 
 function addBotReply(output) {
   for (let botReply of output) {
-    lines.push('| ' + botReply.message.replace('\n', ' | |\n| ') + ' | |');
+    for (let message of botReply.message.split('\n')) {
+      lines.push('| ' + message + ' | |');
+    }
     if (botReply.quickReplies.length > 0) {
       lines.push('| [' +
         botReply.quickReplies
