@@ -39,31 +39,46 @@ function addBotReply(output) {
   }
 }
 
+var clock = sinon.useFakeTimers(new Date().getTime());
+
 for (let scenario in discussions) {
   const messages = discussions[scenario].messages;
+  const sessionID = discussions[scenario].session;
 
-  promise = promise.then(() => {
-    lines.push('# ' + scenario);
-    lines.push('| Kehitystön vertaisohjausrobotti | ' + discussions[scenario].player + ' |');
-    lines.push('|-|-|');
-  });
-
-  let sessionID = discussions[scenario].session;
-
-  promise = promise.then(() => {
-    if (messageQueue[sessionID] != undefined) {
-      addBotReply(messageQueue[sessionID]);
-      messageQueue[sessionID] = undefined;
-    }
-  });
-
-  for (let message of messages) {
+  if (discussions[scenario].time) {
     promise = promise.then(() => {
-      lines.push('| | ' + message + ' |');
-      return bot.receive(sessionID, message);
-    }).then((output) => {
-      addBotReply(output);
+      clock = sinon.useFakeTimers(new Date(discussions[scenario].time).getTime());
     });
+  }
+
+  if (discussions[scenario].hide) {
+    for (let message of messages) {
+      promise = promise.then(() => {
+        return bot.receive(sessionID, message);
+      });
+    }
+  } else {
+    promise = promise.then(() => {
+      lines.push('# ' + scenario);
+      lines.push('| Kehitystön vertaisohjausrobotti | ' + discussions[scenario].player + ' |');
+      lines.push('|-|-|');
+    });
+
+    promise = promise.then(() => {
+      if (messageQueue[sessionID] != undefined) {
+        addBotReply(messageQueue[sessionID]);
+        messageQueue[sessionID] = undefined;
+      }
+    });
+
+    for (let message of messages) {
+      promise = promise.then(() => {
+        lines.push('| | ' + message + ' |');
+        return bot.receive(sessionID, message);
+      }).then((output) => {
+        addBotReply(output);
+      });
+    }
   }
 
   promise = promise.then(() => {
@@ -78,6 +93,7 @@ for (let scenario in discussions) {
         });
       }
       messengerSpy.reset();
+      clock.reset();
     }
   });
 }
