@@ -205,10 +205,7 @@ describe('Sessions service', function() {
   describe('#readAllWithReminders', function() {
     it('should return users with reminders', function() {
       let currentDate = new Date();
-      let currentMinutes = currentDate.getMinutes();
-      if (currentMinutes < 10) {
-        currentMinutes = '0' + currentMinutes;
-      }
+      let currentMinutes = ('0' + currentDate.getMinutes()).substr(-2, 2);
       const context1 = {
         name: 'Kaapo',
         remindersEnabled: true,
@@ -234,10 +231,7 @@ describe('Sessions service', function() {
   describe('#readAllWithFeedbacks', function() {
     it('should return users with reminders', function() {
       let currentDate = new Date();
-      let currentMinutes = currentDate.getMinutes();
-      if (currentMinutes < 10) {
-        currentMinutes = '0' + currentMinutes;
-      }
+      let currentMinutes = ('0' + currentDate.getMinutes()).substr(-2, 2);
       const context1 = {
         name: 'Katriina',
         remindersEnabled: true,
