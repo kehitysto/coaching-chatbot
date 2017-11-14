@@ -38,8 +38,6 @@ module.exports = class DynamoDBProvider {
       currentHourWithZero = currentHourWithoutZero;
     }
 
-    log.debug('PREVIOUS DAY: ' + currentDay);
-
     const params = {
       Limit: 50,
       FilterExpression: 'context.weekDay = :currentDay',
@@ -49,8 +47,6 @@ module.exports = class DynamoDBProvider {
     };
 
     return this.table.scan(params).then((items) => {
-      log.debug('CURRENT TIME: ' + currentHourWithZero +
-      ':' + currentDate.getMinutes());
       let sessions = [];
       for (let i = 0; i < items.length; i++) {
         let item = items[i];
@@ -77,7 +73,6 @@ module.exports = class DynamoDBProvider {
     let currentDate = new Date(utc + (2 * 60 * 60 * 1000));
     let enumDate = (currentDate.getDay() + 6) % 7;
     let currentDay = strings['@WEEKDAYS'][enumDate].toUpperCase();
-    log.debug('CURRENT DAY: ' + currentDay);
     let currentHourWithoutZero = (currentDate.getHours() - 1) % 24;
     let currentHourWithZero;
     if (currentHourWithoutZero < 10) {
@@ -95,8 +90,6 @@ module.exports = class DynamoDBProvider {
     };
 
     return this.table.scan(params).then((items) => {
-      log.debug('CURRENT TIME: ' + currentHourWithZero +
-      ':' + currentDate.getMinutes());
       let sessions = [];
       for (let i = 0; i < items.length; i++) {
         let item = items[i];

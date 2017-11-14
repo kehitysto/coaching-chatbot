@@ -206,7 +206,7 @@ describe('Sessions service', function() {
     it('should return users with reminders', function() {
       let currentDate = new Date();
       let currentMinutes = currentDate.getMinutes();
-      if (currentMinutes.length < 10) {
+      if (currentMinutes < 10) {
         currentMinutes = '0' + currentMinutes;
       }
       const context1 = {
@@ -235,7 +235,7 @@ describe('Sessions service', function() {
     it('should return users with reminders', function() {
       let currentDate = new Date();
       let currentMinutes = currentDate.getMinutes();
-      if (currentMinutes.length < 10) {
+      if (currentMinutes < 10) {
         currentMinutes = '0' + currentMinutes;
       }
       const context1 = {
