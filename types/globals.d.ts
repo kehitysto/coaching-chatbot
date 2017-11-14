@@ -24,6 +24,7 @@ declare class Context {
     time: string;
     skipMeeting: boolean;
     remindersEnabled: boolean;
+    hasPair: boolean;
 }
 
 declare class Session {
@@ -55,6 +56,7 @@ declare class Session {
     areRemindersEnabled(): boolean;
     getPairRequestCount(): number;
     getAvailablePeersCount(): number;
+    hasPair(): boolean;
 }
 
 declare class Sessions {
