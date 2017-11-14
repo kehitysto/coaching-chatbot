@@ -30,13 +30,7 @@ module.exports = class DynamoDBProvider {
     // UTC + 2 -> Suomen aika
     let currentDate = new Date(utc + (2 * 60 * 60 * 1000));
     let currentDay = strings['@WEEKDAYS'][currentDate.getDay()].toUpperCase();
-    let currentHourWithoutZero = currentDate.getHours();
-    let currentHourWithZero;
-    if (currentHourWithoutZero < 10) {
-      currentHourWithZero = '0' + currentHourWithoutZero;
-    } else {
-      currentHourWithZero = currentHourWithoutZero;
-    }
+    let currentHour = ('0' + currentDate.getHours()).substr(-2, 2);
 
     const params = {
       Limit: 50,
@@ -47,20 +41,8 @@ module.exports = class DynamoDBProvider {
     };
 
     return this.table.scan(params).then((items) => {
-      let sessions = [];
-      for (let i = 0; i < items.length; i++) {
-        let item = items[i];
-        if (item.context.time.length == 5) {
-          if (item.context.time.substring(0, 2) == currentHourWithZero) {
-            sessions.push(items[i]);
-          }
-        } else if (item.context.time.length == 4) {
-          if (item.context.time.substring(0, 1) == currentHourWithoutZero) {
-            sessions.push(items[i]);
-          }
-        }
-      }
-
+      let sessions = items.filter((item) =>
+        ('0' + item.context.time).substr(-5, 2) == currentHour);
       log.debug('Sessions with reminder: ' + JSON.stringify(sessions));
       return sessions;
     });
@@ -71,15 +53,9 @@ module.exports = class DynamoDBProvider {
     let utc = d.getTime() + (d.getTimezoneOffset() * 60 * 1000);
     // UTC + 2 -> Suomen aika
     let currentDate = new Date(utc + (2 * 60 * 60 * 1000));
-    let enumDate = (currentDate.getDay() + 6) % 7;
-    let currentDay = strings['@WEEKDAYS'][enumDate].toUpperCase();
-    let currentHourWithoutZero = (currentDate.getHours() - 1) % 24;
-    let currentHourWithZero;
-    if (currentHourWithoutZero < 10) {
-      currentHourWithZero = '0' + currentHourWithoutZero;
-    } else {
-      currentHourWithZero = currentHourWithoutZero;
-    }
+    let enumDay = (currentDate.getDay() + 6) % 7;
+    let currentDay = strings['@WEEKDAYS'][enumDay].toUpperCase();
+    let currentHour = ('0' + ((currentDate.getHours() - 1) % 24)).substr(-2, 2);
 
     const params = {
       Limit: 50,
@@ -90,20 +66,8 @@ module.exports = class DynamoDBProvider {
     };
 
     return this.table.scan(params).then((items) => {
-      let sessions = [];
-      for (let i = 0; i < items.length; i++) {
-        let item = items[i];
-        if (item.context.time.length == 5) {
-          if (item.context.time.substring(0, 2) == currentHourWithZero) {
-            sessions.push(items[i]);
-          }
-        } else if (item.context.time.length == 4) {
-          if (item.context.time.substring(0, 1) == currentHourWithoutZero) {
-            sessions.push(items[i]);
-          }
-        }
-      }
-
+      let sessions = items.filter((item) =>
+        ('0' + item.context.time).substr(-5, 2) == currentHour);
       log.debug('Sessions with feedback: ' + JSON.stringify(sessions));
       return sessions;
     });
