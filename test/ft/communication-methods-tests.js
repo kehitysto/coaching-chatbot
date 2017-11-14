@@ -50,6 +50,32 @@ describe('Communication methods tests', function() {
         }
       );
 
+      it('should not allow too long Skype username', function () {
+        return expect(
+          this.bot.receive(SESSION, Array(51).fill('a').join('')))
+          .to.eventually.become([
+            buildResponse('@TOO_LONG_COMMUNICATION_METHOD'),
+            buildResponse('@REQUEST_COMMUNICATION_METHOD', [{
+              'title': 'Skype',
+              'payload': 'SKYPE',
+            }, {
+              'title': 'Puhelin',
+              'payload': 'PHONE',
+            }]),
+          ]);
+      });
+
+      it(
+        'should ask for my Skype username when I choose Skype as a communication method',
+        function () {
+          return expect(
+            this.bot.receive(SESSION, 'Skype'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_SKYPE_NAME'),
+            ]);
+        }
+      );
+
       it(
         'should ask if the user wants to add more methods',
         function() {
