@@ -186,8 +186,35 @@ describe('Communication methods tests', function() {
             ]);
         }
       );
-    }
-  );
+
+      it('should allow changing name', function() {
+          return expect(this.bot.receive(SESSION, 'Vaihda nimi'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_NAME'),
+            ]);
+          }
+      );
+
+      it('should not accept too long name', function() {
+        return expect(this.bot.receive(SESSION, Array(51).fill('a').join('')))
+          .to.eventually.become([
+            buildResponse('@TOO_LONG_NAME'),
+            buildResponse('@REQUEST_NAME'),
+          ]);
+        }
+      );
+
+      it('should accept not too long name', function() {
+        return expect(this.bot.receive(SESSION, Array(50).fill('a').join('')))
+          to.eventually.become([
+            buildResponse(
+              PersonalInformationFormatter.formatFromTemplate(
+                '@DISPLAY_PROFILE', FeatureTestStates['COMMUNICATION_METHODS_TESTS']['sessions'][SESSION]),
+              PersonalInformationFormatter.getPersonalInformationbuttons({})),
+          ]);
+        }
+      );
+  });
 
   describe(
     'As a registered user I want to be able to remove my communication methods, add them again and modify them',

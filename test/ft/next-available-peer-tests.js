@@ -44,7 +44,7 @@ describe('Next available peer tests', function () {
                 }]),
               QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT',])
             ),
-          ]);PersonalInformationFormatter
+          ]);
       });
 
       it('Should show the next available peer', function () {
