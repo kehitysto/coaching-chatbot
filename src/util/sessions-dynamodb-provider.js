@@ -25,7 +25,10 @@ module.exports = class DynamoDBProvider {
   }
 
   readAllWithReminders() {
-    let currentDate = new Date();
+    let d = new Date();
+    let utc = d.getTime() + (d.getTimezoneOffset() * 60 * 1000);
+    // UTC + 2 -> Suomen aika
+    let currentDate = utc + (2 * 60 * 60 * 1000);
     let currentDay = strings['@WEEKDAYS'][currentDate.getDay()].toUpperCase();
     let currentHourWithoutZero = currentDate.getHours();
     let currentHourWithZero;
@@ -68,7 +71,10 @@ module.exports = class DynamoDBProvider {
   }
 
   readAllWithFeedbacks() {
-    let currentDate = new Date();
+    let d = new Date();
+    let utc = d.getTime() + (d.getTimezoneOffset() * 60 * 1000);
+    // UTC + 2 -> Suomen aika
+    let currentDate = utc + (2 * 60 * 60 * 1000);
     let currentDay = strings['@WEEKDAYS'][(currentDate.getDate() + 6)
        % 7].toUpperCase();
     log.debug('CURRENT DAY: ' + currentDay);
