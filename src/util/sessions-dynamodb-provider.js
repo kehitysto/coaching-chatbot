@@ -75,8 +75,8 @@ module.exports = class DynamoDBProvider {
     let utc = d.getTime() + (d.getTimezoneOffset() * 60 * 1000);
     // UTC + 2 -> Suomen aika
     let currentDate = new Date(utc + (2 * 60 * 60 * 1000));
-    let currentDay = strings['@WEEKDAYS'][(currentDate.getDate() + 6)
-       % 7].toUpperCase();
+    let enumDate = (currentDate.getDate() + 6) % 7;
+    let currentDay = strings['@WEEKDAYS'][enumDate].toUpperCase();
     log.debug('CURRENT DAY: ' + currentDay);
     let currentHourWithoutZero = (currentDate.getHours() - 1) % 24;
     let currentHourWithZero;
