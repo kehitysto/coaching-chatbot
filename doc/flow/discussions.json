@@ -42,7 +42,7 @@
       "Kyllä",
       "Aseta tapaaminen",
       "KE",
-      "13:55"
+      "11:55"
     ]
   },
   "Katariina saa tietää Kaapon hyväksyneen pyynnön": {
@@ -52,18 +52,59 @@
       "Aseta tapaaminen"
     ]
   },
-  "Kaapo ei halua enää olla Katariinan pari": {
+  "Kaapon ja Katariinan tapaaminen lähestyy": {
+    "hide": true,
+    "time": 1510647770885,
+    "session": "SessionH",
+    "messages": [
+      "test"
+    ]
+  },
+  "Kaapo saa muistutuksen tapaamisesta": {
+    "player": "Kaapo",
+    "session": "Session1",
+    "messages": [
+      "OK",
+      "Näytä pari"
+    ]
+  },
+  "Kaapo ja Katariina tapaavat": {
+    "hide": true,
+    "time": 1510823536790,
+    "session": "SessionH",
+    "messages": [
+      "test"
+    ]
+  },
+  "Kaapo saa tapaamisen jälkeen pyynnön antaa palautetta": {
+    "player": "Kaapo",
+    "session": "Session1",
+    "messages": [
+      "Kyllä",
+      "1",
+      "En halua saada kelvotonta vertaisohjausta."
+    ]
+  },
+  "Katariina saa tietää Kaapon palautteesta": {
+    "player": "Katariina",
+    "session": "Session2",
+    "messages": [
+      "OK"
+    ]
+  },
+  "Kaapo  halua enää olla Katariinan pari": {
     "player": "Kaapo",
     "session": "Session1",
     "messages": [
       "Riko pari"
     ]
   },
-  "Katariina saa tietää Kaapon rikkoneen parin": {
+  "Katariina saa tietää Kaapon rikkoneen parin ja vaihtaa nimensä": {
     "player": "Katariina",
     "session": "Session2",
     "messages": [
-      "Mitä nyt?"
+      "OK",
+      "Vaihda nimi Katriina"
     ]
   }
 }

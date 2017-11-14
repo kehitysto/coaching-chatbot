@@ -47,12 +47,12 @@ module.exports = class InMemoryProvider {
         if (context.time.length == 5) {
           if (context.time.substring(0, 2) == currentHourWithZero) {
             log.silly('Found context with id: ', sessionId);
-            sessions.push( { 'Id': sessionId, 'context': context } );
+            sessions.push( { 'id': sessionId, 'context': context } );
           }
         } else if (context.time.length == 4) {
           if (context.time.substring(0, 1) == currentHourWithoutZero) {
             log.silly('Found context with id: ', sessionId);
-            sessions.push( { 'Id': sessionId, 'context': context } );
+            sessions.push( { 'id': sessionId, 'context': context } );
           }
         }
       }
@@ -82,17 +82,16 @@ module.exports = class InMemoryProvider {
       const day = context.weekDay;
       if(day === undefined) continue;
       let meetingDay = strings['@WEEKDAYS'].indexOf(day.toUpperCase());
-
       if (meetingDay == ((currentDate.getDay() + 6) % 7)) {
         if (context.time.length == 5) {
           if (context.time.substring(0, 2) == currentHourWithZero) {
             log.silly('Found context with id: ', sessionId);
-            sessions.push( { 'Id': sessionId, 'context': context } );
+            sessions.push( { 'id': sessionId, 'context': context } );
           }
         } else if (context.time.length == 4) {
           if (context.time.substring(0, 1) == currentHourWithoutZero) {
             log.silly('Found context with id: ', sessionId);
-            sessions.push( { 'Id': sessionId, 'context': context } );
+            sessions.push( { 'id': sessionId, 'context': context } );
           }
         }
       }

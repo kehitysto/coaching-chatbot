@@ -223,7 +223,7 @@ describe('Sessions service', function() {
       return sessions.write('id1', context1).then(function() {
         return sessions.write('id2', context2).then(function() {
           return expect(sessions.readAllWithReminders()).to.eventually.become([{
-            'Id': 'id1',
+            'id': 'id1',
             'context': context1,
           }]);
         });
@@ -255,7 +255,7 @@ describe('Sessions service', function() {
       return sessions.write('id1', context1).then(function() {
         return sessions.write('id2', context2).then(function() {
           return expect(sessions.readAllWithFeedbacks()).to.eventually.become([{
-            'Id': 'id1',
+            'id': 'id1',
             'context': context1,
           }]);
         });
