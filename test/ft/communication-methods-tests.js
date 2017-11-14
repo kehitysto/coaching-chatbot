@@ -14,10 +14,36 @@ describe('Communication methods tests', function() {
       });
 
       it(
-        'should ask for my Skype username when I choose Skype as a communication method',
+        'should ask for my phone number when I choose phone as a communication method',
         function() {
           return expect(
-              this.bot.receive(SESSION, 'Skype'))
+              this.bot.receive(SESSION, 'Puhelin'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_PHONE_NUMBER'),
+            ]);
+        }
+      );
+
+      it('should not allow too long phone number', function () {
+        return expect(
+          this.bot.receive(SESSION, Array(51).fill('a').join('')))
+          .to.eventually.become([
+            buildResponse('@TOO_LONG_COMMUNICATION_METHOD'),
+            buildResponse('@REQUEST_COMMUNICATION_METHOD', [{
+              'title': 'Skype',
+              'payload': 'SKYPE',
+            }, {
+              'title': 'Puhelin',
+              'payload': 'PHONE',
+            }]),
+          ]);
+      });
+
+      it(
+        'should ask for my Skype username when I choose Skype as a communication method',
+        function () {
+          return expect(
+            this.bot.receive(SESSION, 'Skype'))
             .to.eventually.become([
               buildResponse('@REQUEST_SKYPE_NAME'),
             ]);
