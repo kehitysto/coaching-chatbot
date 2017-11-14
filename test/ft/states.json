@@ -6,7 +6,7 @@
       },
       "FEEDBACK_TESTER": {
         "name": "Kaapo",
-        "state": "/give_feedback?0"
+        "state": "/profile?0/give_feedback?0"
       },
       "FEEDBACK_AND_REMINDER_TESTER": {
         "name": "Kaapeli",
