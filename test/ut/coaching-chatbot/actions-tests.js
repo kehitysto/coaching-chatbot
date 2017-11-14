@@ -957,4 +957,51 @@ describe('coaching-bot actions', function() {
         .deep.equal(expected);
     });
   });
+
+  describe('#setSkipMeeting', () => {
+    it('should set skipMeeting', () => {
+      const sessions = new Sessions();
+      const pairs = new Pairs();
+
+      const pairsReadStub = sinon.stub(
+        pairs.db,
+        'read'
+      ).returns(Promise.resolve(
+          [2]
+      ));
+
+      const spySessionsWrite = sinon.spy(
+        sessions.db,
+        'write'
+      );
+
+      const stubSessionsRead = sinon.stub(
+        sessions.db,
+        'read'
+      ).returns(Promise.resolve({
+          name: 'test',
+          skipMeeting: false,
+        })
+      )
+
+      const ret = actions.setSkipMeeting({
+        sessionId: 1,
+        context: {
+          name: 'test',
+          skipMeeting: false
+        },
+      });
+
+      const expectedToWrite = {
+        name: 'test',
+        skipMeeting: true
+      };
+
+      return ret.then((result) => {
+        expect(result[1]).to.deep.equal({ context: expectedToWrite })
+      }).then(() => {
+        expect(spySessionsWrite.calledWith(2, expectedToWrite)).to.equal(true)
+      })
+    });
+  });
 });
