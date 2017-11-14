@@ -1,5 +1,7 @@
 import commonFeatures from './common';
 import PairFormatter from '../../src/lib/pair-formatter';
+import PersonalInformationFormatter from
+'../../src/lib/personal-information-formatter-service';
 const { buildResponse, FeatureTestStates, setupChatbot, QuickReplies } = commonFeatures;
 
 const SESSION = 'PAIR_SEARCH_LISTING_TESTER';
@@ -50,6 +52,25 @@ describe('Pair search listing tests', function() {
             ]);
         }
       );
-    }
-  );
+
+      it('should show listing button after all pairs shown', function() {
+        return expect(this.bot.receive(SESSION, 'Ei'))
+          .to.eventually.become([
+            buildResponse('@NO_PAIRS_AVAILABLE',
+              QuickReplies.createArray(['@LIST_AS_SEARCHING', '@TO_PROFILE',])
+            ),
+          ]);
+      });
+
+
+      it('should allow listing after all pairs shown', function () {
+        return expect(this.bot.receive(SESSION, 'Listaudu'))
+          .to.eventually.become([
+            buildResponse(
+              PersonalInformationFormatter.formatFromTemplate(
+                '@DISPLAY_PROFILE_SEARCHING', FeatureTestStates['PAIR_SEARCH_LISTING_TESTS']['sessions'][SESSION]),
+              PersonalInformationFormatter.getPersonalInformationbuttons({})),
+          ]);
+      });
+    });
 });
