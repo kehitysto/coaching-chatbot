@@ -36,7 +36,7 @@ module.exports = class InMemoryProvider {
       let meetingDay = strings['@WEEKDAYS'].indexOf(day.toUpperCase());
       if (meetingDay == new Date().getDay()) {
         log.silly('Found context with id: ', sessionId);
-        sessions.push( { 'Id': sessionId, 'context': context } );
+        sessions.push( { 'id': sessionId, 'context': context } );
       }
     }
 
@@ -58,7 +58,7 @@ module.exports = class InMemoryProvider {
 
       if (meetingDay == ((new Date().getDay() + 5) % 7)) {
         log.silly('Found context with id: ', sessionId);
-        sessions.push( { 'Id': sessionId, 'context': context } );
+        sessions.push( { 'id': sessionId, 'context': context } );
       }
     }
     return Promise.resolve(sessions);
