@@ -35,6 +35,8 @@ module.exports = class DynamoDBProvider {
       currentHourWithZero = currentHourWithoutZero;
     }
 
+    log.debug('PREVIOUS DAY: ' + currentDay);
+
     const params = {
       Limit: 50,
       FilterExpression: 'context.weekDay = :currentDay',
@@ -44,15 +46,17 @@ module.exports = class DynamoDBProvider {
     };
 
     return this.table.scan(params).then((items) => {
+      log.debug('CURRENT TIME: ' + currentHourWithZero +
+      ':' + currentDate.getMinutes());
       let sessions = [];
       for (let i = 0; i < items.length; i++) {
         let item = items[i];
         if (item.context.time.length == 5) {
-          if (item.context.time.substring(0, 2) != currentHourWithZero) {
+          if (item.context.time.substring(0, 2) == currentHourWithZero) {
             sessions.push(items[i]);
           }
         } else if (item.context.time.length == 4) {
-          if (item.context.time.substring(0, 1) != currentHourWithoutZero) {
+          if (item.context.time.substring(0, 1) == currentHourWithoutZero) {
             sessions.push(items[i]);
           }
         }
@@ -67,7 +71,7 @@ module.exports = class DynamoDBProvider {
     let currentDate = new Date();
     let currentDay = strings['@WEEKDAYS'][(currentDate.getDate() + 6)
        % 7].toUpperCase();
-
+    log.debug('CURRENT DAY: ' + currentDay);
     let currentHourWithoutZero = (currentDate.getHours() - 1) % 24;
     let currentHourWithZero;
     if (currentHourWithoutZero < 10) {
@@ -85,15 +89,17 @@ module.exports = class DynamoDBProvider {
     };
 
     return this.table.scan(params).then((items) => {
+      log.debug('CURRENT TIME: ' + currentHourWithZero +
+      ':' + currentDate.getMinutes());
       let sessions = [];
       for (let i = 0; i < items.length; i++) {
         let item = items[i];
         if (item.context.time.length == 5) {
-          if (item.context.time.substring(0, 2) != currentHourWithZero) {
+          if (item.context.time.substring(0, 2) == currentHourWithZero) {
             sessions.push(items[i]);
           }
         } else if (item.context.time.length == 4) {
-          if (item.context.time.substring(0, 1) != currentHourWithoutZero) {
+          if (item.context.time.substring(0, 1) == currentHourWithoutZero) {
             sessions.push(items[i]);
           }
         }
