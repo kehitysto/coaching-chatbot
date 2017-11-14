@@ -44,21 +44,22 @@ module.exports = class DynamoDBProvider {
     };
 
     return this.table.scan(params).then((items) => {
-      for (let i = items.length - 1; i >= 0; i--) {
+      let sessions = [];
+      for (let i = 0; i < items.length; i++) {
         let item = items[i];
         if (item.context.time.length == 5) {
           if (item.context.time.substring(0, 2) != currentHourWithZero) {
-            items.splice(i, 1);
+            sessions.push(items[i]);
           }
         } else if (item.context.time.length == 4) {
           if (item.context.time.substring(0, 1) != currentHourWithoutZero) {
-            items.splice(i, 1);
+            sessions.push(items[i]);
           }
         }
       }
 
-      log.debug('Sessions with reminder: ' + JSON.stringify(items));
-      return items;
+      log.debug('Sessions with reminder: ' + JSON.stringify(sessions));
+      return sessions;
     });
   }
 
@@ -84,21 +85,22 @@ module.exports = class DynamoDBProvider {
     };
 
     return this.table.scan(params).then((items) => {
-      for (let i = items.length - 1; i >= 0; i--) {
+      let sessions = [];
+      for (let i = 0; i < items.length; i++) {
         let item = items[i];
         if (item.context.time.length == 5) {
           if (item.context.time.substring(0, 2) != currentHourWithZero) {
-            items.splice(i, 1);
+            sessions.push(items[i]);
           }
         } else if (item.context.time.length == 4) {
           if (item.context.time.substring(0, 1) != currentHourWithoutZero) {
-            items.splice(i, 1);
+            sessions.push(items[i]);
           }
         }
       }
 
-      log.debug('Sessions with feedback: ' + JSON.stringify(items));
-      return items;
+      log.debug('Sessions with feedback: ' + JSON.stringify(sessions));
+      return sessions;
     });
   }
 
