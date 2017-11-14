@@ -375,10 +375,8 @@ export function addPairRequest({ sessionId, context }) {
 
   return session.read(peerId).then((chosenPeer) => {
     if (chosenPeer.searching) {
-      chosenPeer.pairRequests = chosenPeer.pairRequests || [];
-      chosenPeer.pairRequests.push(sessionId);
-      context.sentRequests = context.sentRequests || [];
-      context.sentRequests.push(peerId);
+      chosenPeer.pairRequests = [sessionId].concat(chosenPeer.pairRequests);
+      context.sentRequests = [peerId].concat(context.sentRequests);
       context.availablePeers = context.availablePeers.slice(1);
       return session.write(peerId, chosenPeer)
           .then(() => {
@@ -492,13 +490,13 @@ export function testReminderAndFeedback({ context }) {
       }
       return sessions.readAllWithFeedbacks()
         .then((feedbackSessions) => {
-          for (let i = 0; i < feedbackSessions.length; i++) {
-            if (feedbackSessions[i].context.skipMeeting) {
+          for (let feedbackSession of feedbackSessions) {
+            if (feedbackSession.context.skipMeeting) {
               promises.push(
                 sessions.write(
-                  feedbackSessions[i].id,
+                  feedbackSession.id,
                   {
-                    ...feedbackSessions[i].context,
+                    ...feedbackSession.context,
                     skipMeeting: false,
                   }
                 )
@@ -507,14 +505,14 @@ export function testReminderAndFeedback({ context }) {
             }
             promises.push(
               sessions.write(
-                feedbackSessions[i].id,
+                feedbackSession.id,
                 {
-                  ...feedbackSessions[i].context,
+                  ...feedbackSession.context,
                   state:
                   '/?0/profile?0/accepted_pair_profile?0/give_feedback?0',
                 }
               ).then(() => {
-                Messenger.send(feedbackSessions[i].id,
+                Messenger.send(feedbackSession.id,
                   strings['@FEEDBACK_MESSAGE'],
                   Builder.QuickReplies.createArray([
                     strings['@YES'],
@@ -551,7 +549,6 @@ export function setSkipMeeting({ context, sessionId }) {
           return Promise.reject(new Error('No pair found!'));
         }
         return sessions.read(pairId).then((pairContext) => {
-          let meetingAlreadySkipped = pairContext.skipMeeting;
           promises.push(
             sessions.write(
               pairId,
@@ -560,11 +557,7 @@ export function setSkipMeeting({ context, sessionId }) {
                 skipMeeting: true,
               }
             ).then(() => {
-              if(
-                meetingAlreadySkipped == undefined ||
-                meetingAlreadySkipped == null ||
-                meetingAlreadySkipped == false
-              ) {
+              if(!pairContext.skipMeeting) {
                 Messenger.send(pairId, strings['@SKIPPED_MEETING_MESSAGE'],
                 Builder.QuickReplies.createArray([
                   'OK',
