@@ -20,7 +20,9 @@ describe('Invalid input tests', function() {
               .to.include(ret[0].message);
             expect(ret[1])
               .to.deep.equal(
-                buildResponse('@GREETING', [{
+              buildResponse('@GREETING_1'),
+              buildResponse('@GREETING_2'),
+                buildResponse('@GREETING_3', [{
                   'title': 'Kyllä',
                   'payload': '@YES',
                 }, {
