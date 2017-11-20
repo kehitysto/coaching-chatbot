@@ -28,8 +28,11 @@ module.exports = class InMemoryProvider {
 
     let d = new Date();
     // UTC + 2 -> Suomen aika
-    let currentDate = new Date(d.getTime() + (1000 * ((d.getTimezoneOffset() / 60) + 2)));
+    let currentDate =
+      new Date(d.getTime() + (1000 * ((d.getTimezoneOffset() / 60) + 2)));
     let currentHour = ('0' + currentDate.getHours()).substr(-2, 2);
+    console.log("WEEKDAY: " + currentDate.getDay());
+    console.log("HOURS: " + currentDate.getHours());
 
     for (let sessionId in this.db) {
       if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
@@ -56,7 +59,8 @@ module.exports = class InMemoryProvider {
 
     let d = new Date();
     // UTC + 2 -> Suomen aika
-    let currentDate = new Date(d.getTime() + (1000 * ((d.getTimezoneOffset() / 60) + 2)));    
+    let currentDate =
+      new Date(d.getTime() + (1000 * ((d.getTimezoneOffset() / 60) + 2)));
     let currentHour = ('0' + ((currentDate.getHours() - 1) % 24)).substr(-2, 2);
 
     for (let sessionId in this.db) {
