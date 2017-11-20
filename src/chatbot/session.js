@@ -349,4 +349,8 @@ module.exports = class Session {
   hasPair() {
     return this.context.hasPair;
   }
+
+  validInput(maxLength) {
+    return this.getInput().length <= maxLength;
+  }
 };

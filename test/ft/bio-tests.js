@@ -11,6 +11,15 @@ describe('Bio tests', function() {
         setupChatbot(this, 'BIO_TESTS');
       });
 
+      it('should not allow too long bio', function() {
+          return expect(
+              this.bot.receive(SESSION, Array(401).fill('a').join('')))
+              .to.eventually.become([
+                buildResponse('@TOO_LONG_BIO'),
+                buildResponse('@REQUEST_BIO'),
+              ]);
+      });
+
       it(
         'after user has given his bio, it should ask for communication methods',
         function() {

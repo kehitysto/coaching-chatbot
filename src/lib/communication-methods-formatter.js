@@ -12,32 +12,20 @@ const CommunicationMethodsFormatter = {
 export default CommunicationMethodsFormatter;
 
 function createCommunicationMethodslist(context) {
-  let a = [];
-  for (let method in context.communicationMethods) {
-    if (method != null) {
-      let methodName = getCommunicationMethodByIdentifier(method);
-      a.push(` ${methodName.name} (${context.communicationMethods[method]})`);
-    }
-  }
-  return a;
+  return CommunicationMethods
+    .filter((method) => context.communicationMethods[method.identifier])
+    .map((method) =>
+      ` ${method.name} (${context.communicationMethods[method.identifier]})`);
 }
 
 function getCommunicationMethodByInput(input) {
-  for (let i = 0; i < CommunicationMethods.length; i++) {
-    if (input.toLowerCase()
-      .includes(
-        CommunicationMethods[i].name.toLowerCase())) {
-      return CommunicationMethods[i];
-    }
-  }
+  return CommunicationMethods.filter(
+    (method) => input.toLowerCase().includes(method.name.toLowerCase()))[0];
 }
 
 function getCommunicationMethodByIdentifier(input) {
-  for (let i = 0; i < CommunicationMethods.length; i++) {
-    if (input === CommunicationMethods[i].identifier) {
-      return CommunicationMethods[i];
-    }
-  }
+  return CommunicationMethods.filter(
+    (method) => input === method.identifier)[0];
 }
 
 /**
@@ -45,16 +33,13 @@ function getCommunicationMethodByIdentifier(input) {
  * @return {Array<{title: string, payload: string}>}
  */
 function getCommunicationMethods(context) {
-  return CommunicationMethods.reduce((l, m) => {
-    if (context.communicationMethods === undefined ||
-      context.communicationMethods[m.identifier] === undefined) {
-      l.push({
-        title: m.name,
-        payload: m.identifier,
-      });
-    }
-    return l;
-  }, []);
+  return CommunicationMethods
+    .filter((method) => (context.communicationMethods === undefined ||
+            context.communicationMethods[method.identifier] === undefined))
+    .map((method) => ({
+      title: method.name,
+      payload: method.identifier,
+    }));
 }
 
 function getFilledCommunicationMethods(context) {
