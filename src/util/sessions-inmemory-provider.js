@@ -26,7 +26,10 @@ module.exports = class InMemoryProvider {
     log.silly('Getting all sessions with reminders');
     let sessions = [];
 
-    let currentDate = new Date();
+    let d = new Date();
+    let utc = d.getTime() + (d.getTimezoneOffset() * 60 * 1000);
+    // UTC + 2 -> Suomen aika
+    let currentDate = new Date(utc + (2 * 60 * 60 * 1000));
     let currentHour = ('0' + currentDate.getHours()).substr(-2, 2);
 
     for (let sessionId in this.db) {
@@ -52,7 +55,10 @@ module.exports = class InMemoryProvider {
     log.silly('Getting all sessions with feedbacks');
     let sessions = [];
 
-    let currentDate = new Date();
+    let d = new Date();
+    let utc = d.getTime() + (d.getTimezoneOffset() * 60 * 1000);
+    // UTC + 2 -> Suomen aika
+    let currentDate = new Date(utc + (2 * 60 * 60 * 1000));
     let currentHour = ('0' + ((currentDate.getHours() - 1) % 24)).substr(-2, 2);
 
     for (let sessionId in this.db) {
