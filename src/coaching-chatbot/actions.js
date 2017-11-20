@@ -101,6 +101,18 @@ export function deleteCommunicationMethod({ context, input }) {
   return contextChanges(context)();
 }
 
+export function deleteUndefinedCommunicationMethod({ context }) {
+  let communicationMethods = context.communicationMethods;
+  let undefinedCommunicationInfo = 'UNDEFINED_COMMUNICATION_INFO';
+
+  for (let method in communicationMethods) {
+    if (communicationMethods[method] === undefinedCommunicationInfo) {
+      delete context.communicationMethods[method];
+      return contextChanges(context)();
+    };
+  }
+}
+
 export function reset() {
   return contextChanges()();
 }
