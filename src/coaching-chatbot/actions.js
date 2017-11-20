@@ -375,8 +375,8 @@ export function addPairRequest({ sessionId, context }) {
 
   return session.read(peerId).then((chosenPeer) => {
     if (chosenPeer.searching) {
-      chosenPeer.pairRequests = [sessionId].concat(chosenPeer.pairRequests);
-      context.sentRequests = [peerId].concat(context.sentRequests);
+      chosenPeer.pairRequests = [sessionId, ...(chosenPeer.pairRequests || [])];
+      context.sentRequests = [peerId, ...(context.sentRequests || [])];
       context.availablePeers = context.availablePeers.slice(1);
       return session.write(peerId, chosenPeer)
           .then(() => {
