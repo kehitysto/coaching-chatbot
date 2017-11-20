@@ -204,7 +204,9 @@ describe('Sessions service', function() {
 
   describe('#readAllWithReminders', function() {
     it('should return users with reminders', function() {
-      let currentDate = new Date();
+      let d = new Date();
+      // UTC + 2 -> Suomen aika
+      let currentDate = new Date(d.getTime() + (1000 * ((d.getTimezoneOffset() / 60) + 2)));
       let currentMinutes = ('0' + currentDate.getMinutes()).substr(-2, 2);
       const context1 = {
         name: 'Kaapo',
@@ -230,7 +232,9 @@ describe('Sessions service', function() {
 
   describe('#readAllWithFeedbacks', function() {
     it('should return users with reminders', function() {
-      let currentDate = new Date();
+      let d = new Date();
+      // UTC + 2 -> Suomen aika
+      let currentDate = new Date(d.getTime() + (1000 * ((d.getTimezoneOffset() / 60) + 2)));
       let currentMinutes = ('0' + currentDate.getMinutes()).substr(-2, 2);
       const context1 = {
         name: 'Katriina',
