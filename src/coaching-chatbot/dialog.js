@@ -39,7 +39,7 @@ bot
           session.addResult('@GOODBYE');
         } else {
           session.addResult('@UNCLEAR');
-          session.next();
+          session.prev();
         }
       },
     ])
@@ -137,7 +137,7 @@ bot
           session.runActions(['addCommunicationMethod']);
         } else {
           session.addResult('@UNCLEAR');
-          session.resetDialog();
+          session.prev();
         }
       },
       (session) => {
@@ -169,7 +169,7 @@ bot
           session.switchDialog('/communication_methods');
         } else {
           session.addResult('@UNCLEAR');
-          session.resetDialog();
+          session.prev();
         }
       },
   ])
@@ -221,9 +221,6 @@ bot
         session.resetDialog();
         session.beginDialog('/list_requests', true);
       }],
-      ['#OK', (session) => {
-        session.resetDialog();
-      }],
       ['#OPTIONAL_VALUE', (session) => {
         session.addResult('@UNCLEAR');
       }],
@@ -246,7 +243,7 @@ bot
           session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
-          session.next();
+          session.prev();
         }
       },
     ])
@@ -465,12 +462,11 @@ bot
       (session) => {
         if (session.checkIntent('#WEEKDAY')) {
           session.runActions(['setWeekday']);
+          session.next();
         } else {
           session.addResult('@UNCLEAR');
           session.prev();
-          session.prev();
         }
-        session.next();
       },
       (session) => {
         session.addResult('@ASK_FOR_TIME');
@@ -555,7 +551,7 @@ bot
             session.switchDialog('/searching');
           } else {
             session.addResult('@UNCLEAR');
-            session.next();
+            session.prev();
           }
         },
       ])
@@ -574,8 +570,17 @@ bot
           session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
-          session.next();
+          session.prev();
         }
+      },
+    ])
+  .dialog(
+    '/ok', [
+      (session) => {
+      },
+      (session) => {
+        session.endDialog();
+        session.prev();
       },
     ])
   .match(
