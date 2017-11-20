@@ -75,5 +75,9 @@
   "@DISABLE_REMINDERS": "Estä muistutukset",
   "@ENABLE_REMINDERS": "Salli muistutukset",
   "@CONFIRM_REMINDERS_ENABLED": "Muistutukset on sallittu.",
-  "@CONFIRM_REMINDERS_DISABLED": "Muistutukset on estetty."
+  "@CONFIRM_REMINDERS_DISABLED": "Muistutukset on estetty.",
+  "@TOO_LONG_NAME": "Liian pitkä nimi, sallittu pituus on 50 merkkiä.",
+  "@TOO_LONG_BIO": "Liian pitkä kuvaus, sallittu pituus on 400 merkkiä.",
+  "@TOO_LONG_FEEDBACK": "Liian pitkä palaute, sallittu pituus on 600 merkkiä.",
+  "@TOO_LONG_COMMUNICATION_METHOD": "Liian pitkä yhteydenottotapa, sallittu pituus on 50 merkkiä."
 }

@@ -73,9 +73,14 @@ bot
         session.addResult('@REQUEST_NAME');
       },
       (session) => {
-        session.runActions(['setName']);
-        session.addResult('@CONFIRM_NAME');
-        session.endDialog();
+        if (session.validInput(50)) {
+          session.runActions(['setName']);
+          session.addResult('@CONFIRM_NAME');
+          session.endDialog();
+        } else {
+          session.addResult('@TOO_LONG_NAME');
+          session.prev();
+        }
       },
     ])
   .dialog(
@@ -84,9 +89,14 @@ bot
         session.addResult('@REQUEST_BIO');
       },
       (session) => {
-        session.runActions(['setBio']);
-        session.addResult('@CONFIRM_BIO');
-        session.endDialog();
+        if (session.validInput(400)) {
+          session.runActions(['setBio']);
+          session.addResult('@CONFIRM_BIO');
+          session.endDialog();
+        } else {
+          session.addResult('@TOO_LONG_BIO');
+          session.prev();
+        }
       },
     ])
   .dialog(
@@ -131,8 +141,14 @@ bot
         }
       },
       (session) => {
-        session.runActions(['addCommunicationInfo']);
-        session.switchDialog('/communication_methods');
+        if (session.validInput(50)) {
+          session.runActions(['addCommunicationInfo']);
+          session.switchDialog('/communication_methods');
+        } else {
+          session.addResult('@TOO_LONG_COMMUNICATION_METHOD');
+          session.runActions(['deleteUndefinedCommunicationMethod']);
+          session.resetDialog();
+        }
       },
   ])
   .dialog(
@@ -506,8 +522,13 @@ bot
         }
       },
       (session) => {
-        session.runActions(['sendRating', 'sendFeedback']);
-        session.next();
+        if (session.validInput(600)) {
+          session.runActions(['sendRating', 'sendFeedback']);
+          session.next();
+        } else {
+          session.addResult('@TOO_LONG_FEEDBACK');
+          session.prev();
+        }
       },
       (session) => {
         session.addResult('@THANKS_FOR_FEEDBACK');
