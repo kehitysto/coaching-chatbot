@@ -105,7 +105,7 @@ module.exports = {
 
     PAIR: {
         any: [
-            /^(vertais)?ohjaaj(?:a|oita)$/i,
+            /^(vertais)?ohjaaj(?:aa|a|oita)$/i,
         ],
     },
 
