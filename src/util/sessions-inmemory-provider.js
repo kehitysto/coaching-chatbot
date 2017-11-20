@@ -27,12 +27,12 @@ module.exports = class InMemoryProvider {
     let sessions = [];
 
     let d = new Date();
+    let utc = d.getTime() + (d.getTimezoneOffset() * 60 * 1000);
     // UTC + 2 -> Suomen aika
-    let currentDate =
-      new Date(d.getTime() + (1000 * ((d.getTimezoneOffset() / 60) + 2)));
+    let currentDate = new Date(utc + (2 * 60 * 60 * 1000));
     let currentHour = ('0' + currentDate.getHours()).substr(-2, 2);
-    console.log("WEEKDAY: " + currentDate.getDay());
-    console.log("HOURS: " + currentDate.getHours());
+    console.log('WEEKDAY: ' + currentDate.getDay());
+    console.log('HOURS: ' + currentDate.getHours());
 
     for (let sessionId in this.db) {
       if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
