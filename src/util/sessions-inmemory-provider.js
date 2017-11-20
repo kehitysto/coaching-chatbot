@@ -31,8 +31,6 @@ module.exports = class InMemoryProvider {
     // UTC + 2 -> Suomen aika
     let currentDate = new Date(utc + (2 * 60 * 60 * 1000));
     let currentHour = ('0' + currentDate.getHours()).substr(-2, 2);
-    console.log('WEEKDAY: ' + currentDate.getDay());
-    console.log('HOURS: ' + currentDate.getHours());
 
     for (let sessionId in this.db) {
       if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
