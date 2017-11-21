@@ -26,6 +26,12 @@ module.exports = class InMemoryProvider {
     log.silly('Getting all sessions with reminders');
     let sessions = [];
 
+    let d = new Date();
+    let utc = d.getTime() + (d.getTimezoneOffset() * 60 * 1000);
+    // UTC + 2 -> Suomen aika
+    let currentDate = new Date(utc + (2 * 60 * 60 * 1000));
+    let currentHour = ('0' + currentDate.getHours()).substr(-2, 2);
+
     for (let sessionId in this.db) {
       if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
       log.silly('Evaluating session with id: ', sessionId);
@@ -34,9 +40,11 @@ module.exports = class InMemoryProvider {
       const day = context.weekDay;
       if(day === undefined) continue;
       let meetingDay = strings['@WEEKDAYS'].indexOf(day.toUpperCase());
-      if (meetingDay == new Date().getDay()) {
-        log.silly('Found context with id: ', sessionId);
-        sessions.push( { 'id': sessionId, 'context': context } );
+      if (meetingDay == currentDate.getDay()) {
+        if (('0' + context.time).substr(-5, 2) == currentHour) {
+          log.silly('Found context with id: ', sessionId);
+          sessions.push( { 'id': sessionId, 'context': context } );
+        }
       }
     }
 
@@ -47,6 +55,12 @@ module.exports = class InMemoryProvider {
     log.silly('Getting all sessions with feedbacks');
     let sessions = [];
 
+    let d = new Date();
+    let utc = d.getTime() + (d.getTimezoneOffset() * 60 * 1000);
+    // UTC + 2 -> Suomen aika
+    let currentDate = new Date(utc + (2 * 60 * 60 * 1000));
+    let currentHour = ('0' + ((currentDate.getHours() - 1) % 24)).substr(-2, 2);
+
     for (let sessionId in this.db) {
       if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
       log.silly('Evaluating session with id: ', sessionId);
@@ -55,10 +69,11 @@ module.exports = class InMemoryProvider {
       const day = context.weekDay;
       if(day === undefined) continue;
       let meetingDay = strings['@WEEKDAYS'].indexOf(day.toUpperCase());
-
-      if (meetingDay == ((new Date().getDay() + 5) % 7)) {
-        log.silly('Found context with id: ', sessionId);
-        sessions.push( { 'id': sessionId, 'context': context } );
+      if (meetingDay == ((currentDate.getDay() + 6) % 7)) {
+        if (('0' + context.time).substr(-5, 2) == currentHour) {
+          log.silly('Found context with id: ', sessionId);
+          sessions.push( { 'id': sessionId, 'context': context } );
+        }
       }
     }
     return Promise.resolve(sessions);
