@@ -16,7 +16,7 @@ describe('Send request tests', function () {
 
       it('Should show the first available peer', function () {
         return expect(
-          this.bot.receive(SESSION, 'Etsi pari'))
+          this.bot.receive(SESSION, 'Etsi vertaisohjaajaa'))
           .to.eventually.become([
             buildResponse('@INFORMATION_ABOUT_LIST'),
             buildResponse('Vertaisohjaaja: 1/2'),
