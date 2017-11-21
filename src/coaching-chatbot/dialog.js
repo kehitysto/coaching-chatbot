@@ -402,14 +402,12 @@ bot
           if (session.areRemindersEnabled()) {
             session.addQuickReplies(
               Builder.QuickReplies.createArray([
-                '@CHANGE_DATE', '@SKIP_MEETING',
-                '@DISABLE_REMINDERS', '@SHOW_PAIR'])
+                '@CHANGE_DATE', '@DISABLE_REMINDERS', '@SHOW_PAIR'])
             );
           } else {
             session.addQuickReplies(
               Builder.QuickReplies.createArray([
-                '@CHANGE_DATE', '@SKIP_MEETING',
-                '@ENABLE_REMINDERS', '@SHOW_PAIR'])
+                '@CHANGE_DATE', '@ENABLE_REMINDERS', '@SHOW_PAIR'])
             );
           }
         }
@@ -420,11 +418,6 @@ bot
       }],
       ['#SET_DATE', (session) => {
         session.beginDialog('/set_date');
-      }],
-      ['#SKIP_MEETING', (session) => {
-        session.runActions(['setSkipMeeting']);
-        session.addResult('@CONFIRM_SKIPPED_MEETING');
-        session.resetDialog();
       }],
       ['#TOGGLE_REMINDERS', (session) => {
         session.beginDialog('/toggle_reminders');
@@ -477,7 +470,7 @@ bot
       },
       (session) => {
         if (session.checkIntent('#TIME')) {
-          session.runActions(['setTime', 'resetSkipMeeting']);
+          session.runActions(['setTime']);
           session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
