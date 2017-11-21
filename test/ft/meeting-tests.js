@@ -84,7 +84,7 @@ describe('Meeting tests', function() {
                 buildResponse(
                     'Tapaaminen on viikoittain MA, klo 11:11',
                     QuickReplies.createArray([
-                        '@CHANGE_DATE', '@SKIP_MEETING', '@DISABLE_REMINDERS', '@SHOW_PAIR']),
+                        '@CHANGE_DATE', '@DISABLE_REMINDERS', '@SHOW_PAIR']),
                 ));
           });
         }
