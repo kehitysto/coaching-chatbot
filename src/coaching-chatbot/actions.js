@@ -431,7 +431,7 @@ export function addPairRequest({ sessionId, context }) {
 export function sendRating({ context, sessionId }) {
   let pairs = new Pairs();
 
-  const answer = strings['@RATINGS'][context.rating - 1];
+  const answer = context.rating;
 
   log.info('SendRating with answer ' + answer);
 
@@ -443,10 +443,7 @@ export function sendRating({ context, sessionId }) {
         }
 
         return Messenger.send(
-          pairId, strings['@TELL_USER_HAS_NEW_FEEDBACK'] + answer,
-          Builder.QuickReplies.createArray([
-            'OK',
-          ])
+          pairId, strings['@TELL_USER_HAS_NEW_FEEDBACK'] + answer + '/4'
         );
     }).then(() => {
       return Promise.resolve({ result: '' });

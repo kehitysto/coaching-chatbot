@@ -334,10 +334,6 @@ module.exports = class Session {
     return (d === undefined || t === undefined);
   }
 
-  isRatingGood() {
-    return [3, 4].includes(this.context.rating);
-  }
-
   isSearching() {
     return this.context.searching;
   }
