@@ -505,8 +505,7 @@ export function testReminderAndFeedback({ context }) {
     .then((sessionsFromDb) => {
       const promises = [];
       for (let i = 0; i < sessionsFromDb.length; i++) {
-        if (sessionsFromDb[i].context.skipMeeting ||
-          !sessionsFromDb[i].context.remindersEnabled) {
+        if (!sessionsFromDb[i].context.remindersEnabled) {
           continue;
         }
         promises.push(
@@ -520,18 +519,6 @@ export function testReminderAndFeedback({ context }) {
       return sessions.readAllWithFeedbacks()
         .then((feedbackSessions) => {
           for (let feedbackSession of feedbackSessions) {
-            if (feedbackSession.context.skipMeeting) {
-              promises.push(
-                sessions.write(
-                  feedbackSession.id,
-                  {
-                    ...feedbackSession.context,
-                    skipMeeting: false,
-                  }
-                )
-              );
-              continue;
-            }
             promises.push(
               sessions.write(
                 feedbackSession.id,
@@ -559,55 +546,11 @@ export function testReminderAndFeedback({ context }) {
 export function resetMeeting({ context }) {
   delete context.weekDay;
   delete context.time;
-  delete context.skipMeeting;
   delete context.remindersEnabled;
 
   return Promise.resolve(
     context
   );
-}
-
-export function setSkipMeeting({ context, sessionId }) {
-  const sessions = new Sessions();
-  let pairs = new Pairs();
-  return pairs.read(sessionId)
-    .then((pairList) => {
-        const promises = [];
-        const pairId = pairList[0];
-        if (pairId == undefined) {
-          return Promise.reject(new Error('No pair found!'));
-        }
-        return sessions.read(pairId).then((pairContext) => {
-          promises.push(
-            sessions.write(
-              pairId,
-              {
-                ...pairContext,
-                skipMeeting: true,
-              }
-            ).then(() => {
-              if(!pairContext.skipMeeting) {
-                Messenger.send(pairId, strings['@SKIPPED_MEETING_MESSAGE'],
-                Builder.QuickReplies.createArray([
-                  'OK',
-                ]));
-              }
-            })
-          );
-          promises.push(
-            contextChanges(context)({
-              skipMeeting: true,
-            })
-          );
-          return Promise.all(promises);
-        });
-    });
-}
-
-export function resetSkipMeeting({ context }) {
-  return contextChanges(context)({
-      skipMeeting: false,
-  });
 }
 
 export function toggleReminders({ context }) {

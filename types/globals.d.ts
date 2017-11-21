@@ -22,7 +22,6 @@ declare class Context {
     state: string;
     weekDay: string;
     time: string;
-    skipMeeting: boolean;
     remindersEnabled: boolean;
     hasPair: boolean;
 }
