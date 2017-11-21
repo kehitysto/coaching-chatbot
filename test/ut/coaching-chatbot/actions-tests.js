@@ -753,7 +753,7 @@ describe('coaching-bot actions', function() {
 
         const expectedToWrite = {
           ...profile,
-          state: '/?0/profile?0',
+          state: '/?0/profile?0/ok?0',
         };
 
         const ret = actions.breakPair({

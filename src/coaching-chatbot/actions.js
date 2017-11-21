@@ -339,9 +339,13 @@ export function breakPair({ sessionId, context }) {
               pairId,
               {
                 ...context,
-                state: '/?0/profile?0',
+                state: '/?0/profile?0/ok?0',
               }
             ))
+            .then(() => {
+              const bot = new Chatbot(dialog, sessions);
+              return bot.receive(pairId, '');
+            })
             .then(() => {
               return Messenger.send(
                 pairId,
@@ -446,6 +450,7 @@ export function sendRating({ context, sessionId }) {
 export function sendFeedback({ context, sessionId, input }) {
   let pairs = new Pairs();
   let feedback = new Feedback();
+  let sessions = new Sessions();
 
   log.info('SendFeedback with input ' + input);
 
@@ -461,11 +466,23 @@ export function sendFeedback({ context, sessionId, input }) {
           input,
           Builder.QuickReplies.createArray([
           'OK',
-        ])).then(() => {
-              return feedback.createFeedback({
-                giver: sessionId, pair: pairId, feedback: input,
-              });
+        ]))
+        .then(() => {
+          return sessions.read(pairId)
+            .then((context) => {
+              context.state += '/ok?0';
+              return sessions.write(pairId, context);
+            });
+        })
+        .then(() => {
+          const bot = new Chatbot(dialog, sessions);
+          return bot.receive(pairId, '');
+        })
+        .then(() => {
+          return feedback.createFeedback({
+            giver: sessionId, pair: pairId, feedback: input,
           });
+        });
     });
 }
 
@@ -508,7 +525,7 @@ export function testReminderAndFeedback({ context }) {
                 {
                   ...feedbackSession.context,
                   state:
-                  '/?0/profile?0/accepted_pair_profile?0/give_feedback?0',
+                  '/?0/profile?0/accepted_pair_profile?0/give_feedback?1',
                 }
               ).then(() => {
                 Messenger.send(feedbackSession.id,
