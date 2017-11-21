@@ -43,7 +43,7 @@
       "Kyllä",
       "Aseta tapaaminen",
       "KE",
-      "11:55"
+      "10:55"
     ]
   },
   "Katariina saa tietää Kaapon hyväksyneen pyynnön": {
@@ -71,7 +71,7 @@
   },
   "Kaapo ja Katariina tapaavat": {
     "hide": true,
-    "time": 1510823536790,
+    "time": 1510737136790,
     "session": "SessionH",
     "messages": [
       "test"
