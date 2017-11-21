@@ -626,8 +626,8 @@ describe('coaching-bot actions', function() {
     it('should display the profile of the requesting user', function() {
         const sessions = new Sessions();
         const stubSessionsRead = sinon.stub(
-        sessions.db,
-        'read'
+          sessions.db,
+          'read'
         );
 
         stubSessionsRead.returns(
@@ -636,22 +636,24 @@ describe('coaching-bot actions', function() {
             communicationMethods: {
             SKYPE: 'pertti_42',
             },
+            sentRequestMessages: { '1': 'Message' }
         })
         );
 
         const context = {
-        pairRequests: [
-            1,
-            2,
-        ],
+          pairRequests: [
+              1,
+              2,
+          ],
         };
 
         const expected = {
-        result: 'Pertti\n  - Skype',
+          result: 'Pertti\n  - Skype\nMessage',
         };
 
         const ret = actions.displayRequest({
-        context,
+          context,
+          sessionId: '1'
         });
 
         return expect(ret)
