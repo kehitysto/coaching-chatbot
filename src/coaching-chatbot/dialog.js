@@ -422,7 +422,7 @@ bot
         session.beginDialog('/toggle_reminders');
       }],
       ['#TEST', (session) => {
-          if(process.env.STAGE != 'production') {
+          if (process.env.STAGE != 'production') {
             session.runActions(['testReminderAndFeedback']);
             session.addResult('@INFO');
             session.resetDialog();
