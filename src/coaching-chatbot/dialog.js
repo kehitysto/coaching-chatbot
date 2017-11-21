@@ -438,9 +438,13 @@ bot
         session.beginDialog('/toggle_reminders');
       }],
       ['#TEST', (session) => {
-          session.runActions(['testReminderAndFeedback']);
-          session.addResult('@INFO');
-          session.resetDialog();
+          if (process.env.STAGE != 'production') {
+            session.runActions(['testReminderAndFeedback']);
+            session.addResult('@INFO');
+            session.resetDialog();
+          } else {
+            session.addResult('@UNCLEAR');
+          }
       }],
       ['#BREAK_PAIR', (session) => {
         session.runActions(['breakPair']);
