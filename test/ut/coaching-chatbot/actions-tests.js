@@ -753,7 +753,7 @@ describe('coaching-bot actions', function() {
 
         const expectedToWrite = {
           ...profile,
-          state: '/?0/profile?0',
+          state: '/?0/profile?0/ok?0',
         };
 
         const ret = actions.breakPair({
@@ -955,53 +955,6 @@ describe('coaching-bot actions', function() {
 
       return expect(ret).to.eventually
         .deep.equal(expected);
-    });
-  });
-
-  describe('#setSkipMeeting', () => {
-    it('should set skipMeeting', () => {
-      const sessions = new Sessions();
-      const pairs = new Pairs();
-
-      const pairsReadStub = sinon.stub(
-        pairs.db,
-        'read'
-      ).returns(Promise.resolve(
-          [2]
-      ));
-
-      const spySessionsWrite = sinon.spy(
-        sessions.db,
-        'write'
-      );
-
-      const stubSessionsRead = sinon.stub(
-        sessions.db,
-        'read'
-      ).returns(Promise.resolve({
-          name: 'test',
-          skipMeeting: false,
-        })
-      )
-
-      const ret = actions.setSkipMeeting({
-        sessionId: 1,
-        context: {
-          name: 'test',
-          skipMeeting: false
-        },
-      });
-
-      const expectedToWrite = {
-        name: 'test',
-        skipMeeting: true
-      };
-
-      return ret.then((result) => {
-        expect(result[1]).to.deep.equal({ context: expectedToWrite })
-      }).then(() => {
-        expect(spySessionsWrite.calledWith(2, expectedToWrite)).to.equal(true)
-      })
     });
   });
 });

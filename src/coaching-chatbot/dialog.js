@@ -41,7 +41,7 @@ bot
           session.addResult('@GOODBYE');
         } else {
           session.addResult('@UNCLEAR');
-          session.next();
+          session.prev();
         }
       },
     ])
@@ -139,7 +139,7 @@ bot
           session.runActions(['addCommunicationMethod']);
         } else {
           session.addResult('@UNCLEAR');
-          session.resetDialog();
+          session.prev();
         }
       },
       (session) => {
@@ -171,7 +171,7 @@ bot
           session.switchDialog('/communication_methods');
         } else {
           session.addResult('@UNCLEAR');
-          session.resetDialog();
+          session.prev();
         }
       },
   ])
@@ -223,9 +223,6 @@ bot
         session.resetDialog();
         session.beginDialog('/list_requests', true);
       }],
-      ['#OK', (session) => {
-        session.resetDialog();
-      }],
       ['#OPTIONAL_VALUE', (session) => {
         session.addResult('@UNCLEAR');
       }],
@@ -248,7 +245,7 @@ bot
           session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
-          session.next();
+          session.prev();
         }
       },
     ])
@@ -404,14 +401,12 @@ bot
           if (session.areRemindersEnabled()) {
             session.addQuickReplies(
               Builder.QuickReplies.createArray([
-                '@CHANGE_DATE', '@SKIP_MEETING',
-                '@DISABLE_REMINDERS', '@SHOW_PAIR'])
+                '@CHANGE_DATE', '@DISABLE_REMINDERS', '@SHOW_PAIR'])
             );
           } else {
             session.addQuickReplies(
               Builder.QuickReplies.createArray([
-                '@CHANGE_DATE', '@SKIP_MEETING',
-                '@ENABLE_REMINDERS', '@SHOW_PAIR'])
+                '@CHANGE_DATE', '@ENABLE_REMINDERS', '@SHOW_PAIR'])
             );
           }
         }
@@ -422,11 +417,6 @@ bot
       }],
       ['#SET_DATE', (session) => {
         session.beginDialog('/set_date');
-      }],
-      ['#SKIP_MEETING', (session) => {
-        session.runActions(['setSkipMeeting']);
-        session.addResult('@CONFIRM_SKIPPED_MEETING');
-        session.resetDialog();
       }],
       ['#TOGGLE_REMINDERS', (session) => {
         session.beginDialog('/toggle_reminders');
@@ -467,19 +457,18 @@ bot
       (session) => {
         if (session.checkIntent('#WEEKDAY')) {
           session.runActions(['setWeekday']);
+          session.next();
         } else {
           session.addResult('@UNCLEAR');
           session.prev();
-          session.prev();
         }
-        session.next();
       },
       (session) => {
         session.addResult('@ASK_FOR_TIME');
       },
       (session) => {
         if (session.checkIntent('#TIME')) {
-          session.runActions(['setTime', 'resetSkipMeeting']);
+          session.runActions(['setTime']);
           session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
@@ -490,13 +479,17 @@ bot
   .dialog(
     '/give_feedback', [
       (session) => {
+        session.addResult('@FEEDBACK_MESSAGE',
+          Builder.QuickReplies.createArray(['@YES', '@NO']));
+      },
+      (session) => {
         if (session.checkIntent('#YES')) {
           session.next();
         } else if (session.checkIntent('#NO')) {
           session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
-          session.resetDialog();
+          session.prev();
         }
       },
       (session) => {
@@ -557,7 +550,7 @@ bot
             session.switchDialog('/searching');
           } else {
             session.addResult('@UNCLEAR');
-            session.next();
+            session.prev();
           }
         },
       ])
@@ -576,8 +569,17 @@ bot
           session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
-          session.next();
+          session.prev();
         }
+      },
+    ])
+  .dialog(
+    '/ok', [
+      (session) => {
+      },
+      (session) => {
+        session.endDialog();
+        session.prev();
       },
     ])
   .match(
