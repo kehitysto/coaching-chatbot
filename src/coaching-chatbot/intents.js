@@ -140,10 +140,6 @@ module.exports = {
         any: /^(?:info|ohje(?:et)|help|faq)$/i,
     },
 
-    SKIP_MEETING: {
-        each: /^Ohita tämä viikko$/i,
-    },
-
     OPTIONAL_VALUE: {
         any: /(\w.*)?/i,
         match: (match) => match[1] || true,
