@@ -37,9 +37,6 @@ module.exports.meetingCheck = (event, context, cb) => {
     .then((sessionsFromDb) => {
       const promises = [];
       for (let i = 0; i < sessionsFromDb.length; i++) {
-        if (sessionsFromDb[i].context.skipMeeting) {
-          continue;
-        }
         promises.push(
             Messenger.send(sessionsFromDb[i].id,
               strings['@REMINDER_MESSAGE'] + sessionsFromDb[i].context.time,
@@ -51,18 +48,6 @@ module.exports.meetingCheck = (event, context, cb) => {
       return sessions.readAllWithFeedbacks()
         .then((feedbackSessions) => {
           for (let i = 0; i < feedbackSessions.length; i++) {
-            if (feedbackSessions[i].context.skipMeeting) {
-              promises.push(
-                sessions.write(
-                  feedbackSessions[i].id,
-                  {
-                    ...feedbackSessions[i].context,
-                    skipMeeting: false,
-                  }
-                )
-              );
-              continue;
-            }
             promises.push(
               sessions.write(
                 feedbackSessions[i].id,
