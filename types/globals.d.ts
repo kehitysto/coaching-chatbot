@@ -18,6 +18,7 @@ declare class Context {
     availablePeers: (number|string)[];
     pairRequests: (number|string)[];
     sentRequests: (number|string)[];
+    sentRequestMessages: {};
     rejectedPeers: (number|string)[];
     state: string;
     weekDay: string;

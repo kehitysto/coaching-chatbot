@@ -368,14 +368,14 @@ export function breakPair({ sessionId, context }) {
       });
 }
 
-export function displayRequest({ context }) {
+export function displayRequest({ context, sessionId }) {
   return new Promise((resolve, reject) => {
     let sessions = new Sessions();
 
     return sessions.read(context.pairRequests[0])
       .then((profile) => {
         resolve({
-          result: PairFormatter.createPairString(profile),
+          result: PairFormatter.createPairStringMessage(profile, sessionId),
         });
       })
       .catch((err) => {
@@ -385,12 +385,14 @@ export function displayRequest({ context }) {
   });
 }
 
-export function addPairRequest({ sessionId, context }) {
+export function addPairRequest({ sessionId, context, input }) {
   let peerId = context.availablePeers[context.availablePeersIndex - 1];
   let session = new Sessions();
 
   return session.read(peerId).then((chosenPeer) => {
     if (chosenPeer.searching) {
+      context.sentRequestMessages = context.sentRequestMessages || {};
+      context.sentRequestMessages[peerId] = input;
       chosenPeer.pairRequests = [sessionId, ...(chosenPeer.pairRequests || [])];
       context.sentRequests = [peerId, ...(context.sentRequests || [])];
       context.availablePeers = context.availablePeers.slice(1);

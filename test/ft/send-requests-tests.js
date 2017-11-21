@@ -44,12 +44,20 @@ describe('Send request tests', function () {
                 }]),
               QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT',])
             ),
-          ]);PersonalInformationFormatter
+          ]);
+      });
+      
+      it('should ask for a message to be sent for the selected pair', function() {
+        return expect(
+          this.bot.receive(SESSION, 'Kyllä'))
+          .to.eventually.become([
+            buildResponse('@GIVE_PAIR_REQUEST_MESSAGE')
+          ]);
       });
 
       it('Should show the next available peer', function () {
         return expect(
-          this.bot.receive(SESSION, 'Kyllä'))
+          this.bot.receive(SESSION, 'Haluan sinut parikseni! <3'))
           .to.eventually.become([
             buildResponse('@CONFIRM_NEW_PEER_ASK'),
             buildResponse('Vertaisohjaaja: 1/1'),
