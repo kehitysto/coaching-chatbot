@@ -29,6 +29,7 @@ promise = promise.then((lines) => {
    'describe(\'Automatically generated feature test\', function() {',
    '  describe(\'As a user I want the chatbot to work correctly\', function() {',
    '    it(\'should match with the given hash sum\', function() {',
+   '      this.timeout(10000);',
    '      return expect(DiscussionGenerator.generate(discussions, states)',
    '        .then(lines => keccak512(lines.join()))).to.eventually.equal(\'' + hash + '\');',
    '    });',
