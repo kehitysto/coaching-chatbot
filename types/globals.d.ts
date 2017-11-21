@@ -50,7 +50,6 @@ declare class Session {
     send(message: string, quickReplies: QuickReplies)
     switchDialog(dialogId: string): void;
     ifFacilitationSet(): boolean;
-    isRatingGood(): boolean;
     isSearching(): boolean;
     areRemindersEnabled(): boolean;
     getPairRequestCount(): number;

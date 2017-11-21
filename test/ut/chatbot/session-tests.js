@@ -302,28 +302,4 @@ describe('chatbot sessions', function() {
         .to.deep.equal(false);
     });
   });
-
-  describe('#isRatingGood', function() {
-    it('should return true if rating equals 3', function() {
-      this.session.context = {
-        rating: 3,
-      };
-
-      const ret = this.session.isRatingGood();
-
-      return expect(ret)
-        .to.deep.equal(true);
-    });
-
-    it('should return false if rating equals 2', function() {
-      this.session.context = {
-        rating: 2,
-      };
-
-      const ret = this.session.isRatingGood();
-
-      return expect(ret)
-        .to.deep.equal(false);
-    });
-  });
 });
