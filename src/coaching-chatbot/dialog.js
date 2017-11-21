@@ -540,8 +540,7 @@ bot
         },
         (session) => {
           if (session.checkIntent('#YES')) {
-            session.runActions(['removeSentRequests',
-              'markUserAsNotSearching']);
+            session.runActions(['markUserAsNotSearching']);
             session.addResult('@STOPPED_SEARCHING');
             session.resetDialog();
             session.switchDialog('/profile');
