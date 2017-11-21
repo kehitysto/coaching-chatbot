@@ -422,9 +422,13 @@ bot
         session.beginDialog('/toggle_reminders');
       }],
       ['#TEST', (session) => {
-          session.runActions(['testReminderAndFeedback']);
-          session.addResult('@INFO');
-          session.resetDialog();
+          if(process.env.STAGE != 'production') {
+            session.runActions(['testReminderAndFeedback']);
+            session.addResult('@INFO');
+            session.resetDialog();
+          } else {
+            log.info('THIS FUNCTION IS NOT ALLOWED HERE');
+          }
       }],
       ['#BREAK_PAIR', (session) => {
         session.runActions(['breakPair']);

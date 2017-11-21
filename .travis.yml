@@ -17,7 +17,7 @@ deploy:
   script: ./scripts/deploy.sh production
   skip-cleanup: true
   on:
-    branch: master
+    branch: fix/test-not-master
 
 cache:
   directories:
