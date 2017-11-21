@@ -50,9 +50,9 @@ describe('Feedback tests', function() {
       );
 
       it(
-        'should ask for feedback when a low rating is given',
+        'should ask for feedback when a rating has been given',
         function() {
-          let promise = this.bot.receive(SESSION, '1');
+          let promise = this.bot.receive(SESSION, '3');
 
           return expect(promise)
             .to.eventually.become([
