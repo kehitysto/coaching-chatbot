@@ -501,9 +501,13 @@ bot
         session.beginDialog('/toggle_reminders');
       }],
       ['#TEST', (session) => {
-          session.runActions(['testReminderAndFeedback']);
-          session.addResult('@INFO');
-          session.resetDialog();
+          if (process.env.STAGE != 'production') {
+            session.runActions(['testReminderAndFeedback']);
+            session.addResult('@INFO');
+            session.resetDialog();
+          } else {
+            session.addResult('@UNCLEAR');
+          }
       }],
       ['#BREAK_PAIR', (session) => {
         session.runActions(['breakPair']);
@@ -613,8 +617,7 @@ bot
         },
         (session) => {
           if (session.checkIntent('#YES')) {
-            session.runActions(['removeSentRequests',
-              'markUserAsNotSearching']);
+            session.runActions(['markUserAsNotSearching']);
             session.addResult('@STOPPED_SEARCHING');
             session.resetDialog();
             session.switchDialog('/profile');

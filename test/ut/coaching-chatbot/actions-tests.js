@@ -312,13 +312,35 @@ describe('coaching-bot actions', function() {
         .to.eventually
         .deep.equal({
           context: {
-            availablePeers: [],
-            rejectedPeers: [],
-            pairRequests: [],
             searching: false,
-            sentRequests: []
           },
         });
+    });
+  });
+
+  describe('#resetRequestsAndSearching', function() {
+    it('should reset all requests, available and rejected peers and searching', function() {
+      const ret = actions.resetRequestsAndSearching({
+        context: {
+          rejectedPeers: ['123'],
+          availablePeers: ['321'],
+          pairRequests: ['322'],
+          sentRequests: ['123', '523'],
+          searching: true,
+        },
+      });
+
+      return expect(ret)
+        .to.eventually
+        .deep.equal({
+          context: {
+            rejectedPeers: [],
+            availablePeers: [],
+            pairRequests: [],
+            sentRequests: [],
+            searching: false,
+          },
+      });
     });
   });
 

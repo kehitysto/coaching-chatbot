@@ -125,6 +125,12 @@ export function markUserAsSearching({ context }) {
 
 export function markUserAsNotSearching({ context }) {
   return contextChanges(context)({
+      searching: false,
+  });
+}
+
+export function resetRequestsAndSearching({ context }) {
+  return contextChanges(context)({
             rejectedPeers: [],
             availablePeers: [],
             pairRequests: [],
@@ -313,7 +319,7 @@ export function acceptRequest({ sessionId, context }) {
                   sessionId: chosenPeerId, context: chosenPeer });
               })
               .then((chosenPeer) => {
-                return markUserAsNotSearching(chosenPeer);
+                return resetRequestsAndSearching(chosenPeer);
               }
             )
               .then((chosenPeer) => {
@@ -337,7 +343,7 @@ export function acceptRequest({ sessionId, context }) {
           });
         })
         .then(() => removeSentRequests({ sessionId, context }))
-        .then(() => markUserAsNotSearching({ context }))
+        .then(() => resetRequestsAndSearching({ context }))
         .then(({ context }) => contextChanges(context)({ hasPair: true }));
   });
 }
