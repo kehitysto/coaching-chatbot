@@ -22,7 +22,7 @@ describe('Invalid input tests', function() {
               .to.deep.equal(
               buildResponse('@GREETING_1'),
               buildResponse('@GREETING_2'),
-                buildResponse('@GREETING_3', [{
+              buildResponse('@GREETING_3', [{
                   'title': 'Kyllä',
                   'payload': '@YES',
                 }, {
