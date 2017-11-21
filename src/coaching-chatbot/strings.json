@@ -60,12 +60,6 @@
   "@SET_DATE": "Aseta päivä",
   "@CHANGE_DATE": "Muokkaa päivää",
   "@TELL_USER_HAS_NEW_FEEDBACK": "Olet saanut palautetta. Parisi vastasi kysymykseen \"Kuinka lähellä saamasi ohjaus oli ideaalia ohjaustilannettasi?\"\n",
-  "@RATINGS": [
-    "Toivoisin useita merkittäviä muutoksia",
-    "Toivoisin yhtä merkittävää muutosta",
-    "Pientä parannettavaa löytyisi",
-    "Täysin ideaali"
-  ],
   "@REMINDER_MESSAGE": "Sinulla on tapaaminen huomenna klo. ",
   "@FEEDBACK_MESSAGE": "Haluatko antaa palautetta eilisestä tapaamisesta?",
   "@INFO": "Profiilissa voit muokata tietojasi, nähdä pyyntösi ja lopettaa haun kirjoittamalla 'lopeta haku'.\nProfiilista pääset myös selaamaan muita hakijoita.\nJos vapaita hakijoita ei ole, voit tarkistaa myöhemmin tai listata itsesi hakijaksi ja odottaa pyyntöä.\nMuodostettuasi parin voit antaa botille tapaamispäivän saadaksesi muistutuksia.\nJos ette pidä seuraavaa tapaamista, voit ilmoittaa asiasta. Parisi saa ilmoituksen ja voitte sopia uuden tapaamispäivän.\nVoit rikkoa parisi komennolla 'riko pari'.\nJos haluat nollata tiedot ja aloittaa alusta kirjoita 'aloita alusta'.\nOta yhteyttä: fb.com/kehitysto\n",

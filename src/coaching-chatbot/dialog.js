@@ -506,13 +506,7 @@ bot
         }
       },
       (session) => {
-        if (session.isRatingGood()) {
-          session.runActions(['sendRating']);
-          session.next();
-          session.next();
-        } else {
           session.addResult('@GIVE_FEEDBACK');
-        }
       },
       (session) => {
         if (session.validInput(600)) {
