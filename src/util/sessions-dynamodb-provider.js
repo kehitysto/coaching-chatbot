@@ -25,7 +25,12 @@ module.exports = class DynamoDBProvider {
   }
 
   readAllWithReminders() {
-    let currentDay = strings['@WEEKDAYS'][new Date().getDay()].toUpperCase();
+    let d = new Date();
+    let utc = d.getTime() + (d.getTimezoneOffset() * 60 * 1000);
+    // UTC + 2 -> Suomen aika
+    let currentDate = new Date(utc + (2 * 60 * 60 * 1000));
+    let currentDay = strings['@WEEKDAYS'][currentDate.getDay()].toUpperCase();
+    let currentHour = ('0' + currentDate.getHours()).substr(-2, 2);
 
     const params = {
       Limit: 50,
@@ -36,14 +41,21 @@ module.exports = class DynamoDBProvider {
     };
 
     return this.table.scan(params).then((items) => {
-      log.debug('Sessions with reminder: ' + JSON.stringify(items));
-      return items;
+      let sessions = items.filter((item) =>
+        ('0' + item.context.time).substr(-5, 2) == currentHour);
+      log.debug('Sessions with reminder: ' + JSON.stringify(sessions));
+      return sessions;
     });
   }
 
   readAllWithFeedbacks() {
-    let enumForDay = (new Date().getDay() + 5) % 7;
-    let currentDay = strings['@WEEKDAYS'][enumForDay].toUpperCase();
+    let d = new Date();
+    let utc = d.getTime() + (d.getTimezoneOffset() * 60 * 1000);
+    // UTC + 2 -> Suomen aika
+    let currentDate = new Date(utc + (2 * 60 * 60 * 1000));
+    let enumDay = (currentDate.getDay() + 6) % 7;
+    let currentDay = strings['@WEEKDAYS'][enumDay].toUpperCase();
+    let currentHour = ('0' + ((currentDate.getHours() - 1) % 24)).substr(-2, 2);
 
     const params = {
       Limit: 50,
@@ -54,8 +66,10 @@ module.exports = class DynamoDBProvider {
     };
 
     return this.table.scan(params).then((items) => {
-      log.debug('Sessions with feedback: ' + JSON.stringify(items));
-      return items;
+      let sessions = items.filter((item) =>
+        ('0' + item.context.time).substr(-5, 2) == currentHour);
+      log.debug('Sessions with feedback: ' + JSON.stringify(sessions));
+      return sessions;
     });
   }
 
