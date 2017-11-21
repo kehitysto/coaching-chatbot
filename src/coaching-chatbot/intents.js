@@ -48,7 +48,7 @@ module.exports = {
     },
 
     BREAK: {
-        any: /^(?:hajota|riko|poista)\s/i,
+        any: /^(?:hajota|riko|poista|lopeta)\s/i,
     },
 
     RESET: {
@@ -105,8 +105,7 @@ module.exports = {
 
     PAIR: {
         any: [
-            /^(?:paria?)$/i,
-            /^(parin)?hakijoita$/i,
+            /^(vertais)?ohjaaj(?:aa|a|oita)$/i,
         ],
     },
 
