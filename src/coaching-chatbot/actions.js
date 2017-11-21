@@ -385,12 +385,14 @@ export function displayRequest({ context }) {
   });
 }
 
-export function addPairRequest({ sessionId, context }) {
+export function addPairRequest({ sessionId, context, input }) {
   let peerId = context.availablePeers[context.availablePeersIndex - 1];
   let session = new Sessions();
 
   return session.read(peerId).then((chosenPeer) => {
     if (chosenPeer.searching) {
+      chosenPeer.pairRequestMessages = chosenPeer.pairRequestMessages || {};
+      chosenPeer.pairRequestMessages[sessionId] = input;
       chosenPeer.pairRequests = [sessionId, ...(chosenPeer.pairRequests || [])];
       context.sentRequests = [peerId, ...(context.sentRequests || [])];
       context.availablePeers = context.availablePeers.slice(1);

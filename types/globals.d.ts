@@ -17,6 +17,7 @@ declare class Context {
     searching: boolean;
     availablePeers: (number|string)[];
     pairRequests: (number|string)[];
+    pairRequestMessages: {};
     sentRequests: (number|string)[];
     rejectedPeers: (number|string)[];
     state: string;
