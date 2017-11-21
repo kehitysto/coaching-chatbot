@@ -312,13 +312,35 @@ describe('coaching-bot actions', function() {
         .to.eventually
         .deep.equal({
           context: {
-            availablePeers: [],
-            rejectedPeers: [],
-            pairRequests: [],
             searching: false,
-            sentRequests: []
           },
         });
+    });
+  });
+
+  describe('#resetRequestsAndSearching', function() {
+    it('should reset all requests, available and rejected peers and searching', function() {
+      const ret = actions.resetRequestsAndSearching({
+        context: {
+          rejectedPeers: ['123'],
+          availablePeers: ['321'],
+          pairRequests: ['322'],
+          sentRequests: ['123', '523'],
+          searching: true,
+        },
+      });
+
+      return expect(ret)
+        .to.eventually
+        .deep.equal({
+          context: {
+            rejectedPeers: [],
+            availablePeers: [],
+            pairRequests: [],
+            sentRequests: [],
+            searching: false,
+          },
+      });
     });
   });
 
@@ -626,8 +648,8 @@ describe('coaching-bot actions', function() {
     it('should display the profile of the requesting user', function() {
         const sessions = new Sessions();
         const stubSessionsRead = sinon.stub(
-        sessions.db,
-        'read'
+          sessions.db,
+          'read'
         );
 
         stubSessionsRead.returns(
@@ -636,22 +658,24 @@ describe('coaching-bot actions', function() {
             communicationMethods: {
             SKYPE: 'pertti_42',
             },
+            sentRequestMessages: { '1': 'Message' }
         })
         );
 
         const context = {
-        pairRequests: [
-            1,
-            2,
-        ],
+          pairRequests: [
+              1,
+              2,
+          ],
         };
 
         const expected = {
-        result: 'Pertti\n  - Skype',
+          result: 'Pertti\n  - Skype\nMessage',
         };
 
         const ret = actions.displayRequest({
-        context,
+          context,
+          sessionId: '1'
         });
 
         return expect(ret)

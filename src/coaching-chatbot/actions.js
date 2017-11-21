@@ -125,6 +125,12 @@ export function markUserAsSearching({ context }) {
 
 export function markUserAsNotSearching({ context }) {
   return contextChanges(context)({
+      searching: false,
+  });
+}
+
+export function resetRequestsAndSearching({ context }) {
+  return contextChanges(context)({
             rejectedPeers: [],
             availablePeers: [],
             pairRequests: [],
@@ -281,7 +287,7 @@ export function acceptRequest({ sessionId, context }) {
                   sessionId: chosenPeerId, context: chosenPeer });
               })
               .then((chosenPeer) => {
-                return markUserAsNotSearching(chosenPeer);
+                return resetRequestsAndSearching(chosenPeer);
               }
             )
               .then((chosenPeer) => {
@@ -305,7 +311,7 @@ export function acceptRequest({ sessionId, context }) {
           });
         })
         .then(() => removeSentRequests({ sessionId, context }))
-        .then(() => markUserAsNotSearching({ context }))
+        .then(() => resetRequestsAndSearching({ context }))
         .then(({ context }) => contextChanges(context)({ hasPair: true }));
   });
 }
@@ -368,14 +374,14 @@ export function breakPair({ sessionId, context }) {
       });
 }
 
-export function displayRequest({ context }) {
+export function displayRequest({ context, sessionId }) {
   return new Promise((resolve, reject) => {
     let sessions = new Sessions();
 
     return sessions.read(context.pairRequests[0])
       .then((profile) => {
         resolve({
-          result: PairFormatter.createPairString(profile),
+          result: PairFormatter.createPairStringMessage(profile, sessionId),
         });
       })
       .catch((err) => {
@@ -385,12 +391,14 @@ export function displayRequest({ context }) {
   });
 }
 
-export function addPairRequest({ sessionId, context }) {
+export function addPairRequest({ sessionId, context, input }) {
   let peerId = context.availablePeers[context.availablePeersIndex - 1];
   let session = new Sessions();
 
   return session.read(peerId).then((chosenPeer) => {
     if (chosenPeer.searching) {
+      context.sentRequestMessages = context.sentRequestMessages || {};
+      context.sentRequestMessages[peerId] = input;
       chosenPeer.pairRequests = [sessionId, ...(chosenPeer.pairRequests || [])];
       context.sentRequests = [peerId, ...(context.sentRequests || [])];
       context.availablePeers = context.availablePeers.slice(1);

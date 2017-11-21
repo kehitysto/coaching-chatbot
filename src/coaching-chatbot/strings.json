@@ -71,5 +71,6 @@
   "@TOO_LONG_NAME": "Liian pitkä nimi, sallittu pituus on 50 merkkiä.",
   "@TOO_LONG_BIO": "Liian pitkä kuvaus, sallittu pituus on 400 merkkiä.",
   "@TOO_LONG_FEEDBACK": "Liian pitkä palaute, sallittu pituus on 600 merkkiä.",
-  "@TOO_LONG_COMMUNICATION_METHOD": "Liian pitkä yhteydenottotapa, sallittu pituus on 50 merkkiä."
+  "@TOO_LONG_COMMUNICATION_METHOD": "Liian pitkä yhteydenottotapa, sallittu pituus on 50 merkkiä.",
+  "@GIVE_PAIR_REQUEST_MESSAGE": "Anna tervehdys potentiaaliselle ohjaajallesi."
 }

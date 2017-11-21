@@ -6,6 +6,7 @@ from './communication-methods-formatter';
 
 const Formatter = {
   createPairString,
+  createPairStringMessage,
   beautifyAvailablePairs,
 };
 
@@ -22,6 +23,11 @@ function createPairString(context) {
     .join('\n');
 
   return `${pif.createProfile(context)}\n${s}`;
+}
+
+function createPairStringMessage(context, sessionId) {
+  return createPairString(context) + '\n' +
+    context.sentRequestMessages[sessionId];
 }
 
 /**

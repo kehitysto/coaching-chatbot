@@ -12,10 +12,21 @@ describe('Pair request tests', function() {
       });
 
       it(
+        'should ask for a message to be sent for the selected pair',
+        function() {
+          return expect(
+              this.bot.receive(SESSION, 'Kyllä'))
+            .to.eventually.become([
+              buildResponse('@GIVE_PAIR_REQUEST_MESSAGE')
+            ]);
+        }
+      );
+      
+      it(
         'should send the request when choosing a potential pair',
         function() {
           return expect(
-              this.bot.receive(SESSION, 'kyllä'))
+              this.bot.receive(SESSION, 'Olet parini ennen kuin huomaatkaan'))
             .to.eventually.become([
               buildResponse('@CONFIRM_NEW_PEER_ASK'),
               buildResponse('@NO_PAIRS_AVAILABLE', [{
@@ -23,10 +34,10 @@ describe('Pair request tests', function() {
                   'payload': '@TO_PROFILE',
                 },
                 {
-                'title': 'Lopeta haku',
-                'payload': '@STOP_SEARCHING',
-              }
-            ]),
+                  'title': 'Lopeta haku',
+                  'payload': '@STOP_SEARCHING',
+                }
+              ]),
             ])
             .then(() => expect(this.sessions.read('PAIR_REQUEST_TESTER_PAIR'))
                 .to.eventually.include.keys({ 'pairRequests': [SESSION] }));
