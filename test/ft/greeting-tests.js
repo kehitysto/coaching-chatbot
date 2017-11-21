@@ -15,7 +15,9 @@ describe('User story', function() {
         function() {
           return expect(this.bot.receive(SESSION, 'moi'))
             .to.eventually.become([
-              buildResponse('@GREETING', [{
+              buildResponse('@GREETING_1'),
+              buildResponse('@GREETING_2'),
+              buildResponse('@GREETING_3', [{
                 'title': 'Kyllä',
                 'payload': '@YES',
               }, {

@@ -19,7 +19,7 @@ describe('Next available peer tests', function () {
           this.bot.receive(SESSION, 'Etsi vertaisohjaajaa'))
           .to.eventually.become([
             buildResponse('@INFORMATION_ABOUT_LIST'),
-            buildResponse('Parinhakija: 1/2'),
+            buildResponse('Vertaisohjaaja: 1/2'),
             buildResponse(
               PairFormatter.beautifyAvailablePairs(
                 [{
@@ -35,7 +35,7 @@ describe('Next available peer tests', function () {
         return expect(
           this.bot.receive(SESSION, 'Seuraava'))
           .to.eventually.become([
-            buildResponse('Parinhakija: 2/2'),
+            buildResponse('Vertaisohjaaja: 2/2'),
             buildResponse(
               PairFormatter.beautifyAvailablePairs(
                 [{
@@ -51,7 +51,7 @@ describe('Next available peer tests', function () {
         return expect(
           this.bot.receive(SESSION, 'Seuraava'))
           .to.eventually.become([
-            buildResponse('Parinhakija: 1/2'),
+            buildResponse('Vertaisohjaaja: 1/2'),
             buildResponse(
               PairFormatter.beautifyAvailablePairs(
                 [{
@@ -67,7 +67,7 @@ describe('Next available peer tests', function () {
         return expect(
           this.bot.receive(SESSION, 'Ei'))
           .to.eventually.become([
-            buildResponse('Parinhakija: 1/1'),
+            buildResponse('Vertaisohjaaja: 1/1'),
             buildResponse(
               PairFormatter.beautifyAvailablePairs(
                 [{

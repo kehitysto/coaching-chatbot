@@ -49,7 +49,7 @@ describe('Stop searching', () => {
             this.bot.receive(SESSION, 'ei'))
             .to.eventually.become([
               buildResponse('@INFORMATION_ABOUT_LIST'),
-              buildResponse('Parinhakija: 1/1'),
+              buildResponse('Vertaisohjaaja: 1/1'),
               buildResponse(PairFormatter.beautifyAvailablePairs(
                 [{
                   id: 'ID',

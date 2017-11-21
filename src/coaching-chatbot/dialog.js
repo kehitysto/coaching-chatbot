@@ -29,7 +29,9 @@ bot
   .dialog(
     '/', [
       (session) => {
-        session.addResult('@GREETING',
+        session.addResult('@GREETING_1');
+        session.addResult('@GREETING_2');
+        session.addResult('@GREETING_3',
           Builder.QuickReplies.createArray(['@YES', '@NO']));
       },
       (session) => {
@@ -116,7 +118,7 @@ bot
         session.switchDialog('/add_communication_method');
       } else if (session.checkIntent('#DELETE')) {
         session.switchDialog('/delete_communication_method');
-      } else if (session.checkIntent('#TO_PROFILE')) {
+      } else if (session.checkIntent('#PROFILE')) {
         session.switchDialog('/profile');
       } else {
         session.addResult('@UNCLEAR');
