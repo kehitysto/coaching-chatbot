@@ -11,8 +11,12 @@ module.exports = {
         any: /^e[in]?$/i,
     },
 
+    OK: {
+        any: /^ok$/i,
+    },
+
     NEXT: {
-        any: /^(?:seuraavat|seuraava|seur)$/i,
+        any: /^seuraavat?$/i,
     },
 
     RETURN: {
@@ -20,11 +24,11 @@ module.exports = {
     },
 
     LIST_AS_SEARCHING: {
-        any: /^(?:listaudu|listaa)$/i,
+        any: /^lista(?:udu|lle|a)$/i,
     },
 
     PROFILE: {
-        any: /^(?:profiiliin|profiili|prof)$/i,
+        any: /^profiili(in)?$/i,
     },
 
     SET: {
@@ -48,7 +52,7 @@ module.exports = {
     },
 
     BREAK: {
-        any: /^(?:hajota|riko|poista)\s/i,
+        any: /^(?:hajota|riko|poista|lopeta)\s/i,
     },
 
     RESET: {
@@ -63,12 +67,8 @@ module.exports = {
         each: /^poista$/i,
     },
 
-    TO_PROFILE: {
-        each: /^profiiliin$/i,
-    },
-
     GIVE_FEEDBACK: {
-        any: /^(?:Anna palautetta|kommentoi|arvostele)$/i,
+        any: /^(?:anna palautetta|kommentoi|arvostele)$/i,
     },
 
     NUMERIC_RATING: {
@@ -105,8 +105,7 @@ module.exports = {
 
     PAIR: {
         any: [
-            /^(?:paria?)$/i,
-            /^(parin)?hakijoita$/i,
+            /^(vertais)?ohjaaj(?:aa|a|oita)$/i,
         ],
     },
 
@@ -126,15 +125,22 @@ module.exports = {
     },
 
     SEARCHING: {
-        any: /^(?:parin?)?\s?(?:haku|hakeminen|etsiminen)$/i,
+        any: /^((vertais)?ohjauksen)?\s?(?:haku|hakeminen|etsiminen)$/i,
     },
 
     PAIR_REQUEST: {
-        any: /^(?:pyyntö|pyynnöt|pyyntöjä)$/i,
+        any: /^pyyn(?:tö|nöt|töjä)$/i,
     },
 
     TEST: {
         each: /^test$/i,
+    },
+
+    TOGGLE_REMINDERS: {
+        any: [
+            /^Estä muistutukset$/i,
+            /^Salli muistutukset$/i,
+        ],
     },
 
     INFO: {
@@ -209,16 +215,5 @@ module.exports = {
             '#SET_OR_CHANGE',
             '#MEETING',
         ],
-    },
-
-    TOGGLE_REMINDERS: {
-        any: [
-            /^Estä muistutukset$/i,
-            /^Salli muistutukset$/i,
-        ],
-    },
-
-    OK: {
-        any: /^ok$/i,
     },
 };

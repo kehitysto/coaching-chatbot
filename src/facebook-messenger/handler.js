@@ -37,6 +37,9 @@ module.exports.meetingCheck = (event, context, cb) => {
     .then((sessionsFromDb) => {
       const promises = [];
       for (let i = 0; i < sessionsFromDb.length; i++) {
+        if (!sessionsFromDb[i].context.remindersEnabled) {
+          continue;
+        }
         promises.push(
             Messenger.send(sessionsFromDb[i].id,
               strings['@REMINDER_MESSAGE'] + sessionsFromDb[i].context.time,
