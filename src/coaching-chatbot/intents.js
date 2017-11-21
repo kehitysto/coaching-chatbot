@@ -48,11 +48,7 @@ module.exports = {
     },
 
     STOP: {
-        any: /^(?:lopeta|keskeytä|poistu)\s/i,
-    },
-
-    BREAK: {
-        any: /^(?:hajota|riko|poista|lopeta)\s/i,
+        any: /^(?:lopeta|keskeytä|poistu|päätä)\s/i,
     },
 
     RESET: {
@@ -105,7 +101,7 @@ module.exports = {
 
     PAIR: {
         any: [
-            /^(vertais)?ohjaaj(?:aa|a|oita)$/i,
+            /^(vertais)?ohja(?:ajaa|aja|ajia|us)$/i,
         ],
     },
 
@@ -198,7 +194,7 @@ module.exports = {
 
     BREAK_PAIR: {
         each: [
-          '#BREAK',
+          '#STOP',
           '#PAIR',
         ],
     },
