@@ -4,11 +4,10 @@ import * as Messenger from '../src/facebook-messenger/messenger-service';
 import * as Sessions from '../src/util/sessions-service';
 import * as sinon from 'sinon';
 
-const messengerSpy = sinon.spy(Messenger, "send");
-
-var clock = sinon.useFakeTimers(new Date().getTime());
-
 export function generate(discussions, states) {
+  const messengerSpy = sinon.spy(Messenger, "send");
+  var clock = sinon.useFakeTimers(new Date().getTime());
+
   const sessions = new Sessions();
   const bot = new Chatbot(dialog, sessions);
 
@@ -92,5 +91,5 @@ export function generate(discussions, states) {
     });
   }
 
-  return promise.then(() => lines);
+  return promise.then(() => messengerSpy.restore()).then(() => lines);
 }
