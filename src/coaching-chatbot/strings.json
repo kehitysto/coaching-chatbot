@@ -35,7 +35,6 @@
   "@CONFIRM_COMMUNICATION_METHODS": "Olet lisännyt seuraavat tavat olla yhteydessä:\n {communicationMethods}",
   "@NO_METHODS_ADDED": "Et ole vielä lisännyt yhteydenottotapoja. Haluatko lisätä nyt? Muuten palaat profiiliin.",
   "@NO_PAIRS_AVAILABLE": "Valitettavasti antamillasi yhteydenottotavoilla ei juuri nyt löydy vapaata vertaisohjaajaa. Voit lisätä tapoja tai listata itsesi vapaaksi ohjaajaksi, jotta muut ohjaajaa etsivät voivat lähettää sinulle pyyntöjä.",
-  "@PEER_NO_LONGER_AVAILABLE": "Hups, valitsemasi vertaispari ei olekaan enää vapaana. Jatka etsimistä!",
   "@STOP_SEARCHING": "Lopeta haku",
   "@CONFIRM_STOP_SEARCHING": "Haluatko varmasti lopettaa vertaisohjaajanhaun?",
   "@STOPPED_SEARCHING": "Hakusi on lopetettu.",
@@ -72,5 +71,7 @@
   "@TOO_LONG_BIO": "Liian pitkä kuvaus, sallittu pituus on 400 merkkiä.",
   "@TOO_LONG_FEEDBACK": "Liian pitkä palaute, sallittu pituus on 600 merkkiä.",
   "@TOO_LONG_COMMUNICATION_METHOD": "Liian pitkä yhteydenottotapa, sallittu pituus on 50 merkkiä.",
-  "@GIVE_PAIR_REQUEST_MESSAGE": "Anna tervehdys potentiaaliselle ohjaajallesi."
+  "@GIVE_PAIR_REQUEST_MESSAGE": "Anna tervehdys potentiaaliselle ohjaajallesi.",
+  "@PEER_NO_LONGER_AVAILABLE": "{name} ei enää ole käytettävissä vertaisohjaajaksi.",
+  "@PEER_NO_LONGER_AVAILABLE_GENERIC": "Kyseinen henkilö ei enää ole käytettävissä vertaisohjaajaksi."
 }
