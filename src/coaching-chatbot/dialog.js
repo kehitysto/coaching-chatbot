@@ -427,7 +427,7 @@ bot
             session.addResult('@INFO');
             session.resetDialog();
           } else {
-            log.info('THIS FUNCTION IS NOT ALLOWED HERE');
+            console.log('THIS FUNCTION IS NOT ALLOWED HERE');
           }
       }],
       ['#BREAK_PAIR', (session) => {
