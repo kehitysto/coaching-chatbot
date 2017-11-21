@@ -35,11 +35,31 @@
       "Skype-acc"
     ]
   },
+  "Kaarina lähettää ja hallinnoi pyyntöjä": {
+    "player": "Kaarina",
+    "session": "Session3",
+    "messages": [
+      "Selaa ohjaaja",
+      "Kyllä",
+      "Moi",
+      "Kyllä",
+      "Hei",
+      "Kyllä",
+      "HALOO",
+      "Profiiliin",
+      "Pyynnöt",
+      "Lähetetyt",
+      "Seuraava",
+      "Peru",
+      "Palaa"
+    ]
+  },
   "Kaapo hyväksyy pyynnön ja asettaa tapaamisen ajankohdan": {
     "player": "Kaapo",
     "session": "Session1",
     "messages": [
-      "Näytä pyynnöt",
+      "pyynnöt",
+      "saapuneet",
       "Kyllä",
       "Aseta tapaaminen",
       "KE",

@@ -23,6 +23,21 @@
     "communicationMethods": {
       "PHONE": "1235"
     },
+    
+    "state": "/?0/profile?0"
+  },
+  "Session4": {
+    "name": "Kalle",
+    "bio": "Kallen kuvaus",
+    "searching": true,
+    "availablePeers": [],
+    "pairRequests": [],
+    "rejectedPeers": [],
+    "sentRequests": [],
+    "communicationMethods": {
+      "PHONE": "1235"
+    },
+    
     "state": "/?0/profile?0"
   },
   "SessionH": {

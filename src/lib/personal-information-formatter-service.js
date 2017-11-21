@@ -43,6 +43,10 @@ function format(template, context) {
           .createCommunicationMethodslist(context).join('\n');
       } else if (name === 'availablePeers') {
         return context.availablePeers.length;
+      } else if (name === 'sentRequests') {
+        return context.sentRequests.length;
+      } else if (name === 'pairRequests') {
+        return context.pairRequests.length;
       }
 
       return context[name] != undefined ? context[name] : match;
