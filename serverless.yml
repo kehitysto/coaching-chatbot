@@ -5,6 +5,8 @@ provider:
   runtime: nodejs6.10
   region: us-east-1
   cfLogs: true
+  environment:
+    STAGE: ${opt:stage}
   iamRoleStatements:
     - Effect: Allow
       Action:
