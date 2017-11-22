@@ -27,7 +27,7 @@ module.exports = {
         any: /^lista(?:udu|lle|a)$/i,
     },
 
-    PROFILE: {
+    TO_PROFILE: {
         any: /^profiili(in)?$/i,
     },
 
@@ -51,11 +51,19 @@ module.exports = {
         any: /^(?:lopeta|keskeytä|poistu|päätä)\s/i,
     },
 
+    DONE: {
+        any: /^valmis/i,
+    },
+
+    MANAGE: {
+        any: /^halli(?:tse|nnoi)\s/i,
+    },
+
     RESET: {
         any: /^(?:aloita alusta|nollaa|resetoi)$/i,
     },
 
-    EDIT: {
+    ADD: {
         any: /^lisää$/i,
     },
 
@@ -92,11 +100,21 @@ module.exports = {
     },
 
     NAME: {
-        any: /^(?:nimi|nimeä|nimeksi)/i,
+        each: [
+            /^nimi/i,
+            '#OPTIONAL_VALUE',
+        ],
     },
 
     BIO: {
-        any: /^(?:kuvausta|kuvaukseksi|kuvaus)/i,
+        each: [
+            /^kuvaus/i,
+            '#OPTIONAL_VALUE',
+        ],
+    },
+
+    INFO: {
+        each: /^tietoja$/i,
     },
 
     PAIR: {
@@ -139,8 +157,8 @@ module.exports = {
         ],
     },
 
-    INFO: {
-        any: /^(?:info|ohje(?:et)|help|faq)$/i,
+    HELP: {
+        any: /^(?:info|ohje(?:et)|help|faq|apua?)$/i,
     },
 
     OPTIONAL_VALUE: {
@@ -155,19 +173,17 @@ module.exports = {
         ],
     },
 
-    CHANGE_NAME: {
-        each: [
-          '#CHANGE',
-          '#NAME',
-          '#OPTIONAL_VALUE',
+    MANAGE_OR_CHANGE: {
+        any: [
+            '#MANAGE',
+            '#CHANGE',
         ],
     },
 
-    CHANGE_BIO: {
-        each: [
-          '#CHANGE',
-          '#BIO',
-          '#OPTIONAL_VALUE',
+    ADD_OR_CHANGE: {
+        any: [
+            '#ADD',
+            '#CHANGE',
         ],
     },
 
@@ -210,6 +226,13 @@ module.exports = {
         each: [
             '#SET_OR_CHANGE',
             '#MEETING',
+        ],
+    },
+
+    MANAGE_INFO: {
+        each: [
+            '#MANAGE_OR_CHANGE',
+            '#INFO',
         ],
     },
 };

@@ -62,7 +62,7 @@
   "@CHANGE_DATE": "Muokkaa päivää",
   "@TELL_USER_HAS_NEW_FEEDBACK": "Olet saanut palautetta. Ohjaajasi vastasi kysymykseen \"Kuinka lähellä saamasi ohjaus oli ideaalia ohjaustilannettasi?\"\n",
   "@REMINDER_MESSAGE": "Sinulla on tapaaminen huomenna klo. ",
-  "@INFO": "Profiilissa voit muokata tietojasi, nähdä pyyntösi ja lopettaa haun kirjoittamalla 'lopeta haku'.\nProfiilista pääset myös selaamaan vapaita ohjaajia.\nVoit lopettaa ohjauksen komennolla 'lopeta ohjaus'.\nJos haluat nollata tiedot ja aloittaa alusta kirjoita 'aloita alusta'.\nOta yhteyttä: fb.com/kehitysto\n",
+  "@HELP": "Profiilissa voit muokata tietojasi, nähdä pyyntösi ja lopettaa haun kirjoittamalla 'lopeta haku'.\nProfiilista pääset myös selaamaan vapaita ohjaajia.\nVoit lopettaa ohjauksen komennolla 'lopeta ohjaus'.\nJos haluat nollata tiedot ja aloittaa alusta kirjoita 'aloita alusta'.\nOta yhteyttä: fb.com/kehitysto\n",
   "@FEEDBACK_MESSAGE": "Haluatko antaa palautetta äskeisestä tapaamisesta?",
   "@DISABLE_REMINDERS": "Estä muistutukset",
   "@ENABLE_REMINDERS": "Salli muistutukset",
@@ -72,5 +72,10 @@
   "@TOO_LONG_BIO": "Liian pitkä kuvaus, sallittu pituus on 400 merkkiä.",
   "@TOO_LONG_FEEDBACK": "Liian pitkä palaute, sallittu pituus on 600 merkkiä.",
   "@TOO_LONG_COMMUNICATION_METHOD": "Liian pitkä yhteydenottotapa, sallittu pituus on 50 merkkiä.",
-  "@GIVE_PAIR_REQUEST_MESSAGE": "Anna tervehdys potentiaaliselle ohjaajallesi."
+  "@GIVE_PAIR_REQUEST_MESSAGE": "Anna tervehdys potentiaaliselle ohjaajallesi.",
+  "@MANAGE_INFO": "Hallitse tietojasi",
+  "@NAME": "Nimi",
+  "@BIO": "Kuvaus",
+  "@COMMUNICATION_METHODS": "Yhteystiedot",
+  "@DONE": "Valmis"
 }

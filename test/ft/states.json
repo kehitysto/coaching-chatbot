@@ -46,6 +46,13 @@
       }
     }
   },
+  "MANAGE_INFO_TESTS": {
+    "sessions": {
+      "MANAGE_INFO_TESTER": {
+        "state": "/?0/profile?0/manage_info?0"
+      }
+    }
+  },
   "CONFIRM_PERMISSION_TESTS": {
     "sessions": {
       "CONFIRM_PERMISSION_TESTER": {

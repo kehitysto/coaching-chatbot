@@ -95,20 +95,12 @@ describe('Formatter service', function() {
           .getPersonalInformationbuttons(context);
 
         const expected = [{
-          title: 'Selaa hakijoita',
-          payload: 'LOOK_FOR_PEER',
+            title: 'Selaa ohjaajia',
+            payload: 'LOOK_FOR_PEER',
           },
           {
-            title: 'Vaihda nimi',
-            payload: 'CHANGE_NAME',
-          },
-          {
-            title: 'Muokkaa kuvausta',
-            payload: 'CHANGE_BIO',
-          },
-          {
-          payload: "EDIT_COMMUNICATION_METHODS",
-          title: "Yhteystiedot"
+            title: 'Hallitse tietoja',
+            payload: 'MANAGE_INFO',
           },
         ];
 
