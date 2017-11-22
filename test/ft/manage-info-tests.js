@@ -1,6 +1,5 @@
 import commonFeatures from './common';
 import PersonalInformationFormatter from '../../src/lib/personal-information-formatter-service';
-import CommunicationMethodsFormatter from '../../src/lib/communication-methods-formatter';
 const { buildResponse, FeatureTestStates, setupChatbot, QuickReplies } = commonFeatures;
 
 const SESSION = 'MANAGE_INFO_TESTER';
