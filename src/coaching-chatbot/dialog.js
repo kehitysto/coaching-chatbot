@@ -459,7 +459,6 @@ bot
       ['#TEST', (session) => {
           if (process.env.STAGE != 'production') {
             session.runActions(['testReminderAndFeedback']);
-            session.addResult('@INFO');
             session.resetDialog();
           } else {
             session.addResult('@UNCLEAR');
