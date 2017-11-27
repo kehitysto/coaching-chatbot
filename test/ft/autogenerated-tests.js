@@ -5,11 +5,11 @@ import * as DiscussionGenerator from '../generate-discussions';
 import { keccak512 } from 'js-sha3'
 
 describe('Automatically generated feature test', function() {
-  describe('As a user I want the chatbot to work correctly', function() {
+  describe('As a user I want the chatbot to work correctly', function () {
     it('should match with the given hash sum', function() {
       this.timeout(10000);
       return expect(DiscussionGenerator.generate(discussions, states)
-        .then(lines => keccak512(lines.join()))).to.eventually.equal('91b807b2d9244b64f9c421424e7bc4a379db4bccaee0877d08a33db0968c24b92226514b7df740edb24c6f5300698bca694c30d79937a5d77224974aa73d6d4c');
+        .then(lines => keccak512(lines.join()))).to.eventually.equal('79646669481903a34493af07ae6a16833cb8c4df6374e2f93246f3b0ecd896368de22ced3346665f219d516eea91a8f26506f1982a32c68e8fe9fe67cc10c89f');
     });
   });
 });

@@ -394,13 +394,11 @@ bot
       (session) => {
         if (session.getSentRequestCount() <= 0) {
           session.addResult('@NO_SENT_REQUESTS_AVAILABLE');
+          return session.endDialog();
         }
         session.next();
       },
       (session) => {
-        if (session.getSentRequestCount() <= 0) {
-          return session.endDialog();
-        }
         session.context.sentRequestsIndex =
           session.context.sentRequestsIndex || 1;
         session.addResult('@SENT_REQUEST_LIST_LENGTH');
@@ -413,6 +411,7 @@ bot
       (session) => {
         if (session.checkIntent('#REVOKE_REQUEST')) {
           session.runActions(['removeSentRequest']);
+          session.resetDialog();
         } else if (session.checkIntent('#NEXT')) {
           session.runActions(['nextSentRequest']);
           session.prev();
@@ -420,15 +419,7 @@ bot
           session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
-        }
-
-        return session.prev();
-      },
-      (session) => {
-        if (session.hasPair()) {
-          session.switchDialog('/accepted_pair_information');
-        } else {
-          session.endDialog();
+          session.prev();
         }
       },
   ])
@@ -437,14 +428,11 @@ bot
       (session) => {
         if (session.getPairRequestCount() <= 0) {
           session.addResult('@NO_REQUESTS_AVAILABLE');
+          return session.endDialog();
         }
-
         session.next();
       },
       (session) => {
-        if (session.getPairRequestCount() <= 0) {
-          return session.endDialog();
-        }
         session.addResult('@REQUEST_LIST_LENGTH');
         session.addResult('@INFORMATION_ABOUT_REQUESTS');
         session.runActions(['displayRequest']);
@@ -455,6 +443,7 @@ bot
       (session) => {
         if (session.checkIntent('#NO')) {
           session.runActions(['rejectRequest']);
+          sessio.prev();
         } else if (session.checkIntent('#YES')) {
           session.runActions(['acceptRequest']);
           return session.next();
@@ -462,9 +451,8 @@ bot
           session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
+          session.prev();
         }
-
-        return session.prev();
       },
       (session) => {
         if (session.hasPair()) {
