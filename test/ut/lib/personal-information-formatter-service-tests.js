@@ -110,6 +110,10 @@ describe('Formatter service', function() {
           payload: "EDIT_COMMUNICATION_METHODS",
           title: "Yhteystiedot"
           },
+          {
+          payload: "MANAGE_REQUESTS",
+          title: "Pyynnöt"
+          },
         ];
 
         return expect(personalInformationChangers)

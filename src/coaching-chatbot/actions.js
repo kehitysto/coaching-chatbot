@@ -180,6 +180,27 @@ export function removeSentRequests({ sessionId, context }) {
   });
 }
 
+export function removeSentRequest({ sessionId, context }) {
+  const sessions = new Sessions();
+  context.sentRequests = context.sentRequests || [];
+  const recipientId = context.sentRequests[context.sentRequestsIndex - 1];
+  context.sentRequests.splice(context.sentRequestsIndex - 1, 1);
+  if (context.sentRequestsIndex > context.sentRequests.length) {
+    context.sentRequestsIndex = 1;
+  }
+  return sessions.read(recipientId)
+    .then((recipient) => {
+      return sessions.write(recipientId, {
+        ...recipient,
+        pairRequests: recipient.pairRequests
+          .filter((senderId) => senderId !== sessionId),
+      });
+    })
+    .then(() => {
+      return { context };
+    });
+}
+
 export function getAvailablePeers({ sessionId, context }) {
   const sessions = new Sessions();
   const rejectedPeers = context.rejectedPeers || [];
@@ -255,6 +276,17 @@ export function displayAcceptedPeer({ sessionId, context }) {
 export function nextAvailablePeer({ context }) {
   return contextChanges(context)({
       availablePeersIndex: context.availablePeersIndex + 1,
+  });
+}
+
+export function nextSentRequest({ context }) {
+  let sentRequestsIndex = context.sentRequestsIndex || 1;
+  sentRequestsIndex = sentRequestsIndex + 1;
+  if (sentRequestsIndex > context.sentRequests.length) {
+    sentRequestsIndex = 1;
+  }
+  return contextChanges(context)({
+    sentRequestsIndex: sentRequestsIndex,
   });
 }
 
@@ -428,6 +460,23 @@ export function displayRequest({ context, sessionId }) {
   });
 }
 
+export function displaySentRequest({ context, sessionId }) {
+  return new Promise((resolve, reject) => {
+    let sessions = new Sessions();
+    let sentRequestsIndex = context.sentRequestsIndex || 1;
+    return sessions.read(context.sentRequests[sentRequestsIndex - 1])
+      .then((profile) => {
+        resolve({
+          result: PairFormatter.createPairString(profile, sessionId),
+        });
+      })
+      .catch((err) => {
+        log.error('err: {0}', err);
+        reject(err);
+      });
+  });
+}
+
 export function addPairRequest({ sessionId, context, input }) {
   let peerId = context.availablePeers[context.availablePeersIndex - 1];
   let session = new Sessions();
@@ -445,7 +494,7 @@ export function addPairRequest({ sessionId, context, input }) {
               peerId,
               strings['@TELL_USER_HAS_NEW_REQUEST'],
               Builder.QuickReplies.createArray([
-                strings['@SHOW_REQUESTS'],
+                strings['@REQUESTS'],
                 strings['@STOP_SEARCHING'],
               ])
             );

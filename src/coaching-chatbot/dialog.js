@@ -219,9 +219,9 @@ bot
         session.resetDialog();
         session.beginDialog('/stop_searching', true);
       }],
-      ['#SHOW_PAIR_REQUESTS', (session) => {
+      ['#PAIR_REQUEST', (session) => {
         session.resetDialog();
-        session.beginDialog('/list_requests', true);
+        session.beginDialog('/manage_requests');
       }],
       ['#OPTIONAL_VALUE', (session) => {
         session.addResult('@UNCLEAR');
@@ -258,7 +258,7 @@ bot
       (session) => {
         if (session.getPairRequestCount() > 0) {
           session.addResult('@TELL_USER_HAS_NEW_REQUEST', [
-            Builder.QuickReplies.create('@SHOW_REQUESTS'),
+            Builder.QuickReplies.create('@REQUESTS'),
           ]);
         }
         if (!session.context.availablePeers ||
@@ -318,9 +318,9 @@ bot
         session.resetDialog();
         session.beginDialog('/stop_searching', true);
       }],
-      ['#SHOW_PAIR_REQUESTS', (session) => {
+      ['#PAIR_REQUEST', (session) => {
         session.resetDialog();
-        session.beginDialog('/list_requests', true);
+        session.beginDialog('/manage_requests');
       }],
       ['#INFO', (session) => {
         session.addResult('@INFO');
@@ -347,6 +347,71 @@ bot
       },
     ])
   .dialog(
+    '/manage_requests', [
+      (session) => {
+        session.addResult('@REQUEST_MANAGEMENT');
+        session.addQuickReplies(
+          Builder.QuickReplies.createArray([
+            '@SHOW_SENT_REQUESTS', '@SHOW_REQUESTS', '@RETURN'])
+        );
+      },
+      (session) => {
+        if (session.checkIntent('#SENT_REQUESTS')) {
+          session.beginDialog('/list_sent_requests');
+        } else if (session.checkIntent('#RECEIVED_REQUESTS')) {
+          session.beginDialog('/list_requests');
+        } else if (session.checkIntent('#RETURN')) {
+          session.endDialog();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
+        }
+      },
+  ])
+  .dialog(
+    '/list_sent_requests', [
+      (session) => {
+        if (session.getSentRequestCount() <= 0) {
+          return session.addResult('@NO_SENT_REQUESTS_AVAILABLE');
+        }
+        session.next();
+      },
+      (session) => {
+        if (session.getSentRequestCount() <= 0) {
+          return session.endDialog();
+        }
+        session.context.sentRequestsIndex =
+          session.context.sentRequestsIndex || 1;
+        session.addResult('@SENT_REQUEST_LIST_LENGTH');
+        session.runActions(['displaySentRequest']);
+        session.addQuickReplies(
+          Builder.QuickReplies.createArray(
+            ['@REVOKE_REQUEST', '@NEXT', '@RETURN'])
+        );
+      },
+      (session) => {
+        if (session.checkIntent('#REVOKE_REQUEST')) {
+          session.runActions(['removeSentRequest']);
+        } else if (session.checkIntent('#NEXT')) {
+          session.runActions(['nextSentRequest']);
+          session.prev();
+        } else if (session.checkIntent('#RETURN')) {
+          return session.endDialog();
+        } else {
+          session.addResult('@UNCLEAR');
+        }
+
+        return session.prev();
+      },
+      (session) => {
+        if (session.hasPair()) {
+          session.switchDialog('/accepted_pair_information');
+        } else {
+          session.endDialog();
+        }
+      },
+  ])
+  .dialog(
     '/list_requests', [
       (session) => {
         if (session.getPairRequestCount() <= 0) {
@@ -359,7 +424,7 @@ bot
         if (session.getPairRequestCount() <= 0) {
           return session.endDialog();
         }
-
+        session.addResult('@REQUEST_LIST_LENGTH');
         session.addResult('@INFORMATION_ABOUT_REQUESTS');
         session.runActions(['displayRequest']);
         session.addQuickReplies(

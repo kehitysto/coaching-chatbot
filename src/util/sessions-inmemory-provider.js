@@ -77,28 +77,21 @@ module.exports = class InMemoryProvider {
     return new Promise((resolve, reject) => {
       log.silly('Id: {0}', id);
 
-      let pairs = [];
+      let context = this.db[id];
+      if (!context || !context.communicationMethods) return resolve([]);
 
-      for (let sessionId in this.db) {
-        if (!{}.hasOwnProperty.call(this.db, sessionId)) continue;
+      let notIn = (prop, content) => !prop || !prop.includes(content);
+      let someCommon = (a, b) => Object.keys(a || {})
+            .some((method) => Object.keys(b || {}).includes(method));
 
-        log.silly('Evaluating possible pair {0}', sessionId);
-        if (sessionId == id) continue;
-        let session = this.db[sessionId];
-        let context = this.db[id];
-
-        if (session.searching === true &&
-            (!session.pairRequests || !session.pairRequests.includes(id)) &&
-            (!session.rejectedPeers || !session.rejectedPeers.includes(id)) &&
-            (session.communicationMethods && context.communicationMethods &&
-              Object.keys(session.communicationMethods).some((method) =>
-              Object.keys(context.communicationMethods).includes(method)))) {
-          log.silly('Found a valid pair!');
-          pairs.push({ id: sessionId });
-        }
-      }
-
-      resolve(pairs);
+      resolve(Object.keys(this.db).filter((pairId) => {
+          log.silly('Evaluating possible pair {0}', pairId);
+          let pair = this.db[pairId];
+          return id != pairId && pair.searching === true &&
+            notIn(pair.pairRequests, id) &&
+            notIn(pair.rejectedPeers, id) &&
+            someCommon(pair.communicationMethods, context.communicationMethods);
+        }).map((pairId) => ({ id: pairId })));
     });
   }
 
