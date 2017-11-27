@@ -11,7 +11,28 @@ process.env.RUN_ENV = 'dev';
 
 require('../src/lib/env-vars').config();
 
-let promise = DiscussionGenerator.generate(discussions, states);
+let descriptions = [];
+let promise = DiscussionGenerator.generate(discussions, states)
+  .then((scenarios) => {
+    let i = 0;
+    for (let scenario of scenarios) {
+      let hash = keccak512(scenario.content.join());
+      ['  { title: \'' + scenario.title.split('# ')[1] + '\',',
+       '    hash: \'' + hash + '\' },'].map(l => descriptions.push(l));
+      i += 1;
+    }
+    return scenarios;
+  })
+  .then((scenarios) => {
+    let lines = [];
+    for (let scenario of scenarios) {
+      lines.push(scenario.title);
+      for (let line of scenario.content) {
+        lines.push(line);
+      }
+    }
+    return lines;
+  });
 
 promise = promise.then((lines) => {
   const target = path.resolve(__dirname, '..', 'doc', 'flow', 'discussions.md');
@@ -24,16 +45,30 @@ promise = promise.then((lines) => {
    'import * as path from \'path\';',
    'import * as states from \'../../doc/flow/states.json\';',
    'import * as DiscussionGenerator from \'../generate-discussions\';',
-   'import { keccak512 } from \'js-sha3\'',
+   'import { keccak512 } from \'js-sha3\';',
    '',
-   'describe(\'Automatically generated feature test\', function() {',
-   '  describe(\'As a user I want the chatbot to work correctly\', function() {',
-   '    it(\'should match with the given hash sum\', function() {',
-   '      this.timeout(10000);',
-   '      return expect(DiscussionGenerator.generate(discussions, states)',
-   '        .then(lines => keccak512(lines.join()))).to.eventually.equal(\'' + hash + '\');',
-   '    });',
+   'let scenarios;',
+   '',
+   'let checkData = [',
+   ...descriptions,
+   '];',
+   '',
+   'describe(\'Automatically generated feature tests\', () => {',
+   '  before(() => {',
+   '    DiscussionGenerator.generate(discussions, states)',
+   '      .then(result => {',
+   '         scenarios = result;',
+   '      });',
    '  });',
+   '',
+   '  for (let i in checkData) {',
+   '    describe(checkData[i].title, () => {',
+   '      it(\'should match with the given hash sum\', () => {',
+   '        return expect(keccak512(scenarios[i].content.join())).to.equal(checkData[i].hash);',
+   '      });',
+   '    });',
+   '  }',
    '});',
+   '',
    '```'].join('\n'));
 });
