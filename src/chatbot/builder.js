@@ -295,8 +295,6 @@ class Builder {
   }
 
   _runStep(step, session, input) {
-    setTimeout(function() {
-    }, 500);
 
     log.silly('Running iteration {0}', step);
 

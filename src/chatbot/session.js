@@ -91,6 +91,8 @@ module.exports = class Session {
    */
   addResult(templateId, quickReplies = []) {
     this._queueFunction(() => this._addResult(templateId, quickReplies));
+    setTimeout(function () {
+    }, 3000);
   }
 
   _addResult(templateId, quickReplies = []) {
