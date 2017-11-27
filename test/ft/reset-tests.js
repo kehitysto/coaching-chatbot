@@ -67,7 +67,9 @@ describe('Reset tests', function() {
             return expect(response)
               .to.eventually.become([
                 buildResponse('@RESET_DONE'),
-                buildResponse('@GREETING', [{
+                buildResponse('@GREETING_1'),
+                buildResponse('@GREETING_2'),
+                buildResponse('@GREETING_3', [{
                   'title': 'Kyllä',
                   'payload': '@YES',
                 }, {

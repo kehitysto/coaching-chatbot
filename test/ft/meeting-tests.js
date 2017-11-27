@@ -1,5 +1,7 @@
 import commonFeatures from './common';
 import * as strings from '../../src/coaching-chatbot/strings.json';
+import * as sinon from 'sinon';
+import * as Messenger from '../../src/facebook-messenger/messenger-service';
 const { buildResponse, setupChatbot, QuickReplies, Strings } = commonFeatures;
 
 const SESSION = 'MEETING_TESTER';
@@ -82,11 +84,27 @@ describe('Meeting tests', function() {
                 buildResponse(
                     'Tapaaminen on viikoittain MA, klo 11:11',
                     QuickReplies.createArray([
-                        '@CHANGE_DATE', '@SKIP_MEETING', '@DISABLE_REMINDERS', '@SHOW_PAIR']),
+                        '@CHANGE_DATE', '@DISABLE_REMINDERS', '@SHOW_PAIR']),
                 ));
           });
         }
       );
+
+      it('should remind', function() {
+        const spy = sinon.spy(Messenger, 'send');
+        const clock = sinon.useFakeTimers(1510478570885); // sunday
+
+        return this.bot.receive(SESSION, 'test')
+          .then(() => expect(spy.args[0]).to.deep.equal([
+              SESSION,
+              Strings['@REMINDER_MESSAGE'] + '11:11',
+              QuickReplies.createArray(['OK'])
+            ]))
+          .then((result) => {
+            spy.restore(); clock.restore();
+            return result;
+          });
+      });
     }
   );
 });

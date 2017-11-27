@@ -14,10 +14,62 @@ describe('Communication methods tests', function() {
       });
 
       it(
-        'should ask for my Skype username when I choose Skype as a communication method',
+        'should ask for my phone number when I choose phone as a communication method',
         function() {
           return expect(
-              this.bot.receive(SESSION, 'Skype'))
+              this.bot.receive(SESSION, 'Puhelin'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_PHONE_NUMBER'),
+            ]);
+        }
+      );
+
+      it('should not allow too long phone number', function () {
+        return expect(
+          this.bot.receive(SESSION, Array(51).fill('a').join('')))
+          .to.eventually.become([
+            buildResponse('@TOO_LONG_COMMUNICATION_METHOD'),
+            buildResponse('@REQUEST_COMMUNICATION_METHOD', [{
+              'title': 'Skype',
+              'payload': 'SKYPE',
+            }, {
+              'title': 'Puhelin',
+              'payload': 'PHONE',
+            }]),
+          ]);
+      });
+
+      it(
+        'should ask for my Skype username when I choose Skype as a communication method',
+        function () {
+          return expect(
+            this.bot.receive(SESSION, 'Skype'))
+            .to.eventually.become([
+              buildResponse('@REQUEST_SKYPE_NAME'),
+            ]);
+        }
+      );
+
+      it('should not allow too long Skype username', function () {
+        return expect(
+          this.bot.receive(SESSION, Array(51).fill('a').join('')))
+          .to.eventually.become([
+            buildResponse('@TOO_LONG_COMMUNICATION_METHOD'),
+            buildResponse('@REQUEST_COMMUNICATION_METHOD', [{
+              'title': 'Skype',
+              'payload': 'SKYPE',
+            }, {
+              'title': 'Puhelin',
+              'payload': 'PHONE',
+            }]),
+          ]);
+      });
+
+      it(
+        'should ask for my Skype username when I choose Skype as a communication method',
+        function () {
+          return expect(
+            this.bot.receive(SESSION, 'Skype'))
             .to.eventually.become([
               buildResponse('@REQUEST_SKYPE_NAME'),
             ]);
@@ -43,8 +95,8 @@ describe('Communication methods tests', function() {
                 'title': 'Poista',
                 'payload': '@DELETE',
               }, {
-                'title': 'Profiiliin',
-                'payload': '@TO_PROFILE',
+                'title': 'Valmis',
+                'payload': '@DONE',
               }]),
             ]);
         }
@@ -93,8 +145,8 @@ describe('Communication methods tests', function() {
                 'title': 'Poista',
                 'payload': '@DELETE',
               }, {
-                'title': 'Profiiliin',
-                'payload': '@TO_PROFILE',
+                'title': 'Valmis',
+                'payload': '@DONE',
               }]),
             ]);
         }
@@ -139,29 +191,13 @@ describe('Communication methods tests', function() {
                 'title': 'Poista',
                 'payload': '@DELETE',
               }, {
-                'title': 'Profiiliin',
-                'payload': '@TO_PROFILE',
+                'title': 'Valmis',
+                'payload': '@DONE',
               }]),
             ]);
         }
       );
-
-      it(
-        'should go to profile',
-        function() {
-          return expect(
-            this.bot.receive(SESSION, 'Profiiliin'))
-            .to.eventually.become([
-              buildResponse(
-                PersonalInformationFormatter.formatFromTemplate(
-                  '@DISPLAY_PROFILE', FeatureTestStates['COMMUNICATION_METHODS_TESTS']['sessions'][SESSION]),
-                PersonalInformationFormatter.getPersonalInformationbuttons(
-                  {})),
-            ]);
-        }
-      );
-    }
-  );
+  });
 
   describe(
     'As a registered user I want to be able to remove my communication methods, add them again and modify them',
@@ -200,8 +236,8 @@ describe('Communication methods tests', function() {
                 'title': 'Poista',
                 'payload': '@DELETE',
               }, {
-                'title': 'Profiiliin',
-                'payload': '@TO_PROFILE',
+                'title': 'Valmis',
+                'payload': '@DONE',
               }]),
             ]);
         }
@@ -271,8 +307,8 @@ describe('Communication methods tests', function() {
                 'title': 'Poista',
                 'payload': '@DELETE',
               }, {
-                'title': 'Profiiliin',
-                'payload': '@TO_PROFILE',
+                'title': 'Valmis',
+                'payload': '@DONE',
               }]),
             ]);
         }
@@ -320,8 +356,8 @@ describe('Communication methods tests', function() {
                 'title': 'Poista',
                 'payload': '@DELETE',
               }, {
-                'title': 'Profiiliin',
-                'payload': '@TO_PROFILE',
+                'title': 'Valmis',
+                'payload': '@DONE',
               }]),
             ]);
         }

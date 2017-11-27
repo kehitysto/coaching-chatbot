@@ -1,0 +1,47 @@
+{
+  "Session2": {
+    "name": "Katariina",
+    "bio": "Kuvaukseni ei sovi herkille",
+    "searching": false,
+    "availablePeers": [],
+    "pairRequests": [],
+    "rejectedPeers": [],
+    "sentRequests": [],
+    "communicationMethods": {
+      "PHONE": "1235"
+    },
+    "state": "/?0/profile?0"
+  },
+  "Session3": {
+    "name": "Kaarina",
+    "bio": "Kaarinan kuvaus",
+    "searching": true,
+    "availablePeers": [],
+    "pairRequests": [],
+    "rejectedPeers": [],
+    "sentRequests": [],
+    "communicationMethods": {
+      "PHONE": "1235"
+    },
+    
+    "state": "/?0/profile?0"
+  },
+  "Session4": {
+    "name": "Kalle",
+    "bio": "Kallen kuvaus",
+    "searching": true,
+    "availablePeers": [],
+    "pairRequests": [],
+    "rejectedPeers": [],
+    "sentRequests": [],
+    "communicationMethods": {
+      "PHONE": "1235"
+    },
+    
+    "state": "/?0/profile?0"
+  },
+  "SessionH": {
+    "searching": false,
+    "state": "/?0/profile?0/accepted_pair_profile?0"
+  }
+}

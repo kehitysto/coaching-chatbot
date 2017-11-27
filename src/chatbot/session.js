@@ -323,6 +323,10 @@ module.exports = class Session {
     return this.context.pairRequests ? this.context.pairRequests.length : 0;
   }
 
+  getSentRequestCount() {
+    return this.context.sentRequests ? this.context.sentRequests.length : 0;
+  }
+
   allCommunicationMethodsFilled() {
     return CommunicationMethodsFormatter.getCommunicationMethods(this.context)
       .length === 0;
@@ -332,10 +336,6 @@ module.exports = class Session {
     let d = this.context.weekDay;
     let t = this.context.time;
     return (d === undefined || t === undefined);
-  }
-
-  isRatingGood() {
-    return [3, 4].includes(this.context.rating);
   }
 
   isSearching() {
@@ -348,5 +348,9 @@ module.exports = class Session {
 
   hasPair() {
     return this.context.hasPair;
+  }
+
+  validInput(maxLength) {
+    return this.getInput().length <= maxLength;
   }
 };

@@ -11,8 +11,12 @@ module.exports = {
         any: /^e[in]?$/i,
     },
 
+    OK: {
+        any: /^ok$/i,
+    },
+
     NEXT: {
-        any: /^(?:seuraavat|seuraava|seur)$/i,
+        any: /^seuraavat?$/i,
     },
 
     RETURN: {
@@ -20,11 +24,11 @@ module.exports = {
     },
 
     LIST_AS_SEARCHING: {
-        any: /^(?:listaudu|listaa)$/i,
+        any: /^lista(?:udu|lle|a)$/i,
     },
 
-    PROFILE: {
-        any: /^(?:profiiliin|profiili|prof)$/i,
+    TO_PROFILE: {
+        any: /^profiili(in)?$/i,
     },
 
     SET: {
@@ -32,7 +36,7 @@ module.exports = {
     },
 
     CHANGE: {
-        any: /^(?:vaihda|muuta|muokkaa)\s/i,
+        any: /^(?:vaihda|muuta|muokkaa|hallinnoi)\s/i,
     },
 
     FIND: {
@@ -44,31 +48,43 @@ module.exports = {
     },
 
     STOP: {
-        any: /^(?:lopeta|keskeytä|poistu)\s/i,
+        any: /^(?:lopeta|keskeytä|poistu|päätä)\s/i,
     },
 
-    BREAK: {
-        any: /^(?:hajota|riko|poista)\s/i,
+    DONE: {
+        any: /^valmis/i,
+    },
+
+    MANAGE: {
+        any: /^halli(?:tse|nnoi)\s/i,
     },
 
     RESET: {
         any: /^(?:aloita alusta|nollaa|resetoi)$/i,
     },
 
-    EDIT: {
+    ADD: {
         any: /^lisää$/i,
+    },
+
+    SENT_REQUESTS: {
+        any: /^lähetetyt$/i,
+    },
+
+    RECEIVED_REQUESTS: {
+        any: /^saapuneet$/i,
+    },
+
+    REVOKE_REQUEST: {
+        any: /^peru/i,
     },
 
     DELETE: {
         each: /^poista$/i,
     },
 
-    TO_PROFILE: {
-        each: /^profiiliin$/i,
-    },
-
     GIVE_FEEDBACK: {
-        any: /^(?:Anna palautetta|kommentoi|arvostele)$/i,
+        any: /^(?:anna palautetta|kommentoi|arvostele)$/i,
     },
 
     NUMERIC_RATING: {
@@ -96,17 +112,26 @@ module.exports = {
     },
 
     NAME: {
-        any: /^(?:nimi|nimeä|nimeksi)/i,
+        each: [
+            /^nimi/i,
+            '#OPTIONAL_VALUE',
+        ],
     },
 
     BIO: {
-        any: /^(?:kuvausta|kuvaukseksi|kuvaus)/i,
+        each: [
+            /^kuvaus/i,
+            '#OPTIONAL_VALUE',
+        ],
+    },
+
+    INFO: {
+        each: /^tietoja$/i,
     },
 
     PAIR: {
         any: [
-            /^(?:paria?)$/i,
-            /^(parin)?hakijoita$/i,
+            /^(vertais)?ohja(?:ajaa|aja|ajia|us)$/i,
         ],
     },
 
@@ -126,23 +151,26 @@ module.exports = {
     },
 
     SEARCHING: {
-        any: /^(?:parin?)?\s?(?:haku|hakeminen|etsiminen)$/i,
+        any: /^((vertais)?ohjauksen)?\s?(?:haku|hakeminen|etsiminen)$/i,
     },
 
     PAIR_REQUEST: {
-        any: /^(?:pyyntö|pyynnöt|pyyntöjä)$/i,
+        any: /^pyyn(?:tö|nöt|töjä)$/i,
     },
 
     TEST: {
         each: /^test$/i,
     },
 
-    INFO: {
-        any: /^(?:info|ohje(?:et))$/i,
+    TOGGLE_REMINDERS: {
+        any: [
+            /^Estä muistutukset$/i,
+            /^Salli muistutukset$/i,
+        ],
     },
 
-    SKIP_MEETING: {
-        each: /^Ohita tämä viikko$/i,
+    HELP: {
+        any: /^(?:info|ohje(?:et)|help|faq|apua?)$/i,
     },
 
     OPTIONAL_VALUE: {
@@ -157,19 +185,17 @@ module.exports = {
         ],
     },
 
-    CHANGE_NAME: {
-        each: [
-          '#CHANGE',
-          '#NAME',
-          '#OPTIONAL_VALUE',
+    MANAGE_OR_CHANGE: {
+        any: [
+            '#MANAGE',
+            '#CHANGE',
         ],
     },
 
-    CHANGE_BIO: {
-        each: [
-          '#CHANGE',
-          '#BIO',
-          '#OPTIONAL_VALUE',
+    ADD_OR_CHANGE: {
+        any: [
+            '#ADD',
+            '#CHANGE',
         ],
     },
 
@@ -194,9 +220,16 @@ module.exports = {
         ],
     },
 
+    SHOW_SENT_REQUESTS: {
+        each: [
+          '#SENT',
+          '#PAIR_REQUEST',
+        ],
+    },
+
     BREAK_PAIR: {
         each: [
-          '#BREAK',
+          '#STOP',
           '#PAIR',
         ],
     },
@@ -215,14 +248,10 @@ module.exports = {
         ],
     },
 
-    TOGGLE_REMINDERS: {
-        any: [
-            /^Estä muistutukset$/i,
-            /^Salli muistutukset$/i,
+    MANAGE_INFO: {
+        each: [
+            '#MANAGE_OR_CHANGE',
+            '#INFO',
         ],
-    },
-
-    OK: {
-        any: /^ok$/i,
     },
 };

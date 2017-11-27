@@ -312,13 +312,35 @@ describe('coaching-bot actions', function() {
         .to.eventually
         .deep.equal({
           context: {
-            availablePeers: [],
-            rejectedPeers: [],
-            pairRequests: [],
             searching: false,
-            sentRequests: []
           },
         });
+    });
+  });
+
+  describe('#resetRequestsAndSearching', function() {
+    it('should reset all requests, available and rejected peers and searching', function() {
+      const ret = actions.resetRequestsAndSearching({
+        context: {
+          rejectedPeers: ['123'],
+          availablePeers: ['321'],
+          pairRequests: ['322'],
+          sentRequests: ['123', '523'],
+          searching: true,
+        },
+      });
+
+      return expect(ret)
+        .to.eventually
+        .deep.equal({
+          context: {
+            rejectedPeers: [],
+            availablePeers: [],
+            pairRequests: [],
+            sentRequests: [],
+            searching: false,
+          },
+      });
     });
   });
 
@@ -399,11 +421,11 @@ describe('coaching-bot actions', function() {
   describe('#nextAvailablePeer', function() {
     it('moves the current peer to the end of nextAvailablePeer array', function() {
       const ret = actions.nextAvailablePeer({
-        context: { availablePeers: ['TEST1', 'TEST2'] },
+        context: { availablePeers: ['TEST1', 'TEST2'], availablePeersIndex: 1 },
       });
 
       return expect(ret).to.become({
-        context: { availablePeers: ['TEST2', 'TEST1'], availablePeersIndex: NaN },
+        context: { availablePeers: ['TEST1', 'TEST2'], availablePeersIndex: 2 },
       });
     });
   });
@@ -414,13 +436,15 @@ describe('coaching-bot actions', function() {
         context: {
           rejectedPeers: ['TEST1'],
           availablePeers: ['TEST2'],
+          availablePeersIndex: 1,
         },
       });
 
       return expect(ret).to.become({
         context: {
           rejectedPeers: ['TEST1', 'TEST2'],
-          availablePeers: [],
+          availablePeers: ['TEST2'],
+          availablePeersIndex: 1,
         },
       });
     });
@@ -429,13 +453,15 @@ describe('coaching-bot actions', function() {
       const ret = actions.rejectAvailablePeer({
         context: {
           availablePeers: ['TEST2'],
+          availablePeersIndex: 1
         },
       });
 
       return expect(ret).to.become({
         context: {
           rejectedPeers: ['TEST2'],
-          availablePeers: [],
+          availablePeers: ['TEST2'],
+          availablePeersIndex: 1
         },
       });
     });
@@ -622,8 +648,8 @@ describe('coaching-bot actions', function() {
     it('should display the profile of the requesting user', function() {
         const sessions = new Sessions();
         const stubSessionsRead = sinon.stub(
-        sessions.db,
-        'read'
+          sessions.db,
+          'read'
         );
 
         stubSessionsRead.returns(
@@ -632,22 +658,24 @@ describe('coaching-bot actions', function() {
             communicationMethods: {
             SKYPE: 'pertti_42',
             },
+            sentRequestMessages: { '1': 'Message' }
         })
         );
 
         const context = {
-        pairRequests: [
-            1,
-            2,
-        ],
+          pairRequests: [
+              1,
+              2,
+          ],
         };
 
         const expected = {
-        result: 'Pertti\n  - Skype',
+          result: 'Pertti\n  - Skype\nMessage',
         };
 
         const ret = actions.displayRequest({
-        context,
+          context,
+          sessionId: '1'
         });
 
         return expect(ret)
@@ -749,7 +777,7 @@ describe('coaching-bot actions', function() {
 
         const expectedToWrite = {
           ...profile,
-          state: '/?0/profile?0',
+          state: '/?0/profile?0/ok?0',
         };
 
         const ret = actions.breakPair({
@@ -797,7 +825,7 @@ describe('coaching-bot actions', function() {
       })
 
       return ret.then((result) => {
-        expect(result.result).to.equal('@PEER_NO_LONGER_AVAILABLE');
+        expect(result.result).to.equal('@PEER_NO_LONGER_AVAILABLE_GENERIC');
       }).then(() => {
         stubSessionsRead.restore();
       });

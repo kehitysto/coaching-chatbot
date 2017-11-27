@@ -18,12 +18,13 @@ declare class Context {
     availablePeers: (number|string)[];
     pairRequests: (number|string)[];
     sentRequests: (number|string)[];
+    sentRequestMessages: {};
     rejectedPeers: (number|string)[];
     state: string;
     weekDay: string;
     time: string;
-    skipMeeting: boolean;
     remindersEnabled: boolean;
+    hasPair: boolean;
 }
 
 declare class Session {
@@ -50,11 +51,11 @@ declare class Session {
     send(message: string, quickReplies: QuickReplies)
     switchDialog(dialogId: string): void;
     ifFacilitationSet(): boolean;
-    isRatingGood(): boolean;
     isSearching(): boolean;
     areRemindersEnabled(): boolean;
     getPairRequestCount(): number;
     getAvailablePeersCount(): number;
+    hasPair(): boolean;
 }
 
 declare class Sessions {

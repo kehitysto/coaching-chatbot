@@ -1,18 +1,14 @@
 [
   {
     "identifier": "LOOK_FOR_PEER",
-    "description": "Selaa hakijoita"
+    "description": "Selaa ohjaajia"
   },
   {
-    "identifier": "CHANGE_NAME",
-    "description": "Vaihda nimi"
+    "identifier": "MANAGE_INFO",
+    "description": "Hallitse tietoja"
   },
   {
-    "identifier": "CHANGE_BIO",
-    "description": "Muokkaa kuvausta"
-  },
-  {
-    "identifier": "EDIT_COMMUNICATION_METHODS",
-    "description": "Yhteystiedot"
+    "identifier": "MANAGE_REQUESTS",
+    "description": "Pyynnöt"
   }
 ]

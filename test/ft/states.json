@@ -6,7 +6,7 @@
       },
       "FEEDBACK_TESTER": {
         "name": "Kaapo",
-        "state": "/give_feedback?0"
+        "state": "/profile?0/give_feedback?1"
       },
       "FEEDBACK_AND_REMINDER_TESTER": {
         "name": "Kaapeli",
@@ -43,6 +43,13 @@
     "sessions": {
       "COMMUNICATION_METHODS_TESTER": {
         "state": "/?0/create_profile?3/add_communication_method?1"
+      }
+    }
+  },
+  "MANAGE_INFO_TESTS": {
+    "sessions": {
+      "MANAGE_INFO_TESTER": {
+        "state": "/?0/profile?0/manage_info?0"
       }
     }
   },
@@ -112,6 +119,7 @@
         "name": "Pair Request Tester",
         "searching": true,
         "availablePeers": ["PAIR_REQUEST_TESTER_PAIR"],
+        "availablePeersIndex": 1,
         "state": "/?0/searching?3"
       },
       "PAIR_REQUEST_TESTER_PAIR": {
@@ -124,6 +132,74 @@
     "sessions": {
       "MEETING_TESTER": {
         "state": "/?0/accepted_pair_profile?0"
+      }
+    }
+  },
+  "NEXT_TESTS": {
+    "sessions": {
+      "104": {
+        "name": "Skype3Matti Luukkainen",
+        "bio": "asdasd",
+        "communicationMethods": {
+            "SKYPE": "2asdasd323"
+        },
+        "searching": true,
+        "availablePeers": [],
+        "state": "/?0/profile?0/searching?2"
+    },
+    "105": {
+        "name": "Skype4Matti Luukkainen",
+        "bio": "asdasd",
+        "communicationMethods": {
+            "SKYPE": "23asdasd23"
+        },
+        "searching": true,
+        "availablePeers": [],
+        "state": "/?0/profile?0/searching?2"
+    },
+    "NEXT_TESTER": {
+        "name": "Matti Luukkainen",
+        "bio": "asd",
+        "communicationMethods": {
+            "PHONE": "2323",
+            "SKYPE": "2323"
+        },
+        "sentRequests": [],
+        "state": "/profile?0"
+      }
+    }
+  },
+  "SEND_REQUEST_TESTS": {
+    "sessions": {
+      "104": {
+        "name": "Skype3Matti Luukkainen",
+        "bio": "asdasd",
+        "communicationMethods": {
+          "SKYPE": "2asdasd323"
+        },
+        "searching": true,
+        "availablePeers": [],
+        "state": "/?0/profile?0/searching?2"
+      },
+      "105": {
+        "name": "Skype4Matti Luukkainen",
+        "bio": "asdasd",
+        "communicationMethods": {
+          "SKYPE": "23asdasd23"
+        },
+        "searching": true,
+        "availablePeers": [],
+        "state": "/?0/profile?0/searching?2"
+      },
+      "NEXT_TESTER": {
+        "name": "Matti Luukkainen",
+        "bio": "asd",
+        "communicationMethods": {
+          "PHONE": "2323",
+          "SKYPE": "2323"
+        },
+        "sentRequests": [],
+        "state": "/profile?0"
       }
     }
   }

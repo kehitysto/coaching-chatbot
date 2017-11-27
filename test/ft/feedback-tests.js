@@ -1,7 +1,9 @@
 import commonFeatures from './common';
 import * as Session from '../../src/chatbot/session';
 import * as sinon from 'sinon';
-const { buildResponse, setupChatbot, QuickReplies, Strings } = commonFeatures;
+import PersonalInformationFormatter from
+'../../src/lib/personal-information-formatter-service';
+const { buildResponse, setupChatbot, QuickReplies, Strings, FeatureTestStates } = commonFeatures;
 
 const sessionSpy = sinon.spy(Session.prototype, 'runActions');
 
@@ -18,7 +20,7 @@ describe('Feedback tests', function() {
       it(
         'should ask for feedback and give rating buttons',
         function() {
-          let promise = this.bot.receive('FEEDBACK_TESTER', 'k');
+          let promise = this.bot.receive(SESSION, 'k');
 
           return expect(promise)
             .to.eventually.become([
@@ -48,9 +50,9 @@ describe('Feedback tests', function() {
       );
 
       it(
-        'should ask for feedback when a low rating is given',
+        'should ask for feedback when a rating has been given',
         function() {
-          let promise = this.bot.receive(SESSION, '1');
+          let promise = this.bot.receive(SESSION, '3');
 
           return expect(promise)
             .to.eventually.become([
@@ -58,6 +60,27 @@ describe('Feedback tests', function() {
             ]);
         }
       );
+
+      it('should not allow too long feedback', function() {
+        return expect(
+            this.bot.receive(SESSION, Array(601).fill('a').join('')))
+              .to.eventually.become([
+                buildResponse('@TOO_LONG_FEEDBACK'),
+                buildResponse('@GIVE_FEEDBACK'),
+              ]);
+      });
+
+      it('should thank for feedback', function() {
+        return expect(
+            this.bot.receive(SESSION, 'palaute'))
+              .to.eventually.become([
+                buildResponse('@THANKS_FOR_FEEDBACK'),
+                buildResponse(
+                  PersonalInformationFormatter.formatFromTemplate(
+                    '@DISPLAY_PROFILE', FeatureTestStates['DEFAULT']['sessions'][SESSION]),
+                  PersonalInformationFormatter.getPersonalInformationbuttons({})),
+              ]);
+      });
     }
   );
 
