@@ -110,16 +110,16 @@ bot
         session.addResult('@CONFIRM_COMMUNICATION_METHODS');
         session.addResult('@PROVIDE_OTHER_COMMUNICATION_METHODS',
           Builder.QuickReplies.createArray([
-            '@EDIT', '@DELETE', '@TO_PROFILE']));
+            '@EDIT', '@DELETE', '@DONE']));
       }
     },
     (session) => {
-      if (session.checkIntent('#EDIT')) {
+      if (session.checkIntent('#ADD_OR_CHANGE')) {
         session.switchDialog('/add_communication_method');
       } else if (session.checkIntent('#DELETE')) {
         session.switchDialog('/delete_communication_method');
-      } else if (session.checkIntent('#PROFILE')) {
-        session.switchDialog('/profile');
+      } else if (session.checkIntent('#DONE')) {
+        session.endDialog();
       } else {
         session.addResult('@UNCLEAR');
         session.prev();
@@ -176,6 +176,41 @@ bot
       },
   ])
   .dialog(
+    '/manage_info', [
+      (session) => {
+        session.addResult('@MANAGE_INFO',
+          Builder.QuickReplies.createArray([
+            '@NAME', '@BIO', '@COMMUNICATION_METHODS', '@RETURN']
+        ));
+      },
+    ], [
+      ['#NAME', (session, match) => {
+        if (match !== true) {
+          session.runActions(['setName'], match);
+          session.addResult('@CONFIRM_NAME');
+        } else {
+          session.beginDialog('/set_name');
+        }
+      }],
+      ['#BIO', (session, match) => {
+        if (match !== true) {
+          session.runActions(['setBio'], match);
+          session.addResult('@CONFIRM_BIO');
+        } else {
+          session.beginDialog('/set_bio');
+        }
+      }],
+      ['#EDIT_COMMUNICATION_METHODS', (session) => {
+        session.beginDialog('/communication_methods');
+      }],
+      ['#RETURN', (session) => {
+        session.endDialog();
+      }],
+      ['#OPTIONAL_VALUE', (session) => {
+        session.addResult('@UNCLEAR');
+      }],
+    ])
+  .dialog(
     '/profile', [
       (session) => {
         session.runActions(['updateProfile']);
@@ -190,30 +225,14 @@ bot
         }
       },
     ], [
-      ['#CHANGE_NAME', (session, match) => {
-        if (match !== true) {
-          session.runActions(['setName'], match);
-          session.addResult('@CONFIRM_NAME');
-        } else {
-          session.beginDialog('/set_name');
-        }
-      }],
-      ['#CHANGE_BIO', (session, match) => {
-        if (match !== true) {
-          session.runActions(['setBio'], match);
-          session.addResult('@CONFIRM_BIO');
-        } else {
-          session.beginDialog('/set_bio');
-        }
+      ['#MANAGE_INFO', (session) => {
+      session.beginDialog('/manage_info');
       }],
       ['#FIND_PAIR', (session) => {
         session.switchDialog('/searching');
       }],
-      ['#EDIT_COMMUNICATION_METHODS', (session) => {
-        session.beginDialog('/communication_methods');
-      }],
-      ['#INFO', (session) => {
-        session.addResult('@INFO');
+      ['#HELP', (session) => {
+        session.addResult('@HELP');
       }],
       ['#STOP_SEARCHING', (session) => {
         session.resetDialog();
@@ -322,8 +341,8 @@ bot
         session.resetDialog();
         session.beginDialog('/manage_requests');
       }],
-      ['#INFO', (session) => {
-        session.addResult('@INFO');
+      ['#HELP', (session) => {
+        session.addResult('@HELP');
       }],
       ['#LIST_AS_SEARCHING', (session) => {
         session.context.searching = true; // markUserAsSearching is too slow
@@ -331,7 +350,7 @@ bot
         session.resetDialog();
         session.switchDialog('/profile');
       }],
-      ['#PROFILE', (session) => {
+      ['#TO_PROFILE', (session) => {
         session.resetDialog();
         session.switchDialog('/profile');
       }],
@@ -466,8 +485,8 @@ bot
         session.runActions(['breakPair']);
         session.endDialog();
       }],
-      ['#INFO', (session) => {
-        session.addResult('@INFO');
+      ['#HELP', (session) => {
+        session.addResult('@HELP');
       }],
     ])
   .dialog(
@@ -505,7 +524,6 @@ bot
       ['#TEST', (session) => {
           if (process.env.STAGE != 'production') {
             session.runActions(['testReminderAndFeedback']);
-            session.addResult('@INFO');
             session.resetDialog();
           } else {
             session.addResult('@UNCLEAR');
@@ -515,8 +533,8 @@ bot
         session.runActions(['breakPair']);
         session.endDialog();
       }],
-      ['#INFO', (session) => {
-        session.addResult('@INFO');
+      ['#HELP', (session) => {
+        session.addResult('@HELP');
       }],
     ])
   .dialog(

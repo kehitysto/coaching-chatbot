@@ -8,9 +8,11 @@
       "En tiedä itsestäni mitään.",
       "Puhelin",
       "1234",
-      "Profiiliin",
-      "Vaihda nimi",
+      "Valmis",
+      "Hallitse tietoja",
+      "Nimi",
       "Kaapo",
+      "Palaa",
       "Etsi ohjaaja",
       "Listaudu"
     ]
@@ -25,9 +27,10 @@
       "Haluaisin lisätä juuri sinut parikseni.",
       "Ei",
       "Listaudu",
-      "Vaihda nimi",
+      "Hallitse tietoja",
+      "Nimi",
       "Katariina-Elli",
-      "Muokkaa kuvausta",
+      "Kuvaus",
       "Parempi kuvaus",
       "Yhteystiedot",
       "Lisää",
@@ -126,7 +129,8 @@
     "session": "Session3",
     "messages": [
       "OK",
-      "Vaihda nimi Katriina"
+      "Hallitse tietoja",
+      "Nimi Katriina"
     ]
   }
 }
