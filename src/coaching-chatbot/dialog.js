@@ -376,8 +376,10 @@ bot
       },
       (session) => {
         if (session.checkIntent('#SENT_REQUESTS')) {
+          session.resetDialog();
           session.beginDialog('/list_sent_requests');
         } else if (session.checkIntent('#RECEIVED_REQUESTS')) {
+          session.resetDialog();
           session.beginDialog('/list_requests');
         } else if (session.checkIntent('#RETURN')) {
           session.endDialog();
@@ -397,7 +399,8 @@ bot
       },
       (session) => {
         if (session.getSentRequestCount() <= 0) {
-          return session.endDialog();
+          session.endDialog();
+          return session.prev();
         }
         session.context.sentRequestsIndex =
           session.context.sentRequestsIndex || 1;
@@ -415,7 +418,7 @@ bot
           session.runActions(['nextSentRequest']);
           session.prev();
         } else if (session.checkIntent('#RETURN')) {
-          return session.endDialog();
+          session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
         }
@@ -441,7 +444,8 @@ bot
       },
       (session) => {
         if (session.getPairRequestCount() <= 0) {
-          return session.endDialog();
+          session.endDialog();
+          return session.prev();
         }
         session.addResult('@REQUEST_LIST_LENGTH');
         session.addResult('@INFORMATION_ABOUT_REQUESTS');
@@ -457,7 +461,7 @@ bot
           session.runActions(['acceptRequest']);
           return session.next();
         } else if (session.checkIntent('#RETURN')) {
-          return session.endDialog();
+          session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
         }
