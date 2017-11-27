@@ -14,7 +14,7 @@ let checkData = [
   { title: 'Katariina muuttaa tietojaan',
     hash: '83a7d4268160aa0771fb3c5b595d3caf5455ea6f24f07de4f9bdf052b7c2cd7bf90ee36b16d80160f835fc05311f6596a8abc3f0dfbb68da74d0b1fc59cd95d8' },
   { title: 'Kaarina lähettää ja hallinnoi pyyntöjä',
-    hash: 'd108df3c10c9cd6cca418e485d5ca6151650293729445a5554725fade87ef4702fa5d873911f7d43c09f342a9470795d9a28700b049ce44ce2f481692934136a' },
+    hash: '169a34b7d60deb5be8a0f2e81b9001cfef95f155d50131a0c3bfd728761623192f262bfa216a9b70ea1c673011affa3b2fb275c16b90b1c79c0d715420c4ede6' },
   { title: 'Kaapo hyväksyy pyynnön ja asettaa tapaamisen ajankohdan',
     hash: 'aab9251ebc3dcad468dfe5d8820bea9189af56749269aa507551dea02ec3a5f905d59897b39884678fa3da1fd86e3eab37f57ae2fa2ceb0bdc42cff4b22603e8' },
   { title: 'Kaarina saa tietää Kaapon hyväksyneen pyynnön',
