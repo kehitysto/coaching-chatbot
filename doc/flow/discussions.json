@@ -17,7 +17,7 @@
       "Listaudu"
     ]
   },
-  "Katariina on syöttänyt tietonsa ja haluaa nyt etsiä paria. Katariina muuttaa tietojansa.": {
+  "Katariina on syöttänyt tietonsa ja haluaa nyt etsiä paria": {
     "player": "Katariina",
     "session": "Session2",
     "messages": [
@@ -26,7 +26,13 @@
       "Kyllä",
       "Haluaisin lisätä juuri sinut parikseni.",
       "Ei",
-      "Listaudu",
+      "Listaudu"
+    ]
+  },
+  "Katariina muuttaa tietojaan": {
+    "player": "Katariina",
+    "session": "Session2",
+    "messages": [
       "Hallitse tietoja",
       "Nimi",
       "Katariina-Elli",

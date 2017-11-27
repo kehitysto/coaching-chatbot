@@ -91,5 +91,20 @@ export function generate(discussions, states) {
     });
   }
 
-  return promise.then(() => messengerSpy.restore()).then(() => lines);
+  return promise
+    .then(() => messengerSpy.restore())
+    .then(() => {
+      let scenarios = [];
+      for (let line of lines) {
+        if (line[0] == '#') {
+          scenarios.push({
+            title: line,
+            content: []
+          });
+        } else {
+          scenarios[scenarios.length - 1].content.push(line);
+        }
+      }
+      return scenarios;
+    });
 }
