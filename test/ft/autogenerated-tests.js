@@ -9,7 +9,7 @@ describe('Automatically generated feature test', function() {
     it('should match with the given hash sum', function() {
       this.timeout(10000);
       return expect(DiscussionGenerator.generate(discussions, states)
-        .then(lines => keccak512(lines.join()))).to.eventually.equal('68cf9519f202134d15258c38d2f650001711585f41b7a94dccbd832fd567e5bf8b50cae7b0f572bf771c8c3e2a61d00bd13bad28eebfebd7b71f8b6e044c7fc0');
+        .then(lines => keccak512(lines.join()))).to.eventually.equal('67ada0d34879b00adfaad86a2d1c69edd24391ed8e5b998e6986b16ce27f8fe3496731a291d5750f49cebcea6e652f02b5e5ef235c4eadcb99599d74fa04b3e5');
     });
   });
 });

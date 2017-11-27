@@ -51,6 +51,7 @@
       "Lähetetyt",
       "Seuraava",
       "Peru",
+      "Palaa",
       "Palaa"
     ]
   },
@@ -58,22 +59,22 @@
     "player": "Kaapo",
     "session": "Session1",
     "messages": [
-      "pyynnöt",
-      "saapuneet",
+      "Pyynnöt",
+      "Saapuneet",
       "Kyllä",
       "Aseta tapaaminen",
       "KE",
       "10:55"
     ]
   },
-  "Katariina saa tietää Kaapon hyväksyneen pyynnön": {
-    "player": "Katariina",
-    "session": "Session2",
+  "Kaarina saa tietää Kaapon hyväksyneen pyynnön": {
+    "player": "Kaarina",
+    "session": "Session3",
     "messages": [
       "Aseta tapaaminen"
     ]
   },
-  "Kaapon ja Katariinan tapaaminen lähestyy": {
+  "Kaapon ja Kaarinan tapaaminen lähestyy": {
     "hide": true,
     "time": 1510647770885,
     "session": "SessionH",
@@ -89,7 +90,7 @@
       "Näytä pari"
     ]
   },
-  "Kaapo ja Katariina tapaavat": {
+  "Kaapo ja Kaarina tapaavat": {
     "hide": true,
     "time": 1510737136790,
     "session": "SessionH",
@@ -106,23 +107,23 @@
       "En halua saada kelvotonta vertaisohjausta."
     ]
   },
-  "Katariina saa tietää Kaapon palautteesta": {
-    "player": "Katariina",
-    "session": "Session2",
+  "Kaarina saa tietää Kaapon palautteesta": {
+    "player": "Kaarina",
+    "session": "Session3",
     "messages": [
       "OK"
     ]
   },
-  "Kaapo  halua enää olla Katariinan pari": {
+  "Kaapo ei halua enää olla Kaarinan pari": {
     "player": "Kaapo",
     "session": "Session1",
     "messages": [
       "Lopeta ohjaaja"
     ]
   },
-  "Katariina saa tietää Kaapon rikkoneen parin ja vaihtaa nimensä": {
-    "player": "Katariina",
-    "session": "Session2",
+  "Kaarina saa tietää Kaapon rikkoneen parin ja vaihtaa nimensä": {
+    "player": "Kaarina",
+    "session": "Session3",
     "messages": [
       "OK",
       "Vaihda nimi Katriina"

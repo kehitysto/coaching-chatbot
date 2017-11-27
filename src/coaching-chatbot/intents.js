@@ -61,12 +61,12 @@ module.exports = {
 
     SENT_REQUESTS: {
         any: /^lähetetyt$/i,
-    }, 
-    
+    },
+
     RECEIVED_REQUESTS: {
         any: /^saapuneet$/i,
     },
-    
+
     REVOKE_REQUEST: {
         any: /^peru/i,
     },

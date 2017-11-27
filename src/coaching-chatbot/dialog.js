@@ -380,11 +380,13 @@ bot
         if (session.getSentRequestCount() <= 0) {
           return session.endDialog();
         }
-        session.context.sentRequestsIndex = session.context.sentRequestsIndex || 1;
+        session.context.sentRequestsIndex =
+          session.context.sentRequestsIndex || 1;
         session.addResult('@SENT_REQUEST_LIST_LENGTH');
         session.runActions(['displaySentRequest']);
         session.addQuickReplies(
-          Builder.QuickReplies.createArray(['@REVOKE_REQUEST', '@NEXT', '@RETURN'])
+          Builder.QuickReplies.createArray(
+            ['@REVOKE_REQUEST', '@NEXT', '@RETURN'])
         );
       },
       (session) => {
@@ -422,7 +424,7 @@ bot
         if (session.getPairRequestCount() <= 0) {
           return session.endDialog();
         }
-        session.addResult('@REQUEST_LIST_LENGTH')
+        session.addResult('@REQUEST_LIST_LENGTH');
         session.addResult('@INFORMATION_ABOUT_REQUESTS');
         session.runActions(['displayRequest']);
         session.addQuickReplies(
