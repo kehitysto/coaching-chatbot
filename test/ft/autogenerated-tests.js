@@ -16,19 +16,19 @@ describe('Automatically generated feature tests', () => {
 
   describe('Kaapo syöttää tietonsa ja alkaa etsiä paria', () => {
     it('should match with the given hash sum', () => {
-      return expect(keccak512(scenarios[0].content.join())).to.equal('94de890eb8e569ebcf9a855e043f50ad6a0a2cc1e5aa7c88cc4d4f2d50391e81abe3d6d12e7ce7841752546ee1dffc9e9c28ca29404c3c558bb83b89aafa2312');
+      return expect(keccak512(scenarios[0].content.join())).to.equal('754eca5ca003df42fc9a577d45cd35bbdc78e33bb6d2c79cd0095cd6acc6f5eb366144b0420f9e63e0d5f8f35f195af8a92e6deeb64fee77416458e79ea27e82');
     });
   });
 
   describe('Katariina on syöttänyt tietonsa ja haluaa nyt etsiä paria. Katariina muuttaa tietojansa.', () => {
     it('should match with the given hash sum', () => {
-      return expect(keccak512(scenarios[1].content.join())).to.equal('533a3c4a5a7aa9f779ff9695efee675262acd6b1150bdc8bf83243332b0962ea38cb556007f2e422d45dbf120fa6a64aabe154612e16bfd34d47e73d8ceda222');
+      return expect(keccak512(scenarios[1].content.join())).to.equal('af0c6ff03d7e5f784dd4cd24812a8b77a76f0e3732b6bbda99ebb75d26cb8c465a1fe34a03a43435eec6fc59ae436d742f68f3e87b028d5ce817acd4a002ebf4');
     });
   });
 
   describe('Kaarina lähettää ja hallinnoi pyyntöjä', () => {
     it('should match with the given hash sum', () => {
-      return expect(keccak512(scenarios[2].content.join())).to.equal('6410eda68822aa5c8ec6258fcaed78ad08844f5710e6a283f98699a1987920aa80efeb6014f6ab45d1d7ca1d23e7ca4138e379a17ff84525fd3334d3a3232526');
+      return expect(keccak512(scenarios[2].content.join())).to.equal('d108df3c10c9cd6cca418e485d5ca6151650293729445a5554725fade87ef4702fa5d873911f7d43c09f342a9470795d9a28700b049ce44ce2f481692934136a');
     });
   });
 
@@ -64,13 +64,13 @@ describe('Automatically generated feature tests', () => {
 
   describe('Kaapo ei halua enää olla Kaarinan pari', () => {
     it('should match with the given hash sum', () => {
-      return expect(keccak512(scenarios[8].content.join())).to.equal('0bc34285cdbdfae1d993960cc311031c6e00d824d31ad6072db6877915ab16ad7a52dcfaa0e16f0ab60fb32156394ac917e6cc3adfafbd8891ea0a26c9f861d1');
+      return expect(keccak512(scenarios[8].content.join())).to.equal('6dfb508e3effd371b80701e7b4bbc4f8d4ad0a8c0c477370edcad49135d9c700ab7a54a6b9b7ab73dcb1f67a08415e870d1196c372cdc95ca68bf04eb0061719');
     });
   });
 
   describe('Kaarina saa tietää Kaapon rikkoneen parin ja vaihtaa nimensä', () => {
     it('should match with the given hash sum', () => {
-      return expect(keccak512(scenarios[9].content.join())).to.equal('7b2be0e7d61bfd79210212292f2e4f7f63cec549c8c3bc4660f439b7e8ae6d6a42b1a0bbed32de410464b5b708434998d7eda1a0f1d7b1cc49cea5087eeae702');
+      return expect(keccak512(scenarios[9].content.join())).to.equal('bfca454dd908ada6d32a140bb6a44242b62dd1e66097ca1c74ed5ada6037ee3b2f93df92ad56c22b46d2b82c37a2cdd0c355a5b0a3973382e2391c1b08506fa4');
     });
   });
 });
