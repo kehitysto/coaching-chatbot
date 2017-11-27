@@ -36,7 +36,7 @@ module.exports = {
     },
 
     CHANGE: {
-        any: /^(?:vaihda|muuta|muokkaa)\s/i,
+        any: /^(?:vaihda|muuta|muokkaa|hallinnoi)\s/i,
     },
 
     FIND: {
@@ -57,6 +57,18 @@ module.exports = {
 
     EDIT: {
         any: /^lisää$/i,
+    },
+
+    SENT_REQUESTS: {
+        any: /^lähetetyt$/i,
+    }, 
+    
+    RECEIVED_REQUESTS: {
+        any: /^saapuneet$/i,
+    },
+    
+    REVOKE_REQUEST: {
+        any: /^peru/i,
     },
 
     DELETE: {
@@ -188,6 +200,13 @@ module.exports = {
     SHOW_PAIR_REQUESTS: {
         each: [
           '#SHOW',
+          '#PAIR_REQUEST',
+        ],
+    },
+
+    SHOW_SENT_REQUESTS: {
+        each: [
+          '#SENT',
           '#PAIR_REQUEST',
         ],
     },

@@ -14,5 +14,9 @@
   {
     "identifier": "EDIT_COMMUNICATION_METHODS",
     "description": "Yhteystiedot"
+  },
+  {
+    "identifier": "MANAGE_REQUESTS",
+    "description": "Pyynnöt"
   }
 ]
