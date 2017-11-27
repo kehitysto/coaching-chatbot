@@ -129,13 +129,34 @@ export function markUserAsNotSearching({ context }) {
   });
 }
 
+export function sendRejectMessages({ peerId, context }) {
+  if (context.pairRequests) {
+    for (let i = 0; i < context.pairRequests.length; i++) {
+      if (context.pairRequests[i] !== peerId) {
+        Messenger.send(
+          context.pairRequests[i],
+          PersonalInformationFormatter.format(
+            strings['@PEER_NO_LONGER_AVAILABLE'],
+            { name: context.name }
+          ),
+          Builder.QuickReplies.createArray([
+            'OK',
+          ])
+        );
+      }
+    }
+  }
+
+  return context;
+}
+
 export function resetRequestsAndSearching({ context }) {
   return contextChanges(context)({
-            rejectedPeers: [],
-            availablePeers: [],
-            pairRequests: [],
-            sentRequests: [],
-            searching: false,
+      rejectedPeers: [],
+      availablePeers: [],
+      pairRequests: [],
+      sentRequests: [],
+      searching: false,
   });
 }
 
@@ -157,6 +178,27 @@ export function removeSentRequests({ sessionId, context }) {
   .then(() => {
     return { context };
   });
+}
+
+export function removeSentRequest({ sessionId, context }) {
+  const sessions = new Sessions();
+  context.sentRequests = context.sentRequests || [];
+  const recipientId = context.sentRequests[context.sentRequestsIndex - 1];
+  context.sentRequests.splice(context.sentRequestsIndex - 1, 1);
+  if (context.sentRequestsIndex > context.sentRequests.length) {
+    context.sentRequestsIndex = 1;
+  }
+  return sessions.read(recipientId)
+    .then((recipient) => {
+      return sessions.write(recipientId, {
+        ...recipient,
+        pairRequests: recipient.pairRequests
+          .filter((senderId) => senderId !== sessionId),
+      });
+    })
+    .then(() => {
+      return { context };
+    });
 }
 
 export function getAvailablePeers({ sessionId, context }) {
@@ -237,6 +279,17 @@ export function nextAvailablePeer({ context }) {
   });
 }
 
+export function nextSentRequest({ context }) {
+  let sentRequestsIndex = context.sentRequestsIndex || 1;
+  sentRequestsIndex = sentRequestsIndex + 1;
+  if (sentRequestsIndex > context.sentRequests.length) {
+    sentRequestsIndex = 1;
+  }
+  return contextChanges(context)({
+    sentRequestsIndex: sentRequestsIndex,
+  });
+}
+
 export function rejectAvailablePeer({ context }) {
   const rejectedPeers = context.rejectedPeers || [];
   rejectedPeers.push(context.availablePeers[context.availablePeersIndex - 1]);
@@ -259,6 +312,17 @@ export function rejectRequest({ context }) {
   const rejectedPeers = context.rejectedPeers || [];
   rejectedPeers.push(context.pairRequests[0]);
 
+  Messenger.send(
+    context.pairRequests[0],
+    PersonalInformationFormatter.format(
+      strings['@PEER_NO_LONGER_AVAILABLE'],
+      { name: context.name }
+    ),
+    Builder.QuickReplies.createArray([
+      'OK',
+    ])
+  );
+
   return contextChanges(context)({
     rejectedPeers,
     pairRequests: context.pairRequests.slice(1),
@@ -275,13 +339,17 @@ export function acceptRequest({ sessionId, context }) {
   return sessions.read(sessionId).then((session) => {
     if (!session.pairRequests || !session.pairRequests.includes(chosenPeerId)) {
       return Promise.resolve({
-        result: '@PEER_NO_LONGER_AVAILABLE',
+        result: '@PEER_NO_LONGER_AVAILABLE_GENERIC',
       });
     }
 
     return pairs.createPair(sessionId, chosenPeerId)
         .then(() => {
           return sessions.read(chosenPeerId)
+              .then((chosenPeer) => {
+                return sendRejectMessages({
+                  peerId: sessionId, context: chosenPeer });
+              })
               .then((chosenPeer) => {
                 return removeSentRequests({
                   sessionId: chosenPeerId, context: chosenPeer });
@@ -310,6 +378,7 @@ export function acceptRequest({ sessionId, context }) {
               out[out.length - 1].quickReplies);
           });
         })
+        .then(() => sendRejectMessages({ peerId: chosenPeerId, context }))
         .then(() => removeSentRequests({ sessionId, context }))
         .then(() => resetRequestsAndSearching({ context }))
         .then(({ context }) => contextChanges(context)({ hasPair: true }));
@@ -391,6 +460,23 @@ export function displayRequest({ context, sessionId }) {
   });
 }
 
+export function displaySentRequest({ context, sessionId }) {
+  return new Promise((resolve, reject) => {
+    let sessions = new Sessions();
+    let sentRequestsIndex = context.sentRequestsIndex || 1;
+    return sessions.read(context.sentRequests[sentRequestsIndex - 1])
+      .then((profile) => {
+        resolve({
+          result: PairFormatter.createPairString(profile, sessionId),
+        });
+      })
+      .catch((err) => {
+        log.error('err: {0}', err);
+        reject(err);
+      });
+  });
+}
+
 export function addPairRequest({ sessionId, context, input }) {
   let peerId = context.availablePeers[context.availablePeersIndex - 1];
   let session = new Sessions();
@@ -408,7 +494,7 @@ export function addPairRequest({ sessionId, context, input }) {
               peerId,
               strings['@TELL_USER_HAS_NEW_REQUEST'],
               Builder.QuickReplies.createArray([
-                strings['@SHOW_REQUESTS'],
+                strings['@REQUESTS'],
                 strings['@STOP_SEARCHING'],
               ])
             );
@@ -424,7 +510,7 @@ export function addPairRequest({ sessionId, context, input }) {
           });
     } else {
       return Promise.resolve({
-        result: '@PEER_NO_LONGER_AVAILABLE',
+        result: '@PEER_NO_LONGER_AVAILABLE_GENERIC',
       });
     }
   });

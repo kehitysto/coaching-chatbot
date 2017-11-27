@@ -6,5 +6,9 @@
   {
     "identifier": "MANAGE_INFO",
     "description": "Hallitse tietoja"
+  },
+  {
+    "identifier": "MANAGE_REQUESTS",
+    "description": "Pyynnöt"
   }
 ]

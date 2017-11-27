@@ -102,6 +102,10 @@ describe('Formatter service', function() {
             title: 'Hallitse tietoja',
             payload: 'MANAGE_INFO',
           },
+          {
+          payload: "MANAGE_REQUESTS",
+          title: "Pyynnöt"
+          },
         ];
 
         return expect(personalInformationChangers)
