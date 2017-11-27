@@ -30,11 +30,7 @@ bot
     '/', [
       (session) => {
         session.addResult('@GREETING_1');
-        setTimeout(function() {
-        }, 3000);
         session.addResult('@GREETING_2');
-        setTimeout(function() {
-        }, 3000);
         session.addResult('@GREETING_3',
           Builder.QuickReplies.createArray(['@YES', '@NO']));
       },
@@ -52,26 +48,16 @@ bot
   .dialog(
     '/create_profile', [
       (session) => {
-        setTimeout(function() {
-        }, 3000);
         session.addResult('@GREAT');
-        setTimeout(function() {
-        }, 3000);
         session.beginDialog('/set_real_name');
       },
       (session) => {
-        setTimeout(function() {
-        }, 3000);
         session.beginDialog('/set_bio');
       },
       (session) => {
-        setTimeout(function() {
-        }, 3000);
         session.beginDialog('/communication_methods');
       },
       (session) => {
-        setTimeout(function() {
-        }, 3000);
         session.switchDialog('/profile');
       },
     ])

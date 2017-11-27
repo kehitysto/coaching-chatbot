@@ -113,9 +113,14 @@ function _receiveMessage(messageEvent, chatbot) {
     return resolve(Messenger.toggleTypingIndicator(sender, true)
       .then(() => chatbot.receive(sender, text))
       .then((response) => {
-        return Promise.all(
-          response.map(
-            (r) => Messenger.send(sender, r.message, r.quickReplies)))
+        let promise = Promise.resolve();
+        for (let r of response) {
+          promise = promise.then(() => {
+            return Messenger.send(sender,
+              r.message, r.quickReplies);
+          });
+        }
+        return promise
           .then(() => Messenger.toggleTypingIndicator(sender, false));
       }));
   });
