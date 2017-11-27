@@ -295,7 +295,6 @@ class Builder {
   }
 
   _runStep(step, session, input) {
-
     log.silly('Running iteration {0}', step);
 
     return new Promise((resolve, reject) => {
