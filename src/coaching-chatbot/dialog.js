@@ -415,6 +415,7 @@ bot
           session.runActions(['nextSentRequest']);
           session.prev();
         } else if (session.checkIntent('#RETURN')) {
+          session.resetDialog();
           return session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
