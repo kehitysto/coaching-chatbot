@@ -825,7 +825,7 @@ describe('coaching-bot actions', function() {
       })
 
       return ret.then((result) => {
-        expect(result.result).to.equal('@PEER_NO_LONGER_AVAILABLE');
+        expect(result.result).to.equal('@PEER_NO_LONGER_AVAILABLE_GENERIC');
       }).then(() => {
         stubSessionsRead.restore();
       });
