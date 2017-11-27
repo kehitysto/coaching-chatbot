@@ -17,13 +17,9 @@ let promise = DiscussionGenerator.generate(discussions, states)
     let i = 0;
     for (let scenario of scenarios) {
       let hash = keccak512(scenario.content.join());
-      ['',
-       '  describe(\'' + scenario.title.split('# ')[1] + '\', () => {',
-       '    it(\'should match with the given hash sum\', () => {',
-       '      return expect(keccak512(scenarios[' + i + '].content.join())).to.equal(\'' + hash + '\');',
-       '    });',
-       '  });'].map(l => descriptions.push(l));
-       i += 1;
+      ['  { title: \'' + scenario.title.split('# ')[1] + '\',',
+       '    hash: \'' + hash + '\' },'].map(l => descriptions.push(l));
+      i += 1;
     }
     return scenarios;
   })
@@ -53,6 +49,10 @@ promise = promise.then((lines) => {
    '',
    'let scenarios;',
    '',
+   'let checkData = [',
+   ...descriptions,
+   '];',
+   '',
    'describe(\'Automatically generated feature tests\', () => {',
    '  before(() => {',
    '    DiscussionGenerator.generate(discussions, states)',
@@ -60,7 +60,14 @@ promise = promise.then((lines) => {
    '         scenarios = result;',
    '      });',
    '  });',
-   ...descriptions,
+   '',
+   '  for (let i in checkData) {',
+   '    describe(checkData[i].title, () => {',
+   '      it(\'should match with the given hash sum\', () => {',
+   '        return expect(keccak512(scenarios[i].content.join())).to.equal(checkData[i].hash);',
+   '      });',
+   '    });',
+   '  }',
    '});',
    '',
    '```'].join('\n'));
