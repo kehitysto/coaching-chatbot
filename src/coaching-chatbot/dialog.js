@@ -393,7 +393,7 @@ bot
     '/list_sent_requests', [
       (session) => {
         if (session.getSentRequestCount() <= 0) {
-          return session.addResult('@NO_SENT_REQUESTS_AVAILABLE');
+          session.addResult('@NO_SENT_REQUESTS_AVAILABLE');
         }
         session.next();
       },
@@ -417,7 +417,7 @@ bot
           session.runActions(['nextSentRequest']);
           session.prev();
         } else if (session.checkIntent('#RETURN')) {
-          return session.endDialog();
+          session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
         }
@@ -436,7 +436,7 @@ bot
     '/list_requests', [
       (session) => {
         if (session.getPairRequestCount() <= 0) {
-          return session.addResult('@NO_REQUESTS_AVAILABLE');
+          session.addResult('@NO_REQUESTS_AVAILABLE');
         }
 
         session.next();
@@ -459,7 +459,7 @@ bot
           session.runActions(['acceptRequest']);
           return session.next();
         } else if (session.checkIntent('#RETURN')) {
-          return session.endDialog();
+          session.endDialog();
         } else {
           session.addResult('@UNCLEAR');
         }
