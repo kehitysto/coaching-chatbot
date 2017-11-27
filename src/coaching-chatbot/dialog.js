@@ -376,10 +376,8 @@ bot
       },
       (session) => {
         if (session.checkIntent('#SENT_REQUESTS')) {
-          session.resetDialog();
           session.beginDialog('/list_sent_requests');
         } else if (session.checkIntent('#RECEIVED_REQUESTS')) {
-          session.resetDialog();
           session.beginDialog('/list_requests');
         } else if (session.checkIntent('#RETURN')) {
           session.endDialog();
