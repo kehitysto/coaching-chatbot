@@ -556,8 +556,8 @@ export function sendFeedback({ context, sessionId, input }) {
           pairId,
           input,
           Builder.QuickReplies.createArray([
-          'OK',
-        ]))
+            'OK',
+          ]))
         .then(() => {
           return sessions.read(pairId)
             .then((context) => {
