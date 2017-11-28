@@ -238,10 +238,6 @@ bot
         session.resetDialog();
         session.beginDialog('/stop_searching', true);
       }],
-      ['#PAIR_REQUEST', (session) => {
-        session.resetDialog();
-        session.beginDialog('/manage_requests');
-      }],
       ['#OPTIONAL_VALUE', (session) => {
         session.addResult('@UNCLEAR');
       }],
@@ -336,10 +332,6 @@ bot
       ['#STOP_SEARCHING', (session) => {
         session.resetDialog();
         session.beginDialog('/stop_searching', true);
-      }],
-      ['#PAIR_REQUEST', (session) => {
-        session.resetDialog();
-        session.beginDialog('/manage_requests');
       }],
       ['#HELP', (session) => {
         session.addResult('@HELP');
@@ -670,6 +662,14 @@ bot
     '#RESET',
     (session) => {
       session.beginDialog('/reset');
+    })
+  .match(
+    '#PAIR_REQUEST',
+    (session) => {
+      if (!session.hasPair()) {
+        session.resetDialog();
+        session.beginDialog('/manage_requests');
+      }
     });
 
 export default bot;
