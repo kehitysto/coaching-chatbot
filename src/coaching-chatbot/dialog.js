@@ -279,15 +279,15 @@ bot
         if (!session.context.availablePeers ||
           session.context.availablePeers.length <= 0) {
           if (session.isSearching()) {
-            return session.addResult('@NO_PAIRS_AVAILABLE', [
-              Builder.QuickReplies.create('@TO_PROFILE'),
-              Builder.QuickReplies.create('@STOP_SEARCHING'),
-            ]);
+            return session.addResult('@NO_PAIRS_AVAILABLE',
+              Builder.QuickReplies.createArray([
+                '@TO_PROFILE', '@STOP_SEARCHING'])
+            );
           } else {
-            return session.addResult('@NO_PAIRS_AVAILABLE', [
-              Builder.QuickReplies.create('@LIST_AS_SEARCHING'),
-              Builder.QuickReplies.create('@TO_PROFILE'),
-            ]);
+            return session.addResult('@NO_PAIRS_AVAILABLE',
+              Builder.QuickReplies.createArray([
+                '@LIST_AS_SEARCHING', '@TO_PROFILE'])
+            );
           }
         }
 
@@ -300,10 +300,17 @@ bot
         }
         session.addResult('@LIST_LENGTH');
         session.runActions(['displayAvailablePeer']);
-        session.addQuickReplies(
-          Builder.QuickReplies.createArray([
-            '@YES', '@NO', '@NEXT', '@EXIT'])
-        );
+        if (session.isSearching()) {
+          session.addQuickReplies(
+            Builder.QuickReplies.createArray([
+              '@YES', '@NO', '@NEXT', '@EXIT', '@STOP_SEARCHING'])
+          );
+        } else {
+          session.addQuickReplies(
+            Builder.QuickReplies.createArray([
+              '@YES', '@NO', '@NEXT', '@EXIT', '@LIST_AS_SEARCHING'])
+          );
+        }
       },
       (session) => {
         if (session.checkIntent('#NO')) {

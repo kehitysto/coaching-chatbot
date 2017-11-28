@@ -495,7 +495,7 @@ export function addPairRequest({ sessionId, context, input }) {
               strings['@TELL_USER_HAS_NEW_REQUEST'],
               Builder.QuickReplies.createArray([
                 strings['@REQUESTS'],
-                strings['@STOP_SEARCHING'],
+                'OK',
               ])
             );
           })

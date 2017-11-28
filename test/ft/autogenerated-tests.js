@@ -8,21 +8,21 @@ let scenarios;
 
 let checkData = [
   { title: 'Kaapo syöttää tietonsa ja alkaa etsiä paria',
-    hash: 'db36404f8df0cfb077e61126a3f3290a86c1a53f01947c9a4e5fc2a74ae5bb35f046253b633765563d1f655722e453e8a8d250aabc197ffa75b953df8fdeb79f' },
+    hash: 'c7b1aa4f2e27f828291d4464daaba3a309e14ffae5b1efc77ed86c08a078b894b290910d592b8be5f7eb8214b8782dae77411d9910c50750df348deb6fa1b5b9' },
   { title: 'Kalle alkaa vaihtaa nimeään',
     hash: '1feaed9ad1ba06383200e6d6a1f3c1ed0157976a505700f694dc116316df44dda146a9a5d5a0e823030a43a4a7beb53c749d30e4a6cd6ec251202c4c84f2970b' },
   { title: 'Katariina on syöttänyt tietonsa ja haluaa nyt etsiä paria',
-    hash: 'e0e4a1d9844fbcb63e177e97d37a869c6b3db8c9357d48d356907f042cf48c8a83d527919e52de37287140256c8ff4d1c23180418c6046d1fb9daa861ede0361' },
+    hash: '4ed823b8cd43fd0bca6c9dddc0b750faf820c7021af6e1ae6c323f51820b079c1b6e4dddedc018630612d0cb571a13559444973af0cd4fe075cf84b25eb55ca5' },
   { title: 'Kalle saa pyynnön Katariinalta kesken nimen asettamista',
-    hash: '60361119f30b6ae0a0ee84fecc1ff83f78a4dbbafcf26910ea21fd23d47934437b6e4c331b71f0cb73bd30dc1e7bd84f791b2776a0d03297fc64fdc91ded5fbc' },
+    hash: '84be0a56cb5b21cf09fc11032580fe88952e1bde938d53d76b1deefb1bd8e606ef69dfe2f08c0cb11955e2b3284cd25ce094539a425edcc2e2e724b98803fae5' },
   { title: 'Katariina muuttaa tietojaan',
     hash: '83a7d4268160aa0771fb3c5b595d3caf5455ea6f24f07de4f9bdf052b7c2cd7bf90ee36b16d80160f835fc05311f6596a8abc3f0dfbb68da74d0b1fc59cd95d8' },
   { title: 'Kaarina lähettää pyyntöjä',
-    hash: '08e5bb04a08fc4b3b51be5797b84f301777e350edd06f38c6f216f87a07a49310a26b431901dea57e3cf8c10f35a8b9f175c364c7c042b9d75f1d042e4eb563b' },
+    hash: '24d56e7c2e6f23e460b58373609d12d74614a90a8daa6f60b3456bf66b9f413a77391f0fcd857ed4568b7eb8e1384b3b39432d423b79354f3ad0abed36bea57d' },
   { title: 'Kaarina hallinnoi pyyntöjä',
     hash: 'a858fe743450d60af12ceca1c5114fce54f0013240f1be8347dc03aedc79d024dd647035c8ef791098c4384f0c779df371c8197298e13154535740273aa35954' },
   { title: 'Kaapo hyväksyy pyynnön ja asettaa tapaamisen ajankohdan',
-    hash: 'aab9251ebc3dcad468dfe5d8820bea9189af56749269aa507551dea02ec3a5f905d59897b39884678fa3da1fd86e3eab37f57ae2fa2ceb0bdc42cff4b22603e8' },
+    hash: '591254c6249856273c3676916786f73a43be3106aed8be9019e86d3939f882d4dcdb64662131640ceebf238b81e1d338ad24e811fb4fbedef0e9820d16256228' },
   { title: 'Kaarina saa tietää Kaapon hyväksyneen pyynnön',
     hash: '70504afd51552eb411287e9d3429b17a9ae757fbe41861277be3d29d5b70703b8ee7b73bfc5ae7ba1e3522746d041d36a0939c177b329a7c605c18a4364ff004' },
   { title: 'Kaapo saa muistutuksen tapaamisesta',
@@ -41,7 +41,7 @@ describe('Automatically generated feature tests', () => {
   before(() => {
     DiscussionGenerator.generate(discussions, states)
       .then(result => {
-         scenarios = result;
+        scenarios = result;
       });
   });
 
