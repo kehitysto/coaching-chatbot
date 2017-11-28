@@ -17,6 +17,14 @@
       "Listaudu"
     ]
   },
+  "Kalle alkaa vaihtaa nimeään": {
+    "player": "Kalle",
+    "session": "Session4",
+    "messages": [
+      "Hallitse tietoja",
+      "Nimi"
+    ]
+  },
   "Katariina on syöttänyt tietonsa ja haluaa nyt etsiä paria": {
     "player": "Katariina",
     "session": "Session2",
@@ -27,6 +35,16 @@
       "Haluaisin lisätä juuri sinut parikseni.",
       "Ei",
       "Listaudu"
+    ]
+  },
+  "Kalle saa pyynnön Katariinalta kesken nimen asettamista": {
+    "player": "Kalle",
+    "session": "Session4",
+    "messages": [
+      "Pyynnöt",
+      "Saapuneet",
+      "Palaa",
+      "Palaa"
     ]
   },
   "Katariina muuttaa tietojaan": {
@@ -44,7 +62,7 @@
       "Skype-acc"
     ]
   },
-  "Kaarina lähettää ja hallinnoi pyyntöjä": {
+  "Kaarina lähettää pyyntöjä": {
     "player": "Kaarina",
     "session": "Session3",
     "messages": [
@@ -55,7 +73,13 @@
       "Hei",
       "Kyllä",
       "HALOO",
-      "Profiiliin",
+      "Profiiliin"
+    ]
+  },
+  "Kaarina hallinnoi pyyntöjä": {
+    "player": "Kaarina",
+    "session": "Session3",
+    "messages": [
       "Pyynnöt",
       "Lähetetyt",
       "Seuraava",
