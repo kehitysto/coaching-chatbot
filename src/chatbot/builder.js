@@ -56,10 +56,13 @@ class Builder {
    * Register a match-making function for the given intent id
    * @param {string} intentId
    * @param {dialogHandler} fn
+   * @return {Builder}
    */
   match(intentId, fn) {
     log.debug('Registering a global intent {0}', intentId);
     this._match[intentId] = fn;
+
+    return this;
   }
 
   /**

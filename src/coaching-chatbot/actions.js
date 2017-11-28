@@ -130,6 +130,8 @@ export function markUserAsNotSearching({ context }) {
 }
 
 export function sendRejectMessages({ peerId, context }) {
+  let sessions = new Sessions();
+
   if (context.pairRequests) {
     for (let i = 0; i < context.pairRequests.length; i++) {
       if (context.pairRequests[i] !== peerId) {
@@ -142,7 +144,20 @@ export function sendRejectMessages({ peerId, context }) {
           Builder.QuickReplies.createArray([
             'OK',
           ])
-        );
+        )
+        .then(() => {
+          return sessions.read(context.pairRequests[i])
+            .then((context) => {
+              if (!context.state.includes('/ok?')) {
+                context.state += '/ok?0';
+              }
+              return sessions.write(context.pairRequests[i], context);
+            });
+        })
+        .then(() => {
+          const bot = new Chatbot(dialog, sessions);
+          return bot.receive(context.pairRequests[i], '');
+        });
       }
     }
   }
@@ -194,6 +209,30 @@ export function removeSentRequest({ sessionId, context }) {
         ...recipient,
         pairRequests: recipient.pairRequests
           .filter((senderId) => senderId !== sessionId),
+      });
+    })
+    .then(() => {
+      Messenger.send(
+        recipientId,
+        PersonalInformationFormatter.format(
+          strings['@PEER_NO_LONGER_AVAILABLE'],
+          { name: context.name }
+        ),
+        Builder.QuickReplies.createArray([
+          'OK',
+        ]))
+      .then(() => {
+        return sessions.read(recipientId)
+          .then((context) => {
+            if (!context.state.includes('/ok?')) {
+              context.state += '/ok?0';
+            }
+            return sessions.write(recipientId, context);
+          });
+      })
+      .then(() => {
+        const bot = new Chatbot(dialog, sessions);
+        return bot.receive(recipientId, '');
       });
     })
     .then(() => {
@@ -311,6 +350,7 @@ export function checkAvailablePeersIndex({ context }) {
 export function rejectRequest({ context }) {
   const rejectedPeers = context.rejectedPeers || [];
   rejectedPeers.push(context.pairRequests[0]);
+  let sessions = new Sessions();
 
   Messenger.send(
     context.pairRequests[0],
@@ -320,8 +360,20 @@ export function rejectRequest({ context }) {
     ),
     Builder.QuickReplies.createArray([
       'OK',
-    ])
-  );
+    ]))
+  .then(() => {
+    return sessions.read(context.pairRequests[0])
+      .then((context) => {
+        if (!context.state.includes('/ok?')) {
+          context.state += '/ok?0';
+        }
+        return sessions.write(context.pairRequests[0], context);
+      });
+  })
+  .then(() => {
+    const bot = new Chatbot(dialog, sessions);
+    return bot.receive(context.pairRequests[0], '');
+  });
 
   return contextChanges(context)({
     rejectedPeers,
@@ -479,28 +531,41 @@ export function displaySentRequest({ context, sessionId }) {
 
 export function addPairRequest({ sessionId, context, input }) {
   let peerId = context.availablePeers[context.availablePeersIndex - 1];
-  let session = new Sessions();
+  let sessions = new Sessions();
 
-  return session.read(peerId).then((chosenPeer) => {
+  return sessions.read(peerId).then((chosenPeer) => {
     if (chosenPeer.searching) {
       context.sentRequestMessages = context.sentRequestMessages || {};
       context.sentRequestMessages[peerId] = input;
       chosenPeer.pairRequests = [sessionId, ...(chosenPeer.pairRequests || [])];
       context.sentRequests = [peerId, ...(context.sentRequests || [])];
       context.availablePeers = context.availablePeers.slice(1);
-      return session.write(peerId, chosenPeer)
+      return sessions.write(peerId, chosenPeer)
           .then(() => {
             return Messenger.send(
               peerId,
               strings['@TELL_USER_HAS_NEW_REQUEST'],
               Builder.QuickReplies.createArray([
                 strings['@REQUESTS'],
-                strings['@STOP_SEARCHING'],
+                'OK',
               ])
-            );
+            )
+            .then(() => {
+              return sessions.read(peerId)
+                .then((context) => {
+                  if (!context.state.includes('/ok?')) {
+                    context.state += '/ok?0';
+                  }
+                  return sessions.write(peerId, context);
+                });
+            })
+            .then(() => {
+              const bot = new Chatbot(dialog, sessions);
+              return bot.receive(peerId, '');
+            });
           })
           .then(() => {
-            return session.write(sessionId, context);
+            return sessions.write(sessionId, context);
           })
           .then(() => {
             return {
@@ -556,8 +621,8 @@ export function sendFeedback({ context, sessionId, input }) {
           pairId,
           input,
           Builder.QuickReplies.createArray([
-          'OK',
-        ]))
+            'OK',
+          ]))
         .then(() => {
           return sessions.read(pairId)
             .then((context) => {

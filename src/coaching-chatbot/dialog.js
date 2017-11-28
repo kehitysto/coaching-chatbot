@@ -238,10 +238,6 @@ bot
         session.resetDialog();
         session.beginDialog('/stop_searching', true);
       }],
-      ['#PAIR_REQUEST', (session) => {
-        session.resetDialog();
-        session.beginDialog('/manage_requests');
-      }],
       ['#OPTIONAL_VALUE', (session) => {
         session.addResult('@UNCLEAR');
       }],
@@ -283,15 +279,15 @@ bot
         if (!session.context.availablePeers ||
           session.context.availablePeers.length <= 0) {
           if (session.isSearching()) {
-            return session.addResult('@NO_PAIRS_AVAILABLE', [
-              Builder.QuickReplies.create('@TO_PROFILE'),
-              Builder.QuickReplies.create('@STOP_SEARCHING'),
-            ]);
+            return session.addResult('@NO_PAIRS_AVAILABLE',
+              Builder.QuickReplies.createArray([
+                '@TO_PROFILE', '@STOP_SEARCHING'])
+            );
           } else {
-            return session.addResult('@NO_PAIRS_AVAILABLE', [
-              Builder.QuickReplies.create('@LIST_AS_SEARCHING'),
-              Builder.QuickReplies.create('@TO_PROFILE'),
-            ]);
+            return session.addResult('@NO_PAIRS_AVAILABLE',
+              Builder.QuickReplies.createArray([
+                '@LIST_AS_SEARCHING', '@TO_PROFILE'])
+            );
           }
         }
 
@@ -304,10 +300,17 @@ bot
         }
         session.addResult('@LIST_LENGTH');
         session.runActions(['displayAvailablePeer']);
-        session.addQuickReplies(
-          Builder.QuickReplies.createArray([
-            '@YES', '@NO', '@NEXT', '@EXIT'])
-        );
+        if (session.isSearching()) {
+          session.addQuickReplies(
+            Builder.QuickReplies.createArray([
+              '@YES', '@NO', '@NEXT', '@EXIT', '@STOP_SEARCHING'])
+          );
+        } else {
+          session.addQuickReplies(
+            Builder.QuickReplies.createArray([
+              '@YES', '@NO', '@NEXT', '@EXIT', '@LIST_AS_SEARCHING'])
+          );
+        }
       },
       (session) => {
         if (session.checkIntent('#NO')) {
@@ -336,10 +339,6 @@ bot
       ['#STOP_SEARCHING', (session) => {
         session.resetDialog();
         session.beginDialog('/stop_searching', true);
-      }],
-      ['#PAIR_REQUEST', (session) => {
-        session.resetDialog();
-        session.beginDialog('/manage_requests');
       }],
       ['#HELP', (session) => {
         session.addResult('@HELP');
@@ -441,7 +440,7 @@ bot
       (session) => {
         if (session.checkIntent('#NO')) {
           session.runActions(['rejectRequest']);
-          session.prev();
+          session.resetDialog();
         } else if (session.checkIntent('#YES')) {
           session.runActions(['acceptRequest']);
           return session.next();
@@ -662,6 +661,9 @@ bot
       (session) => {
       },
       (session) => {
+        session.next();
+      },
+      (session) => {
         session.endDialog();
         session.prev();
       },
@@ -670,6 +672,13 @@ bot
     '#RESET',
     (session) => {
       session.beginDialog('/reset');
+    })
+  .match(
+    '#PAIR_REQUEST',
+    (session) => {
+      if (!session.hasPair()) {
+        session.beginDialog('/manage_requests');
+      }
     });
 
 export default bot;

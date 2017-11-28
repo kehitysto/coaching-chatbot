@@ -845,6 +845,7 @@ describe('coaching-bot actions', function() {
           SKYPE: 'pertti_42',
         },
         searching: true,
+        state: '/?0',
       };
 
       stubSessionsRead.returns(Promise.resolve(
