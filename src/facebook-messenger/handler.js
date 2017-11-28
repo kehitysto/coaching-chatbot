@@ -57,7 +57,7 @@ module.exports.meetingCheck = (event, context, cb) => {
                 {
                   ...feedbackSessions[i].context,
                   state:
-                  '/?0/profile?0/accepted_pair_profile?0/give_feedback?0',
+                  '/?0/profile?0/accepted_pair_profile?0/give_feedback?1',
                 }
               ).then(() => {
                 Messenger.send(feedbackSessions[i].id,
