@@ -8,7 +8,7 @@ let scenarios;
 
 let checkData = [
   { title: 'Kaapo syöttää tietonsa ja alkaa etsiä paria',
-    hash: '754eca5ca003df42fc9a577d45cd35bbdc78e33bb6d2c79cd0095cd6acc6f5eb366144b0420f9e63e0d5f8f35f195af8a92e6deeb64fee77416458e79ea27e82' },
+    hash: 'db36404f8df0cfb077e61126a3f3290a86c1a53f01947c9a4e5fc2a74ae5bb35f046253b633765563d1f655722e453e8a8d250aabc197ffa75b953df8fdeb79f' },
   { title: 'Katariina on syöttänyt tietonsa ja haluaa nyt etsiä paria',
     hash: 'e0e4a1d9844fbcb63e177e97d37a869c6b3db8c9357d48d356907f042cf48c8a83d527919e52de37287140256c8ff4d1c23180418c6046d1fb9daa861ede0361' },
   { title: 'Katariina muuttaa tietojaan',
