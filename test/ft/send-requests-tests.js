@@ -26,7 +26,7 @@ describe('Send request tests', function () {
                   id: '104',
                   context: FeatureTestStates['NEXT_TESTS']['sessions']['104'],
                 }]),
-              QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT',])
+              QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT', '@LIST_AS_SEARCHING',])
             ),
           ]);
       });
@@ -42,7 +42,7 @@ describe('Send request tests', function () {
                   id: '105',
                   context: FeatureTestStates['NEXT_TESTS']['sessions']['105'],
                 }]),
-              QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT',])
+              QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT', '@LIST_AS_SEARCHING',])
             ),
           ]);
       });
@@ -67,7 +67,7 @@ describe('Send request tests', function () {
                   id: '104',
                   context: FeatureTestStates['NEXT_TESTS']['sessions']['104'],
                 }]),
-              QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT',])
+              QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT', '@LIST_AS_SEARCHING',])
             ),
           ]);
       });

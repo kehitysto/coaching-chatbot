@@ -88,6 +88,7 @@
         "communicationMethods": {
           "SKYPE": "NICKNAME"
         },
+        "searching": true,
         "state": "/?0/profile?0"
       },
       "SEARCHING#1": {
