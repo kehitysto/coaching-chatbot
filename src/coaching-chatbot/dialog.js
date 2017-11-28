@@ -441,7 +441,7 @@ bot
       (session) => {
         if (session.checkIntent('#NO')) {
           session.runActions(['rejectRequest']);
-          session.prev();
+          session.resetDialog();
         } else if (session.checkIntent('#YES')) {
           session.runActions(['acceptRequest']);
           return session.next();
