@@ -661,6 +661,9 @@ bot
       (session) => {
       },
       (session) => {
+        session.next();
+      },
+      (session) => {
         session.endDialog();
         session.prev();
       },

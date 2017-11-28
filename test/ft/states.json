@@ -125,7 +125,8 @@
       },
       "PAIR_REQUEST_TESTER_PAIR": {
         "name": "Some Pair",
-        "searching": true
+        "searching": true,
+        "state": "/?0"
       }
     }
   },
