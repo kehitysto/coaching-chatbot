@@ -75,8 +75,8 @@ module.exports = {
         any: /^saapun(?:eet|ut)$/i,
     },
 
-    REVOKE: {
-        any: /^peru$/i,
+    REVOKE_REQUEST: {
+        any: /^(?:peru|kumoa|poista)\spyyntö$/i,
     },
 
     DELETE: {
@@ -252,13 +252,6 @@ module.exports = {
         each: [
             '#MANAGE_OR_CHANGE',
             '#INFO',
-        ],
-    },
-
-    REVOKE_REQUEST: {
-        any: [
-            '#REVOKE',
-            '#DELETE',
         ],
     },
 };
