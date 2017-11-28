@@ -667,7 +667,6 @@ bot
     '#PAIR_REQUEST',
     (session) => {
       if (!session.hasPair()) {
-        session.resetDialog();
         session.beginDialog('/manage_requests');
       }
     });
