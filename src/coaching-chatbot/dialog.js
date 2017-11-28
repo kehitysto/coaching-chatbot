@@ -440,7 +440,7 @@ bot
       (session) => {
         if (session.checkIntent('#NO')) {
           session.runActions(['rejectRequest']);
-          session.prev();
+          session.resetDialog();
         } else if (session.checkIntent('#YES')) {
           session.runActions(['acceptRequest']);
           return session.next();
@@ -674,7 +674,6 @@ bot
     '#PAIR_REQUEST',
     (session) => {
       if (!session.hasPair()) {
-        session.resetDialog();
         session.beginDialog('/manage_requests');
       }
     });
