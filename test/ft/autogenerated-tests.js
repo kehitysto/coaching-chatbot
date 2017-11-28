@@ -42,7 +42,9 @@ describe('Automatically generated feature tests', () => {
   for (let i in checkData) {
     describe(checkData[i].title, () => {
       it('should match with the given hash sum', () => {
-        return expect(keccak512(scenarios[i].content.join())).to.equal(checkData[i].hash);
+        return expect(keccak512(scenarios[i].content.join()),
+            'Check \'' + checkData[i].title + '\' in doc/flow/discussions.md')
+          .to.equal(checkData[i].hash);
       });
     });
   }
