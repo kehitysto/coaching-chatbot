@@ -44,9 +44,9 @@ let checkData = [
   { title: 'Kaarina saa tietää Kaapon palautteesta',
     hash: 'bca68c5acbe6dd79b6516d5b72ddae1c58eb8e2d05355904603c3e14f33e3edf954b76bb8d208da26e2d16a365ca910203c85de94e0acc236b6bf379fe12da4e' },
   { title: 'Kaapo ei halua enää olla Kaarinan pari',
-    hash: '6dfb508e3effd371b80701e7b4bbc4f8d4ad0a8c0c477370edcad49135d9c700ab7a54a6b9b7ab73dcb1f67a08415e870d1196c372cdc95ca68bf04eb0061719' },
+    hash: '26f91f60335a68ae18dcc3123d98fa0fc02fc753e3edda6efd4891fb1520eee950153c8d8b1954fc0d92c01f3443a5809b104b7236b7a67a29bb1721fc417bba' },
   { title: 'Kaarina saa tietää Kaapon rikkoneen parin ja vaihtaa nimensä',
-    hash: 'bfca454dd908ada6d32a140bb6a44242b62dd1e66097ca1c74ed5ada6037ee3b2f93df92ad56c22b46d2b82c37a2cdd0c355a5b0a3973382e2391c1b08506fa4' },
+    hash: '802f7ffd58eb649cea3dd88203d26372af6ed6ce679795b093d73ea8ba43d9994bddeab78f43d6728af81fb1b6c66cfa02895b286a4602fc778ea64cae431f88' },
 ];
 
 describe('Automatically generated feature tests', () => {

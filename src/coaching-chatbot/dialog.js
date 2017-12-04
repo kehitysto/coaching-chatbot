@@ -360,8 +360,13 @@ bot
         session.addResult('@GIVE_PAIR_REQUEST_MESSAGE');
       },
       (session) => {
-        session.runActions(['addPairRequest']);
-        session.endDialog();
+        if (session.validInput(500)) {
+          session.runActions(['addPairRequest']);
+          session.endDialog();
+        } else {
+          session.addResult(['@TOO_LONG_GREETING']);
+          session.prev();
+        }
       },
     ])
   .dialog(
@@ -469,13 +474,25 @@ bot
       },
     ], [
       ['#BREAK_PAIR', (session) => {
-        session.runActions(['breakPair']);
-        session.endDialog();
+        session.switchDialog('/break_pair');
       }],
       ['#HELP', (session) => {
         session.addResult('@HELP');
       }],
     ])
+  .dialog('/break_pair', [
+    (session) => {
+      session.addResult('@BREAK_REASON');
+    },
+    (session) => {
+      if (session.validInput(500)) {
+        session.runActions(['breakPair']);
+      } else {
+        session.addResult('@TOO_LONG_REASON');
+        session.prev();
+      }
+    },
+  ])
   .dialog(
     '/accepted_pair_profile', [
       (session) => {
@@ -517,8 +534,7 @@ bot
           }
       }],
       ['#BREAK_PAIR', (session) => {
-        session.runActions(['breakPair']);
-        session.endDialog();
+        session.switchDialog('/break_pair');
       }],
       ['#HELP', (session) => {
         session.addResult('@HELP');
