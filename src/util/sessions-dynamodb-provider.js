@@ -55,7 +55,8 @@ module.exports = class DynamoDBProvider {
     let currentDate = new Date(utc + (2 * 60 * 60 * 1000));
     let enumDay = (currentDate.getDay() + 6) % 7;
     let currentDay = strings['@WEEKDAYS'][enumDay].toUpperCase();
-    let currentHour = ('0' + ((currentDate.getHours() - 1) % 24)).substr(-2, 2);
+    let currentHour = ('0' +
+      ((currentDate.getHours() + 23) % 24)).substr(-2, 2);
 
     const params = {
       Limit: 50,

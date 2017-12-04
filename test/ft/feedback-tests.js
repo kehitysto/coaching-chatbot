@@ -70,9 +70,19 @@ describe('Feedback tests', function() {
               ]);
       });
 
+      it('should ask for permission', function() {
+        return expect(
+          this.bot.receive(SESSION, 'palaute'))
+            .to.eventually.become([
+              buildResponse(
+                '@CONFIRM_FEEDBACK',
+                QuickReplies.createArray(['@YES', '@NO']))
+            ]);
+      });
+
       it('should thank for feedback', function() {
         return expect(
-            this.bot.receive(SESSION, 'palaute'))
+            this.bot.receive(SESSION, 'k'))
               .to.eventually.become([
                 buildResponse('@THANKS_FOR_FEEDBACK'),
                 buildResponse(

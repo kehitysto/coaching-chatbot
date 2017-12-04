@@ -360,8 +360,13 @@ bot
         session.addResult('@GIVE_PAIR_REQUEST_MESSAGE');
       },
       (session) => {
-        session.runActions(['addPairRequest']);
-        session.endDialog();
+        if (session.validInput(500)) {
+          session.runActions(['addPairRequest']);
+          session.endDialog();
+        } else {
+          session.addResult(['@TOO_LONG_GREETING']);
+          session.prev();
+        }
       },
     ])
   .dialog(
@@ -469,13 +474,26 @@ bot
       },
     ], [
       ['#BREAK_PAIR', (session) => {
-        session.runActions(['breakPair']);
-        session.endDialog();
+        session.switchDialog('/break_pair');
       }],
       ['#HELP', (session) => {
         session.addResult('@HELP');
       }],
     ])
+  .dialog('/break_pair', [
+    (session) => {
+      session.addResult('@BREAK_REASON');
+    },
+    (session) => {
+      if (session.validInput(500)) {
+        session.runActions(['breakPair']);
+        session.switchDialog('/profile');
+      } else {
+        session.addResult('@TOO_LONG_REASON');
+        session.prev();
+      }
+    },
+  ])
   .dialog(
     '/accepted_pair_profile', [
       (session) => {
@@ -517,8 +535,7 @@ bot
           }
       }],
       ['#BREAK_PAIR', (session) => {
-        session.runActions(['breakPair']);
-        session.endDialog();
+        session.switchDialog('/break_pair');
       }],
       ['#HELP', (session) => {
         session.addResult('@HELP');
@@ -602,12 +619,29 @@ bot
       },
       (session) => {
         if (session.validInput(600)) {
-          session.runActions(['sendRating', 'sendFeedback']);
-          session.next();
+          session.context.input = session.getInput();
+          session.addResult('@CONFIRM_FEEDBACK',
+            Builder.QuickReplies.createArray(['@YES', '@NO']));
         } else {
           session.addResult('@TOO_LONG_FEEDBACK');
           session.prev();
         }
+      },
+      (session) => {
+        if (session.checkIntent('#YES')) {
+          session.next();
+        } else if (session.checkIntent('#NO')) {
+          session.resetDialog();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
+        }
+      },
+      (session) => {
+          session.input = session.context.input;
+          delete session.context.input;
+          session.runActions(['sendRating', 'sendFeedback']);
+          session.next();
       },
       (session) => {
         session.addResult('@THANKS_FOR_FEEDBACK');
