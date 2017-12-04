@@ -36,6 +36,7 @@ let checkData = [
   { title: 'Kaarina saa tietää Kaapon rikkoneen parin ja vaihtaa nimensä',
     hash: '802f7ffd58eb649cea3dd88203d26372af6ed6ce679795b093d73ea8ba43d9994bddeab78f43d6728af81fb1b6c66cfa02895b286a4602fc778ea64cae431f88' },
 ];
+
 describe('Automatically generated feature tests', () => {
   before(() => {
     DiscussionGenerator.generate(discussions, states)
