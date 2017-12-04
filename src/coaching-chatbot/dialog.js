@@ -487,6 +487,7 @@ bot
     (session) => {
       if (session.validInput(500)) {
         session.runActions(['breakPair']);
+        session.switchDialog('/profile');
       } else {
         session.addResult('@TOO_LONG_REASON');
         session.prev();
