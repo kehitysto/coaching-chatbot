@@ -83,7 +83,7 @@
       "OK"
     ]
   },
-  "Katariina muuttaa tietojaan": {
+  "Katariina muuttaa nimeään ja kuvaustaan": {
     "player": "Katariina",
     "session": "Session2",
     "messages": [
@@ -91,11 +91,21 @@
       "Nimi",
       "Katariina-Elli",
       "Kuvaus",
-      "Parempi kuvaus",
+      "Parempi kuvaus"
+    ]
+  },
+  "Katariina muuttaa yhteystietojaan": {
+    "player": "Katariina",
+    "session": "Session2",
+    "messages": [
       "Yhteystiedot",
       "Lisää",
       "Skype",
-      "Skype-acc"
+      "Skype-acc",
+      "Poista",
+      "Skype",
+      "Valmis",
+      "Palaa"
     ]
   },
   "Kaarina lähettää pyyntöjä": {
