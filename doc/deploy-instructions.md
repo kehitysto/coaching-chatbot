@@ -8,7 +8,7 @@ $ npm install -g serverless
 $ git clone https://github.com/kehitysto/coaching-chatbot.git
 $ npm install
 ```
-Rename .env.example to .env and fill in `FACEBOOK_BOT_VERIFY_TOKEN`
+Rename .env.example to .env and fill in `FACEBOOK_BOT_VERIFY_TOKEN`. The verify token can be anything you choose. You will need it later.
 
 ```
 $ serverless deploy
@@ -66,6 +66,8 @@ Instructions of approvals:
         * Upload a Screencast showing one path of the possible conversations with the bot. This example should show what kind of messages the bot send to users without the user initiating the conversation.
 6. Press `Submit for Review`
 
+
+
 ## Deploying multiple versions
 
 To deploy multiple versions of the chatbot you have to define a name for serverless deploy:
@@ -73,4 +75,5 @@ To deploy multiple versions of the chatbot you have to define a name for serverl
 ```
 $ serverless deploy <name here>
 ```
+
 After this you can follow the instructions from the top of this page onwards. You can see the different versions you have deployed in you aws lambda dashboard and also delete/modify them there. One good use for this is for example having a staging environment and a production environment.
