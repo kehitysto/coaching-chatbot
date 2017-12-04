@@ -425,7 +425,7 @@ export function acceptRequest({ sessionId, context }) {
             let promise = Promise.resolve();
 
             out.forEach((m) => {
-              promise = promise.then(
+              promise = promise.then(() =>
                 Messenger.send(chosenPeerId, m.message, m.quickReplies)
               );
             });
