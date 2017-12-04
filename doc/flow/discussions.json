@@ -35,11 +35,12 @@
       "Haluaisin lisätä juuri sinut parikseni."
     ]
   },
-  "Katariina lähettää pyynnön Kaarinalle": {
+  "Katariina lähettää pyynnön Kaapolle ja Kaarinalle": {
     "player": "Katariina",
     "session": "Session2",
     "messages": [
-      "Ei",
+      "Kyllä",
+      "Olen aina halunnut Kaapon parikseni",
       "Kyllä",
       "Haluan pariksesi",
       "Listaudu"
@@ -139,6 +140,13 @@
     "session": "Session3",
     "messages": [
       "Aseta tapaaminen"
+    ]
+  },
+  "Katariina saa tietää ettei Kaapo ole enää vapaa": {
+    "player": "Katariina",
+    "session": "Session2",
+    "messages": [
+      "OK"
     ]
   },
   "Kaapon ja Kaarinan tapaaminen lähestyy": {
