@@ -1,6 +1,7 @@
 ## Coaching chatbot Installation
  - Prerequisites:
     * npm and node must be installed
+      * npm is installed with node so you can get both here: https://nodejs.org/en/download/package-manager/
     * Set up AWS, instructions could be found: https://serverless.com/framework/docs/providers/aws/guide/credentials/
 ```
 $ npm install -g serverless
@@ -22,7 +23,7 @@ Copy the GET endpoint url
   * Create Facebook application -> https://developers.facebook.com/quickstarts/?platform=web
   * Create Facebook page -> https://www.facebook.com/pages/create (if the page already exists, use it when we refer to the page created in step 1)
 2. Go to the App Dashboard. Select under Products "+Add Product" and choose Messenger.  Next setup webhook by clicking `Setup Webhooks`
-  * Callback URL -> use endpoint url coppied in Coaching chatbot Installation
+  * Callback URL -> use endpoint url copied in Coaching chatbot Installation
   * Verify Token -> use FACEBOOK_BOT_VERIFY_TOKEN filled in Coaching chatbot Installation
   * Select Subscription field `messages`
   * At this stage, the application is available only for developers and testers. The application needs to be approved by Facebook for public access
@@ -61,6 +62,15 @@ Instructions of approvals:
         <p align="center"><img src="/img/pages-messaging-subscription.png" alt="Pages messaging"/></p>
         * Add description:
         "Our application will use pages_messaging_subscriptions to notify the user that some other users want to became their pair. The user can quite pair searching at any point if he/she doesn't want to get notification anymore.  Permission is needed because the pair could be found after 24 hours after subscribing and it's possible that during this time few users want to send a request to the user."
-        <span style="color : yellow">  Feel free to change the description </span></br>
-        * Upload Screencast
+        <span style="color : yellow">  Feel free to change the description </span></br></br>
+        * Upload a Screencast showing one path of the possible conversations with the bot. This example should show what kind of messages the bot send to users without the user initiating the conversation.
 6. Press `Submit for Review`
+
+## Deploying multiple versions
+
+To deploy multiple versions of the chatbot you have to define a name for serverless deploy:
+
+```
+$ serverless deploy <name here>
+```
+After this you can follow the instructions from the top of this page onwards. You can see the different versions you have deployed in you aws lambda dashboard and also delete/modify them there. One good use for this is for example having a staging environment and a production environment.
