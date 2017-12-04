@@ -221,6 +221,10 @@ module.exports = class Session {
     return this._input;
   }
 
+  set input(newInput) {
+    this._input = newInput;
+  }
+
   get context() {
     return this._context;
   }

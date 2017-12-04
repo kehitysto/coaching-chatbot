@@ -138,7 +138,12 @@
     "messages": [
       "Kyllä",
       "1",
-      "En halua saada kelvotonta vertaisohjausta."
+      "En halua saada kelvotonta vertaisohjausta.",
+      "Ei",
+      "Kyllä",
+      "4",
+      "Sain hyvää vertaisohjausta.",
+      "Kyllä"
     ]
   },
   "Kaarina saa tietää Kaapon palautteesta": {
