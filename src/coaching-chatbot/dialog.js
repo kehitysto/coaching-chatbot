@@ -618,12 +618,29 @@ bot
       },
       (session) => {
         if (session.validInput(600)) {
-          session.runActions(['sendRating', 'sendFeedback']);
-          session.next();
+          session.context.input = session.getInput();
+          session.addResult('@CONFIRM_FEEDBACK',
+            Builder.QuickReplies.createArray(['@YES', '@NO']));
         } else {
           session.addResult('@TOO_LONG_FEEDBACK');
           session.prev();
         }
+      },
+      (session) => {
+        if (session.checkIntent('#YES')) {
+          session.next();
+        } else if (session.checkIntent('#NO')) {
+          session.resetDialog();
+        } else {
+          session.addResult('@UNCLEAR');
+          session.prev();
+        }
+      },
+      (session) => {
+          session.input = session.context.input;
+          delete session.context.input;
+          session.runActions(['sendRating', 'sendFeedback']);
+          session.next();
       },
       (session) => {
         session.addResult('@THANKS_FOR_FEEDBACK');
