@@ -437,7 +437,7 @@ export function acceptRequest({ sessionId, context }) {
   });
 }
 
-export function breakPair({ sessionId, context }) {
+export function breakPair({ sessionId, context, input }) {
   let pairs = new Pairs();
   let sessions = new Sessions();
 
@@ -478,7 +478,8 @@ export function breakPair({ sessionId, context }) {
                 pairId,
                 PersonalInformationFormatter.format(
                   strings['@NOTIFY_PAIR_BROKEN'],
-                  { pairName: context.name }
+                  { pairName: context.name,
+                    breakReason: input }
                 ),
                 Builder.QuickReplies.createArray([
                   'OK',
