@@ -56,6 +56,7 @@
   "@NOTIFY_PAIR_BROKEN": "{pairName} lopetti vertaisohjauksen.",
   "@PAIR_BROKEN": "Ohjaus lopetettiin.",
   "@SHOW_PAIR": "Näytä ohjaaja",
+  "@CONFIRM_FEEDBACK": "Oletko varma, että haluat lähettää tämän palautteen? Voit antaa palautetta uudestaan kieltäytyessä.",
   "@FEEDBACK_ABOUT_MEETING": "Kuinka lähellä saamasi ohjaus oli ideaalia ohjaustilannettasi? Valitse arvosana, missä 4 tarkoittaa täysin ideaalia ja 1, että toivoisit useita merkittäviä muutoksia.",
   "@GIVE_FEEDBACK": "Anna palautetta",
   "@REQUEST_MANAGEMENT": "Pyyntöjen hallinnointi",
