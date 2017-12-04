@@ -57,5 +57,10 @@ describe('Inmemory database service', function() {
             return expect(this.feedback.dump())
                 .to.deep.equal(expected);
         });
+
+        it('should reject with an error when the given row does not include required fields', function() {
+            return expect(this.feedback.write({ date: 1, giver: 'hack', pair: 2 }))
+                .to.eventually.be.rejectedWith('Missing feedback parameters!');
+        });
     });
 });
