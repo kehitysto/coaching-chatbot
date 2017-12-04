@@ -13,20 +13,31 @@ export function generate(discussions, states) {
 
   sessions.db.load(states);
 
-  let lines = [];
+  let scenarios = [];
   let promise = bot.receive('', '');
 
   let messageQueue = {};
+
+  function newTitle(title) {
+    scenarios.push({
+      title: '# ' + title,
+      content: []
+    });
+  }
+
+  function newContent(line) {
+    scenarios[scenarios.length - 1].content.push(line);
+  }
 
   function addBotReply(output) {
     for (let botReply of output) {
       for (let message of botReply.message.replace('\n\n', '\n').split('\n')) {
         if (message.length > 0) {
-          lines.push('| ' + message + ' | |');
+          newContent('| ' + message + ' | |');
         }
       }
       if (botReply.quickReplies.length > 0) {
-        lines.push('| [' +
+        newContent('| [' +
           botReply.quickReplies
             .map((quickReply) => quickReply.title)
             .join('] [') + '] | |');
@@ -52,9 +63,9 @@ export function generate(discussions, states) {
       }
     } else {
       promise = promise.then(() => {
-        lines.push('# ' + scenario);
-        lines.push('| Kehitystön vertaisohjausrobotti | ' + discussions[scenario].player + ' |');
-        lines.push('|-|-|');
+        newTitle(scenario);
+        newContent('| Kehitystön vertaisohjausrobotti | ' + discussions[scenario].player + ' |');
+        newContent('|-|-|');
       });
 
       promise = promise.then(() => {
@@ -66,7 +77,7 @@ export function generate(discussions, states) {
 
       for (let message of messages) {
         promise = promise.then(() => {
-          lines.push('| | ' + message + ' |');
+          newContent('| | ' + message + ' |');
           return bot.receive(sessionID, message);
         }).then((output) => {
           addBotReply(output);
@@ -93,18 +104,5 @@ export function generate(discussions, states) {
 
   return promise
     .then(() => messengerSpy.restore())
-    .then(() => {
-      let scenarios = [];
-      for (let line of lines) {
-        if (line[0] == '#') {
-          scenarios.push({
-            title: line,
-            content: []
-          });
-        } else {
-          scenarios[scenarios.length - 1].content.push(line);
-        }
-      }
-      return scenarios;
-    });
+    .then(() => scenarios);
 }

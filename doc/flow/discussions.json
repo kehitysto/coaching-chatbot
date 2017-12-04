@@ -32,8 +32,17 @@
       "Etsi ohjaaja",
       "Seuraava",
       "Kyllä",
-      "Haluaisin lisätä juuri sinut parikseni.",
-      "Ei",
+      "Haluaisin lisätä juuri sinut parikseni."
+    ]
+  },
+  "Katariina lähettää pyynnön Kaapolle ja Kaarinalle": {
+    "player": "Katariina",
+    "session": "Session2",
+    "messages": [
+      "Kyllä",
+      "Olen aina halunnut Kaapon parikseni",
+      "Kyllä",
+      "Haluan pariksesi",
       "Listaudu"
     ]
   },
@@ -44,9 +53,34 @@
       "Pyynnöt",
       "Saapuneet",
       "Palaa",
-      "Palaa",
-      "Pyynnöt",
       "Palaa"
+    ]
+  },
+  "Kalle hylkää Katariinan pyynnön": {
+    "player": "Kalle",
+    "session": "Session4",
+    "messages": [
+      "Pyynnöt",
+      "Saapuneet",
+      "Ei",
+      "Palaa"
+    ]
+  },
+  "Kaarina hylkää Katariinan pyynnön": {
+    "player": "Kaarina",
+    "session": "Session3",
+    "messages": [
+      "Pyynnöt",
+      "Saapuneet",
+      "Ei",
+      "Palaa"
+    ]
+  },
+  "Katariina saa kahdelta henkilöltä hylkäyksen": {
+    "player": "Katariina",
+    "session": "Session2",
+    "messages": [
+      "OK"
     ]
   },
   "Katariina muuttaa tietojaan": {
@@ -72,9 +106,9 @@
       "Kyllä",
       "Moi",
       "Kyllä",
-      "Hei",
-      "Kyllä",
       "HALOO",
+      "Kyllä",
+      "Hei",
       "Profiiliin"
     ]
   },
@@ -84,8 +118,8 @@
     "messages": [
       "Pyynnöt",
       "Lähetetyt",
-      "Seuraava",
       "Peru pyyntö",
+      "Seuraava",
       "Palaa"
     ]
   },
@@ -106,6 +140,13 @@
     "session": "Session3",
     "messages": [
       "Aseta tapaaminen"
+    ]
+  },
+  "Katariina saa tietää ettei Kaapo ole enää vapaa": {
+    "player": "Katariina",
+    "session": "Session2",
+    "messages": [
+      "OK"
     ]
   },
   "Kaapon ja Kaarinan tapaaminen lähestyy": {
@@ -138,7 +179,12 @@
     "messages": [
       "Kyllä",
       "1",
-      "En halua saada kelvotonta vertaisohjausta."
+      "En halua saada kelvotonta vertaisohjausta.",
+      "Ei",
+      "Kyllä",
+      "4",
+      "Sain hyvää vertaisohjausta.",
+      "Kyllä"
     ]
   },
   "Kaarina saa tietää Kaapon palautteesta": {
