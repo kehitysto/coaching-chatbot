@@ -150,13 +150,14 @@ export function sendRejectMessages({ peerId, context }) {
             .then((context) => {
               if (!context.state.includes('/ok?')) {
                 context.state += '/ok?0';
+                return sessions
+                  .write(context.pairRequests[i], context)
+                  .then(() => {
+                    const bot = new Chatbot(dialog, sessions);
+                    return bot.receive(context.pairRequests[i], '');
+                  });
               }
-              return sessions.write(context.pairRequests[i], context);
             });
-        })
-        .then(() => {
-          const bot = new Chatbot(dialog, sessions);
-          return bot.receive(context.pairRequests[i], '');
         });
       }
     }
@@ -366,13 +367,14 @@ export function rejectRequest({ context }) {
       .then((context) => {
         if (!context.state.includes('/ok?')) {
           context.state += '/ok?0';
+          return sessions
+            .write(context.pairRequests[0], context)
+            .then(() => {
+              const bot = new Chatbot(dialog, sessions);
+              return bot.receive(context.pairRequests[0], '');
+            });
         }
-        return sessions.write(context.pairRequests[0], context);
       });
-  })
-  .then(() => {
-    const bot = new Chatbot(dialog, sessions);
-    return bot.receive(context.pairRequests[0], '');
   });
 
   return contextChanges(context)({
@@ -558,13 +560,14 @@ export function addPairRequest({ sessionId, context, input }) {
                 .then((context) => {
                   if (!context.state.includes('/ok?')) {
                     context.state += '/ok?0';
+                    return sessions
+                      .write(peerId, context)
+                      .then(() => {
+                        const bot = new Chatbot(dialog, sessions);
+                        return bot.receive(peerId, '');
+                      });
                   }
-                  return sessions.write(peerId, context);
                 });
-            })
-            .then(() => {
-              const bot = new Chatbot(dialog, sessions);
-              return bot.receive(peerId, '');
             });
           })
           .then(() => {
