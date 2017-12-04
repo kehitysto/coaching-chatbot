@@ -422,12 +422,15 @@ export function acceptRequest({ sessionId, context }) {
           const bot = new Chatbot(dialog, sessions);
 
           return bot.receive(chosenPeerId, '').then((out) => {
-            // run the chatbot for the chosen peer
+            let promise = Promise.resolve();
 
-            return Messenger.send(
-              chosenPeerId,
-              out.map((m) => m.message).join('\n\n'),
-              out[out.length - 1].quickReplies);
+            out.forEach((m) => {
+              promise = promise.then(() =>
+                Messenger.send(chosenPeerId, m.message, m.quickReplies)
+              );
+            });
+
+            return promise;
           });
         })
         .then(() => sendRejectMessages({ peerId: chosenPeerId, context }))
