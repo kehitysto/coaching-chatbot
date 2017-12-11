@@ -442,13 +442,23 @@ export function acceptRequest({ sessionId, context }) {
   });
 }
 
-export function breakPair({ sessionId, context, input }) {
+export function breakPairGeneric({ sessionId, context, input }) {
+  return breakPair({ sessionId, context, input, isReset: false });
+}
+
+export function breakPairReset({ sessionId, context, input }) {
+  return breakPair({ sessionId, context, input, isReset: true });
+}
+
+export function breakPair({ sessionId, context, input, isReset }) {
   let pairs = new Pairs();
   let sessions = new Sessions();
 
   if (context) {
     delete context.hasPair;
   }
+
+  let reason = isReset ? '@PEER_HAS_RESET_MESSAGE' : input;
 
   return pairs.read(sessionId)
       .then((pairList) => {
@@ -484,7 +494,7 @@ export function breakPair({ sessionId, context, input }) {
                 PersonalInformationFormatter.format(
                   strings['@NOTIFY_PAIR_BROKEN'],
                   { pairName: context.name,
-                    breakReason: input }
+                    breakReason: reason }
                 ),
                 Builder.QuickReplies.createArray([
                   'OK',
