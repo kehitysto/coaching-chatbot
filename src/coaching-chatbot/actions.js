@@ -254,10 +254,6 @@ export function getAvailablePeers({ sessionId, context }) {
           .filter((entry) => rejectedPeers.indexOf(entry) < 0),
         availablePeersIndex: availablePeersIndex,
       });
-    })
-    .catch((err) => {
-      log.error('err: {0}', err);
-      return Promise.reject(err);
     });
 }
 
@@ -280,10 +276,6 @@ export function displayAvailablePeer({ context }) {
         resolve({
           result: PairFormatter.createPairString(profile),
         });
-      })
-      .catch((err) => {
-        log.error('err: {0}', err);
-        reject(err);
       });
   });
 }
@@ -509,10 +501,6 @@ export function displayRequest({ context, sessionId }) {
         resolve({
           result: PairFormatter.createPairString(profile),
         });
-      })
-      .catch((err) => {
-        log.error('err: {0}', err);
-        reject(err);
       });
   });
 }
@@ -526,10 +514,6 @@ export function displayRequestMessage({ context, sessionId }) {
         resolve({
           result: profile.sentRequestMessages[sessionId],
         });
-      })
-      .catch((err) => {
-        log.error('err: {0}', err);
-        reject(err);
       });
   });
 }
@@ -543,10 +527,6 @@ export function displaySentRequest({ context, sessionId }) {
         resolve({
           result: PairFormatter.createPairString(profile, sessionId),
         });
-      })
-      .catch((err) => {
-        log.error('err: {0}', err);
-        reject(err);
       });
   });
 }
