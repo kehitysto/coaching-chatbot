@@ -354,7 +354,8 @@ module.exports = class Session {
     return this.context.hasPair;
   }
 
+  // Messenger max length for messages is 640 characters
   validInput(maxLength) {
-    return this.getInput().length <= Math.min(maxLength, 640);
+    return this.getInput().length <= maxLength;
   }
 };
