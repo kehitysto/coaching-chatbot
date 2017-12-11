@@ -63,7 +63,7 @@ Instructions of approvals:
         * Add description:
         "Our application will use pages_messaging_subscriptions to notify the user that some other users want to became their pair. The user can quite pair searching at any point if he/she doesn't want to get notification anymore.  Permission is needed because the pair could be found after 24 hours after subscribing and it's possible that during this time few users want to send a request to the user."
         <span style="color : yellow">  Feel free to change the description </span></br></br>
-        * Upload a Screencast showing one path of the possible conversations with the bot. This example should show what kind of messages the bot send to users without the user initiating the conversation.
+        * Upload a Screencast showing one path of the possible conversations with the bot. This example should show what kind of messages the bot sends to users without the user initiating the conversation.
 6. Press `Submit for Review`
 
 
@@ -76,4 +76,4 @@ To deploy multiple versions of the chatbot you have to define a name for serverl
 $ serverless deploy <name here>
 ```
 
-After this you can follow the instructions from the top of this page onwards. You can see the different versions you have deployed in you aws lambda dashboard and also delete/modify them there. One good use for this is for example having a staging environment and a production environment.
+After this you can follow the instructions from the top of this page onwards. You can see the different versions you have deployed in your aws lambda dashboard and also delete/modify them there. One good use for this is for example having a staging environment and a production environment.
