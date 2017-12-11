@@ -485,7 +485,7 @@ bot
       session.addResult('@BREAK_REASON');
     },
     (session) => {
-      if (session.validInput(500)) {
+      if (session.validInput(600)) {
         session.runActions(['breakPair']);
         session.switchDialog('/profile');
       } else {
