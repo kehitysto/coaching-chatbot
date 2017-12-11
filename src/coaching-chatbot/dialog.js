@@ -235,34 +235,11 @@ bot
         session.addResult('@HELP');
       }],
       ['#STOP_SEARCHING', (session) => {
-        session.resetDialog();
         session.beginDialog('/stop_searching', true);
       }],
       ['#OPTIONAL_VALUE', (session) => {
         session.addResult('@UNCLEAR');
       }],
-    ])
-  .dialog(
-    '/find_pair', [
-      (session) => {
-        if (session.getCommunicationMethodsCount() === 0) {
-          session.addResult('@NO_METHODS_ADDED',
-            Builder.QuickReplies.createArray(['@YES', '@NO']));
-        } else {
-          session.switchDialog('/confirm_permission');
-        }
-      },
-      (session) => {
-        if (session.checkIntent('#YES')) {
-          session.prev();
-          session.switchDialog('/add_communication_method');
-        } else if (session.checkIntent('#NO')) {
-          session.endDialog();
-        } else {
-          session.addResult('@UNCLEAR');
-          session.prev();
-        }
-      },
     ])
   .dialog(
     '/searching', [
@@ -271,13 +248,8 @@ bot
         session.next();
       },
       (session) => {
-        if (session.getPairRequestCount() > 0) {
-          session.addResult('@TELL_USER_HAS_NEW_REQUEST', [
-            Builder.QuickReplies.create('@REQUESTS'),
-          ]);
-        }
         if (!session.context.availablePeers ||
-          session.context.availablePeers.length <= 0) {
+          session.getAvailablePeersCount() <= 0) {
           if (session.isSearching()) {
             return session.addResult('@NO_PAIRS_AVAILABLE',
               Builder.QuickReplies.createArray([
@@ -296,7 +268,7 @@ bot
       },
       (session) => {
         if (session.getAvailablePeersCount() <= 0) {
-          return session.resetDialog();
+          return session.prev();
         }
         session.addResult('@LIST_LENGTH');
         session.runActions(['displayAvailablePeer']);
@@ -346,11 +318,9 @@ bot
       ['#LIST_AS_SEARCHING', (session) => {
         session.context.searching = true; // markUserAsSearching is too slow
         session.runActions(['markUserAsSearching']);
-        session.resetDialog();
         session.switchDialog('/profile');
       }],
       ['#TO_PROFILE', (session) => {
-        session.resetDialog();
         session.switchDialog('/profile');
       }],
     ])
@@ -498,9 +468,10 @@ bot
     '/accepted_pair_profile', [
       (session) => {
         if (session.ifFacilitationSet()) {
-          session.addResult('@ASK_FOR_FACILITATION', [
-            Builder.QuickReplies.create('@SET_DATE'),
-          ]);
+          session.addResult('@ASK_FOR_FACILITATION',
+            Builder.QuickReplies.createArray([
+              '@SET_DATE', '@SHOW_PAIR'])
+          );
         } else {
           session.addResult('@CONFIRM_DATE');
           if (session.areRemindersEnabled()) {
@@ -660,11 +631,9 @@ bot
           if (session.checkIntent('#YES')) {
             session.runActions(['markUserAsNotSearching']);
             session.addResult('@STOPPED_SEARCHING');
-            session.resetDialog();
             session.switchDialog('/profile');
           } else if (session.checkIntent('#NO')) {
-            session.resetDialog();
-            session.switchDialog('/searching');
+            session.endDialog();
           } else {
             session.addResult('@UNCLEAR');
             session.prev();

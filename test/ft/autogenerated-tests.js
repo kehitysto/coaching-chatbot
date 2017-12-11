@@ -32,9 +32,9 @@ let checkData = [
   { title: 'Kaarina hallinnoi pyyntöjä',
     hash: '9334053e2af72a529dfccb77b8b7e6a9b322b3244c6568bd1c0d62843a3338e03ec59f53591ea249ce55c467f124e7199d637d3c2da7f1ede8038fdaf6274669' },
   { title: 'Kaapo hyväksyy pyynnön ja asettaa tapaamisen ajankohdan',
-    hash: '66683f9aba0d2b5904fbdf61f105ca3ebea65e56661568f61dc6cb37322cc89612cc26f5d21b17d9a74f008b667ed67358a497d91aa2150d87b5919cc3c8f469' },
+    hash: '200036e1613fe8d84a78a14bcbac41f3b8897a15e1c9a6d750baa53d2c8aaadd74bd9158410ba40807feccfcdb5970ffc7a5f97e27fef4750cd71dcea5378af8' },
   { title: 'Kaarina saa tietää Kaapon hyväksyneen pyynnön',
-    hash: '70504afd51552eb411287e9d3429b17a9ae757fbe41861277be3d29d5b70703b8ee7b73bfc5ae7ba1e3522746d041d36a0939c177b329a7c605c18a4364ff004' },
+    hash: 'b73e508d6b87d7ec84b77b94403564f00743fbbad22aba30dc266273940928b4caf760585ac0206541ff3ff63f1c2cf4f0b85e48640c7930e70e10b941102fa9' },
   { title: 'Katariina saa tietää ettei Kaapo ole enää vapaa',
     hash: 'f1a75c95812524f87f15fda9d24afdbe3e5be8de0f8840f97c90ede12d0932f80701416cd1ca8f6c2bc2e8a027aaaf1cd41670386fa5131f7778e500a8b586d9' },
   { title: 'Kaapo saa muistutuksen tapaamisesta',
@@ -46,7 +46,7 @@ let checkData = [
   { title: 'Kaapo ei halua enää olla Kaarinan pari',
     hash: '1ea3645bf564cadce11b2c79ca3ea8d7ae6d515277368ce48adbe8a4a7e9db7b01c563a0fa8bdd7b4dd749b671821782f5b3edf83a64dc461476c37b14ec3af1' },
   { title: 'Kaarina saa tietää Kaapon rikkoneen parin ja vaihtaa nimensä',
-    hash: '802f7ffd58eb649cea3dd88203d26372af6ed6ce679795b093d73ea8ba43d9994bddeab78f43d6728af81fb1b6c66cfa02895b286a4602fc778ea64cae431f88' },
+    hash: '5627d473003262d12300e08ce3367bc18b15f3ef1653bdac168752714e57135cd99e03c651ca749844921756909e75c689815466c8599e682819cacb0617a8d3' },
 ];
 
 describe('Automatically generated feature tests', () => {
