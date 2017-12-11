@@ -90,5 +90,6 @@
   "@COMMUNICATION_METHODS": "Yhteystiedot",
   "@DONE": "Valmis",
   "@PEER_NO_LONGER_AVAILABLE": "{name} ei enää ole käytettävissä vertaisohjaajaksi.",
-  "@PEER_NO_LONGER_AVAILABLE_GENERIC": "Kyseinen henkilö ei enää ole käytettävissä vertaisohjaajaksi."
+  "@PEER_NO_LONGER_AVAILABLE_GENERIC": "Kyseinen henkilö ei enää ole käytettävissä vertaisohjaajaksi.",
+  "@PEER_HAS_RESET_MESSAGE": "Pari nollasi tiedot"
 }

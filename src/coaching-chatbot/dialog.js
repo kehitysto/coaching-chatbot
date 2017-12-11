@@ -449,7 +449,7 @@ bot
     },
     (session) => {
       if (session.validInput(600)) {
-        session.runActions(['breakPair']);
+        session.runActions(['breakPairGeneric']);
         session.switchDialog('/profile');
       } else {
         session.addResult('@TOO_LONG_REASON');
@@ -641,7 +641,7 @@ bot
       },
       (session) => {
         if (session.checkIntent('#YES')) {
-          session.runActions(['breakPair', 'removeSentRequests', 'reset']);
+          session.runActions(['breakPairReset', 'removeSentRequests', 'reset']);
           session.addResult('@RESET_DONE');
           session.clearState();
         } else if (session.checkIntent('#NO')) {
