@@ -14,18 +14,14 @@ require('../src/lib/env-vars').config();
 let descriptions = [];
 let promise = DiscussionGenerator.generate(discussions, states)
   .then((scenarios) => {
+    let lines = [];
     let i = 0;
     for (let scenario of scenarios) {
       let hash = keccak512(scenario.content.join());
       ['  { title: \'' + scenario.title.split('# ')[1] + '\',',
        '    hash: \'' + hash + '\' },'].map(l => descriptions.push(l));
       i += 1;
-    }
-    return scenarios;
-  })
-  .then((scenarios) => {
-    let lines = [];
-    for (let scenario of scenarios) {
+
       lines.push(scenario.title);
       for (let line of scenario.content) {
         lines.push(line);
@@ -64,7 +60,13 @@ promise = promise.then((lines) => {
    '  for (let i in checkData) {',
    '    describe(checkData[i].title, () => {',
    '      it(\'should match with the given hash sum\', () => {',
-   '        return expect(keccak512(scenarios[i].content.join())).to.equal(checkData[i].hash);',
+   '        return expect(keccak512(scenarios[i].content.join()),',
+   '            \'Run \\\'npm run visualize\\\' and \' +',
+   '            \'check \\\'\' + checkData[i].title + \'\\\' in \' +',
+   '            \'doc/flow/discussions.md. If it looks fine, copy \' +',
+   '            \'the hash from automatically generated tests \' +',
+   '            \'in the same document.\')',
+   '          .to.equal(checkData[i].hash);',
    '      });',
    '    });',
    '  }',
