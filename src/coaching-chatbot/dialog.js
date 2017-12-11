@@ -442,13 +442,6 @@ bot
         session.addResult('@LINK_TO_HELP');
         session.switchDialog('/accepted_pair_profile');
       },
-    ], [
-      ['#BREAK_PAIR', (session) => {
-        session.switchDialog('/break_pair');
-      }],
-      ['#HELP', (session) => {
-        session.addResult('@HELP');
-      }],
     ])
   .dialog('/break_pair', [
     (session) => {
