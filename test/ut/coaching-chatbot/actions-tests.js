@@ -695,19 +695,19 @@ describe('coaching-bot actions', function() {
       );
 
       stubSessionsRead.returns(
-      Promise.resolve({
+        Promise.resolve({
           name: 'Pertti',
           communicationMethods: {
-          SKYPE: 'pertti_42',
+            SKYPE: 'pertti_42',
           },
           sentRequestMessages: { '1': 'Message' }
-      })
+        })
       );
 
       const context = {
         pairRequests: [
-            1,
-            2,
+          1,
+          2,
         ],
       };
 
@@ -721,8 +721,8 @@ describe('coaching-bot actions', function() {
       });
 
       return expect(ret)
-      .to.become(expected)
-      .then(() => stubSessionsRead.restore());
+        .to.become(expected)
+        .then(() => stubSessionsRead.restore());
     });
 
     it('should handle exceptions properly', function() {
