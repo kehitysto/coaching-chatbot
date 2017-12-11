@@ -1009,14 +1009,15 @@ describe('coaching-bot actions', function() {
     });
   });
 
-  describe('#resetMeeting', () => {
-    it('should remove day and time from context', () => {
-      const ret = actions.resetMeeting({
+  describe('#resetMeetingAndHasPair', () => {
+    it('should remove day, time and hasPair from context', () => {
+      const ret = actions.resetMeetingAndHasPair({
         context: {
           asd: 3,
           weekDay: 'TI',
           as: 5,
           time: '10:23',
+          hasPair: true,
         }
       });
 

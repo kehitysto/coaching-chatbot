@@ -457,7 +457,7 @@ export function breakPair({ sessionId, context, input, isReset }) {
 
         return pairs.breakPair(sessionId, pairId)
             .then(() => sessions.read(pairId))
-            .then((context) => resetMeeting({ context }))
+          .then((context) => resetMeetingAndHasPair({ context }))
             .then((context) => sessions.write(
               pairId,
               {
@@ -483,7 +483,7 @@ export function breakPair({ sessionId, context, input, isReset }) {
               );
             });
       })
-      .then(() => resetMeeting({ context }))
+    .then(() => resetMeetingAndHasPair({ context }))
       .then((context) => sessions.write(sessionId, context))
       .then(() => {
         return Promise.resolve({
@@ -702,7 +702,7 @@ export function testReminderAndFeedback({ context }) {
     });
 }
 
-export function resetMeeting({ context }) {
+export function resetMeetingAndHasPair({ context }) {
   delete context.weekDay;
   delete context.time;
   delete context.remindersEnabled;
