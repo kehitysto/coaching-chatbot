@@ -446,10 +446,6 @@ export function breakPair({ sessionId, context, input, isReset }) {
   let pairs = new Pairs();
   let sessions = new Sessions();
 
-  if (context) {
-    delete context.hasPair;
-  }
-
   let reason = isReset ? strings['@PEER_HAS_RESET_MESSAGE'] : input;
 
   return pairs.read(sessionId)
@@ -461,14 +457,7 @@ export function breakPair({ sessionId, context, input, isReset }) {
 
         return pairs.breakPair(sessionId, pairId)
             .then(() => sessions.read(pairId))
-            .then((context) => {
-              resetMeeting({ context });
-              return context;
-            })
-            .then((context) => {
-              delete context.hasPair;
-              return context;
-            })
+          .then((context) => resetMeetingAndHasPair({ context }))
             .then((context) => sessions.write(
               pairId,
               {
@@ -494,7 +483,7 @@ export function breakPair({ sessionId, context, input, isReset }) {
               );
             });
       })
-      .then(() => resetMeeting({ context }))
+    .then(() => resetMeetingAndHasPair({ context }))
       .then((context) => sessions.write(sessionId, context))
       .then(() => {
         return Promise.resolve({
@@ -713,10 +702,11 @@ export function testReminderAndFeedback({ context }) {
     });
 }
 
-export function resetMeeting({ context }) {
+export function resetMeetingAndHasPair({ context }) {
   delete context.weekDay;
   delete context.time;
   delete context.remindersEnabled;
+  delete context.hasPair;
 
   return Promise.resolve(
     context
