@@ -469,37 +469,37 @@ describe('coaching-bot actions', function() {
 
   describe('#displayAvailablePeer', function() {
     it('should return a pair string if a pair is found', function() {
-        const sessions = new Sessions();
-        const stubSessionsRead = sinon.stub(
+      const sessions = new Sessions();
+      const stubSessionsRead = sinon.stub(
         sessions.db,
         'read'
-        );
+      );
 
-        stubSessionsRead.returns(
+      stubSessionsRead.returns(
         Promise.resolve({
             name: 'Pertti',
             communicationMethods: {
             SKYPE: 'pertti_42',
             },
         })
-        );
+      );
 
-        const context = {
+      const context = {
         availablePeers: [
             1,
             2,
         ],
-        };
+      };
 
-        const expected = {
+      const expected = {
         result: 'Pertti\n  - Skype',
-        };
+      };
 
-        const ret = actions.displayAvailablePeer({
+      const ret = actions.displayAvailablePeer({
         context,
-        });
+      });
 
-        return expect(ret)
+      return expect(ret)
         .to.become(expected)
         .then(() => stubSessionsRead.restore());
     });
@@ -507,180 +507,227 @@ describe('coaching-bot actions', function() {
 
   describe('#displayAcceptedPeer', function() {
     it('should return a profile string if pairs are found', function () {
-        const sessions = new Sessions();
-        const stubSessionsRead = sinon.stub(
-          sessions.db,
-          'read'
-        );
+      const sessions = new Sessions();
+      const stubSessionsRead = sinon.stub(
+        sessions.db,
+        'read'
+      );
 
-        const pairs = new Pairs();
-        const stubPairsRead = sinon.stub(
-          pairs.db,
-          'read'
-        );
+      const pairs = new Pairs();
+      const stubPairsRead = sinon.stub(
+        pairs.db,
+        'read'
+      );
 
-        const profiles = [
-          {
-            name: 'Pertti',
-            communicationMethods: {
-              SKYPE: 'pertti_42',
-            },
+      const profiles = [
+        {
+          name: 'Pertti',
+          communicationMethods: {
+            SKYPE: 'pertti_42',
           },
-          {
-            name: 'Masa',
-            communicationMethods: {
-              PHONE: '040566123',
-            },
+        },
+        {
+          name: 'Masa',
+          communicationMethods: {
+            PHONE: '040566123',
           },
-          {
-            name: 'Antti',
-            communicationMethods: {
-              PHONE: '044123123',
-            },
+        },
+        {
+          name: 'Antti',
+          communicationMethods: {
+            PHONE: '044123123',
           },
-        ];
+        },
+      ];
 
-        stubSessionsRead.onCall(0).returns(Promise.resolve(profiles[0]));
-        stubSessionsRead.onCall(1).returns(Promise.resolve(profiles[1]));
-        stubSessionsRead.onCall(2).returns(Promise.resolve(profiles[2]));
+      stubSessionsRead.onCall(0).returns(Promise.resolve(profiles[0]));
+      stubSessionsRead.onCall(1).returns(Promise.resolve(profiles[1]));
+      stubSessionsRead.onCall(2).returns(Promise.resolve(profiles[2]));
 
-        stubPairsRead.returns(Promise.resolve([1, 2, 3]));
+      stubPairsRead.returns(Promise.resolve([1, 2, 3]));
 
-        const expected = {
-          result: 'Pertti\n -  Skype (pertti_42)\n' +
-                  'Masa\n -  Puhelin (040566123)\n' +
-                  'Antti\n -  Puhelin (044123123)',
-        };
+      const expected = {
+        result: 'Pertti\n -  Skype (pertti_42)\n' +
+                'Masa\n -  Puhelin (040566123)\n' +
+                'Antti\n -  Puhelin (044123123)',
+      };
 
-        const ret = actions.displayAcceptedPeer({
-          sessionId: sessions.sessionId,
+      const ret = actions.displayAcceptedPeer({
+        sessionId: sessions.sessionId,
+      });
+
+      return expect(ret)
+        .to.become(expected)
+        .then(() => {
+          stubSessionsRead.restore();
+          stubPairsRead.restore();
         });
-
-        return expect(ret)
-          .to.become(expected)
-          .then(() => {
-            stubSessionsRead.restore();
-            stubPairsRead.restore();
-          });
     });
   });
 
   describe('#rejectRequest', function() {
     it('should drop the first item from the list', function() {
-        const ret = actions.rejectRequest({
+      const ret = actions.rejectRequest({
         context: {
           pairRequests: [0, 1, 2],
         },
-        });
+      });
 
-        return expect(ret)
+      return expect(ret)
         .to.become({
-            context: {
-              pairRequests: [1, 2],
-              rejectedPeers: [0],
-            },
+          context: {
+            pairRequests: [1, 2],
+            rejectedPeers: [0],
+          },
         });
     });
   });
 
   describe('#acceptRequests', function() {
     it('should write a state and mark user as not searching', function() {
-        const sessions = new Sessions();
+      const sessions = new Sessions();
 
-        const stubSessionsRead = sinon.stub(
-          sessions.db,
-          'read'
-        );
+      const stubSessionsRead = sinon.stub(
+        sessions.db,
+        'read'
+      );
 
-        const spySessionsWrite = sinon.spy(
-          sessions.db,
-          'write'
-        );
+      const spySessionsWrite = sinon.spy(
+        sessions.db,
+        'write'
+      );
 
-        const profile = {
-          name: 'Pertti',
-          communicationMethods: {
-            SKYPE: 'pertti_42',
-          },
+      const profile = {
+        name: 'Pertti',
+        communicationMethods: {
+          SKYPE: 'pertti_42',
+        },
+        pairRequests: [1],
+      };
+
+      stubSessionsRead.returns(Promise.resolve(
+        profile
+      ));
+
+      const expectedFromMarkUser = {
+        context: {
+          availablePeers: [],
+          pairRequests: [],
+          rejectedPeers: [],
+          searching: false,
+          sentRequests: [],
+          hasPair: true,
+        }
+      };
+
+      const expectedToWrite = {
+        ...profile,
+        ...expectedFromMarkUser.context,
+        state: '/?0/profile?0/accepted_pair_information?0',
+      };
+
+      const ret = actions.acceptRequest({
+        sessionId: 0,
+        context: {
           pairRequests: [1],
-        };
-
-        stubSessionsRead.returns(Promise.resolve(
-          profile
-        ));
-
-        const expectedFromMarkUser = {
-          context: {
-            availablePeers: [],
-            pairRequests: [],
-            rejectedPeers: [],
-            searching: false,
-            sentRequests: [],
-            hasPair: true,
-          }
-        };
-
-        const expectedToWrite = {
-          ...profile,
-          ...expectedFromMarkUser.context,
-          state: '/?0/profile?0/accepted_pair_information?0',
-        };
-
-        const ret = actions.acceptRequest({
-          sessionId: 0,
-          context: {
-            pairRequests: [1],
-          },
-        });
-
-        return ret.then((result) => {
-          expect(result).to.deep.equal(expectedFromMarkUser);
-        }).then(() => {
-          expect(spySessionsWrite.calledWith(1, expectedToWrite)).to.equal(true);
-        }).then(() => {
-          spySessionsWrite.restore();
-          stubSessionsRead.restore();
-        });
+        },
       });
+
+      return ret.then((result) => {
+        expect(result).to.deep.equal(expectedFromMarkUser);
+      }).then(() => {
+        expect(spySessionsWrite.calledWith(1, expectedToWrite)).to.equal(true);
+      }).then(() => {
+        spySessionsWrite.restore();
+        stubSessionsRead.restore();
+      });
+    });
   });
 
   describe('#displayRequest', function() {
     it('should display the profile of the requesting user', function() {
-        const sessions = new Sessions();
-        const stubSessionsRead = sinon.stub(
-          sessions.db,
-          'read'
-        );
+      const sessions = new Sessions();
+      const stubSessionsRead = sinon.stub(sessions.db, 'read');
 
-        stubSessionsRead.returns(
+      stubSessionsRead.returns(
         Promise.resolve({
-            name: 'Pertti',
-            communicationMethods: {
+          name: 'Pertti',
+          communicationMethods: {
             SKYPE: 'pertti_42',
-            },
-            sentRequestMessages: { '1': 'Message' }
+          },
+          sentRequestMessages: { '1': 'Message' }
         })
-        );
+      );
 
-        const context = {
-          pairRequests: [
-              1,
-              2,
-          ],
-        };
+      const context = {
+        pairRequests: [
+          1,
+          2,
+        ],
+      };
 
-        const expected = {
-          result: 'Pertti\n  - Skype\nMessage',
-        };
+      const expected = {
+        result: 'Pertti\n  - Skype',
+      };
 
-        const ret = actions.displayRequest({
-          context,
-          sessionId: '1'
-        });
+      const ret = actions.displayRequest({
+        context,
+        sessionId: '1'
+      });
 
-        return expect(ret)
+      return expect(ret)
         .to.become(expected)
         .then(() => stubSessionsRead.restore());
+    });
+
+    it('should handle exceptions properly', function() {
+      return expect(actions.displayRequest({ sessionId: -1 }))
+        .to.eventually.be.rejected;
+    });
+  });
+
+  describe('#displayRequestMessage', function() {
+    it('should display the sent message of the requesting user', function() {
+      const sessions = new Sessions();
+      const stubSessionsRead = sinon.stub(
+        sessions.db,
+        'read'
+      );
+
+      stubSessionsRead.returns(
+        Promise.resolve({
+          name: 'Pertti',
+          communicationMethods: {
+            SKYPE: 'pertti_42',
+          },
+          sentRequestMessages: { '1': 'Message' }
+        })
+      );
+
+      const context = {
+        pairRequests: [
+          1,
+          2,
+        ],
+      };
+
+      const expected = {
+        result: 'Message',
+      };
+
+      const ret = actions.displayRequestMessage({
+        context,
+        sessionId: '1'
+      });
+
+      return expect(ret)
+        .to.become(expected)
+        .then(() => stubSessionsRead.restore());
+    });
+
+    it('should handle exceptions properly', function() {
+      return expect(actions.displayRequestMessage({ sessionId: -1 }))
+        .to.eventually.be.rejected;
     });
   });
 
@@ -962,14 +1009,15 @@ describe('coaching-bot actions', function() {
     });
   });
 
-  describe('#resetMeeting', () => {
-    it('should remove day and time from context', () => {
-      const ret = actions.resetMeeting({
+  describe('#resetMeetingAndHasPair', () => {
+    it('should remove day, time and hasPair from context', () => {
+      const ret = actions.resetMeetingAndHasPair({
         context: {
           asd: 3,
           weekDay: 'TI',
           as: 5,
           time: '10:23',
+          hasPair: true,
         }
       });
 

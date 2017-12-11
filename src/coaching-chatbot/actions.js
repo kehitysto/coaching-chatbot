@@ -254,10 +254,6 @@ export function getAvailablePeers({ sessionId, context }) {
           .filter((entry) => rejectedPeers.indexOf(entry) < 0),
         availablePeersIndex: availablePeersIndex,
       });
-    })
-    .catch((err) => {
-      log.error('err: {0}', err);
-      return Promise.reject(err);
     });
 }
 
@@ -280,10 +276,6 @@ export function displayAvailablePeer({ context }) {
         resolve({
           result: PairFormatter.createPairString(profile),
         });
-      })
-      .catch((err) => {
-        log.error('err: {0}', err);
-        reject(err);
       });
   });
 }
@@ -442,13 +434,19 @@ export function acceptRequest({ sessionId, context }) {
   });
 }
 
-export function breakPair({ sessionId, context, input }) {
+export function breakPairGeneric({ sessionId, context, input }) {
+  return breakPair({ sessionId, context, input, isReset: false });
+}
+
+export function breakPairReset({ sessionId, context, input }) {
+  return breakPair({ sessionId, context, input, isReset: true });
+}
+
+export function breakPair({ sessionId, context, input, isReset }) {
   let pairs = new Pairs();
   let sessions = new Sessions();
 
-  if (context) {
-    delete context.hasPair;
-  }
+  let reason = isReset ? strings['@PEER_HAS_RESET_MESSAGE'] : input;
 
   return pairs.read(sessionId)
       .then((pairList) => {
@@ -459,14 +457,7 @@ export function breakPair({ sessionId, context, input }) {
 
         return pairs.breakPair(sessionId, pairId)
             .then(() => sessions.read(pairId))
-            .then((context) => {
-              resetMeeting({ context });
-              return context;
-            })
-            .then((context) => {
-              delete context.hasPair;
-              return context;
-            })
+          .then((context) => resetMeetingAndHasPair({ context }))
             .then((context) => sessions.write(
               pairId,
               {
@@ -484,7 +475,7 @@ export function breakPair({ sessionId, context, input }) {
                 PersonalInformationFormatter.format(
                   strings['@NOTIFY_PAIR_BROKEN'],
                   { pairName: context.name,
-                    breakReason: input }
+                    breakReason: reason }
                 ),
                 Builder.QuickReplies.createArray([
                   'OK',
@@ -492,7 +483,7 @@ export function breakPair({ sessionId, context, input }) {
               );
             });
       })
-      .then(() => resetMeeting({ context }))
+    .then(() => resetMeetingAndHasPair({ context }))
       .then((context) => sessions.write(sessionId, context))
       .then(() => {
         return Promise.resolve({
@@ -508,12 +499,21 @@ export function displayRequest({ context, sessionId }) {
     return sessions.read(context.pairRequests[0])
       .then((profile) => {
         resolve({
-          result: PairFormatter.createPairStringMessage(profile, sessionId),
+          result: PairFormatter.createPairString(profile),
         });
-      })
-      .catch((err) => {
-        log.error('err: {0}', err);
-        reject(err);
+      });
+  });
+}
+
+export function displayRequestMessage({ context, sessionId }) {
+  return new Promise((resolve, reject) => {
+    let sessions = new Sessions();
+
+    return sessions.read(context.pairRequests[0])
+      .then((profile) => {
+        resolve({
+          result: profile.sentRequestMessages[sessionId],
+        });
       });
   });
 }
@@ -527,10 +527,6 @@ export function displaySentRequest({ context, sessionId }) {
         resolve({
           result: PairFormatter.createPairString(profile, sessionId),
         });
-      })
-      .catch((err) => {
-        log.error('err: {0}', err);
-        reject(err);
       });
   });
 }
@@ -706,10 +702,11 @@ export function testReminderAndFeedback({ context }) {
     });
 }
 
-export function resetMeeting({ context }) {
+export function resetMeetingAndHasPair({ context }) {
   delete context.weekDay;
   delete context.time;
   delete context.remindersEnabled;
+  delete context.hasPair;
 
   return Promise.resolve(
     context
