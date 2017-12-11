@@ -458,7 +458,7 @@ export function breakPair({ sessionId, context, input, isReset }) {
     delete context.hasPair;
   }
 
-  let reason = isReset ? '@PEER_HAS_RESET_MESSAGE' : input;
+  let reason = isReset ? strings['@PEER_HAS_RESET_MESSAGE'] : input;
 
   return pairs.read(sessionId)
       .then((pairList) => {
