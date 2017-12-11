@@ -26,7 +26,7 @@ describe('Next available peer tests', function () {
                   id: '104',
                   context: FeatureTestStates['NEXT_TESTS']['sessions']['104'],
                 }]),
-              QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT',])
+              QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT', '@LIST_AS_SEARCHING',])
             ),
           ]);
       });
@@ -42,12 +42,12 @@ describe('Next available peer tests', function () {
                   id: '105',
                   context: FeatureTestStates['NEXT_TESTS']['sessions']['105'],
                 }]),
-              QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT',])
+              QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT', '@LIST_AS_SEARCHING',])
             ),
           ]);
       });
 
-      it('Should show the next available peer', function () {
+      it('Should show the first available peer after last one', function () {
         return expect(
           this.bot.receive(SESSION, 'Seuraava'))
           .to.eventually.become([
@@ -58,7 +58,7 @@ describe('Next available peer tests', function () {
                   id: '104',
                   context: FeatureTestStates['NEXT_TESTS']['sessions']['104'],
                 }]),
-              QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT',])
+              QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT', '@LIST_AS_SEARCHING',])
             ),
           ]);
       });
@@ -74,7 +74,7 @@ describe('Next available peer tests', function () {
                   id: '105',
                   context: FeatureTestStates['NEXT_TESTS']['sessions']['105'],
                 }]),
-              QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT',])
+              QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT', '@LIST_AS_SEARCHING',])
             ),
           ]);
       });

@@ -221,6 +221,10 @@ module.exports = class Session {
     return this._input;
   }
 
+  set input(newInput) {
+    this._input = newInput;
+  }
+
   get context() {
     return this._context;
   }
@@ -351,6 +355,6 @@ module.exports = class Session {
   }
 
   validInput(maxLength) {
-    return this.getInput().length <= maxLength;
+    return this.getInput().length <= Math.min(maxLength, 640);
   }
 };

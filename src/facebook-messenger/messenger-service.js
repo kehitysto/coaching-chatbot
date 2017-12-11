@@ -3,8 +3,10 @@ import * as request from 'request-promise';
 import log from '../lib/logger-service';
 
 const Messenger = {
-  send(id, text, quickReplies = []) {
+  send(id, text, quickReplies = [], proactive = true) {
+    let type = proactive ? 'NON_PROMOTIONAL_SUBSCRIPTION' : 'RESPONSE';
     let body = {
+      messaging_type: type,
       recipient: {
         id,
       },
@@ -107,7 +109,9 @@ function _receiveMessage(messageEvent, chatbot) {
     if (!text) {
       const unhandledMessageTypeResponse =
         'Voit lähettää minulle vain tekstiä tai painaa antamiani nappeja.';
-      return resolve(Messenger.send(sender, unhandledMessageTypeResponse));
+      return resolve(
+        Messenger.send(sender, unhandledMessageTypeResponse, [], false)
+      );
     }
 
     return resolve(Messenger.toggleTypingIndicator(sender, true)
@@ -117,7 +121,7 @@ function _receiveMessage(messageEvent, chatbot) {
         for (let r of response) {
           promise = promise.then(() => {
             return Messenger.send(sender,
-              r.message, r.quickReplies);
+              r.message, r.quickReplies, false);
           });
         }
         return promise

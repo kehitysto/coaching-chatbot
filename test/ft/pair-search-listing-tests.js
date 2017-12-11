@@ -26,7 +26,7 @@ describe('Pair search listing tests', function() {
                     id: 'SEARCHING#1',
                     context: FeatureTestStates['PAIR_SEARCH_LISTING_TESTS']['sessions']['SEARCHING#1'],
                   }]),
-                QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT',])
+                QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT', '@STOP_SEARCHING',])
               ),
             ]);
         }
@@ -45,7 +45,7 @@ describe('Pair search listing tests', function() {
                     id: 'SEARCHING#2',
                     context: FeatureTestStates['PAIR_SEARCH_LISTING_TESTS']['sessions']['SEARCHING#2'],
                   }]),
-                QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT',])
+                QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT', '@STOP_SEARCHING',])
               ),
             ]);
         }

@@ -88,6 +88,7 @@
         "communicationMethods": {
           "SKYPE": "NICKNAME"
         },
+        "searching": true,
         "state": "/?0/profile?0"
       },
       "SEARCHING#1": {
@@ -124,7 +125,8 @@
       },
       "PAIR_REQUEST_TESTER_PAIR": {
         "name": "Some Pair",
-        "searching": true
+        "searching": true,
+        "state": "/?0"
       }
     }
   },

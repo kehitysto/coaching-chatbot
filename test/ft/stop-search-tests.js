@@ -55,7 +55,7 @@ describe('Stop searching', () => {
                   id: 'ID',
                   context: testUser,
                 }]),
-                QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT'])
+                QuickReplies.createArray(['@YES', '@NO', '@NEXT', '@EXIT', '@STOP_SEARCHING',])
               ),
             ]);
         }

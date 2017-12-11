@@ -17,6 +17,14 @@
       "Listaudu"
     ]
   },
+  "Kalle alkaa vaihtaa nimeään": {
+    "player": "Kalle",
+    "session": "Session4",
+    "messages": [
+      "Hallitse tietoja",
+      "Nimi"
+    ]
+  },
   "Katariina on syöttänyt tietonsa ja haluaa nyt etsiä paria": {
     "player": "Katariina",
     "session": "Session2",
@@ -24,12 +32,58 @@
       "Etsi ohjaaja",
       "Seuraava",
       "Kyllä",
-      "Haluaisin lisätä juuri sinut parikseni.",
-      "Ei",
+      "Haluaisin lisätä juuri sinut parikseni."
+    ]
+  },
+  "Katariina lähettää pyynnön Kaapolle ja Kaarinalle": {
+    "player": "Katariina",
+    "session": "Session2",
+    "messages": [
+      "Kyllä",
+      "Olen aina halunnut Kaapon parikseni",
+      "Kyllä",
+      "Haluan pariksesi",
       "Listaudu"
     ]
   },
-  "Katariina muuttaa tietojaan": {
+  "Kalle saa pyynnön Katariinalta kesken nimen asettamista": {
+    "player": "Kalle",
+    "session": "Session4",
+    "messages": [
+      "Pyynnöt",
+      "Saapuneet",
+      "Palaa",
+      "Palaa"
+    ]
+  },
+  "Kalle hylkää Katariinan pyynnön": {
+    "player": "Kalle",
+    "session": "Session4",
+    "messages": [
+      "Pyynnöt",
+      "Saapuneet",
+      "Ei",
+      "Palaa"
+    ]
+  },
+  "Kaarina hylkää Katariinan pyynnön": {
+    "player": "Kaarina",
+    "session": "Session3",
+    "messages": [
+      "Pyynnöt",
+      "Saapuneet",
+      "Ei",
+      "Palaa"
+    ]
+  },
+  "Katariina saa kahdelta henkilöltä hylkäyksen": {
+    "player": "Katariina",
+    "session": "Session2",
+    "messages": [
+      "OK"
+    ]
+  },
+  "Katariina muuttaa nimeään ja kuvaustaan": {
     "player": "Katariina",
     "session": "Session2",
     "messages": [
@@ -37,14 +91,24 @@
       "Nimi",
       "Katariina-Elli",
       "Kuvaus",
-      "Parempi kuvaus",
+      "Parempi kuvaus"
+    ]
+  },
+  "Katariina muuttaa yhteystietojaan": {
+    "player": "Katariina",
+    "session": "Session2",
+    "messages": [
       "Yhteystiedot",
       "Lisää",
       "Skype",
-      "Skype-acc"
+      "Skype-acc",
+      "Poista",
+      "Skype",
+      "Valmis",
+      "Palaa"
     ]
   },
-  "Kaarina lähettää ja hallinnoi pyyntöjä": {
+  "Kaarina lähettää pyyntöjä": {
     "player": "Kaarina",
     "session": "Session3",
     "messages": [
@@ -52,14 +116,20 @@
       "Kyllä",
       "Moi",
       "Kyllä",
-      "Hei",
-      "Kyllä",
       "HALOO",
-      "Profiiliin",
+      "Kyllä",
+      "Hei",
+      "Profiiliin"
+    ]
+  },
+  "Kaarina hallinnoi pyyntöjä": {
+    "player": "Kaarina",
+    "session": "Session3",
+    "messages": [
       "Pyynnöt",
       "Lähetetyt",
+      "Peru pyyntö",
       "Seuraava",
-      "Peru",
       "Palaa"
     ]
   },
@@ -80,6 +150,13 @@
     "session": "Session3",
     "messages": [
       "Aseta tapaaminen"
+    ]
+  },
+  "Katariina saa tietää ettei Kaapo ole enää vapaa": {
+    "player": "Katariina",
+    "session": "Session2",
+    "messages": [
+      "OK"
     ]
   },
   "Kaapon ja Kaarinan tapaaminen lähestyy": {
@@ -112,7 +189,12 @@
     "messages": [
       "Kyllä",
       "1",
-      "En halua saada kelvotonta vertaisohjausta."
+      "En halua saada kelvotonta vertaisohjausta.",
+      "Ei",
+      "Kyllä",
+      "4",
+      "Sain hyvää vertaisohjausta.",
+      "Kyllä"
     ]
   },
   "Kaarina saa tietää Kaapon palautteesta": {
@@ -126,7 +208,8 @@
     "player": "Kaapo",
     "session": "Session1",
     "messages": [
-      "Lopeta ohjaaja"
+      "Lopeta ohjaaja",
+      "Kiitos ohjauksesta!"
     ]
   },
   "Kaarina saa tietää Kaapon rikkoneen parin ja vaihtaa nimensä": {

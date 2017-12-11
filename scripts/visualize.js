@@ -53,7 +53,7 @@ promise = promise.then((lines) => {
    '  before(() => {',
    '    DiscussionGenerator.generate(discussions, states)',
    '      .then(result => {',
-   '         scenarios = result;',
+   '        scenarios = result;',
    '      });',
    '  });',
    '',

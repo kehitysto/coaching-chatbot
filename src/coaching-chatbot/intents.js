@@ -52,7 +52,7 @@ module.exports = {
     },
 
     DONE: {
-        any: /^valmis/i,
+        any: /^valmis$/i,
     },
 
     MANAGE: {
@@ -68,15 +68,15 @@ module.exports = {
     },
 
     SENT_REQUESTS: {
-        any: /^lähetetyt$/i,
+        any: /^lähetet(?:yt|ty)$/i,
     },
 
     RECEIVED_REQUESTS: {
-        any: /^saapuneet$/i,
+        any: /^saapun(?:eet|ut)$/i,
     },
 
     REVOKE_REQUEST: {
-        any: /^peru/i,
+        any: /^(?:peru|kumoa|poista)\spyyntö$/i,
     },
 
     DELETE: {
@@ -145,8 +145,8 @@ module.exports = {
 
     COMMUNICATION_METHODS: {
         any: [
-            /^Skype$/i,
-            /^Puhelin$/i,
+            /^skype$/i,
+            /^puhelin$/i,
         ],
     },
 
@@ -164,13 +164,13 @@ module.exports = {
 
     TOGGLE_REMINDERS: {
         any: [
-            /^Estä muistutukset$/i,
-            /^Salli muistutukset$/i,
+            /^estä muistutukset$/i,
+            /^salli muistutukset$/i,
         ],
     },
 
     HELP: {
-        any: /^(?:info|ohje(?:et)|help|faq|apua?)$/i,
+        any: /^(?:info|ohje(et)?|help|faq|apua?)$/i,
     },
 
     OPTIONAL_VALUE: {
