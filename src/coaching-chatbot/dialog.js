@@ -437,7 +437,7 @@ bot
       (session) => {
         session.addResult('@REQUEST_LIST_LENGTH');
         session.addResult('@INFORMATION_ABOUT_REQUESTS');
-        session.runActions(['displayRequest']);
+        session.runActions(['displayRequest', 'displayRequestMessage']);
         session.addQuickReplies(
           Builder.QuickReplies.createArray(['@YES', '@NO', '@RETURN'])
         );
@@ -485,7 +485,7 @@ bot
       session.addResult('@BREAK_REASON');
     },
     (session) => {
-      if (session.validInput(500)) {
+      if (session.validInput(600)) {
         session.runActions(['breakPairGeneric']);
         session.switchDialog('/profile');
       } else {

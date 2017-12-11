@@ -528,6 +528,23 @@ export function displayRequest({ context, sessionId }) {
   });
 }
 
+export function displayRequestMessage({ context, sessionId }) {
+  return new Promise((resolve, reject) => {
+    let sessions = new Sessions();
+
+    return sessions.read(context.pairRequests[0])
+      .then((profile) => {
+        resolve({
+          result: profile.sentRequestMessages[sessionId],
+        });
+      })
+      .catch((err) => {
+        log.error('err: {0}', err);
+        reject(err);
+      });
+  });
+}
+
 export function displaySentRequest({ context, sessionId }) {
   return new Promise((resolve, reject) => {
     let sessions = new Sessions();

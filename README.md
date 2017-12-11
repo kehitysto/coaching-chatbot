@@ -46,6 +46,12 @@ To test multiple users use different session IDs
 $ npm run bot-client -- --session=<ID>
 ```
 
+Manual testing can also be done with the following command. See readme in doc/flow for more information.
+
+```
+$ npm run visualize
+```
+
 Supported Node version 6.1.0
 
 ## Documentation
