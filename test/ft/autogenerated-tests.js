@@ -61,7 +61,11 @@ describe('Automatically generated feature tests', () => {
     describe(checkData[i].title, () => {
       it('should match with the given hash sum', () => {
         return expect(keccak512(scenarios[i].content.join()),
-            'Check \'' + checkData[i].title + '\' in doc/flow/discussions.md')
+            'Run \'npm run visualize\' and ' +
+            'check \'' + checkData[i].title + '\' in ' +
+            'doc/flow/discussions.md. If it looks fine, copy ' +
+            'the hash from automatically generated tests ' +
+            'in the same document.')
           .to.equal(checkData[i].hash);
       });
     });

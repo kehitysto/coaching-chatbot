@@ -69,8 +69,7 @@
     "tests": "npm run test && npm run ft",
     "test": "cross-env RUN_ENV=dev mocha-webpack src test/ut",
     "test:watch": "cross-env RUN_ENV=dev npm run test -- --watch",
-    "features": "cross-env RUN_ENV=dev mocha-webpack test/ft",
-    "ft": "npm run visualize && npm run features",
+    "ft": "cross-env RUN_ENV=dev mocha-webpack test/ft",
     "ft:watch": "cross-env RUN_ENV=dev npm run ft -- --watch",
     "lint": "eslint src",
     "bot-client": "ts-node ./scripts/bot-client.js",
@@ -87,7 +86,7 @@
   "pre-commit": [
     "lint",
     "test",
-    "features"
+    "ft"
   ],
   "dependencies": {
     "precommit-hook-eslint": "^3.0.0"
