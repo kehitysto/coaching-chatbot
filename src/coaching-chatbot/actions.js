@@ -510,7 +510,7 @@ export function displayRequest({ context, sessionId }) {
     return sessions.read(context.pairRequests[0])
       .then((profile) => {
         resolve({
-          result: PairFormatter.createPairStringMessage(profile, sessionId),
+          result: PairFormatter.createPairString(profile),
         });
       });
   });
