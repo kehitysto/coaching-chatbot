@@ -469,10 +469,7 @@ export function breakPair({ sessionId, context, input, isReset }) {
 
         return pairs.breakPair(sessionId, pairId)
             .then(() => sessions.read(pairId))
-            .then((context) => {
-              resetMeeting({ context });
-              return context;
-            })
+            .then((context) => resetMeeting({ context }))
             .then((context) => {
               delete context.hasPair;
               return context;
