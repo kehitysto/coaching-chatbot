@@ -670,10 +670,50 @@ describe('coaching-bot actions', function() {
         };
 
         const expected = {
-          result: 'Pertti\n  - Skype\nMessage',
+          result: 'Pertti\n  - Skype',
         };
 
         const ret = actions.displayRequest({
+          context,
+          sessionId: '1'
+        });
+
+        return expect(ret)
+        .to.become(expected)
+        .then(() => stubSessionsRead.restore());
+    });
+  });
+
+  describe('#displayRequestMessage', function() {
+    it('should display the sent message of the requesting user', function() {
+        const sessions = new Sessions();
+        const stubSessionsRead = sinon.stub(
+          sessions.db,
+          'read'
+        );
+
+        stubSessionsRead.returns(
+        Promise.resolve({
+            name: 'Pertti',
+            communicationMethods: {
+            SKYPE: 'pertti_42',
+            },
+            sentRequestMessages: { '1': 'Message' }
+        })
+        );
+
+        const context = {
+          pairRequests: [
+              1,
+              2,
+          ],
+        };
+
+        const expected = {
+          result: 'Message',
+        };
+
+        const ret = actions.displayRequestMessage({
           context,
           sessionId: '1'
         });

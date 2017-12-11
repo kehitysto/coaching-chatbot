@@ -26,8 +26,7 @@ function createPairString(context) {
 }
 
 function createPairStringMessage(context, sessionId) {
-  return createPairString(context) + '\n' +
-    context.sentRequestMessages[sessionId];
+  return createPairString(context);
 }
 
 /**
