@@ -33,7 +33,7 @@
   "@REQUEST_COMMUNICATION_METHOD_DELETE": "Minkä yhteystiedon haluat poistaa?",
   "@REQUEST_SKYPE_NAME": "Anna Skype-tunnuksesi.",
   "@REQUEST_PHONE_NUMBER": "Anna puhelinnumerosi.",
-  "@REQUESTS" : "Pyynnöt",
+  "@REQUESTS" : "Katso pyynnöt",
   "@PROVIDE_OTHER_COMMUNICATION_METHODS": "Haluatko lisätä tai poistaa yhteystietoja?",
   "@CONFIRM_COMMUNICATION_METHODS": "Olet lisännyt seuraavat tavat olla yhteydessä:\n {communicationMethods}",
   "@NO_METHODS_ADDED": "Et ole vielä lisännyt yhteydenottotapoja. Haluatko lisätä nyt? Muuten palaat profiiliin.",

@@ -104,7 +104,7 @@ describe('Formatter service', function() {
           },
           {
           payload: "MANAGE_REQUESTS",
-          title: "Pyynnöt"
+          title: "Katso pyynnöt"
           },
         ];
 
