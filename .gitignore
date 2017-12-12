@@ -181,3 +181,4 @@ Temporary Items
 
 # local snapped state
 .state-snap.json
+doc/flow/demo.js
