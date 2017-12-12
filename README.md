@@ -64,3 +64,4 @@ Supported Node version 6.1.0
  - [Definition of Done](doc/dod.md)
  - [Time Tracking and Product Backlog](https://docs.google.com/spreadsheets/d/1fKdP8b8bfaRfgDoVSWLBhEqba9kjgCiv7lt_gYjxqZI/)
  - [Drive folder - Project documents](https://drive.google.com/drive/folders/0B8ebXy63LRc8NUxmQ3ZDNzRLZms?ths=true)
+ - [Demo](https://storage.googleapis.com/demo-ohtu/demo.html)
