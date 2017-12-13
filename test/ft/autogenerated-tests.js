@@ -38,7 +38,7 @@ let checkData = [
   { title: 'Katariina saa tietää ettei Kaapo ole enää vapaa',
     hash: '7bbd49e5a0b8fd83d355c44a0f79b5ef68a38d72762551f11c1c11fccf386d0896dd94ab64dc131d9fd250a69c8ad5c710d19984e192527a0c7c3dd95853ff74' },
   { title: 'Kaapo saa muistutuksen tapaamisesta',
-    hash: 'df9554aa70b5beba8a40dc47af7ee821a0caaae9dbddb1c3c89579d3a88d2a099df056e2fa434799c789c27e881355c707fea0b6156d5238eb65ac96c14ced30' },
+    hash: 'c82c3b8fb57b15092fa2701c54a9f24fa32b894129f04839368f36e60a675bb15757d6ee317f9d9efe8158559b569771973342ea42b14aeea2f64dbeaf10ce13' },
   { title: 'Kaapo saa tapaamisen jälkeen pyynnön antaa palautetta',
     hash: '1b5a3df124a1f0bcf1bba19c649a87334931cf727df5deeda97d4168990ee8bee783a09a5239e745ed1770919417c7646c1dd66b6a8d58069d832c3c13406d18' },
   { title: 'Kaarina saa tietää Kaapon palautteesta',

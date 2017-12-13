@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Demo</title>
+    <script type="text/javascript" src="demo.js"></script>
+    <style type="text/css">
+      .kaapo {
+        background: #3b57f7;
+        color: #ffffff;
+        position: relative;
+        right: -40%;
+      }
+      .bot {
+        background: rgb(219, 219, 219);
+        position: relative;
+      }
+      .kaapo, .bot {
+        padding: 15px;
+        margin: 10px 0px 10px 0px;
+        border-radius: 30px;
+        width:50%;
+      }
+      .buttons {
+        text-align: center;
+        margin: 20px 0px 20px 0px;
+      }
+      .button {
+        border: 1px solid #000000;
+        border-radius: 20px;
+        background: #ffffff;
+        padding:5px 10px 5px 10px;
+        margin:10px;
+      }
+    </style>
+  </head>
+  <body onload="try { demoStart(0) } catch (e) { document.write('Use this command to proceed: <pre>npm run demonize</pre>') }">
+    <div id="demoContainer"></div>
+  </body>
+</html>
