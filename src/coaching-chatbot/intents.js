@@ -155,7 +155,7 @@ module.exports = {
     },
 
     PAIR_REQUEST: {
-        any: /^pyyn(?:tö|nöt|töjä)$/i,
+        any: /^(?:näytä|katso)? ?pyyn(?:tö|nöt|töjä)$/i,
     },
 
     TEST: {

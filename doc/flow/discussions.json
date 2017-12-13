@@ -50,7 +50,7 @@
     "player": "Kalle",
     "session": "Session4",
     "messages": [
-      "Pyynnöt",
+      "Katso pyynnöt",
       "Saapuneet",
       "Palaa",
       "Palaa"
@@ -60,7 +60,7 @@
     "player": "Kalle",
     "session": "Session4",
     "messages": [
-      "Pyynnöt",
+      "Katso pyynnöt",
       "Saapuneet",
       "Ei",
       "Palaa"
@@ -70,7 +70,7 @@
     "player": "Kaarina",
     "session": "Session3",
     "messages": [
-      "Pyynnöt",
+      "Katso pyynnöt",
       "Saapuneet",
       "Ei",
       "Palaa"
@@ -126,7 +126,7 @@
     "player": "Kaarina",
     "session": "Session3",
     "messages": [
-      "Pyynnöt",
+      "Katso pyynnöt",
       "Lähetetyt",
       "Peru pyyntö",
       "Seuraava",
@@ -137,7 +137,7 @@
     "player": "Kaapo",
     "session": "Session1",
     "messages": [
-      "Pyynnöt",
+      "Katso pyynnöt",
       "Saapuneet",
       "Kyllä",
       "Aseta tapaaminen",
