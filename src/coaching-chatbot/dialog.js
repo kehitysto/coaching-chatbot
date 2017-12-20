@@ -670,7 +670,7 @@ bot
       session.beginDialog('/reset');
     })
   .match(
-    '#PAIR_REQUEST',
+    '#SHOW_PAIR_REQUEST',
     (session) => {
       if (!session.hasPair()) {
         session.beginDialog('/manage_requests');
